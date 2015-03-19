@@ -1,0 +1,6 @@
+# spring profile: prod|test|dev
+profile: dev
+
+http:
+    port: 8888
+    adminPort: 9091
