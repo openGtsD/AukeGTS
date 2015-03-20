@@ -4,4 +4,4 @@
 Notes: after services start we can test send Http request by browser e.g: localhost:8888/feed/get-feed
 
 2. build and deploy auke-web for send request into web services.
-updating....
+ run for test by command: mvn jetty:run -Djetty.port=9999
