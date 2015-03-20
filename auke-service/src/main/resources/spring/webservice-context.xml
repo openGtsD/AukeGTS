@@ -14,8 +14,6 @@
                         http://www.springframework.org/schema/task/spring-task-3.0.xsd">
                         
     <context:component-scan base-package="com.auke.drone.ws.resource" />
-    <!-- <context:component-scan base-package="no.auke.drone.services" /> -->
     <context:component-scan base-package="no.auke.drone.services.impl" />
-    <!-- <context:component-scan base-package="no.auke.drone.dao" /> -->
     
 </beans>
