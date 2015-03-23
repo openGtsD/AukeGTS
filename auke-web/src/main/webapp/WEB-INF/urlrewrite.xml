@@ -4,10 +4,16 @@
         "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
 
 <urlrewrite use-query-string="true">
-    <rule>
-        <from>/service/(.+)</from>
-        <to type="proxy">http://localhost:8888/$1</to>
-    </rule>
+	<rule>
+		<from>/service/(.+)</from>
+		<to type="proxy">http://localhost:8888/$1</to>
+	</rule>
+
+	<rule>
+		<from>/ui/(.+)</from>
+		<to type="proxy">http://localhost:8888/$1</to>
+	</rule>
+
 </urlrewrite>
 
 

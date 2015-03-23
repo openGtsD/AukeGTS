@@ -9,12 +9,12 @@
     </style>
     <script src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-   
   </head>
   <body>
     <div id="map-canvas"></div>
   </body>
 </html>
+
 
 <script>
 
