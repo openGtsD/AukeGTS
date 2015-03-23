@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite
+        PUBLIC "-//tuckey.org//DTD UrlRewrite 4.0//EN"
+        "http://www.tuckey.org/res/dtds/urlrewrite4.0.dtd">
+
+<urlrewrite use-query-string="true">
+    <rule>
+        <from>/service/(.+)</from>
+        <to type="proxy">http://localhost:8888/$1</to>
+    </rule>
+</urlrewrite>
+
+
