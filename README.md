@@ -5,3 +5,5 @@ Notes: after services start we can test send Http request by browser e.g: localh
 
 2. build and deploy auke-web for send request into web services.
  run for test by command: mvn jetty:run -Djetty.port=9999
+
+3. Go to browser type >> localhost:9999/drone and see result
