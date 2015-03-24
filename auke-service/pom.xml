@@ -57,6 +57,8 @@
         <dependency>
             <groupId>net.sf.json-lib</groupId>
             <artifactId>json-lib</artifactId>
+            <version>2.2.3</version>
+            <classifier>jdk13</classifier>
         </dependency>
         <dependency>
             <groupId>org.mortbay.jetty</groupId>
