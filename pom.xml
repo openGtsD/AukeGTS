@@ -13,7 +13,8 @@
 
 	<modules>
 		<module>auke-service</module>
-	</modules>
+        <module>auke-web</module>
+    </modules>
 
 	<developers>
 
