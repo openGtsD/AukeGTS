@@ -71,7 +71,7 @@ public class DummyCreator {
         double foundLongitude = new_x + l.getLon();
         double foundLatitude = y + l.getLat();
 
-        System.out.println("Longitude: " + foundLongitude + "  Latitude: " + foundLatitude);
+        //System.out.println("Longitude: " + foundLongitude + "  Latitude: " + foundLatitude);
 
         Location rl = new Location(foundLatitude, foundLongitude);
         return rl;
