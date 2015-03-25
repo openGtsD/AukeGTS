@@ -48,7 +48,7 @@ public class DummyCreator {
       }
     }
 
-    private Location makeLocation(double lat, double lon) {
+    public Location makeLocation(double lat, double lon) {
         return new Location(lat, lon);
     }
 
@@ -81,8 +81,12 @@ public class DummyCreator {
         return list;
     }
 
+    public static PositionUnit createPositionUnit(Location location) {
+        return createPositionUnit(UUID.randomUUID().toString(), 1413835537, location.getLat(), location.getLon(), 5, 0.0);
+    }
+
     private static PositionUnit createPositionUnit(String id, long time, double lat, double lon, double altitude,
-            double speed) {
+                                                   double speed) {
         PositionUnit unit = new PositionUnit();
         unit.setId(id);
         unit.setTime(time);

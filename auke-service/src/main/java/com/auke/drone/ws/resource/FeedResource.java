@@ -46,8 +46,6 @@ public class FeedResource {
         JsonResponse response = new JsonResponse(data != null, data);
         return response;
     }
-    
-    
 
     
 }
