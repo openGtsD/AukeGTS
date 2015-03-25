@@ -1,13 +1,9 @@
 package no.auke.drone.domain;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -50,8 +46,6 @@ public class SimpleDrone implements Drone, Observer{
         this.positions = positionUnits;
     }
 
-
-
     public void update() {
         calculate();
     }
@@ -70,8 +64,8 @@ public class SimpleDrone implements Drone, Observer{
     @Override
     public boolean equals(Object obj) {
         Drone drone = (Drone) obj;
-        return StringUtils.trim(this.id).equalsIgnoreCase(StringUtils.trimToEmpty(((Drone) obj).getId())) &&
-                StringUtils.trim(this.name).equalsIgnoreCase(StringUtils.trimToEmpty(((Drone) obj).getName()));
+        return StringUtils.trim(this.id).equalsIgnoreCase(StringUtils.trimToEmpty(drone.getId())) &&
+                StringUtils.trim(this.name).equalsIgnoreCase(StringUtils.trimToEmpty(drone.getName()));
     }
 
     @Override
