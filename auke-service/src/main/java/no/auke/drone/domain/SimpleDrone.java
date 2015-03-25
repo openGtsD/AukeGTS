@@ -1,9 +1,13 @@
 package no.auke.drone.domain;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -13,9 +17,12 @@ public class SimpleDrone implements Drone, Observer{
     private String name;
     private PositionUnit currentPosition;
     private List<PositionUnit> positions;
+    private Timer timer;
 
     public SimpleDrone() {
         positions = new ArrayList<PositionUnit>();
+        timer = new Timer();
+        timer.schedule(new CalculateTask(), 0 ,10000);
     }
 
     public String getId() {
@@ -54,7 +61,7 @@ public class SimpleDrone implements Drone, Observer{
 
     @Override
     public void calculate() {
-
+        System.out.println(this.toString() + " calculating");
     }
 
     @Override
@@ -75,5 +82,16 @@ public class SimpleDrone implements Drone, Observer{
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "drone id: " + id + ", name:" + name + " ";
+    }
+
+    class CalculateTask extends TimerTask {
+        public void run() {
+            calculate();
+        }
     }
 }
