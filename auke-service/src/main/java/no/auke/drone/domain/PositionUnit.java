@@ -1,5 +1,6 @@
 package no.auke.drone.domain;
 
+// Rename class later
 public class PositionUnit {
     private String id;
     private long time;
@@ -7,8 +8,11 @@ public class PositionUnit {
     private double lon;
     private double altitude; 
     private double speed;
+    private String droneType;
+    private Person flyer;
+    private String purpose;
+    private boolean isUsedCamera;
     
-
     public PositionUnit() {
     }
 
@@ -62,6 +66,38 @@ public class PositionUnit {
 
     public boolean hasGeo(double lat2, double lon2) {
         return this.lat == lat2 && this.lon == lon2;
+    }
+
+    public String getDroneType() {
+        return droneType;
+    }
+
+    public void setDroneType(String droneType) {
+        this.droneType = droneType;
+    }
+
+    public Person getFlyer() {
+        return flyer;
+    }
+
+    public void setFlyer(Person flyer) {
+        this.flyer = flyer;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
+    }
+
+    public boolean isUsedCamera() {
+        return isUsedCamera;
+    }
+
+    public void setUsedCamera(boolean isUsedCamera) {
+        this.isUsedCamera = isUsedCamera;
     }
 
 }
