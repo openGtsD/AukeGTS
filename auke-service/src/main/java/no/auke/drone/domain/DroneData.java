@@ -1,13 +1,12 @@
 package no.auke.drone.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by huyduong on 3/24/2015.
  */
 public class DroneData implements Subject {
-    private List<Observer> drones;
+    private Map<String,Observer> drones;
     private static DroneData droneData;
 
     public static DroneData getInstance() {
@@ -18,27 +17,41 @@ public class DroneData implements Subject {
     }
 
     private DroneData() {
-        drones = new ArrayList<Observer>();
+        drones = new HashMap<String,Observer>();
+        Timer timer = new Timer();
+        timer.schedule(new CalculateTask(), 0 ,10000);
     }
 
-    public List<Observer> getDrones() {
+    public Map<String,Observer> getDrones() {
         return drones;
+    }
+
+    public Observer getDrone(String id) {
+        return drones.get(id) != null ? drones.get(id) : null;
     }
 
     @Override
     public void register(Observer drone) {
-        drones.add(drone);
+        drones.put(drone.getId(), drone);
     }
 
     @Override
     public void remove(Observer drone) {
-        drones.remove(drone);
+        drones.remove(drone.getId());
     }
 
     @Override
     public void notifyAllItems() {
-        for(Observer drone : drones) {
-            drone.update();
+        System.out.println("........notifying " + drones.size() + " items........");
+        for(String droneId : drones.keySet()) {
+            drones.get(droneId).update();
+        }
+        System.out.println(".......notifying finished......");
+    }
+
+    class CalculateTask extends TimerTask {
+        public void run() {
+            notifyAllItems();
         }
     }
 }

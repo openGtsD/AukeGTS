@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -38,9 +40,16 @@ public class DroneController {
     }
 
     @GET
+    @Path("/get")
+    public JsonResponse get(@QueryParam("id") String id) {
+        Drone drone = DroneData.getInstance().getDrone(id) != null ? (Drone) DroneData.getInstance().getDrone(id) : null;
+        return new JsonResponse(drone == null, drone);
+    }
+
+    @GET
     @Path("/getall")
     public JsonResponse getAll() {
-        List<Observer> drones = DroneData.getInstance().getDrones();
+        Collection<Observer> drones = DroneData.getInstance().getDrones().values();
         return new JsonResponse(drones == null, drones);
     }
 }

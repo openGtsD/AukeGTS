@@ -17,12 +17,9 @@ public class SimpleDrone implements Drone, Observer{
     private String name;
     private PositionUnit currentPosition;
     private List<PositionUnit> positions;
-    private Timer timer;
 
     public SimpleDrone() {
         positions = new ArrayList<PositionUnit>();
-        timer = new Timer();
-        timer.schedule(new CalculateTask(), 0 ,10000);
     }
 
     public String getId() {
@@ -56,7 +53,7 @@ public class SimpleDrone implements Drone, Observer{
 
 
     public void update() {
-
+        calculate();
     }
 
     @Override
@@ -87,11 +84,5 @@ public class SimpleDrone implements Drone, Observer{
     @Override
     public String toString() {
         return "drone id: " + id + ", name:" + name + " ";
-    }
-
-    class CalculateTask extends TimerTask {
-        public void run() {
-            calculate();
-        }
     }
 }
