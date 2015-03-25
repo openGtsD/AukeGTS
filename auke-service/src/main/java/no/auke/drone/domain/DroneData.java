@@ -8,9 +8,21 @@ import java.util.List;
  */
 public class DroneData implements Subject {
     private List<Observer> drones;
+    private static DroneData droneData;
 
-    public DroneData() {
+    public static DroneData getInstance() {
+        if(droneData == null) {
+            droneData = new DroneData();
+        }
+        return droneData;
+    }
+
+    private DroneData() {
         drones = new ArrayList<Observer>();
+    }
+
+    public List<Observer> getDrones() {
+        return drones;
     }
 
     @Override
