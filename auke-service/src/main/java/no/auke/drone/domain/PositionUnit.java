@@ -67,6 +67,16 @@ public class PositionUnit {
     public boolean hasGeo(double lat2, double lon2) {
         return this.lat == lat2 && this.lon == lon2;
     }
+    
+    
+    // LHA: something like this get position with a boundary
+
+    public boolean withinView(double lat, double lon, double height, double width) {
+
+		return (this.lat >= lat && this.lat <= lat + height) &&
+				(this.lon >= lon && this.lon <= lon + width);
+	
+	}    
 
     public String getDroneType() {
         return droneType;
@@ -103,5 +113,7 @@ public class PositionUnit {
     public boolean hasID(String droneId) {
         return this.id.equals(droneId);
     }
+
+
 
 }

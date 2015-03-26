@@ -115,4 +115,15 @@ public class DummyCreator {
         }
         return null;
     }
+
+	public List<PositionUnit> getTrackWithinView(double lat, double lon, double height,
+			double width) {
+        List<PositionUnit> result = new ArrayList<PositionUnit>();
+        for (PositionUnit positionUnit : list) {
+            if (positionUnit.withinView(lat, lon, height,width)) {
+                result.add(positionUnit);
+            }
+        }
+        return result;
+	}
 }

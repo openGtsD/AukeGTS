@@ -41,7 +41,7 @@ public class DroneData implements Subject {
     }
 
     public Drone getDrone(String id) {
-        return drones.get(id) != null ? drones.get(id) : null;
+        return drones.containsKey(id) ? drones.get(id) : null;
     }
 
     @Override

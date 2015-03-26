@@ -29,4 +29,12 @@ public class LiveTrackServicesImpl implements LiveTrackServices {
         return new DummyCreator().getDrone(droneId);
     }
 
+    // LHA: implement this
+	@Override
+	public List<PositionUnit> loadTrackWithinView(double lat, double lon,
+			int height, int width) {
+		
+		return new DummyCreator().getTrackWithinView(lat, lon, height, width);
+	}
+
 }

@@ -20,7 +20,7 @@ public class PositionCalculatorImpl implements PositionCalculator {
     protected static final long CALC_FREQUENCY = 10000; // time in milliseconds
 
     private AtomicBoolean isRunning = new AtomicBoolean();
-    private Map<String,Drone> drones = new ConcurrentHashMap<String,Drone>();
+    private Map<String,Drone> drones;
 
     private ExecutorService executor;
 
