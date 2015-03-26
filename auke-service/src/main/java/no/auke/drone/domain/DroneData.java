@@ -1,15 +1,30 @@
 package no.auke.drone.domain;
 
+import no.auke.drone.services.PositionCalculator;
+import no.auke.drone.services.PositionCalculatorImpl;
+
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Created by huyduong on 3/24/2015.
  */
 public class DroneData implements Subject {
-    private Map<String,Observer> drones;
+    private Map<String,Drone> drones;
+    PositionCalculator positionCalculator;
+    private ExecutorService executor = Executors.newCachedThreadPool();
+    public ExecutorService getExecutor() {
+        if(executor==null) {
+            executor = Executors.newCachedThreadPool();
+        }
+        return executor;
+    }
+
     private static DroneData droneData;
 
-    public static DroneData getInstance() {
+    public static synchronized DroneData getInstance() {
         if(droneData == null) {
             droneData = new DroneData();
         }
@@ -17,27 +32,30 @@ public class DroneData implements Subject {
     }
 
     private DroneData() {
-        drones = new HashMap<String,Observer>();
-        Timer timer = new Timer();
-        timer.schedule(new CalculateTask(), 0 ,10000);
+        drones = new ConcurrentHashMap<String,Drone>();
+        positionCalculator = new PositionCalculatorImpl(getExecutor(),drones);
     }
 
-    public Map<String,Observer> getDrones() {
+    public Map<String,Drone> getDrones() {
         return drones;
     }
 
-    public Observer getDrone(String id) {
+    public Drone getDrone(String id) {
         return drones.get(id) != null ? drones.get(id) : null;
     }
 
     @Override
     public void register(Observer drone) {
-        drones.put(drone.getId(), drone);
+        drones.put(drone.getId(), (Drone) drone);
+        positionCalculator.startCalculate();
     }
 
     @Override
     public void remove(Observer drone) {
         drones.remove(drone.getId());
+        if(drones.size() == 0) {
+            positionCalculator.stopCalculate();
+        }
     }
 
     @Override
@@ -47,11 +65,5 @@ public class DroneData implements Subject {
             drones.get(droneId).update();
         }
         System.out.println(".......notifying finished......");
-    }
-
-    class CalculateTask extends TimerTask {
-        public void run() {
-            notifyAllItems();
-        }
     }
 }

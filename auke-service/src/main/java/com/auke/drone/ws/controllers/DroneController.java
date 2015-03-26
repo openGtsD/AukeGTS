@@ -6,6 +6,8 @@ import no.auke.drone.dao.impl.SimpleDroneFactory;
 import no.auke.drone.domain.Drone;
 import no.auke.drone.domain.DroneData;
 import no.auke.drone.domain.Observer;
+import no.auke.drone.services.DroneService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -22,6 +24,8 @@ import java.util.Set;
 @Component
 @Produces(MediaType.APPLICATION_JSON)
 public class DroneController {
+    @Autowired
+    private DroneService droneService;
 
     @GET
     @Path("/register")
@@ -49,7 +53,17 @@ public class DroneController {
     @GET
     @Path("/getall")
     public JsonResponse getAll() {
-        Collection<Observer> drones = DroneData.getInstance().getDrones().values();
+        Collection<Drone> drones = DroneData.getInstance().getDrones().values();
         return new JsonResponse(drones == null, drones);
+    }
+
+    @GET
+    @Path("/move")
+    public JsonResponse move(@QueryParam("id") String id) {
+        Drone drone = DroneData.getInstance().getDrone(id) != null ? (Drone) DroneData.getInstance().getDrone(id) : null;
+        if(drone != null) {
+
+        }
+        return new JsonResponse(drone == null, drone);
     }
 }

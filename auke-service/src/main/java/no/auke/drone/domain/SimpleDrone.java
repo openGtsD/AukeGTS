@@ -4,10 +4,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import javax.swing.text.Position;
+import java.util.*;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -50,15 +48,40 @@ public class SimpleDrone implements Drone, Observer{
         this.positions = positionUnits;
     }
 
-
-
     public void update() {
         calculate();
     }
 
     @Override
     public void calculate() {
-        System.out.println(this.toString() + " calculating");
+        System.out.println(this.toString() + "started calculating");
+        Random ran = new Random();
+        int theta = ran.nextInt(1) + 180;
+        int speed = 1000 * (ran.nextInt(1) + 100);
+
+        // fly randomly
+        double dx = speed * Math.sin(theta);
+        double dy = speed * Math.sin(theta);
+        double deltaLongitude = dx/(111320*Math.cos(this.currentPosition.getAltitude()));
+        double deltaLatitude = dy/110540;
+        double finalLongitude = this.currentPosition.getLon() + deltaLongitude;
+        double finalLatitude = this.currentPosition.getLat() + deltaLatitude;
+
+        // add new position
+        PositionUnit positionUnit = new PositionUnit();
+        positionUnit.setSpeed(speed);
+        positionUnit.setId(currentPosition.getId());
+        positionUnit.setAltitude(currentPosition.getAltitude());
+        positionUnit.setLon(finalLongitude);
+        positionUnit.setLat(finalLatitude);
+        positionUnit.setTime(System.currentTimeMillis());
+        positionUnit.setPurpose(currentPosition.getPurpose());
+        positionUnit.setDroneType(currentPosition.getDroneType());
+        positionUnit.setFlyer(currentPosition.getFlyer());
+        positionUnit.setUsedCamera(currentPosition.isUsedCamera());
+        currentPosition = positionUnit;
+        positions.add(currentPosition);
+        System.out.println(this.toString() + "finished calculating");
     }
 
     @Override

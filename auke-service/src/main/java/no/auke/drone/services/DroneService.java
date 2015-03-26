@@ -6,7 +6,7 @@ import no.auke.drone.domain.Drone;
  * Created by huyduong on 3/25/2015.
  */
 public interface DroneService {
-    void registerDrone();
-    void removeDrone();
-    Drone createDrone();
+    void registerDrone(Drone drone);
+    void removeDrone(Drone drone);
+    Drone createDrone(String id, String name);
 }

@@ -15,6 +15,7 @@ public class SimpleDroneFactory implements DroneFactory {
         drone.setId(id);
         drone.setName(name);
         drone.setCurrentPosition(DummyCreator.createPositionUnit(new DummyCreator().makeLocation(100,100)));
+        drone.getPositions().add(drone.getCurrentPosition());
         return drone;
     }
 }
