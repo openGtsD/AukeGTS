@@ -24,4 +24,9 @@ public class LiveTrackServicesImpl implements LiveTrackServices {
         return new DummyCreator().getAllTrack();
     }
 
+    @Override
+    public PositionUnit getDrone(String droneId) {
+        return new DummyCreator().getDrone(droneId);
+    }
+
 }

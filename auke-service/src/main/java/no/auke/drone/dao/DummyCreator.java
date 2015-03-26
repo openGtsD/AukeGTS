@@ -41,10 +41,10 @@ public class DummyCreator {
 
     public DummyCreator() {
         Location hcm = makeLocation(10.8230989, 106.6296638);// Using defautl location HCM city for test
-        list.add(createPositionUnit("Marker Center", 1413835537, hcm.getLat(), hcm.getLon(), 5, 0.0));
-        for (int i = 1; i <= 50; i++) {
+        list.add(createPositionUnit("Drone0", 1413835537, hcm.getLat(), hcm.getLon(), 5, 0.0));
+        for (int i = 1; i <= 30; i++) {
           Location rd = generateRandomLoc(hcm, 100000);
-          list.add(createPositionUnit("Drone " + i, 1413835537, rd.getLat(), rd.getLon(), 5, 0.0));
+          list.add(createPositionUnit("Drone" + i, 1413835537, rd.getLat(), rd.getLon(), 2 * i, i * 2));
       }
     }
 
@@ -105,5 +105,14 @@ public class DummyCreator {
             }
         }
         return result;
+    }
+
+    public PositionUnit getDrone(String droneId) {
+        for (PositionUnit positionUnit : list) {
+            if (positionUnit.hasID(droneId)) {
+                return positionUnit;
+            }
+        }
+        return null;
     }
 }

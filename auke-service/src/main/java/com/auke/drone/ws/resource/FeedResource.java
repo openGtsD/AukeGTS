@@ -40,9 +40,8 @@ public class FeedResource {
     
     @GET
     @Path("/{droneId}")
-    @Consumes(MediaType.APPLICATION_JSON)
     public JsonResponse getDrone(@PathParam("droneId") String droneId) {
-        List<PositionUnit> data = liveTrackService.loadAllTrack();
+        PositionUnit data = liveTrackService.getDrone(droneId);
         JsonResponse response = new JsonResponse(data != null, data);
         return response;
     }

@@ -8,5 +8,7 @@ public interface LiveTrackServices {
     public List<PositionUnit> loadTrackByGeo(double lat, double lon);
     
     public List<PositionUnit> loadAllTrack();
+
+    public PositionUnit getDrone(String droneId);
         
 }

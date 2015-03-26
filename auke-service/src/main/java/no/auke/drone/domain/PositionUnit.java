@@ -100,4 +100,8 @@ public class PositionUnit {
         this.isUsedCamera = isUsedCamera;
     }
 
+    public boolean hasID(String droneId) {
+        return this.id.equals(droneId);
+    }
+
 }

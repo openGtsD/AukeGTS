@@ -14,7 +14,10 @@
   </head>
   <body>
   
-  <span class="info">Marker <strong>A</strong>: <span id="a" class="bool"></span></span> &larr;&diams;&rarr; <span class="info">Marker <strong>B</strong>: <span id="b" class="bool"></span></span></div>
+  	<div class="info" style="font-weight: bold; font-size: 20pt;">Notes: drag center icon (green) then get all postion in current view: </div>
+  	<div style="font-weight: bold; font-size: 20pt; color: red">
+  	<span id="result"></span>
+  	</div>
     <div id="map-canvas"></div>
   </body>
 </html>

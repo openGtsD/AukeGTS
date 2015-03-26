@@ -10,27 +10,31 @@ function initCenter(lat, lon, zoom) {
 	return map;
 }
 
-function getDroneInfo(droneId, map, marker) {
-	$.ajax({
-		url : 'service/feed/' + droneId,
-		dataType : 'json',
-		contentType : "text/html; charset=utf-8",
-		success : function(response) {
-			var infoWindow = new google.maps.InfoWindow();
-			var droneInfo = response.data[0];
-			infoWindow.setContent(droneInfo);
-			infoWindow.open(map, marker);
-		}
-	})
+function buildHTML(data){
+	
+	return "<h1>Drone Info</h1><ul>" + 
+		"<li>Drone ID:" + data.id + "</li>" +
+		"<li>GPS: " + data.lat + "/" + data.lon + "</li>" +
+		"<li>Speed:" + data.speed  + "</li> " +
+		"<li>Altitude: " + data.altitude +"</li></ul>"
+	
 }
 
-function addInfoWindow(marker, map) {
+function showInfo(marker, map) {
 	var infoWindow = new google.maps.InfoWindow();
 	google.maps.event.addListener(marker, 'click', function() {
-		var droneInfo = getDroneInfo(marker.id);
-		console.log(droneInfo)
-		infoWindow.setContent(droneInfo);
-		infoWindow.open(map, marker);
+		$.ajax({
+			url : 'service/feed/' + marker.id,
+			dataType : 'json',
+			contentType : "text/html; charset=utf-8",
+			success : function(response) {
+				var infoWindow = new google.maps.InfoWindow();
+				var data = response.data[0];
+				var droneInfo = buildHTML(data);
+				infoWindow.setContent(droneInfo);
+				infoWindow.open(map, marker);
+			}
+		})
 	});
 }
 
@@ -198,6 +202,7 @@ function sendRequest() {
 					id : positionUnit.id,
 					title : positionUnit.id
 				});
+				showInfo(marker, map);
 			}
 		}
 	});
