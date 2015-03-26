@@ -31,8 +31,8 @@ public class FeedResource {
     private LiveTrackServices liveTrackService;
     
     @GET
-    @Path("/get-feed")
-    public JsonResponse getFeed() {
+    @Path("/get-all")
+    public JsonResponse getAllDrones() {
         List<PositionUnit> data = liveTrackService.loadAllTrack();
         JsonResponse response = new JsonResponse(data != null, data);
         return response;
