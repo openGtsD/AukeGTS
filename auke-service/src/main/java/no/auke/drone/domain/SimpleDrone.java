@@ -1,11 +1,10 @@
 package no.auke.drone.domain;
 
-import org.apache.commons.lang.StringUtils;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
-import javax.swing.text.Position;
+import java.util.ArrayList;
 import java.util.*;
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -93,8 +92,8 @@ public class SimpleDrone implements Drone, Observer{
     @Override
     public boolean equals(Object obj) {
         Drone drone = (Drone) obj;
-        return StringUtils.trim(this.id).equalsIgnoreCase(StringUtils.trimToEmpty(((Drone) obj).getId())) &&
-                StringUtils.trim(this.name).equalsIgnoreCase(StringUtils.trimToEmpty(((Drone) obj).getName()));
+        return StringUtils.trim(this.id).equalsIgnoreCase(StringUtils.trimToEmpty(drone.getId())) &&
+                StringUtils.trim(this.name).equalsIgnoreCase(StringUtils.trimToEmpty(drone.getName()));
     }
 
     @Override
