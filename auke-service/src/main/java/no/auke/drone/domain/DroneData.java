@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
  */
 public class DroneData implements Subject {
     private Map<String,Drone> drones;
-    PositionCalculator positionCalculator;
+    private PositionCalculator positionCalculator;
     private ExecutorService executor = Executors.newCachedThreadPool();
     public ExecutorService getExecutor() {
         if(executor==null) {
@@ -25,15 +25,23 @@ public class DroneData implements Subject {
     private static DroneData droneData;
 
     public static synchronized DroneData getInstance() {
+        return getInstance(true);
+    }
+
+    public static synchronized DroneData getInstance(boolean isRunningAutomatically) {
         if(droneData == null) {
-            droneData = new DroneData();
+            droneData = new DroneData(isRunningAutomatically);
         }
         return droneData;
     }
 
-    private DroneData() {
+    private DroneData(boolean isRunningAutomatically) {
         drones = new ConcurrentHashMap<String,Drone>();
-        positionCalculator = new PositionCalculatorImpl(getExecutor(),drones);
+        positionCalculator = new PositionCalculatorImpl(getExecutor(),drones, isRunningAutomatically);
+    }
+
+    public PositionCalculator getPositionCalculator() {
+        return positionCalculator;
     }
 
     public Map<String,Drone> getDrones() {

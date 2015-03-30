@@ -20,18 +20,21 @@ public class PositionCalculatorImpl implements PositionCalculator {
     protected static final long CALC_FREQUENCY = 10000; // time in milliseconds
 
     private AtomicBoolean isRunning = new AtomicBoolean();
+    private AtomicBoolean isRunningAutomatically = new AtomicBoolean(true);
+
     private Map<String,Drone> drones;
 
     private ExecutorService executor;
 
-    public PositionCalculatorImpl(ExecutorService executor, Map<String,Drone> drones) {
+    public PositionCalculatorImpl(ExecutorService executor, Map<String,Drone> drones, boolean isRunningAutomatically) {
         this.executor = executor;
         this.drones = drones;
+        this.isRunningAutomatically = new AtomicBoolean(isRunningAutomatically);
     }
 
     public void startCalculate() {
         // start calc tread if not already started
-        if(!isRunning.getAndSet(true)) {
+        if(isRunningAutomatically.get() && !isRunning.getAndSet(true)) {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {
