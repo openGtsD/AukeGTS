@@ -5,38 +5,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import no.auke.drone.dao.impl.Location;
 import no.auke.drone.domain.PositionUnit;
 
 /**
  * @author thaihuynh Using for test
  */
 public class DummyCreator {
-
-    public class Location {
-        private double lat, lon;
-
-        public Location(double lat, double lon) {
-            this.lon = lon;
-            this.lat = lat;
-        }
-
-        public double getLat() {
-            return lat;
-        }
-
-        public void setLat(double lat) {
-            this.lat = lat;
-        }
-
-        public double getLon() {
-            return lon;
-        }
-
-        public void setLon(double lon) {
-            this.lon = lon;
-        }
-    }
-
     List<PositionUnit> list = new ArrayList<PositionUnit>();
 
     public DummyCreator() {

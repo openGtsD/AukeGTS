@@ -11,10 +11,15 @@ import no.auke.drone.domain.SimpleDrone;
 public class SimpleDroneFactory implements DroneFactory {
     @Override
     public Drone createDrone(String id, String name) {
+        return createDrone(id, name, new DummyCreator().makeLocation(100,100));
+    }
+
+    @Override
+    public Drone createDrone(String id, String name, Location location) {
         Drone drone = new SimpleDrone();
         drone.setId(id);
         drone.setName(name);
-        drone.setCurrentPosition(DummyCreator.createPositionUnit(new DummyCreator().makeLocation(100,100)));
+        drone.setCurrentPosition(DummyCreator.createPositionUnit(location));
         drone.getPositions().add(drone.getCurrentPosition());
         return drone;
     }
