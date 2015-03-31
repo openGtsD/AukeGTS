@@ -98,7 +98,7 @@ public class DummyCreator {
     public List<PositionUnit> makeRandomDrones() {
         for (int i = 0; i < points.size(); i++) {
             MapPoint point = points.get(i);
-            for(int j = 1; j <= 1000; j ++) {
+            for(int j = 1; j <= 10; j ++) {
                 MapPoint rd = generateRandomMapPoint(point);
                 list.add(createPositionUnit("Drone" + i + "" + j, System.currentTimeMillis(), rd.getLatitude(), rd.getLongitude(),
                         2 * i, i * 2));
@@ -109,9 +109,5 @@ public class DummyCreator {
 
     public MapPoint makeLocation(int i, int j) {
         return null;
-    }
-
-    public List<PositionUnit> getList() {
-        return list;
     }
 }

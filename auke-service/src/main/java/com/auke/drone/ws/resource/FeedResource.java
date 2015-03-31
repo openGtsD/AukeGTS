@@ -12,7 +12,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.PositionUnit;
 import no.auke.drone.services.LiveTrackServices;
 
@@ -53,11 +52,10 @@ public class FeedResource {
     @Path("/make-drone")
     @Consumes(MediaType.APPLICATION_JSON)
     public JsonResponse makeRandomDrones() {
-        List<PositionUnit> data = liveTrackService.makeRandomDrones();
+        List<PositionUnit> data = liveTrackService.loadAllTrack();
         JsonResponse response = new JsonResponse(data != null, data);
         return response;
     }
-    
     
     
     @POST

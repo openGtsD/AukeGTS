@@ -20,7 +20,4 @@ public interface LiveTrackServices {
     public PositionUnit getDrone(String droneId);
 
     public List<PositionUnit> loadTrackWithinView(BoundingBox boundary);
-
-    public List<PositionUnit> makeRandomDrones();
-        
 }

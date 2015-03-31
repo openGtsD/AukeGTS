@@ -69,11 +69,7 @@ public class PositionUnit {
     }
 
     // LHA: something like this get position with a boundary
-
     public boolean withinView(double upperLat, double upperLon, double lowerLat, double lowerLon) {
-        System.out.println(lat + "/" + lon);
-        System.out.println("upper >>>" + upperLat + "/" + upperLon);
-        System.out.println("lower >>>" + lowerLat + "/" + lowerLon);
         return ((this.lon >= upperLon && this.lon <= lowerLon)) && (this.lat >= upperLat && this.lat <= lowerLat);
     }
 

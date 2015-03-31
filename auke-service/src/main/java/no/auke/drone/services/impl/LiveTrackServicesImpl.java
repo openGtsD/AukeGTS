@@ -37,13 +37,7 @@ public class LiveTrackServicesImpl implements LiveTrackServices {
     }
 
     public List<PositionUnit> loadTrackWithinView(BoundingBox boundary) {
-        return new DummyCreator().getTrackWithinView(boundary.getNorthEastLat(), boundary.getSouthWestLon(),
-                boundary.getSouthWestLat(), boundary.getNorthEastLon());
+        return new DummyCreator().getTrackWithinView(boundary.getNorthEastLat(), boundary.getNorthEastLon(),
+                boundary.getSouthWestLat(), boundary.getSouthWestLon());
     }
-
-    @Override
-    public List<PositionUnit> makeRandomDrones() {
-        return new DummyCreator().getList();
-    }
-
 }
