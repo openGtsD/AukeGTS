@@ -30,40 +30,35 @@ public class DroneController {
     @GET
     @Path("/register")
     public JsonResponse register(@QueryParam("id") String id, @QueryParam("name") String name) {
-        Drone drone = new SimpleDroneFactory().createDrone(id,name);
-        DroneData.getInstance().register((Observer)drone);
+        Drone drone = droneService.registerDrone(id, name);
         return new JsonResponse(drone == null, drone);
     }
 
     @GET
     @Path("/remove")
     public JsonResponse remove(@QueryParam("id") String id, @QueryParam("name") String name) {
-        Drone drone = new SimpleDroneFactory().createDrone(id,name);
-        DroneData.getInstance().remove((Observer) drone);
+        Drone drone = droneService.removeDrone(id);
         return new JsonResponse(drone == null, drone);
     }
 
     @GET
     @Path("/get")
     public JsonResponse get(@QueryParam("id") String id) {
-        Drone drone = DroneData.getInstance().getDrone(id) != null ? (Drone) DroneData.getInstance().getDrone(id) : null;
+        Drone drone = droneService.getDrone(id);
         return new JsonResponse(drone == null, drone);
     }
 
     @GET
     @Path("/getall")
     public JsonResponse getAll() {
-        Collection<Drone> drones = DroneData.getInstance().getDrones().values();
+        Collection<Drone> drones = droneService.getAll();
         return new JsonResponse(drones == null, drones);
     }
 
     @GET
     @Path("/move")
     public JsonResponse move(@QueryParam("id") String id) {
-        Drone drone = DroneData.getInstance().getDrone(id) != null ? (Drone) DroneData.getInstance().getDrone(id) : null;
-        if(drone != null) {
-
-        }
+        Drone drone = droneService.moveDrone(id);
         return new JsonResponse(drone == null, drone);
     }
 }

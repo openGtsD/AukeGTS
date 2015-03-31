@@ -69,6 +69,8 @@ public class DroneDataTest {
         PositionUnit oldPosition = drone.getCurrentPosition();
         drone.calculate();
         PositionUnit newPosition = drone.getCurrentPosition();
+        System.out.println("........." + oldPosition.getLat());
+        System.out.println("........." + newPosition.getLat());
         Assert.assertNotSame(newPosition,oldPosition);
         Assert.assertSame(oldPosition,drone.getPositions().get(0));
     }
