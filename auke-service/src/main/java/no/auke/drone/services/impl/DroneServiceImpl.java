@@ -2,14 +2,10 @@ package no.auke.drone.services.impl;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import no.auke.drone.dao.impl.SimpleDroneFactory;
 import no.auke.drone.domain.*;
 import no.auke.drone.services.DroneService;
-import no.auke.drone.services.PositionCalculator;
-import no.auke.drone.services.PositionCalculatorImpl;
 import org.springframework.stereotype.Service;
 
 

@@ -1,7 +1,7 @@
 package no.auke.drone.domain;
 
 import no.auke.drone.services.PositionCalculator;
-import no.auke.drone.services.PositionCalculatorImpl;
+import no.auke.drone.services.impl.PositionCalculatorImpl;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
