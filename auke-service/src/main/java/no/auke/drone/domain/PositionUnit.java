@@ -6,13 +6,13 @@ public class PositionUnit {
     private long time;
     private double lat;
     private double lon;
-    private double altitude; 
+    private double altitude;
     private double speed;
     private String droneType;
     private Person flyer;
     private String purpose;
     private boolean isUsedCamera;
-    
+
     public PositionUnit() {
     }
 
@@ -67,16 +67,15 @@ public class PositionUnit {
     public boolean hasGeo(double lat2, double lon2) {
         return this.lat == lat2 && this.lon == lon2;
     }
-    
-    
+
     // LHA: something like this get position with a boundary
 
-    public boolean withinView(double lat, double lon, double height, double width) {
-
-		return (this.lat >= lat && this.lat <= lat + height) &&
-				(this.lon >= lon && this.lon <= lon + width);
-	
-	}    
+    public boolean withinView(double upperLat, double upperLon, double lowerLat, double lowerLon) {
+        System.out.println(lat + "/" + lon);
+        System.out.println("upper >>>" + upperLat + "/" + upperLon);
+        System.out.println("lower >>>" + lowerLat + "/" + lowerLon);
+        return ((this.lon >= upperLon && this.lon <= lowerLon)) && (this.lat >= upperLat && this.lat <= lowerLat);
+    }
 
     public String getDroneType() {
         return droneType;
@@ -113,7 +112,11 @@ public class PositionUnit {
     public boolean hasID(String droneId) {
         return this.id.equals(droneId);
     }
-
-
+    
+    @Override
+    public boolean equals(Object obj) {
+        PositionUnit that =  ((PositionUnit) obj);
+        return this.id.equals(that.id);
+    }
 
 }

@@ -5,11 +5,14 @@ import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import no.auke.drone.domain.BoundingBox;
+import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.PositionUnit;
 import no.auke.drone.services.LiveTrackServices;
 
@@ -45,6 +48,24 @@ public class FeedResource {
         JsonResponse response = new JsonResponse(data != null, data);
         return response;
     }
-
     
+    @POST
+    @Path("/make-drone")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public JsonResponse makeRandomDrones() {
+        List<PositionUnit> data = liveTrackService.makeRandomDrones();
+        JsonResponse response = new JsonResponse(data != null, data);
+        return response;
+    }
+    
+    
+    
+    @POST
+    @Path("/load-drone-in-view")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public JsonResponse loadTrackWithinView(BoundingBox boundary) {
+        List<PositionUnit> data = liveTrackService.loadTrackWithinView(boundary);
+        JsonResponse response = new JsonResponse(data != null, data);
+        return response;
+    }
 }
