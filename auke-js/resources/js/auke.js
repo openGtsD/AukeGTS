@@ -79,7 +79,7 @@ function init() {
 				}
 			}
 		});
-	}, 5000);
+	}, 10000);
 	var counter = 0;
 	var interval2 = setInterval(function() {
 		counter++;
@@ -104,10 +104,7 @@ function init() {
 				})
 			}
 		}
-		if (counter >= 1000) {
-			window.clearInterval(interval2);
-		}
-	}, 5000)
+	}, 10000)
 }
 
 google.maps.event.addDomListener(window, 'load', init);
