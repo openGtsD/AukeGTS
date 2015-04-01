@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +20,8 @@ import no.auke.drone.services.DroneService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import com.auke.drone.ws.util.PointUtil;
 
 /**
  * Created by huyduong on 3/25/2015.
@@ -80,25 +83,23 @@ public class DroneServiceImpl implements DroneService {
     }
 
     private class DroneServiceFacade {
-        private List<Drone> createDroneForCity(int numberOfDrones, double latitude, double longitude) {
-            List<Drone> result = new ArrayList<Drone>();
-            for (int i = 0; i < numberOfDrones; i++) {
-                result.add(new SimpleDroneFactory().createDrone(String.valueOf(i), String.valueOf(i),
-                        new MapPoint(1, 1)));
-            }
-            return result;
-        }
-
         public List<Drone> createDronesForCapitalCities() {
             List<Drone> result = new ArrayList<Drone>();
-            // create drones for New York
-            logger.info("creating 100 drones for New York");
-            result.addAll(createDroneForCity(100,44.930,-74.893));
+            List<MapPoint> points = new ArrayList<MapPoint>();
+            points.add(new MapPoint(10.823099, 106.629664));// HCM
+            points.add(new MapPoint(59.913869, 10.752245));// OSLO
+            points.add(new MapPoint(55.378051, -3.435973));// UK
+            points.add(new MapPoint(51.507351, -0.127758));// London
 
-            // TODO update location for different cities
-            // create drones for Paris
-            // createDroneForCity(100,44.930,-74.893);
-
+            for (int i = 0; i < points.size(); i++) {
+                MapPoint point = points.get(i);
+                for (int j = 1; j <= 10; j++) {
+                    MapPoint rd = PointUtil.generateRandomMapPoint(point);
+                    Drone drone = new SimpleDroneFactory().createDrone(UUID.randomUUID().toString(), "Drone" + i + "-"
+                            + j, 2 * i, 2 * i, System.currentTimeMillis(), "type", null, true, rd);
+                    result.add(drone);
+                }
+            }
             return result;
         }
 

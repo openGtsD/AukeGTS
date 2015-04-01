@@ -35,7 +35,7 @@ public class DroneDataTest {
 
     @Test
     public void shouldInitDroneData() {
-        Assert.assertEquals(40, droneData.getDrones().size());
+        Assert.assertEquals(0, droneData.getDrones().size());
     }
 
     @Test

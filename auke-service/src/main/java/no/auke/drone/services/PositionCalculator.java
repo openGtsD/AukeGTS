@@ -1,8 +1,5 @@
 package no.auke.drone.services;
 
-import no.auke.drone.domain.Drone;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by huyduong on 3/26/2015.
