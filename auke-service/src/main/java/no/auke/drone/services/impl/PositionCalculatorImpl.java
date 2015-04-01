@@ -1,16 +1,14 @@
 package no.auke.drone.services.impl;
 
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import no.auke.drone.domain.Drone;
 import no.auke.drone.services.PositionCalculator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import no.auke.drone.domain.Drone;
-import no.auke.drone.domain.PositionUnit;
 
 /**
  * Created by huyduong on 3/26/2015.

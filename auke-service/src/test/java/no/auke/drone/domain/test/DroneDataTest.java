@@ -3,15 +3,13 @@ package no.auke.drone.domain.test;
 import no.auke.drone.dao.impl.SimpleDroneFactory;
 import no.auke.drone.domain.Drone;
 import no.auke.drone.domain.DroneData;
+import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Observer;
-import no.auke.drone.domain.PositionUnit;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by huyduong on 3/29/2015.
@@ -37,7 +35,7 @@ public class DroneDataTest {
 
     @Test
     public void shouldInitDroneData() {
-        Assert.assertEquals(0,droneData.getDrones().size());
+        Assert.assertEquals(40, droneData.getDrones().size());
     }
 
     @Test
@@ -66,11 +64,11 @@ public class DroneDataTest {
         Drone drone = new SimpleDroneFactory().createDrone("drone1","my drone");
         droneData.register((Observer)drone);
         Assert.assertEquals(1,droneData.getDrones().size());
-        PositionUnit oldPosition = drone.getCurrentPosition();
+        MapPoint oldPosition = drone.getCurrentPosition();
         drone.calculate();
-        PositionUnit newPosition = drone.getCurrentPosition();
-        System.out.println("........." + oldPosition.getLat());
-        System.out.println("........." + newPosition.getLat());
+        MapPoint newPosition = drone.getCurrentPosition();
+        System.out.println("........." + oldPosition.getLongitude());
+        System.out.println("........." + newPosition.getLatitude());
         Assert.assertNotSame(newPosition,oldPosition);
         Assert.assertSame(oldPosition,drone.getPositions().get(0));
     }
