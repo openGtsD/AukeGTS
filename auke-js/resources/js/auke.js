@@ -41,15 +41,16 @@ var result = [];// just for test
 function init() {
 	var latLngCenter = new google.maps.LatLng(10.8230989, 106.6296638);// Uk
 	var map = new google.maps.Map(document.getElementById('map-canvas'), {
-		'zoom' : 0,
+		'zoom' : 4,
 		'center' : latLngCenter,
 		'mapTypeId' : google.maps.MapTypeId.ROADMAP,
 		'mapTypeControl' : false
 	});
 
 	makeRandomDronesOn(map);
-	var makers = [];
-	var interval1 = setInterval(function() {
+	var markers = [];
+	var interval1 = setInterval(function() {// Need send request into server and
+											// check po
 		var mapBound = map.getBounds();
 		for (var j = 1; j < result.length; j++) {
 			latLng = new google.maps.LatLng(result[j].currentPosition.latitude,
@@ -62,9 +63,7 @@ function init() {
 			if (mapBound.contains(latLng)) {
 				marker.setMap(map);
 				showInfo(marker, map);
-				makers.push(marker);
-			} else {
-				marker.setMap(null);
+				markers.push(marker);
 			}
 		}
 	}, 5000);
@@ -72,25 +71,22 @@ function init() {
 	var interval2 = setInterval(function() {
 		counter++;
 		var mapBound = map.getBounds();
-		for (var j = 1; j < makers.length; j++) {
-			if (mapBound.contains(makers[j].getPosition())) {
-				makers[j].setMap(null);
-				var droneId = makers[j].id;
+		for (var i = 1;i < markers.length; i++) {
+			var oldMarker = markers[i];
+			if (mapBound.contains(oldMarker.getPosition())) {
+				var droneId = oldMarker.id;
 				$.ajax({
 					url : 'service/drone/' + droneId,
 					dataType : 'json',
 					contentType : "text/html; charset=utf-8",
 					success : function(response) {
 						var data = response.data[0];
-						latLng = new google.maps.LatLng(
-								data.currentPosition.latitude,
-								data.currentPosition.longitude);
-						var marker = new google.maps.Marker({
-							position : latLng,
-							id : data.id,
-							title : data.name
-						});
-						marker.setMap(map);
+						if (data) {
+							latLng = new google.maps.LatLng(
+									data.currentPosition.latitude,
+									data.currentPosition.longitude);
+							oldMarker.setPosition(latLng);
+						}
 					}
 				})
 			}
@@ -98,7 +94,7 @@ function init() {
 		if (counter >= 1000) {
 			window.clearInterval(interval2);
 		}
-	}, 5000)
+	}, 10000)
 }
 
 function makeRandomDronesOn(map) {
