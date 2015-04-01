@@ -1,9 +1,9 @@
 package no.auke.drone.dao.impl;
 
 import no.auke.drone.dao.DroneFactory;
-import no.auke.drone.dao.DummyCreator;
 import no.auke.drone.domain.Drone;
 import no.auke.drone.domain.MapPoint;
+import no.auke.drone.domain.Person;
 import no.auke.drone.domain.SimpleDrone;
 
 /**
@@ -12,7 +12,7 @@ import no.auke.drone.domain.SimpleDrone;
 public class SimpleDroneFactory implements DroneFactory {
     @Override
     public Drone createDrone(String id, String name) {
-        return createDrone(id, name, new DummyCreator().makeLocation(100,100));
+        return createDrone(id, name, new MapPoint(100, 100));
     }
 
     @Override
@@ -20,8 +20,25 @@ public class SimpleDroneFactory implements DroneFactory {
         Drone drone = new SimpleDrone();
         drone.setId(id);
         drone.setName(name);
-        drone.setCurrentPosition(DummyCreator.createPositionUnit(location));
+        drone.setCurrentPosition(location);
         drone.getPositions().add(drone.getCurrentPosition());
         return drone;
     }
+
+    @Override
+    public Drone createDrone(String id, String name, double altitude, double speed, long time, String droneType,
+            Person flyer, boolean hasCamera, MapPoint location) {
+        Drone drone = new SimpleDrone();
+        drone.setId(id);
+        drone.setName(name);
+        drone.setAltitude(altitude);
+        drone.setSpeed(speed);
+        drone.setDroneType(droneType);
+        drone.setFlyer(flyer);
+        drone.setUsedCamera(hasCamera);
+        drone.setCurrentPosition(location);
+        drone.getPositions().add(drone.getCurrentPosition());
+        return drone;
+    }
+
 }

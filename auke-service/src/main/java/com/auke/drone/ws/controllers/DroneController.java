@@ -1,21 +1,25 @@
 package com.auke.drone.ws.controllers;
 
-import com.auke.drone.ws.dto.JsonResponse;
-import no.auke.drone.dao.DroneFactory;
-import no.auke.drone.dao.impl.SimpleDroneFactory;
+import java.util.Collection;
+import java.util.List;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+
+import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.Drone;
-import no.auke.drone.domain.DroneData;
-import no.auke.drone.domain.Observer;
 import no.auke.drone.services.DroneService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import com.auke.drone.ws.dto.JsonResponse;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -42,17 +46,17 @@ public class DroneController {
     }
 
     @GET
-    @Path("/get")
-    public JsonResponse get(@QueryParam("id") String id) {
+    @Path("/{id}")
+    public JsonResponse get(@PathParam("id") String id) {
         Drone drone = droneService.getDrone(id);
-        return new JsonResponse(drone == null, drone);
+        return new JsonResponse(drone != null, drone);
     }
 
     @GET
     @Path("/getall")
     public JsonResponse getAll() {
         Collection<Drone> drones = droneService.getAll();
-        return new JsonResponse(drones == null, drones);
+        return new JsonResponse(drones != null, drones);
     }
 
     @GET
@@ -60,5 +64,14 @@ public class DroneController {
     public JsonResponse move(@QueryParam("id") String id) {
         Drone drone = droneService.moveDrone(id);
         return new JsonResponse(drone == null, drone);
+    }
+    
+    @POST
+    @Path("/load-drone-in-view")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public JsonResponse loadDroneWithinView(BoundingBox boundary) {
+        List<Drone> data = droneService.loadDroneWithinView(boundary);
+        JsonResponse response = new JsonResponse(data != null, data);
+        return response;
     }
 }
