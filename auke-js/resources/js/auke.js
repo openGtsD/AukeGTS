@@ -39,9 +39,9 @@ function showInfo(marker, map) {
 
 var result = [];// just for test
 function init() {
-	var latLngCenter = new google.maps.LatLng(10.8230989, 106.6296638);// Uk
+	var latLngCenter = new google.maps.LatLng(10.8230989, 106.6296638);
 	var map = new google.maps.Map(document.getElementById('map-canvas'), {
-		'zoom' : 4,
+		'zoom' : 3,
 		'center' : latLngCenter,
 		'mapTypeId' : google.maps.MapTypeId.ROADMAP,
 		'mapTypeControl' : false
@@ -63,17 +63,17 @@ function init() {
 			}),
 			type : 'POST',
 			success : function(response) {
-				var datas = response.data;
-				for (var i = 0; i < datas.length; i++) {
+				var data = response.data;
+				for (var i = 0; i < data.length; i++) {
 					latLng = new google.maps.LatLng(
-							datas[i].currentPosition.latitude,
-							datas[i].currentPosition.longitude);
+							data[i].currentPosition.latitude,
+							data[i].currentPosition.longitude);
 					var marker = new google.maps.Marker({
 						position : latLng,
-						id : datas[i].id,
-						title : datas[i].name
+						id : data[i].id,
+						title : data[i].name,
+						map: map
 					});
-					marker.setMap(map);
 					showInfo(marker, map);
 					markers.push(marker);
 				}
@@ -86,6 +86,7 @@ function init() {
 		var mapBound = map.getBounds();
 		for (var i = 1; i < markers.length; i++) {
 			var oldMarker = markers[i];
+			oldMarker.setMap(null);
 			if (mapBound.contains(oldMarker.getPosition())) {
 				var droneId = oldMarker.id;
 				$.ajax({
@@ -102,6 +103,8 @@ function init() {
 						}
 					}
 				})
+			} else {
+				oldMarker.setMap(null);
 			}
 		}
 	}, 10000)

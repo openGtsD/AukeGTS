@@ -54,12 +54,12 @@ public class SimpleDrone implements Drone, Observer {
         System.out.println(this.toString() + "started calculating");
         Random ran = new Random();
         int theta = ran.nextInt(1) + 180;
-        int speed = 1000 * (ran.nextInt(1) + 100);
+        int speed = 100 * (ran.nextInt(1) + 10);
 
         // fly randomly
         double dx = speed * Math.sin(theta);
-        double dy = speed * Math.sin(theta);
-        double deltaLongitude = dx / (111320 * Math.cos(getAltitude()));
+        double dy = speed * Math.cos(theta);
+        double deltaLongitude = dx / (111320 * Math.sin(getAltitude()));
         double deltaLatitude = dy / 110540;
         double finalLongitude = this.currentPosition.getLongitude() + deltaLongitude;
         double finalLatitude = this.currentPosition.getLatitude() + deltaLatitude;
