@@ -85,7 +85,8 @@ public class SimpleDrone implements Drone, Observer {
 
     @Override
     public String toString() {
-        return "drone id: " + id + ", name:" + name + " ";
+        return "drone id: " + id + ", name:" + name + ", latitude " + currentPosition.getLatitude() + ", longitude"
+                + currentPosition.getLongitude();
     }
 
     @Override
@@ -168,7 +169,7 @@ public class SimpleDrone implements Drone, Observer {
     // LHA: something like this get position with a boundary
     @Override
     public boolean withinView(double upperLat, double upperLon, double lowerLat, double lowerLon) {
-        return (this.currentPosition.getLongitude() >= upperLon && this.currentPosition.getLongitude() <= lowerLon)
-                && (this.currentPosition.getLatitude() >= upperLat && this.currentPosition.getLatitude() <= lowerLat);
+        return (this.currentPosition.getLongitude() <= upperLon && this.currentPosition.getLongitude() >= lowerLon)
+                && (this.currentPosition.getLatitude() <= upperLat && this.currentPosition.getLatitude() >= lowerLat);
     }
 }

@@ -46,32 +46,45 @@ function init() {
 		'mapTypeId' : google.maps.MapTypeId.ROADMAP,
 		'mapTypeControl' : false
 	});
-
-	makeRandomDronesOn(map);
 	var markers = [];
-	var interval1 = setInterval(function() {// Need send request into server and
-											// check po
+	var interval1 = setInterval(function() {
 		var mapBound = map.getBounds();
-		for (var j = 1; j < result.length; j++) {
-			latLng = new google.maps.LatLng(result[j].currentPosition.latitude,
-					result[j].currentPosition.longitude);
-			var marker = new google.maps.Marker({
-				position : latLng,
-				id : result[j].id,
-				title : result[j].name
-			});
-			if (mapBound.contains(latLng)) {
-				marker.setMap(map);
-				showInfo(marker, map);
-				markers.push(marker);
+		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
+		var sw = mapBound.getSouthWest();
+		$.ajax({
+			url : 'service/drone/load-drone-in-view',
+			dataType : 'json',
+			contentType : "application/json; charset=utf-8",
+			data : JSON.stringify({
+				southWestLat : sw.lat(),
+				southWestLon : sw.lng(),
+				northEastLat : ne.lat(),
+				northEastLon : ne.lng()
+			}),
+			type : 'POST',
+			success : function(response) {
+				var datas = response.data;
+				for (var i = 0; i < datas.length; i++) {
+					latLng = new google.maps.LatLng(
+							datas[i].currentPosition.latitude,
+							datas[i].currentPosition.longitude);
+					var marker = new google.maps.Marker({
+						position : latLng,
+						id : datas[i].id,
+						title : datas[i].name
+					});
+					marker.setMap(map);
+					showInfo(marker, map);
+					markers.push(marker);
+				}
 			}
-		}
+		});
 	}, 5000);
 	var counter = 0;
 	var interval2 = setInterval(function() {
 		counter++;
 		var mapBound = map.getBounds();
-		for (var i = 1;i < markers.length; i++) {
+		for (var i = 1; i < markers.length; i++) {
 			var oldMarker = markers[i];
 			if (mapBound.contains(oldMarker.getPosition())) {
 				var droneId = oldMarker.id;
@@ -94,19 +107,7 @@ function init() {
 		if (counter >= 1000) {
 			window.clearInterval(interval2);
 		}
-	}, 10000)
-}
-
-function makeRandomDronesOn(map) {
-	$.ajax({
-		url : 'service/drone/getall',
-		dataType : 'json',
-		contentType : "application/json; charset=utf-8",
-		type : 'GET',
-		success : function(response) {
-			result = response.data;
-		}
-	});
+	}, 5000)
 }
 
 google.maps.event.addDomListener(window, 'load', init);

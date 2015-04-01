@@ -90,13 +90,14 @@ public class DroneServiceImpl implements DroneService {
             points.add(new MapPoint(59.913869, 10.752245));// OSLO
             points.add(new MapPoint(55.378051, -3.435973));// UK
             points.add(new MapPoint(51.507351, -0.127758));// London
-
+            points.add(new MapPoint(56.130366, -106.346771));//Canada
+            
             for (int i = 0; i < points.size(); i++) {
                 MapPoint point = points.get(i);
                 for (int j = 1; j <= 10; j++) {
                     MapPoint rd = PointUtil.generateRandomMapPoint(point);
                     Drone drone = new SimpleDroneFactory().createDrone(UUID.randomUUID().toString(), "Drone" + i + "-"
-                            + j, 2 * i, 2 * i, System.currentTimeMillis(), "type", null, true, rd);
+                            + j, 2 * j, 2 * j, System.currentTimeMillis(), "type", null, true, rd);
                     result.add(drone);
                 }
             }
