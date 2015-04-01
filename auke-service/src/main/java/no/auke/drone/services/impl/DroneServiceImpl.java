@@ -31,10 +31,12 @@ public class DroneServiceImpl implements DroneService {
 
     @PostConstruct
     public void initDroneService() {
+        logger.info("initializing drone services");
         List<Drone> drones = new DroneServiceFacade().createDronesForCapitalCities();
         for(Drone drone: drones) {
             DroneData.getInstance().register((Observer)drone);
         }
+        logger.info("finished initializing drone services");
     }
 
     public DroneServiceImpl() {
@@ -88,7 +90,7 @@ public class DroneServiceImpl implements DroneService {
             List<Drone> result = new ArrayList<Drone>();
             // create drones for New York
             logger.info("creating 100 drones for New York");
-            createDroneForCity(100,44.930,-74.893);
+            result.addAll(createDroneForCity(100,44.930,-74.893));
 
             // TODO update location for different cities
             // create drones for Paris
