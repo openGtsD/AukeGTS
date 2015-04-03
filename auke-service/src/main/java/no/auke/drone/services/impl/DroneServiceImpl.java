@@ -118,4 +118,21 @@ public class DroneServiceImpl implements DroneService {
         return result;
     }
 
+    @Override
+    public Drone startDrone(String id) {
+        Drone drone = getDrone(id);
+        if(drone != null) {
+            drone.setFlying(true);
+        }
+        return drone;
+    }
+
+    @Override
+    public Drone stopDrone(String id) {
+        Drone drone = getDrone(id);
+        if(drone != null) {
+            drone.setFlying(false);
+        }
+        return drone;
+    }
 }

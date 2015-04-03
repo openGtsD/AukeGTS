@@ -65,6 +65,20 @@ public class DroneController {
         Drone drone = droneService.moveDrone(id);
         return new JsonResponse(drone == null, drone);
     }
+
+    @GET
+    @Path("/start")
+    public JsonResponse start(@QueryParam("id") String id) {
+        Drone drone = droneService.startDrone(id);
+        return new JsonResponse(drone == null, drone);
+    }
+
+    @GET
+    @Path("/stop")
+    public JsonResponse stop(@QueryParam("id") String id) {
+        Drone drone = droneService.stopDrone(id);
+        return new JsonResponse(drone == null, drone);
+    }
     
     @POST
     @Path("/load-drone-in-view")

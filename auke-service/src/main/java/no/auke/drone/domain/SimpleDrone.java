@@ -5,11 +5,15 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by huyduong on 3/24/2015.
  */
 public class SimpleDrone implements Drone, Observer {
+    private static final Logger logger = LoggerFactory.getLogger(SimpleDrone.class);
+
     private String id;
     private String name;
     private long time;
@@ -20,6 +24,7 @@ public class SimpleDrone implements Drone, Observer {
     private boolean isUsedCamera;
     private MapPoint currentPosition;
     private List<MapPoint> positions;
+    private boolean isFlying = true; // default value
 
     public SimpleDrone() {
         positions = new ArrayList<MapPoint>();
@@ -51,22 +56,26 @@ public class SimpleDrone implements Drone, Observer {
 
     @Override
     public void calculate() {
-        System.out.println(this.toString() + "started calculating");
-        Random ran = new Random();
-        int theta = ran.nextInt(1) + 180;
-        int speed = 100 * (ran.nextInt(1) + 10);
+        if(isFlying) {
+            logger.info(this.toString() + "started calculating");
+            Random ran = new Random();
+            int theta = ran.nextInt(1) + 180;
+            int speed = 100 * (ran.nextInt(1) + 10);
 
-        // fly randomly
-        double dx = speed * Math.sin(theta);
-        double dy = speed * Math.cos(theta);
-        double deltaLongitude = dx / (111320 * Math.sin(getAltitude()));
-        double deltaLatitude = dy / 110540;
-        double finalLongitude = this.currentPosition.getLongitude() + deltaLongitude;
-        double finalLatitude = this.currentPosition.getLatitude() + deltaLatitude;
-        MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude);
-        currentPosition = positionUnit;
+            // fly randomly
+            double dx = speed * Math.sin(theta);
+            double dy = speed * Math.cos(theta);
+            double deltaLongitude = dx / (111320 * Math.sin(getAltitude()));
+            double deltaLatitude = dy / 110540;
+            double finalLongitude = this.currentPosition.getLongitude() + deltaLongitude;
+            double finalLatitude = this.currentPosition.getLatitude() + deltaLatitude;
+            MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude);
+            currentPosition = positionUnit;
 //        positions.add(currentPosition); TODO, will add later when the synchronization to json finished
-        System.out.println(this.toString() + "finished calculating");
+            logger.info(this.toString() + "finished calculating");
+        } else {
+            logger.info(this.toString() + "is not flying!!!");
+        }
     }
 
     @Override
@@ -164,6 +173,14 @@ public class SimpleDrone implements Drone, Observer {
     @Override
     public void setPositions(List<MapPoint> positions) {
         this.positions = positions;
+    }
+
+    public boolean isFlying() {
+        return isFlying;
+    }
+
+    public void setFlying(boolean isFlying) {
+        this.isFlying = isFlying;
     }
 
     // LHA: something like this get position with a boundary

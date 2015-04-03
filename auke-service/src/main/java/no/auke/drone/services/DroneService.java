@@ -15,5 +15,7 @@ public interface DroneService {
     Drone getDrone(String id);
     Collection<Drone> getAll();
     Drone moveDrone(String id);
+    Drone stopDrone(String id);
+    Drone startDrone(String id);
     List<Drone> loadDroneWithinView(BoundingBox boundary);
 }
