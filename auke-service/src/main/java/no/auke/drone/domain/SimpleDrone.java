@@ -65,7 +65,7 @@ public class SimpleDrone implements Drone, Observer {
         double finalLatitude = this.currentPosition.getLatitude() + deltaLatitude;
         MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude);
         currentPosition = positionUnit;
-        positions.add(currentPosition);
+//        positions.add(currentPosition); TODO, will add later when the synchronization to json finished
         System.out.println(this.toString() + "finished calculating");
     }
 
