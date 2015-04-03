@@ -123,6 +123,8 @@ public class DroneServiceImpl implements DroneService {
         Drone drone = getDrone(id);
         if(drone != null) {
             drone.setFlying(true);
+            // setting the drone altitude to 100, this is for testing simulation only
+            drone.setAltitude(100);
         }
         return drone;
     }
@@ -132,6 +134,8 @@ public class DroneServiceImpl implements DroneService {
         Drone drone = getDrone(id);
         if(drone != null) {
             drone.setFlying(false);
+            // setting drone altitude to 0, this is for testing simulation only
+            drone.setAltitude(0);
         }
         return drone;
     }
