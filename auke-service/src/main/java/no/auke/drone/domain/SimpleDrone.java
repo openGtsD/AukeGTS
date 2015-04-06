@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import no.auke.drone.utils.LocationFunction;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,7 +72,7 @@ public class SimpleDrone implements Drone, Observer {
             double finalLatitude = this.currentPosition.getLatitude() + deltaLatitude;
             MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude);
             currentPosition = positionUnit;
-//        positions.add(currentPosition); TODO, will add later when the synchronization to json finished
+            LocationFunction.writeLocationHistoryByDroneId(id,currentPosition);
             logger.info(this.toString() + "finished calculating");
         } else {
             logger.info(this.toString() + "is not flying!!!");
