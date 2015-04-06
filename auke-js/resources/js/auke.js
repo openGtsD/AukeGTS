@@ -55,9 +55,8 @@ function loadDroneIncurrentView(map) {
 		type : 'POST',
 		success : function(response) {
 			var data = response.data;
-			for (var j = 0; j < markers.length; j++) {
-				markers[j].setMap(null);
-			}
+			$("#numberDrone").text(data.length);
+			clearMarkers();
 			for (var i = 0; i < data.length; i++) {
 				latLng = new google.maps.LatLng(
 						data[i].currentPosition.latitude,
@@ -65,12 +64,13 @@ function loadDroneIncurrentView(map) {
 				var marker = new google.maps.Marker({
 					position : latLng,
 					id : data[i].id,
-					title : data[i].name
+					title : data[i].name,
+					icon : '/auke-js/resources/images/drone.png'
+
 				});
 				marker.setMap(map);
 				showInfo(marker, map);
 				markers.push(marker);
-				$("#numberDrone").text(data.length);
 
 			}
 
@@ -105,25 +105,11 @@ function moveDroneIncurrentView(map) {
 }
 
 function init() {
-	var latLngCenter = new google.maps.LatLng(10.8230989, 106.6296638);// HCM
+	var latLngCenter = new google.maps.LatLng(59.913869, 10.752245);// OSLO
 	var map = new google.maps.Map(document.getElementById('map-canvas'), {
-		'zoom' : 0,
-		'center' : latLngCenter,
-		'mapTypeId' : google.maps.MapTypeId.ROADMAP,
-		'mapTypeControl' : false
-	});
-	$("#resultZoom").text(map.getZoom());
-	google.maps.event.addListener(map, 'zoom_changed', function() {
-		var mapBound = map.getBounds();
-		$("#resultZoom").text(map.getZoom());
-		$('#resultCenter').text(
-				map.getCenter().lat() + " / " + map.getCenter().lng());
-		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
-		var sw = mapBound.getSouthWest();
-		var southWestLat = "Upper Left: " + sw.lat() + " / " + sw.lng();
-		var northEastLat = "Lower Right: " + ne.lat() + " / " + ne.lng();
-		$("#resultBoundary").html(southWestLat + "</br>" + northEastLat);
-		loadDroneIncurrentView(map);
+		'zoom' : 3,
+		'center' : latLngCenter
+
 	});
 
 	google.maps.event.addListener(map, 'idle', function() {
@@ -139,25 +125,20 @@ function init() {
 		loadDroneIncurrentView(map);
 	});
 //
-//	// Sets the map on all markers in the array.
-//	function setAllMap(map) {
-//		for (var i = 0; i < markers.length; i++) {
-//			markers[i].setMap(map);
-//		}
-//	}
-//
-//	// Removes the markers from the map, but keeps them in the array.
-//	function clearMarkers() {
-//		setAllMap(null);
-//	}
-
-	var interval2 = setInterval(function() {
-		moveDroneIncurrentView(map);
-	}, 30000)
-	
-//	var interval3 = setInterval(function() {
-//		loadDroneIncurrentView(map);
-//	}, 10000)
-
+//	 var interval2 = setInterval(function() {
+//		moveDroneIncurrentView(map);
+//	}, 5000)
 }
+
+function setAllMap(map) {
+	for (var i = 0; i < markers.length; i++) {
+		markers[i].setMap(map);
+	}
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+	setAllMap(null);
+}
+
 google.maps.event.addDomListener(window, 'load', init);
