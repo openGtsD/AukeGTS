@@ -83,6 +83,7 @@ public class LocationFunction {
                 BufferedReader br = new BufferedReader(
                         new FileReader(dataFile));
                 mapPointData = gson.fromJson(br, MapPointData.class);
+                mapPointData.getMapPoints().add(mapPoint);
             } else {
                 mapPointData = new MapPointData(droneId,mapPoint);
                 dataFile.createNewFile();
