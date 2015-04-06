@@ -90,8 +90,8 @@ public class DroneServiceImpl implements DroneService {
             points.add(new MapPoint(59.913869, 10.752245));// OSLO
             points.add(new MapPoint(55.378051, -3.435973));// UK
             points.add(new MapPoint(51.507351, -0.127758));// London
-            points.add(new MapPoint(56.130366, -106.346771));//Canada
-            
+            points.add(new MapPoint(56.130366, -106.346771));// Canada
+
             for (int i = 0; i < points.size(); i++) {
                 MapPoint point = points.get(i);
                 for (int j = 1; j <= 10; j++) {
@@ -110,8 +110,8 @@ public class DroneServiceImpl implements DroneService {
     public List<Drone> loadDroneWithinView(BoundingBox boundary) {
         List<Drone> result = new ArrayList<Drone>();
         for (Drone positionUnit : getAll()) {
-            if (positionUnit.withinView(boundary.getNorthEastLat(), boundary.getNorthEastLon(),
-                    boundary.getSouthWestLat(), boundary.getSouthWestLon())) {
+            if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
+                    boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
                 result.add(positionUnit);
             }
         }
@@ -121,9 +121,10 @@ public class DroneServiceImpl implements DroneService {
     @Override
     public Drone startDrone(String id) {
         Drone drone = getDrone(id);
-        if(drone != null) {
+        if (drone != null) {
             drone.setFlying(true);
-            // setting the drone altitude to 100, this is for testing simulation only
+            // setting the drone altitude to 100, this is for testing simulation
+            // only
             drone.setAltitude(100);
         }
         return drone;
@@ -132,7 +133,7 @@ public class DroneServiceImpl implements DroneService {
     @Override
     public Drone stopDrone(String id) {
         Drone drone = getDrone(id);
-        if(drone != null) {
+        if (drone != null) {
             drone.setFlying(false);
             // setting drone altitude to 0, this is for testing simulation only
             drone.setAltitude(0);

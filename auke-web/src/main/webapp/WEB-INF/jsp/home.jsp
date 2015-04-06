@@ -14,9 +14,11 @@
     
   </head>
   <body>
-	<div class="info" style="font-weight: bold; font-size: 20pt;">Postion in current view is: </div>
-  	<div style="font-weight: bold; font-size: 20pt; color: red">
-  	<span id="result"></span>
+	<div class="info" style="font-weight: bold; font-size: 20pt;">Map Center: <span style="color: red" id="resultCenter"></span></div>
+  	<div class="info" style="font-weight: bold; font-size: 20pt;">Zoom Factory: <span style="color: red" id="resultZoom"></span></div>
+  	<div class="info" style="font-weight: bold; font-size: 20pt;"><span style="color: red" id="resultBoundary"></span></div>
+	<div class="info" style="font-weight: bold; font-size: 20pt;">Number drone in current view is: <span style="color: red" id="numberDrone"></span></div>
+  	
     <div id="map-canvas"></div>
   </body>
 </html>
