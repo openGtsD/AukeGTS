@@ -34,21 +34,21 @@ public class TrackerController {
     @GET
     @Path("/register")
     public JsonResponse register(@QueryParam("id") String id, @QueryParam("name") String name) {
-        Tracker tracker = trackerService.registerDrone(id, name);
+        Tracker tracker = trackerService.registerTracker(id, name);
         return new JsonResponse(tracker == null, tracker);
     }
 
     @GET
     @Path("/remove")
     public JsonResponse remove(@QueryParam("id") String id, @QueryParam("name") String name) {
-        Tracker tracker = trackerService.removeDrone(id);
+        Tracker tracker = trackerService.removeTracker(id);
         return new JsonResponse(tracker == null, tracker);
     }
 
     @GET
     @Path("/{id}")
     public JsonResponse get(@PathParam("id") String id) {
-        Tracker tracker = trackerService.getDrone(id);
+        Tracker tracker = trackerService.getTracker(id);
         return new JsonResponse(tracker != null, tracker);
     }
 
@@ -62,21 +62,21 @@ public class TrackerController {
     @GET
     @Path("/move")
     public JsonResponse move(@QueryParam("id") String id) {
-        Tracker tracker = trackerService.moveDrone(id);
+        Tracker tracker = trackerService.move(id);
         return new JsonResponse(tracker == null, tracker);
     }
 
     @GET
     @Path("/start")
     public JsonResponse start(@QueryParam("id") String id) {
-        Tracker tracker = trackerService.startDrone(id);
+        Tracker tracker = trackerService.start(id);
         return new JsonResponse(tracker == null, tracker);
     }
 
     @GET
     @Path("/stop")
     public JsonResponse stop(@QueryParam("id") String id) {
-        Tracker tracker = trackerService.stopDrone(id);
+        Tracker tracker = trackerService.stop(id);
         return new JsonResponse(tracker == null, tracker);
     }
     
@@ -84,7 +84,7 @@ public class TrackerController {
     @Path("/load-drone-in-view")
     @Consumes(MediaType.APPLICATION_JSON)
     public JsonResponse loadDroneWithinView(BoundingBox boundary) {
-        List<Tracker> data = trackerService.loadDroneWithinView(boundary);
+        List<Tracker> data = trackerService.loadWithinView(boundary);
         JsonResponse response = new JsonResponse(data != null, data);
         return response;
     }

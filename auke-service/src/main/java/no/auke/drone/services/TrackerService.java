@@ -10,12 +10,12 @@ import java.util.List;
  * Created by huyduong on 3/25/2015.
  */
 public interface TrackerService {
-    Tracker registerDrone(String id, String name);
-    Tracker removeDrone(String droneId);
-    Tracker getDrone(String id);
+    Tracker registerTracker(String id, String name);
+    Tracker removeTracker(String id);
+    Tracker getTracker(String id);
     Collection<Tracker> getAll();
-    Tracker moveDrone(String id);
-    Tracker stopDrone(String id);
-    Tracker startDrone(String id);
-    List<Tracker> loadDroneWithinView(BoundingBox boundary);
+    Tracker move(String id);
+    Tracker stop(String id);
+    Tracker start(String id);
+    List<Tracker> loadWithinView(BoundingBox boundary);
 }

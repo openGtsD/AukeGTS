@@ -27,16 +27,16 @@ import com.auke.drone.ws.util.PointUtil;
 public class TrackerServiceImpl implements TrackerService {
     private static final Logger logger = LoggerFactory.getLogger(TrackerServiceImpl.class);
 
-    Map<String, Tracker> drones = new ConcurrentHashMap<String, Tracker>();
+    Map<String, Tracker> trackers = new ConcurrentHashMap<String, Tracker>();
 
     @PostConstruct
-    public void initDroneService() {
-        logger.info("initializing drone services");
-        List<Tracker> trackers = new DroneServiceFacade().createDronesForCapitalCities();
+    public void initTrackerService() {
+        logger.info("initializing tracker services");
+        List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
         for (Tracker tracker : trackers) {
             TrackerData.getInstance().register((Observer) tracker);
         }
-        logger.info("finished initializing drone services");
+        logger.info("finished initializing tracker services");
     }
 
     public TrackerServiceImpl() {
@@ -44,21 +44,21 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public Tracker registerDrone(String id, String name) {
-        Tracker tracker = new SimpleTrackerFactory().createDrone(id, name);
+    public Tracker registerTracker(String id, String name) {
+        Tracker tracker = new SimpleTrackerFactory().create(id, name);
         TrackerData.getInstance().register((Observer) tracker);
         return tracker;
     }
 
     @Override
-    public Tracker removeDrone(String droneId) {
-        Tracker tracker = new SimpleTrackerFactory().createDrone(droneId, "");
+    public Tracker removeTracker(String id) {
+        Tracker tracker = new SimpleTrackerFactory().create(id, "");
         TrackerData.getInstance().remove((Observer) tracker);
         return tracker;
     }
 
     @Override
-    public Tracker getDrone(String id) {
+    public Tracker getTracker(String id) {
         Tracker tracker = TrackerData.getInstance().getDrone(id) != null ? (Tracker) TrackerData.getInstance().getDrone(id)
                 : null;
         return tracker;
@@ -70,7 +70,7 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public Tracker moveDrone(String id) {
+    public Tracker move(String id) {
         Tracker tracker = TrackerData.getInstance().getDrone(id) != null ? (Tracker) TrackerData.getInstance().getDrone(id)
                 : null;
         if (tracker != null) {
@@ -79,8 +79,8 @@ public class TrackerServiceImpl implements TrackerService {
         return tracker;
     }
 
-    private class DroneServiceFacade {
-        public List<Tracker> createDronesForCapitalCities() {
+    private class TrackerServiceFacade {
+        public List<Tracker> createTrackersForCapitalCities() {
             List<Tracker> result = new ArrayList<Tracker>();
             List<MapPoint> points = new ArrayList<MapPoint>();
             points.add(new MapPoint(10.823099, 106.629664));// HCM
@@ -93,7 +93,7 @@ public class TrackerServiceImpl implements TrackerService {
                 MapPoint point = points.get(i);
                 for (int j = 1; j <= 10; j++) {
                     MapPoint rd = PointUtil.generateRandomMapPoint(point);
-                    Tracker tracker = new SimpleTrackerFactory().createDrone(UUID.randomUUID().toString(), "Tracker" + i + "-"
+                    Tracker tracker = new SimpleTrackerFactory().create(UUID.randomUUID().toString(), "Tracker" + i + "-"
                             + j, 2 * j, 2 * j, System.currentTimeMillis(), "type", null, true, rd);
                     result.add(tracker);
                 }
@@ -104,7 +104,7 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public List<Tracker> loadDroneWithinView(BoundingBox boundary) {
+    public List<Tracker> loadWithinView(BoundingBox boundary) {
         List<Tracker> result = new ArrayList<Tracker>();
         for (Tracker positionUnit : getAll()) {
             if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
@@ -116,8 +116,8 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public Tracker startDrone(String id) {
-        Tracker tracker = getDrone(id);
+    public Tracker start(String id) {
+        Tracker tracker = getTracker(id);
         if (tracker != null) {
             tracker.setFlying(true);
             // setting the tracker altitude to 100, this is for testing simulation
@@ -128,8 +128,8 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public Tracker stopDrone(String id) {
-        Tracker tracker = getDrone(id);
+    public Tracker stop(String id) {
+        Tracker tracker = getTracker(id);
         if (tracker != null) {
             tracker.setFlying(false);
             // setting tracker altitude to 0, this is for testing simulation only

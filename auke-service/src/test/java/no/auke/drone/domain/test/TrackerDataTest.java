@@ -40,18 +40,18 @@ public class TrackerDataTest {
 
     @Test
     public void shouldRegisterNewDrone() {
-        Tracker tracker = new SimpleTrackerFactory().createDrone("drone1","my tracker");
+        Tracker tracker = new SimpleTrackerFactory().create("drone1", "my tracker");
         trackerData.register((Observer) tracker);
         Assert.assertEquals(1, trackerData.getDrones().size());
 
-        Tracker newTracker = new SimpleTrackerFactory().createDrone("drone2","my drone2");
+        Tracker newTracker = new SimpleTrackerFactory().create("drone2", "my drone2");
         trackerData.register((Observer) newTracker);
         Assert.assertEquals(2, trackerData.getDrones().size());
     }
 
     @Test
     public void shouldRemoveDrone() {
-        Tracker tracker = new SimpleTrackerFactory().createDrone("drone1","my tracker");
+        Tracker tracker = new SimpleTrackerFactory().create("drone1", "my tracker");
         trackerData.register((Observer) tracker);
         Assert.assertEquals(1, trackerData.getDrones().size());
 
@@ -61,7 +61,7 @@ public class TrackerDataTest {
 
     @Test
     public void shouldUpdateDroneLocation() {
-        Tracker tracker = new SimpleTrackerFactory().createDrone("drone1","my tracker");
+        Tracker tracker = new SimpleTrackerFactory().create("drone1", "my tracker");
         trackerData.register((Observer) tracker);
         Assert.assertEquals(1, trackerData.getDrones().size());
         MapPoint oldPosition = tracker.getCurrentPosition();
