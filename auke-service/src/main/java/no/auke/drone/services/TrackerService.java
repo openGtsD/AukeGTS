@@ -14,7 +14,7 @@ public interface TrackerService {
     Tracker removeTracker(String id);
     Tracker getTracker(String id);
     Collection<Tracker> getAll();
-    Tracker move(String id);
+    Tracker move(String id, Integer speed, Integer course);
     Tracker stop(String id);
     Tracker start(String id);
     List<Tracker> loadWithinView(BoundingBox boundary);

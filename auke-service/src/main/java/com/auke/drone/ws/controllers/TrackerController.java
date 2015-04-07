@@ -61,8 +61,8 @@ public class TrackerController {
 
     @GET
     @Path("/move")
-    public JsonResponse move(@QueryParam("id") String id) {
-        Tracker tracker = trackerService.move(id);
+    public JsonResponse move(@QueryParam("id") String id, @QueryParam("speed")int speed, @QueryParam("course")int course) {
+        Tracker tracker = trackerService.move(id,speed,course);
         return new JsonResponse(tracker == null, tracker);
     }
 

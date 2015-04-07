@@ -59,20 +59,7 @@ public class SimpleTracker implements Tracker, Observer {
     public void calculate() {
         if(isFlying) {
             logger.info(this.toString() + "started calculating");
-            Random ran = new Random();
-            int theta = ran.nextInt(1) + 180;
-            int speed = 100 * (ran.nextInt(1) + 10);
-
-            // fly randomly
-            double dx = speed * Math.sin(theta);
-            double dy = speed * Math.cos(theta);
-            double deltaLongitude = dx / (111320 * Math.sin(getAltitude()));
-            double deltaLatitude = dy / 110540;
-            double finalLongitude = this.currentPosition.getLongitude() + deltaLongitude;
-            double finalLatitude = this.currentPosition.getLatitude() + deltaLatitude;
-            MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude);
-            currentPosition = positionUnit;
-            LocationFunction.writeLocationHistoryByDroneId(id,currentPosition);
+            move(null,null);// fly randomly
             logger.info(this.toString() + "finished calculating");
         } else {
             logger.info(this.toString() + "is not flying!!!");
@@ -189,5 +176,31 @@ public class SimpleTracker implements Tracker, Observer {
     public boolean withinView(double upperLat, double upperLon, double lowerLat, double lowerLon) {
         return (this.currentPosition.getLongitude() >= upperLon && this.currentPosition.getLongitude() <= lowerLon)
                 && (this.currentPosition.getLatitude() >= upperLat && this.currentPosition.getLatitude() <= lowerLat);
+    }
+
+    @Override
+    public Tracker move(Integer speed, Integer course) {
+        logger.info(this.toString() + "started moving");
+        Random ran = new Random();
+        if(speed == null) {
+            speed = 100 * (ran.nextInt(1) + 10);
+        }
+
+        if(course == null) {
+            course = ran.nextInt(1) + 180;
+        }
+
+        // fly
+        double dx = speed * Math.sin(course);
+        double dy = speed * Math.cos(course);
+        double deltaLongitude = dx / (111320 * Math.sin(getAltitude()));
+        double deltaLatitude = dy / 110540;
+        double finalLongitude = this.currentPosition.getLongitude() + deltaLongitude;
+        double finalLatitude = this.currentPosition.getLatitude() + deltaLatitude;
+        MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude);
+        currentPosition = positionUnit;
+        LocationFunction.writeLocationHistoryByDroneId(id,currentPosition);
+        logger.info(this.toString() + "finished moving");
+        return this;
     }
 }

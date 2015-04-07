@@ -70,11 +70,11 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public Tracker move(String id) {
+    public Tracker move(String id, Integer speed, Integer course) {
         Tracker tracker = TrackerData.getInstance().getDrone(id) != null ? (Tracker) TrackerData.getInstance().getDrone(id)
                 : null;
         if (tracker != null) {
-
+            tracker.move(speed,course);
         }
         return tracker;
     }

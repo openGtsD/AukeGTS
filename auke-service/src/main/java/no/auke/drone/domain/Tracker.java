@@ -55,4 +55,6 @@ public interface Tracker {
     boolean isFlying();
 
     void setFlying(boolean isFlying);
+
+    Tracker move(Integer speed, Integer course);
 }
