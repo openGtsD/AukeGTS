@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by huyduong on 3/24/2015.
  */
-public class SimpleDrone implements Drone, Observer {
-    private static final Logger logger = LoggerFactory.getLogger(SimpleDrone.class);
+public class SimpleTracker implements Tracker, Observer {
+    private static final Logger logger = LoggerFactory.getLogger(SimpleTracker.class);
 
     private String id;
     private String name;
@@ -27,7 +27,7 @@ public class SimpleDrone implements Drone, Observer {
     private List<MapPoint> positions;
     private boolean isFlying = true; // default value
 
-    public SimpleDrone() {
+    public SimpleTracker() {
         positions = new ArrayList<MapPoint>();
     }
 
@@ -81,9 +81,9 @@ public class SimpleDrone implements Drone, Observer {
 
     @Override
     public boolean equals(Object obj) {
-        Drone drone = (Drone) obj;
-        return StringUtils.trim(this.id).equalsIgnoreCase(StringUtils.trimToEmpty(drone.getId()))
-                && StringUtils.trim(this.name).equalsIgnoreCase(StringUtils.trimToEmpty(drone.getName()));
+        Tracker tracker = (Tracker) obj;
+        return StringUtils.trim(this.id).equalsIgnoreCase(StringUtils.trimToEmpty(tracker.getId()))
+                && StringUtils.trim(this.name).equalsIgnoreCase(StringUtils.trimToEmpty(tracker.getName()));
     }
 
     @Override

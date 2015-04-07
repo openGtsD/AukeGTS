@@ -1,24 +1,18 @@
 package no.auke.drone.domain;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import no.auke.drone.dao.impl.SimpleDroneFactory;
 import no.auke.drone.services.PositionCalculator;
 import no.auke.drone.services.impl.PositionCalculatorImpl;
-
-import com.auke.drone.ws.util.PointUtil;
 
 /**
  * Created by huyduong on 3/24/2015.
  */
-public class DroneData implements Subject {
-    private Map<String, Drone> drones;
+public class TrackerData implements Subject {
+    private Map<String, Tracker> drones;
     private PositionCalculator positionCalculator;
     private ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -29,21 +23,21 @@ public class DroneData implements Subject {
         return executor;
     }
 
-    private static DroneData droneData;
+    private static TrackerData trackerData;
 
-    public static synchronized DroneData getInstance() {
+    public static synchronized TrackerData getInstance() {
         return getInstance(true);
     }
 
-    public static synchronized DroneData getInstance(boolean isRunningAutomatically) {
-        if (droneData == null) {
-            droneData = new DroneData(isRunningAutomatically);
+    public static synchronized TrackerData getInstance(boolean isRunningAutomatically) {
+        if (trackerData == null) {
+            trackerData = new TrackerData(isRunningAutomatically);
         }
-        return droneData;
+        return trackerData;
     }
 
-    private DroneData(boolean isRunningAutomatically) {
-        drones = new ConcurrentHashMap<String, Drone>();
+    private TrackerData(boolean isRunningAutomatically) {
+        drones = new ConcurrentHashMap<String, Tracker>();
         positionCalculator = new PositionCalculatorImpl(getExecutor(), drones, isRunningAutomatically);
     }
 
@@ -51,17 +45,17 @@ public class DroneData implements Subject {
         return positionCalculator;
     }
 
-    public Map<String, Drone> getDrones() {
+    public Map<String, Tracker> getDrones() {
         return drones;
     }
 
-    public Drone getDrone(String id) {
+    public Tracker getDrone(String id) {
         return drones.containsKey(id) ? drones.get(id) : null;
     }
 
     @Override
     public void register(Observer drone) {
-        drones.put(drone.getId(), (Drone) drone);
+        drones.put(drone.getId(), (Tracker) drone);
         positionCalculator.startCalculate();
     }
 

@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import no.auke.drone.domain.Drone;
+import no.auke.drone.domain.Tracker;
 import no.auke.drone.services.PositionCalculator;
 
 import org.slf4j.Logger;
@@ -21,11 +21,11 @@ public class PositionCalculatorImpl implements PositionCalculator {
     private AtomicBoolean isRunning = new AtomicBoolean();
     private AtomicBoolean isRunningAutomatically = new AtomicBoolean(true);
 
-    private Map<String,Drone> drones;
+    private Map<String,Tracker> drones;
 
     private ExecutorService executor;
 
-    public PositionCalculatorImpl(ExecutorService executor, Map<String,Drone> drones, boolean isRunningAutomatically) {
+    public PositionCalculatorImpl(ExecutorService executor, Map<String,Tracker> drones, boolean isRunningAutomatically) {
         this.executor = executor;
         this.drones = drones;
         this.isRunningAutomatically = new AtomicBoolean(isRunningAutomatically);
@@ -43,10 +43,10 @@ public class PositionCalculatorImpl implements PositionCalculator {
                     while(isRunning.get()) {
                         if(logger.isDebugEnabled()) logger.debug("run calc");
 
-                        for(Drone drone: drones.values()) {
+                        for(Tracker tracker : drones.values()) {
                             if(isRunning.get()) {
                                 // calc and update current positions
-                                drone.calculate();
+                                tracker.calculate();
                             } else {
                                 break;
                             }
