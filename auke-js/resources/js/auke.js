@@ -1,17 +1,6 @@
-function initCenter(lat, lon, zoom) {
-	var mapCenter = new google.maps.LatLng(lat, lon);
-	var map = new google.maps.Map(document.getElementById('map-canvas'), {
-		'zoom' : zoom,
-		'center' : mapCenter,
-		'mapTypeId' : google.maps.MapTypeId.ROADMAP,
-		'mapTypeControl' : false
-	});
-	return map;
-}
-
 function buildHTML(data) {
 
-	return "<h1>Drone Info</h1><ul>" + "<li>Drone ID:" + data.id + "</li>"
+	return "<h1>Drone Info</h1> <input type='button' onclick='moving()' value='Start Moving' /> <ul>" + "<li>Drone ID:" + data.id + "</li>"
 			+ "<li>GPS: " + data.currentPosition.latitude + "/"
 			+ data.currentPosition.longitude + "</li>" + "<li>Speed:"
 			+ data.speed + "</li> " + "<li>Altitude: " + data.altitude
@@ -19,26 +8,37 @@ function buildHTML(data) {
 
 }
 
-function showInfo(marker, map) {
-	var infoWindow = new google.maps.InfoWindow();
-	google.maps.event.addListener(marker, 'click', function() {
-		$.ajax({
-			url : 'service/drone/' + marker.id,
-			dataType : 'json',
-			contentType : "text/html; charset=utf-8",
-			success : function(response) {
-				var infoWindow = new google.maps.InfoWindow();
-				var data = response.data[0];
-				var droneInfo = buildHTML(data);
-				infoWindow.setContent(droneInfo);
-				infoWindow.open(map, marker);
-			}
-		})
+var map;
+var mgr;
+var icons = {};
+var allmarkers = [];
+function load() {
+	var myOptions = {
+		zoom : 3,
+		center : new google.maps.LatLng(50.62504, -100.10742),
+		mapTypeId : google.maps.MapTypeId.ROADMAP
+	}
+	map = new google.maps.Map(document.getElementById('map-canvas'), myOptions);
+
+	mgr = new MarkerManager(map);
+
+	google.maps.event.addListener(mgr, 'loaded', function() {
+		google.maps.event.addListener(map, 'idle', function() {
+			$("#resultZoom").text(map.getZoom());
+			var mapBound = map.getBounds();
+			var ne = mapBound.getNorthEast(); 
+			var sw = mapBound.getSouthWest();
+			var southWestLat = "Upper Left: " + sw.lat() + " / " + sw.lng();
+			var northEastLat = "Lower Right: " + ne.lat() + " / " + ne.lng();
+			$("#resultBoundary").html(southWestLat + " And " + northEastLat);
+			loadDroneIncurrentView();
+			updateStatus(mgr.getMarkerCount(map.getZoom()));
+		});
 	});
 }
 
-var markers = [];// just for test
-function loadDroneIncurrentView(map) {
+function loadDroneIncurrentView() {
+	allmarkers.length = 0;
 	var mapBound = map.getBounds();
 	var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 	var sw = mapBound.getSouthWest();
@@ -55,90 +55,66 @@ function loadDroneIncurrentView(map) {
 		type : 'POST',
 		success : function(response) {
 			var data = response.data;
-			$("#numberDrone").text(data.length);
-			clearMarkers();
+			mgr.clearMarkers();
+			var markers = [];
 			for (var i = 0; i < data.length; i++) {
-				latLng = new google.maps.LatLng(
-						data[i].currentPosition.latitude,
+				posn = new google.maps.LatLng(data[i].currentPosition.latitude,
 						data[i].currentPosition.longitude);
-				var marker = new google.maps.Marker({
-					position : latLng,
-					id : data[i].id,
-					title : data[i].name,
-					icon : '/auke-js/resources/images/drone.png'
-
-				});
-				marker.setMap(map);
-				showInfo(marker, map);
+				var marker = createMarker(data[i].id, posn, data[i].name,
+						'/auke-js/resources/images/drone.png');
 				markers.push(marker);
-
+				allmarkers.push(marker);
 			}
-
+			// mgr.addMarkers(markers, data[i].minZoom, data[i].maxZoom); TODO:
+			// its use full for show drone in zoom factory
+			mgr.addMarkers(markers, 3, 9);
+			mgr.refresh();
+			updateStatus(mgr.getMarkerCount(map.getZoom()));
 		}
 	});
 }
 
-function moveDroneIncurrentView(map) {
-	var mapBound = map.getBounds();
-	for (var i = 1; i < markers.length; i++) {
-		var oldMarker = markers[i];
-		if (mapBound.contains(oldMarker.getPosition())) {
-			var droneId = oldMarker.id;
-			$.ajax({
-				url : 'service/drone/' + droneId,
-				dataType : 'json',
-				contentType : "text/html; charset=utf-8",
-				success : function(response) {
-					var data = response.data[0];
-					if (data) {
-						latLng = new google.maps.LatLng(
-								data.currentPosition.latitude,
-								data.currentPosition.longitude);
-						oldMarker.setPosition(latLng);
-					} else {
-						oldMarker.setMap(null);
-					}
-				}
-			})
-		}
-	}
-}
+function createMarker(id, posn, title, icon) {
+	var markerOptions = {
+		id : id,
+		position : posn,
+		title : title,
+		icon : icon
+	};
+	// if (icon !== false) {
+	// markerOptions.shadow = icon.shadow;
+	// markerOptions.icon = icon.icon;
+	// markerOptions.shape = icon.shape;
+	// }
 
-function init() {
-	var latLngCenter = new google.maps.LatLng(59.913869, 10.752245);// OSLO
-	var map = new google.maps.Map(document.getElementById('map-canvas'), {
-		'zoom' : 3,
-		'center' : latLngCenter
-
+	var marker = new google.maps.Marker(markerOptions);
+	google.maps.event.addListener(marker, 'click', function() {
+		var infoWindow = new google.maps.InfoWindow();
+		$.ajax({
+			url : 'service/drone/' + marker.id,
+			dataType : 'json',
+			contentType : "text/html; charset=utf-8",
+			success : function(response) {
+				var infoWindow = new google.maps.InfoWindow();
+				var data = response.data[0];
+				var droneInfo = buildHTML(data);
+				infoWindow.setContent(droneInfo);
+				infoWindow.open(map, marker);
+			}
+		})
 	});
-
-	google.maps.event.addListener(map, 'idle', function() {
-		var mapBound = map.getBounds();
-		$("#resultZoom").text(map.getZoom());
-		$('#resultCenter').text(
-				map.getCenter().lat() + "/" + map.getCenter().lng());
-		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
-		var sw = mapBound.getSouthWest();
-		var southWestLat = "Upper Left: " + sw.lat() + " / " + sw.lng();
-		var northEastLat = "Lower Right: " + ne.lat() + " / " + ne.lng();
-		$("#resultBoundary").html(southWestLat + "</br>" + northEastLat);
-		loadDroneIncurrentView(map);
-	});
-//
-//	 var interval2 = setInterval(function() {
-//		moveDroneIncurrentView(map);
-//	}, 5000)
+	return marker;
 }
 
-function setAllMap(map) {
-	for (var i = 0; i < markers.length; i++) {
-		markers[i].setMap(map);
-	}
+function updateStatus(html) {
+	document.getElementById("numberDrone").innerHTML = html;
+}
+//---- Test button
+function reloadMarkers(){
+	loadDroneIncurrentView();
 }
 
-// Removes the markers from the map, but keeps them in the array.
-function clearMarkers() {
-	setAllMap(null);
+function moving(){
 }
 
-google.maps.event.addDomListener(window, 'load', init);
+google.maps.event.addDomListener(window, 'load', load);
