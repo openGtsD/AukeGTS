@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by huyduong on 3/24/2015.
  */
-public interface Drone {
+public interface Tracker {
     void setId(String id);
 
     String getId();

@@ -4,7 +4,7 @@
 	<artifactId>auke-service</artifactId>
 	<name>Auke - REST Service</name>
 	<parent>
-		<groupId>auke.consult.drone</groupId>
+		<groupId>auke.consult.tracker</groupId>
 		<artifactId>gts-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>

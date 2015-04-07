@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>auke.consult.drone</groupId>
+	<groupId>auke.consult.tracker</groupId>
 	<artifactId>gts-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
@@ -80,7 +80,7 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>auke.consult.drone</groupId>
+				<groupId>auke.consult.tracker</groupId>
 				<artifactId>auke-service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
