@@ -1,7 +1,9 @@
 function buildHTML(data) {
 
-	return "<h1>Drone Info</h1> <input type='button' onclick='moving()' value='Start Moving' /> <ul>" + "<li>Drone ID:" + data.id + "</li>"
-			+ "<li>GPS: " + data.currentPosition.latitude + "/"
+	return "<h1>Drone Info</h1> <input type='button' onclick=start("
+			+ "'" + data.id + "'" + ") value='Start Moving'  /> <ul>"
+			+ "<li>Drone ID:" + data.id + "</li>" + "<li>GPS: "
+			+ data.currentPosition.latitude + "/"
 			+ data.currentPosition.longitude + "</li>" + "<li>Speed:"
 			+ data.speed + "</li> " + "<li>Altitude: " + data.altitude
 			+ "</li></ul>"
@@ -11,7 +13,7 @@ function buildHTML(data) {
 var map;
 var mgr;
 var icons = {};
-var allmarkers = [];
+var allmarkers = {};
 function load() {
 	var myOptions = {
 		zoom : 3,
@@ -26,7 +28,7 @@ function load() {
 		google.maps.event.addListener(map, 'idle', function() {
 			$("#resultZoom").text(map.getZoom());
 			var mapBound = map.getBounds();
-			var ne = mapBound.getNorthEast(); 
+			var ne = mapBound.getNorthEast();
 			var sw = mapBound.getSouthWest();
 			var southWestLat = "Upper Left: " + sw.lat() + " / " + sw.lng();
 			var northEastLat = "Lower Right: " + ne.lat() + " / " + ne.lng();
@@ -63,7 +65,7 @@ function loadDroneIncurrentView() {
 				var marker = createMarker(data[i].id, posn, data[i].name,
 						'/auke-js/resources/images/drone.png');
 				markers.push(marker);
-				allmarkers.push(marker);
+				allmarkers[data[i].id] = marker;
 			}
 			// mgr.addMarkers(markers, data[i].minZoom, data[i].maxZoom); TODO:
 			// its use full for show drone in zoom factory
@@ -109,12 +111,38 @@ function createMarker(id, posn, title, icon) {
 function updateStatus(html) {
 	document.getElementById("numberDrone").innerHTML = html;
 }
-//---- Test button
-function reloadMarkers(){
+
+// ---- Test button
+function reloadMarkers() {
 	loadDroneIncurrentView();
 }
 
-function moving(){
+function start(id) {
+	counter = 0;
+	var speed = 100; // just for test
+	var interval1 = setInterval(function() {
+		$.ajax({
+			url : 'service/drone/move/' + id + "/" + speed,
+			dataType : 'json',
+			contentType : "text/html; charset=utf-8",
+			success : function(response) {
+				var data = response.data[0];
+				changeMarkerPosition(data);
+			}
+		})
+		if(counter == speed*2) {
+			clearInterval(interval1);
+		}	
+		counter++;
+	}, 20);
+
+}
+
+function changeMarkerPosition(data) {
+	var newPosition = new google.maps.LatLng(data.currentPosition.latitude,
+			data.currentPosition.longitude);
+	var marker = allmarkers[data.id];
+	marker.setPosition(newPosition);
 }
 
 google.maps.event.addDomListener(window, 'load', load);
