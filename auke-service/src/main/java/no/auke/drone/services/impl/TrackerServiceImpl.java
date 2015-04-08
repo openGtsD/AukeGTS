@@ -66,7 +66,7 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Collection<Tracker> getAll() {
-        return TrackerData.getInstance().getDrones().values();
+        return TrackerData.getInstance().getTrackers().values();
     }
 
     @Override

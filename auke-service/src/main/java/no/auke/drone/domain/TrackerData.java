@@ -12,7 +12,7 @@ import no.auke.drone.services.impl.PositionCalculatorImpl;
  * Created by huyduong on 3/24/2015.
  */
 public class TrackerData implements Subject {
-    private Map<String, Tracker> drones;
+    private Map<String, Tracker> trackers;
     private PositionCalculator positionCalculator;
     private ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -37,41 +37,41 @@ public class TrackerData implements Subject {
     }
 
     private TrackerData(boolean isRunningAutomatically) {
-        drones = new ConcurrentHashMap<String, Tracker>();
-        positionCalculator = new PositionCalculatorImpl(getExecutor(), drones, isRunningAutomatically);
+        trackers = new ConcurrentHashMap<String, Tracker>();
+        positionCalculator = new PositionCalculatorImpl(getExecutor(), trackers, isRunningAutomatically);
     }
 
     public PositionCalculator getPositionCalculator() {
         return positionCalculator;
     }
 
-    public Map<String, Tracker> getDrones() {
-        return drones;
+    public Map<String, Tracker> getTrackers() {
+        return trackers;
     }
 
     public Tracker getDrone(String id) {
-        return drones.containsKey(id) ? drones.get(id) : null;
+        return trackers.containsKey(id) ? trackers.get(id) : null;
     }
 
     @Override
     public void register(Observer drone) {
-        drones.put(drone.getId(), (Tracker) drone);
+        trackers.put(drone.getId(), (Tracker) drone);
         positionCalculator.startCalculate();
     }
 
     @Override
     public void remove(Observer drone) {
-        drones.remove(drone.getId());
-        if (drones.size() == 0) {
+        trackers.remove(drone.getId());
+        if (trackers.size() == 0) {
             positionCalculator.stopCalculate();
         }
     }
 
     @Override
     public void notifyAllItems() {
-        System.out.println("........notifying " + drones.size() + " items........");
-        for (String droneId : drones.keySet()) {
-            drones.get(droneId).update();
+        System.out.println("........notifying " + trackers.size() + " items........");
+        for (String droneId : trackers.keySet()) {
+            trackers.get(droneId).update();
         }
         System.out.println(".......notifying finished......");
     }

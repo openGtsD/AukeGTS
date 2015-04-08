@@ -26,7 +26,7 @@ public class TrackerDataTest {
     @After
     public void tearDown() {
         // remove all drones available
-        for(Tracker tracker : trackerData.getDrones().values()) {
+        for(Tracker tracker : trackerData.getTrackers().values()) {
             trackerData.remove((Observer) tracker);
         }
 
@@ -35,35 +35,35 @@ public class TrackerDataTest {
 
     @Test
     public void shouldInitDroneData() {
-        Assert.assertEquals(0, trackerData.getDrones().size());
+        Assert.assertEquals(0, trackerData.getTrackers().size());
     }
 
     @Test
     public void shouldRegisterNewDrone() {
         Tracker tracker = new SimpleTrackerFactory().create("drone1", "my tracker");
         trackerData.register((Observer) tracker);
-        Assert.assertEquals(1, trackerData.getDrones().size());
+        Assert.assertEquals(1, trackerData.getTrackers().size());
 
         Tracker newTracker = new SimpleTrackerFactory().create("drone2", "my drone2");
         trackerData.register((Observer) newTracker);
-        Assert.assertEquals(2, trackerData.getDrones().size());
+        Assert.assertEquals(2, trackerData.getTrackers().size());
     }
 
     @Test
     public void shouldRemoveDrone() {
         Tracker tracker = new SimpleTrackerFactory().create("drone1", "my tracker");
         trackerData.register((Observer) tracker);
-        Assert.assertEquals(1, trackerData.getDrones().size());
+        Assert.assertEquals(1, trackerData.getTrackers().size());
 
         trackerData.remove((Observer) tracker);
-        Assert.assertEquals(0, trackerData.getDrones().size());
+        Assert.assertEquals(0, trackerData.getTrackers().size());
     }
 
     @Test
     public void shouldUpdateDroneLocation() {
         Tracker tracker = new SimpleTrackerFactory().create("drone1", "my tracker");
         trackerData.register((Observer) tracker);
-        Assert.assertEquals(1, trackerData.getDrones().size());
+        Assert.assertEquals(1, trackerData.getTrackers().size());
         MapPoint oldPosition = tracker.getCurrentPosition();
         tracker.calculate();
         MapPoint newPosition = tracker.getCurrentPosition();
