@@ -54,8 +54,8 @@ public class TrackerController {
 
     @GET
     @Path("/getall")
-    public JsonResponse getAll() {
-        Collection<Tracker> trackers = trackerService.getAll();
+    public JsonResponse getAll(@QueryParam("type") Tracker.TrackerType trackerType) {
+        Collection<Tracker> trackers = trackerService.getAll(trackerType);
         return new JsonResponse(trackers != null, trackers);
     }
 

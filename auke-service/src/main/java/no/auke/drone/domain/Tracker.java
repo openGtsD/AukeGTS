@@ -6,6 +6,28 @@ import java.util.List;
  * Created by huyduong on 3/24/2015.
  */
 public interface Tracker {
+    public enum TrackerType{
+        REAL("Real"),SIMULATED("Simulated");
+        private String value;
+
+        TrackerType(String v) {
+            value = v;
+        }
+
+        public String value() {
+            return value;
+        }
+
+        public static TrackerType fromValue(String v) {
+            for (TrackerType c: TrackerType.values()) {
+                if (c.value.equals(v)) {
+                    return c;
+                }
+            }
+            return TrackerType.REAL;
+        }
+    };
+
     void setId(String id);
 
     String getId();
@@ -30,9 +52,9 @@ public interface Tracker {
 
     void setUsedCamera(boolean isUsedCamera);
 
-    void setDroneType(String name);
+    void setDroneType(TrackerType name);
 
-    String getDroneType();
+    TrackerType getDroneType();
 
     void setFlyer(Person person);
 

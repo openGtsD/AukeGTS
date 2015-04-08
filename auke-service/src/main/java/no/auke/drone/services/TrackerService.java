@@ -13,6 +13,7 @@ public interface TrackerService {
     Tracker registerTracker(String id, String name);
     Tracker removeTracker(String id);
     Tracker getTracker(String id);
+    Collection<Tracker> getAll(Tracker.TrackerType trackerType);
     Collection<Tracker> getAll();
     Tracker move(String id, Integer speed, Integer course);
     Tracker stop(String id);

@@ -20,7 +20,7 @@ public class SimpleTracker implements Tracker, Observer {
     private long time;
     private double altitude;
     private double speed;
-    private String droneType;
+    private TrackerType droneType = TrackerType.SIMULATED;
     private Person flyer;
     private boolean isUsedCamera;
     private MapPoint currentPosition;
@@ -129,12 +129,12 @@ public class SimpleTracker implements Tracker, Observer {
     }
 
     @Override
-    public void setDroneType(String type) {
+    public void setDroneType(TrackerType type) {
         this.droneType = type;
     }
 
     @Override
-    public String getDroneType() {
+    public TrackerType getDroneType() {
         return this.droneType;
     }
 

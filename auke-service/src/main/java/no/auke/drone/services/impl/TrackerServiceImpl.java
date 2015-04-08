@@ -65,8 +65,13 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
+    public Collection<Tracker> getAll(Tracker.TrackerType trackerType) {
+        return TrackerData.getInstance().getTrackers(trackerType);
+    }
+
+    @Override
     public Collection<Tracker> getAll() {
-        return TrackerData.getInstance().getTrackers().values();
+        return getAll(null);
     }
 
     @Override
@@ -94,7 +99,7 @@ public class TrackerServiceImpl implements TrackerService {
                 for (int j = 1; j <= 10; j++) {
                     MapPoint rd = PointUtil.generateRandomMapPoint(point);
                     Tracker tracker = new SimpleTrackerFactory().create(UUID.randomUUID().toString(), "Tracker" + i + "-"
-                            + j, 2 * j, 2 * j, System.currentTimeMillis(), "type", null, true, rd);
+                            + j, 2 * j, 2 * j, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, rd);
                     result.add(tracker);
                 }
             }

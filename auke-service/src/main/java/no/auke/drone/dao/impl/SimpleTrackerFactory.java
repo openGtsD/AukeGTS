@@ -31,7 +31,7 @@ public class SimpleTrackerFactory implements TrackerFactory {
     }
 
     @Override
-    public Tracker create(String id, String name, double altitude, double speed, long time, String droneType,
+    public Tracker create(String id, String name, double altitude, double speed, long time, Tracker.TrackerType droneType,
                           Person flyer, boolean hasCamera, MapPoint location) {
         Tracker tracker = new SimpleTracker();
         tracker.setId(id);

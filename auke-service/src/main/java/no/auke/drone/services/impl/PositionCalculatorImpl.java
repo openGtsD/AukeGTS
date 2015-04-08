@@ -1,5 +1,6 @@
 package no.auke.drone.services.impl;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,11 +22,11 @@ public class PositionCalculatorImpl implements PositionCalculator {
     private AtomicBoolean isRunning = new AtomicBoolean();
     private AtomicBoolean isRunningAutomatically = new AtomicBoolean(true);
 
-    private Map<String,Tracker> drones;
+    private Collection<Tracker> drones;
 
     private ExecutorService executor;
 
-    public PositionCalculatorImpl(ExecutorService executor, Map<String,Tracker> drones, boolean isRunningAutomatically) {
+    public PositionCalculatorImpl(ExecutorService executor, Collection<Tracker> drones, boolean isRunningAutomatically) {
         this.executor = executor;
         this.drones = drones;
         this.isRunningAutomatically = new AtomicBoolean(isRunningAutomatically);
@@ -43,7 +44,7 @@ public class PositionCalculatorImpl implements PositionCalculator {
                     while(isRunning.get()) {
                         if(logger.isDebugEnabled()) logger.debug("run calc");
 
-                        for(Tracker tracker : drones.values()) {
+                        for(Tracker tracker : drones) {
                             if(isRunning.get()) {
                                 // calc and update current positions
                                 tracker.calculate();
