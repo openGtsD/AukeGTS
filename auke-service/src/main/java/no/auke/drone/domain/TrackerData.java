@@ -5,14 +5,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import no.auke.drone.services.PositionCalculator;
 import no.auke.drone.services.impl.PositionCalculatorImpl;
+import no.auke.drone.services.impl.TrackerServiceImpl;
 
 
 /**
@@ -27,34 +26,28 @@ public class TrackerData implements Subject {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TrackerData.class);
 
-    
-	private Map<Tracker.TrackerType,Map<String,Tracker>> trackerLayers = new ConcurrentHashMap<Tracker.TrackerType,Map<String,Tracker>>();
-    private PositionCalculator positionCalculator;
-    private ExecutorService executor = Executors.newCachedThreadPool();
-
-    public ExecutorService getExecutor() {
-        if (executor == null) {
-            executor = Executors.newCachedThreadPool();
-        }
-        return executor;
-    }
-
-    private static TrackerData trackerData;
+    private static Map<String,TrackerData> trackerDataList = new ConcurrentHashMap<String,TrackerData>();
 
     public static synchronized TrackerData getInstance() {
-        return getInstance(true);
+        return getInstance("default",true);
+    }    		
+    public static synchronized TrackerData getInstance(String trackerLayer) {
+        return getInstance(trackerLayer,true);
     }
 
-    public static synchronized TrackerData getInstance(boolean isRunningAutomatically) {
+    public static synchronized TrackerData getInstance(String trackerLayer, boolean isRunningAutomatically) {
         
-    	if (trackerData == null) {
-            trackerData = new TrackerData(isRunningAutomatically);
+    	if (!trackerDataList.containsKey(trackerLayer)) {
+    		trackerDataList.put(trackerLayer, new TrackerData(trackerLayer,isRunningAutomatically));
         }
-        return trackerData;
+        return trackerDataList.get(trackerLayer);
     
     }
 
-    private TrackerData(boolean isRunningAutomatically) {
+	private Map<Tracker.TrackerType,Map<String,Tracker>> trackerLayers = new ConcurrentHashMap<Tracker.TrackerType,Map<String,Tracker>>();
+    private PositionCalculator positionCalculator;
+    
+    private TrackerData(String trackerLayer, boolean isRunningAutomatically) {
         
     	Map<Tracker.TrackerType,Map<String,Tracker>> trackerLayers = new ConcurrentHashMap<>();
         Map<String,Tracker> realLayer = new ConcurrentHashMap<>();
@@ -63,7 +56,7 @@ public class TrackerData implements Subject {
         trackerLayers.put(Tracker.TrackerType.REAL,realLayer);
         trackerLayers.put(Tracker.TrackerType.SIMULATED,simulatedLayer);
 
-        positionCalculator = new PositionCalculatorImpl(getExecutor(), getTrackers(), isRunningAutomatically);
+        positionCalculator = new PositionCalculatorImpl(TrackerServiceImpl.getExecutor(), getTrackers(), isRunningAutomatically);
     
     }
 

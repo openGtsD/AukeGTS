@@ -6,11 +6,13 @@ import no.auke.drone.domain.Tracker.TrackerType;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Created by huyduong on 3/25/2015.
  */
 public interface TrackerService {
+	
     Tracker registerTracker(String id, String name);
     Tracker removeTracker(String id);
     Tracker getTracker(String id);
@@ -21,4 +23,7 @@ public interface TrackerService {
     Tracker start(String id);
     Tracker update(Tracker tracker);
     List<Tracker> loadWithinView(BoundingBox boundary, TrackerType layerId);
+    
+    void stopService();
+    
 }

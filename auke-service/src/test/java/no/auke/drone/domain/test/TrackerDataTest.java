@@ -21,7 +21,7 @@ public class TrackerDataTest {
 
     @Before
     public void setUp() {
-        trackerData = TrackerData.getInstance(false);
+        trackerData = TrackerData.getInstance("",false);
     }
 
     @After

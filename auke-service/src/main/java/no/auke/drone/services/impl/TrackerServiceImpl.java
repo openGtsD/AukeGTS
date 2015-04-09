@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 
@@ -23,20 +25,31 @@ import com.auke.drone.ws.util.PointUtil;
 /**
  * Created by huyduong on 3/25/2015.
  */
+
 @Service
 public class TrackerServiceImpl implements TrackerService {
-    private static final Logger logger = LoggerFactory.getLogger(TrackerServiceImpl.class);
+    
+	private static final Logger logger = LoggerFactory.getLogger(TrackerServiceImpl.class);
 
+    private static ExecutorService executor = Executors.newCachedThreadPool();
+    public static ExecutorService getExecutor() {
+        return executor;
+    }	
+	
     Map<String, Tracker> trackers = new ConcurrentHashMap<String, Tracker>();
 
     @PostConstruct
     public void initTrackerService() {
-        logger.info("initializing tracker services");
-        List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
+        
+    	logger.info("initializing tracker services");
+        
+    	List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
+        
         for (Tracker tracker : trackers) {
             TrackerData.getInstance().register((Observer) tracker);
         }
         logger.info("finished initializing tracker services");
+    
     }
 
     public TrackerServiceImpl() {
@@ -45,28 +58,36 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Tracker registerTracker(String id, String name) {
-        Tracker tracker = new SimpleTrackerFactory().create(id, name);
+        
+    	Tracker tracker = new SimpleTrackerFactory().create(id, name);
         TrackerData.getInstance().register((Observer) tracker);
         return tracker;
+    
     }
 
     @Override
     public Tracker removeTracker(String id) {
-        Tracker tracker = new SimpleTrackerFactory().create(id, "");
+        
+    	Tracker tracker = new SimpleTrackerFactory().create(id, "");
         TrackerData.getInstance().remove((Observer) tracker);
         return tracker;
+    
     }
 
     @Override
     public Tracker getTracker(String id) {
-        Tracker tracker = TrackerData.getInstance().getTracker(id) != null ? (Tracker) TrackerData.getInstance().getTracker(id)
+    
+    	Tracker tracker = TrackerData.getInstance().getTracker(id) != null ? (Tracker) TrackerData.getInstance().getTracker(id)
                 : null;
         return tracker;
+    
     }
 
     @Override
     public Collection<Tracker> getAll(Tracker.TrackerType trackerType) {
-        return TrackerData.getInstance().getTrackers(trackerType);
+    
+    	return TrackerData.getInstance().getTrackers(trackerType);
+    
     }
 
     @Override
@@ -76,12 +97,15 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Tracker move(String id, Integer speed, Integer course) {
-        Tracker tracker = TrackerData.getInstance().getTracker(id) != null ? (Tracker) TrackerData.getInstance().getTracker(id)
-                : null;
-        if (tracker != null) {
+    
+    	Tracker tracker = TrackerData.getInstance().getTracker(id) != null ? (Tracker) TrackerData.getInstance().getTracker(id): null;
+        
+    	if (tracker != null) {
             tracker.move(speed,course);
         }
-        return tracker;
+        
+    	return tracker;
+    
     }
 
     private class TrackerServiceFacade {
@@ -138,8 +162,8 @@ public class TrackerServiceImpl implements TrackerService {
             tracker.setAltitude(100);
         
         }
-        
         return tracker;
+
     }
 
     @Override
@@ -164,4 +188,11 @@ public class TrackerServiceImpl implements TrackerService {
     	return TrackerData.getInstance().update(tracker);
     
     }
+
+	@Override
+	public void stopService() {
+		
+		getExecutor().shutdownNow();
+		
+	}
 }
