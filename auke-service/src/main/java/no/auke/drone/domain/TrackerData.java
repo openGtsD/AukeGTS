@@ -85,7 +85,24 @@ public class TrackerData implements Subject {
         return result;
     }
 
-    public Tracker getDrone(String id) {
+    private void update(Tracker oldTracker, Tracker newTracker) {
+        oldTracker.setName(newTracker.getName());
+        oldTracker.setUsedCamera(newTracker.isUsedCamera());
+        oldTracker.setDroneType(newTracker.getDroneType());
+        oldTracker.setFlyer(newTracker.getFlyer());
+    }
+
+    public Tracker update(Tracker newTracker) {
+        Tracker tracker = getTracker(newTracker.getId());
+        if(tracker.equals(newTracker)) {
+            return tracker;// do nothing
+        }
+
+        update(tracker,newTracker);
+        return tracker;
+    }
+
+    public Tracker getTracker(String id) {
         Tracker tracker = getTrackerLayer(Tracker.TrackerType.REAL).get(id);
         if(tracker == null) {
             tracker = getTrackerLayer(Tracker.TrackerType.SIMULATED).get(id);

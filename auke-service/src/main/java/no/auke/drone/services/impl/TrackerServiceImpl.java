@@ -59,7 +59,7 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Tracker getTracker(String id) {
-        Tracker tracker = TrackerData.getInstance().getDrone(id) != null ? (Tracker) TrackerData.getInstance().getDrone(id)
+        Tracker tracker = TrackerData.getInstance().getTracker(id) != null ? (Tracker) TrackerData.getInstance().getTracker(id)
                 : null;
         return tracker;
     }
@@ -76,7 +76,7 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Tracker move(String id, Integer speed, Integer course) {
-        Tracker tracker = TrackerData.getInstance().getDrone(id) != null ? (Tracker) TrackerData.getInstance().getDrone(id)
+        Tracker tracker = TrackerData.getInstance().getTracker(id) != null ? (Tracker) TrackerData.getInstance().getTracker(id)
                 : null;
         if (tracker != null) {
             tracker.move(speed,course);
@@ -141,5 +141,10 @@ public class TrackerServiceImpl implements TrackerService {
             tracker.setAltitude(0);
         }
         return tracker;
+    }
+
+    @Override
+    public Tracker update(Tracker tracker) {
+        return TrackerData.getInstance().update(tracker);
     }
 }

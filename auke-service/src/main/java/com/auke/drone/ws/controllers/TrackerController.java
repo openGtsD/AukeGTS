@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.auke.drone.ws.dto.JsonResponse;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -86,6 +87,14 @@ public class TrackerController {
     public JsonResponse loadDroneWithinView(BoundingBox boundary) {
         List<Tracker> data = trackerService.loadWithinView(boundary);
         JsonResponse response = new JsonResponse(data != null, data);
+        return response;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public JsonResponse update(@RequestBody Tracker tracker) {
+        Tracker newTracker = trackerService.update(tracker);
+        JsonResponse response = new JsonResponse(newTracker != null, newTracker);
         return response;
     }
 }

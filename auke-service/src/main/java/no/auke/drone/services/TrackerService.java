@@ -18,5 +18,6 @@ public interface TrackerService {
     Tracker move(String id, Integer speed, Integer course);
     Tracker stop(String id);
     Tracker start(String id);
+    Tracker update(Tracker tracker);
     List<Tracker> loadWithinView(BoundingBox boundary);
 }
