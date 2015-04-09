@@ -8,6 +8,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import no.auke.drone.services.PositionCalculator;
 import no.auke.drone.services.impl.PositionCalculatorImpl;
 
@@ -15,8 +18,17 @@ import no.auke.drone.services.impl.PositionCalculatorImpl;
 /**
  * Created by huyduong on 3/24/2015.
  */
+
+
+// LHA: maybe this object is the layer head ??
+// 
+
 public class TrackerData implements Subject {
-    private Map<Tracker.TrackerType,Map<String,Tracker>> trackerLayers = new ConcurrentHashMap<Tracker.TrackerType,Map<String,Tracker>>();
+	
+	private static final Logger logger = LoggerFactory.getLogger(TrackerData.class);
+
+    
+	private Map<Tracker.TrackerType,Map<String,Tracker>> trackerLayers = new ConcurrentHashMap<Tracker.TrackerType,Map<String,Tracker>>();
     private PositionCalculator positionCalculator;
     private ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -34,10 +46,12 @@ public class TrackerData implements Subject {
     }
 
     public static synchronized TrackerData getInstance(boolean isRunningAutomatically) {
-        if (trackerData == null) {
+        
+    	if (trackerData == null) {
             trackerData = new TrackerData(isRunningAutomatically);
         }
         return trackerData;
+    
     }
 
     private TrackerData(boolean isRunningAutomatically) {
@@ -50,6 +64,7 @@ public class TrackerData implements Subject {
         trackerLayers.put(Tracker.TrackerType.SIMULATED,simulatedLayer);
 
         positionCalculator = new PositionCalculatorImpl(getExecutor(), getTrackers(), isRunningAutomatically);
+    
     }
 
     public PositionCalculator getPositionCalculator() {
@@ -93,10 +108,12 @@ public class TrackerData implements Subject {
     }
 
     private void update(Tracker oldTracker, Tracker newTracker) {
-        oldTracker.setName(newTracker.getName());
+        
+    	oldTracker.setName(newTracker.getName());
         oldTracker.setUsedCamera(newTracker.isUsedCamera());
         oldTracker.setDroneType(newTracker.getDroneType());
         oldTracker.setFlyer(newTracker.getFlyer());
+    
     }
 
     public Tracker update(Tracker newTracker) {
@@ -141,10 +158,12 @@ public class TrackerData implements Subject {
 
     @Override
     public void notifyAllItems() {
-        System.out.println("........notifying " + getTrackers().size() + " items........");
+        
+    	logger.info("........notifying " + getTrackers().size() + " items........");
         for (Tracker tracker : getTrackers()) {
             tracker.update();
         }
-        System.out.println(".......notifying finished......");
+        logger.info(".......notifying finished......");
+    
     }
 }

@@ -66,11 +66,14 @@ public interface Tracker {
 
     void update();
 
-    void calculate();
 
     MapPoint getCurrentPosition();
 
     void setCurrentPosition(MapPoint positionUnit);
+    
+    String getLayerid();
+    
+	void setLayerid(String layerid);
 
     List<MapPoint> getPositions();
 
@@ -82,5 +85,8 @@ public interface Tracker {
 
     void setFlying(boolean isFlying);
 
+    void calculate();
+
     Tracker move(Integer speed, Integer course);
+
 }
