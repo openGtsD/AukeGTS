@@ -2,6 +2,7 @@ package no.auke.drone.domain.test;
 
 import no.auke.drone.dao.impl.SimpleTrackerFactory;
 import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.Tracker.TrackerType;
 import no.auke.drone.domain.TrackerData;
 import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Observer;
@@ -26,7 +27,7 @@ public class TrackerDataTest {
     @After
     public void tearDown() {
         // remove all drones available
-        for(Tracker tracker : trackerData.getTrackers().values()) {
+        for(Tracker tracker : trackerData.getTrackers(TrackerType.SIMULATED)) {
             trackerData.remove((Observer) tracker);
         }
 

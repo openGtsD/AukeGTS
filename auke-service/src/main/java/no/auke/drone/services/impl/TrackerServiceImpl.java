@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 
 import no.auke.drone.dao.impl.SimpleTrackerFactory;
 import no.auke.drone.domain.*;
-import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.Tracker.TrackerType;
 import no.auke.drone.services.TrackerService;
 
 import org.slf4j.Logger;
@@ -109,9 +109,9 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public List<Tracker> loadWithinView(BoundingBox boundary) {
+    public List<Tracker> loadWithinView(BoundingBox boundary, TrackerType layerId) {
         List<Tracker> result = new ArrayList<Tracker>();
-        for (Tracker positionUnit : getAll()) {
+        for (Tracker positionUnit : getAll(layerId)) {
             if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
                     boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
                 result.add(positionUnit);

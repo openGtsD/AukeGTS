@@ -14,12 +14,14 @@ import javax.ws.rs.core.MediaType;
 
 import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.Tracker.TrackerType;
 import no.auke.drone.services.TrackerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.auke.drone.ws.dto.JsonResponse;
+
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -82,10 +84,10 @@ public class TrackerController {
     }
     
     @POST
-    @Path("/load-drone-in-view")
+    @Path("/load-drone-in-view/{layerId}/{zoom}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public JsonResponse loadDroneWithinView(BoundingBox boundary) {
-        List<Tracker> data = trackerService.loadWithinView(boundary);
+    public JsonResponse loadDroneWithinView(BoundingBox boundary, @PathParam("layerId") TrackerType layerId, @PathParam("zoom") int zoom) {
+        List<Tracker> data = trackerService.loadWithinView(boundary, layerId);
         JsonResponse response = new JsonResponse(data != null, data);
         return response;
     }

@@ -1,7 +1,8 @@
 function buildHTML(data) {
 
-	return "<h1>Drone Info</h1> <input type='button' onclick=start("
-			+ "'" + data.id + "'" + ") value='Start Moving'  /> <ul>"
+	return "<h1>Drone Info</h1> <input type='button' onclick=start(" + "'"
+			+ data.id + "'" + ") value='Start Moving'  /> | <input type='button' onclick=stop(" + "'"
+			+ data.id + "'" + ") value='Stop Moving'  /> <ul>"
 			+ "<li>Drone ID:" + data.id + "</li>" + "<li>GPS: "
 			+ data.currentPosition.latitude + "/"
 			+ data.currentPosition.longitude + "</li>" + "<li>Speed:"
@@ -14,6 +15,7 @@ var map;
 var mgr;
 var icons = {};
 var allmarkers = {};
+var layerId = "SIMULATED";
 function load() {
 	var myOptions = {
 		zoom : 3,
@@ -33,19 +35,18 @@ function load() {
 			var southWestLat = "Upper Left: " + sw.lat() + " / " + sw.lng();
 			var northEastLat = "Lower Right: " + ne.lat() + " / " + ne.lng();
 			$("#resultBoundary").html(southWestLat + " And " + northEastLat);
-			loadDroneIncurrentView();
+			loadDroneIncurrentView(layerId);
 			updateStatus(mgr.getMarkerCount(map.getZoom()));
 		});
 	});
 }
 
-function loadDroneIncurrentView() {
-	allmarkers.length = 0;
+function loadDroneIncurrentView(layerId) {
 	var mapBound = map.getBounds();
 	var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 	var sw = mapBound.getSouthWest();
 	$.ajax({
-		url : 'service/drone/load-drone-in-view',
+		url : 'service/drone/load-drone-in-view/' + layerId + '/' + map.getZoom(),
 		dataType : 'json',
 		contentType : "application/json; charset=utf-8",
 		data : JSON.stringify({
@@ -68,8 +69,8 @@ function loadDroneIncurrentView() {
 				allmarkers[data[i].id] = marker;
 			}
 			// mgr.addMarkers(markers, data[i].minZoom, data[i].maxZoom); TODO:
-			// its use full for show drone in zoom factory
-			mgr.addMarkers(markers, 3, 9);
+			// its use full for show drones in zoom factory
+			mgr.addMarkers(markers, 3, 12);
 			mgr.refresh();
 			updateStatus(mgr.getMarkerCount(map.getZoom()));
 		}
@@ -113,12 +114,43 @@ function updateStatus(html) {
 }
 
 // ---- Test button
+function moveAll() {
+	var mapBound = map.getBounds();
+	for ( var i in allmarkers) {
+		var oldMarker = allmarkers[i];
+		if (mapBound.contains(oldMarker.getPosition())) {
+			start(oldMarker.id)
+		}
+	}
+}
+
+function stopAll() {
+	var mapBound = map.getBounds();
+	for ( var i in allmarkers) {
+		var oldMarker = allmarkers[i];
+		if (mapBound.contains(oldMarker.getPosition())) {
+			stop(oldMarker.id)
+		}
+	}
+}
+
+function showDroneFromLayer(sel){
+	layerId = sel.value; 
+	loadDroneIncurrentView(layerId);
+}
+
+
 function reloadMarkers() {
-	loadDroneIncurrentView();
+	loadDroneIncurrentView(layerId);
+}
+
+listDronesMoving = {}
+function stop(id){
+	clearInterval(listDronesMoving[id]);
 }
 
 function start(id) {
-	counter = 0;
+	var counter = 0;
 	var speed = 100; // just for test
 	var interval1 = setInterval(function() {
 		$.ajax({
@@ -130,12 +162,12 @@ function start(id) {
 				changeMarkerPosition(data);
 			}
 		})
-		if(counter == speed*2) {
+		if (counter == speed * 2) {
 			clearInterval(interval1);
-		}	
+		}
 		counter++;
 	}, 20);
-
+	listDronesMoving[id] = interval1;
 }
 
 function changeMarkerPosition(data) {
