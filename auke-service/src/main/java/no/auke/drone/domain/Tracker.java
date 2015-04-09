@@ -6,9 +6,13 @@ import java.util.List;
  * Created by huyduong on 3/24/2015.
  */
 public interface Tracker {
-    public enum TrackerType{
-        REAL("Real"),SIMULATED("Simulated");
-        private String value;
+    
+	public enum TrackerType{
+        
+    	REAL("Real"),
+    	SIMULATED("Simulated");
+    
+    	private String value;
 
         TrackerType(String v) {
             value = v;

@@ -85,14 +85,17 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     private class TrackerServiceFacade {
-        public List<Tracker> createTrackersForCapitalCities() {
-            List<Tracker> result = new ArrayList<Tracker>();
+        
+    	public List<Tracker> createTrackersForCapitalCities() {
+            
+        	List<Tracker> result = new ArrayList<Tracker>();
             List<MapPoint> points = new ArrayList<MapPoint>();
-            points.add(new MapPoint(10.823099, 106.629664));// HCM
-            points.add(new MapPoint(59.913869, 10.752245));// OSLO
-            points.add(new MapPoint(55.378051, -3.435973));// UK
-            points.add(new MapPoint(51.507351, -0.127758));// London
-            points.add(new MapPoint(56.130366, -106.346771));// Canada
+        
+            points.add(new MapPoint(10.823099, 106.629664,0,0,0));// HCM
+            points.add(new MapPoint(59.913869, 10.752245,0,0,0));// OSLO
+            points.add(new MapPoint(55.378051, -3.435973,0,0,0));// UK
+            points.add(new MapPoint(51.507351, -0.127758,0,0,0));// London
+            points.add(new MapPoint(56.130366, -106.346771,0,0,0));// Canada
 
             for (int i = 0; i < points.size(); i++) {
                 MapPoint point = points.get(i);
@@ -110,11 +113,14 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public List<Tracker> loadWithinView(BoundingBox boundary, TrackerType layerId) {
-        List<Tracker> result = new ArrayList<Tracker>();
+
+    	List<Tracker> result = new ArrayList<Tracker>();
         for (Tracker positionUnit : getAll(layerId)) {
-            if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
+        
+        	if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
                     boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
-                result.add(positionUnit);
+                
+        		result.add(positionUnit);
             }
         }
         return result;
@@ -122,29 +128,40 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Tracker start(String id) {
-        Tracker tracker = getTracker(id);
+        
+    	Tracker tracker = getTracker(id);
         if (tracker != null) {
-            tracker.setFlying(true);
+        
+        	tracker.setFlying(true);
             // setting the tracker altitude to 100, this is for testing simulation
             // only
             tracker.setAltitude(100);
+        
         }
+        
         return tracker;
     }
 
     @Override
     public Tracker stop(String id) {
-        Tracker tracker = getTracker(id);
-        if (tracker != null) {
-            tracker.setFlying(false);
-            // setting tracker altitude to 0, this is for testing simulation only
+        
+    	Tracker tracker = getTracker(id);
+        
+    	if (tracker != null) {
+        
+    		tracker.setFlying(false);
+        
+    		// setting tracker altitude to 0, this is for testing simulation only
             tracker.setAltitude(0);
         }
+    	
         return tracker;
     }
 
     @Override
     public Tracker update(Tracker tracker) {
-        return TrackerData.getInstance().update(tracker);
+        
+    	return TrackerData.getInstance().update(tracker);
+    
     }
 }

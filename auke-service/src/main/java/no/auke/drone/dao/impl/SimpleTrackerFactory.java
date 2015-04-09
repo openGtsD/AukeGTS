@@ -16,24 +16,27 @@ public class SimpleTrackerFactory implements TrackerFactory {
 
     @Override
     public Tracker create(String id, String name) {
-        return create(id, name, new MapPoint(100, 100));
+        return create(id, name, new MapPoint(100, 100,0,0,0));
     }
 
     @Override
     public Tracker create(String id, String name, MapPoint location) {
-        Tracker tracker = new SimpleTracker();
+        
+    	Tracker tracker = new SimpleTracker();
         tracker.setId(id);
         tracker.setName(name);
         tracker.setCurrentPosition(location);
         tracker.getPositions().add(tracker.getCurrentPosition());
         logger.info("created tracker: " + tracker.toString());
+        
         return tracker;
     }
 
     @Override
     public Tracker create(String id, String name, double altitude, double speed, long time, Tracker.TrackerType droneType,
                           Person flyer, boolean hasCamera, MapPoint location) {
-        Tracker tracker = new SimpleTracker();
+        
+    	Tracker tracker = new SimpleTracker();
         tracker.setId(id);
         tracker.setName(name);
         tracker.setAltitude(altitude);
@@ -44,6 +47,7 @@ public class SimpleTrackerFactory implements TrackerFactory {
         tracker.setCurrentPosition(location);
         tracker.getPositions().add(tracker.getCurrentPosition());
         return tracker;
+    
     }
 
 }

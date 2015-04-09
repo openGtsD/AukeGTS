@@ -7,7 +7,8 @@ import no.auke.drone.domain.MapPoint;
 public class PointUtil {
     
     public static MapPoint generateRandomMapPoint(MapPoint l) {
-        Random random = new Random();
+        
+    	Random random = new Random();
 
         // Convert radius from meters to degrees
         // double radiusInDegrees = radius / 111000f;
@@ -22,7 +23,10 @@ public class PointUtil {
 
         double foundLongitude = new_x + l.getLongitude();
         double foundLatitude = y + l.getLatitude();
-        MapPoint rl = new MapPoint(foundLatitude, foundLongitude);
+        
+        MapPoint rl = new MapPoint(foundLatitude, foundLongitude,0,0,0);
+        
         return rl;
+    
     }
 }

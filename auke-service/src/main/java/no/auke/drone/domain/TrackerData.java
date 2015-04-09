@@ -41,7 +41,8 @@ public class TrackerData implements Subject {
     }
 
     private TrackerData(boolean isRunningAutomatically) {
-        Map<Tracker.TrackerType,Map<String,Tracker>> trackerLayers = new ConcurrentHashMap<>();
+        
+    	Map<Tracker.TrackerType,Map<String,Tracker>> trackerLayers = new ConcurrentHashMap<>();
         Map<String,Tracker> realLayer = new ConcurrentHashMap<>();
         Map<String,Tracker> simulatedLayer = new ConcurrentHashMap<>();
 
@@ -56,8 +57,10 @@ public class TrackerData implements Subject {
     }
 
     private Map<String,Tracker> getTrackerLayer(Tracker.TrackerType trackerType) {
-        Map<String,Tracker> trackerLayer = trackerLayers.get(trackerType);
-        if(trackerLayer == null) {
+        
+    	Map<String,Tracker> trackerLayer = trackerLayers.get(trackerType);
+        
+    	if(trackerLayer == null) {
             trackerLayer = new ConcurrentHashMap<>();
             trackerLayers.put(trackerType,trackerLayer);
         }
@@ -69,17 +72,21 @@ public class TrackerData implements Subject {
     }
 
     public Collection<Tracker> getTrackers(Tracker.TrackerType trackerType) {
-        List<Tracker> result = new ArrayList<>();
+        
+    	List<Tracker> result = new ArrayList<>();
 
         if(trackerType == null) {
-            result.addAll(getTrackerLayer(Tracker.TrackerType.REAL).values());
+        
+        	result.addAll(getTrackerLayer(Tracker.TrackerType.REAL).values());
             result.addAll(getTrackerLayer(Tracker.TrackerType.SIMULATED).values());
 
         } else if(trackerType.equals(Tracker.TrackerType.REAL)) {
-            result.addAll(getTrackerLayer(Tracker.TrackerType.REAL).values());
+            
+        	result.addAll(getTrackerLayer(Tracker.TrackerType.REAL).values());
 
         } else if(trackerType.equals(Tracker.TrackerType.SIMULATED)) {
-            result.addAll(getTrackerLayer(Tracker.TrackerType.SIMULATED).values());
+            
+        	result.addAll(getTrackerLayer(Tracker.TrackerType.SIMULATED).values());
         }
 
         return result;
@@ -93,7 +100,8 @@ public class TrackerData implements Subject {
     }
 
     public Tracker update(Tracker newTracker) {
-        Tracker tracker = getTracker(newTracker.getId());
+        
+    	Tracker tracker = getTracker(newTracker.getId());
         if(tracker.equals(newTracker)) {
             return tracker;// do nothing
         }
@@ -103,23 +111,28 @@ public class TrackerData implements Subject {
     }
 
     public Tracker getTracker(String id) {
-        Tracker tracker = getTrackerLayer(Tracker.TrackerType.REAL).get(id);
+        
+    	Tracker tracker = getTrackerLayer(Tracker.TrackerType.REAL).get(id);
         if(tracker == null) {
             tracker = getTrackerLayer(Tracker.TrackerType.SIMULATED).get(id);
         }
         return tracker;
+    
     }
 
     @Override
     public void register(Observer drone) {
-        Tracker tracker = (Tracker) drone;
+    
+    	Tracker tracker = (Tracker) drone;
         getTrackerLayer(tracker.getDroneType()).put(tracker.getId(), tracker);
         positionCalculator.startCalculate();
+    
     }
 
     @Override
     public void remove(Observer drone) {
-        Tracker tracker = (Tracker) drone;
+        
+    	Tracker tracker = (Tracker) drone;
         getTrackerLayer(tracker.getDroneType()).remove(tracker.getId());
         if (getTrackers().size() == 0) {
             positionCalculator.stopCalculate();

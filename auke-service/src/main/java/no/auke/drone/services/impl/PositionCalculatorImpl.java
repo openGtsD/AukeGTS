@@ -15,7 +15,8 @@ import org.slf4j.LoggerFactory;
  * Created by huyduong on 3/26/2015.
  */
 public class PositionCalculatorImpl implements PositionCalculator {
-    private static final Logger logger = LoggerFactory.getLogger(PositionCalculator.class);
+    
+	private static final Logger logger = LoggerFactory.getLogger(PositionCalculator.class);
 
     protected static final long CALC_FREQUENCY = 10000; // time in milliseconds
 
@@ -27,39 +28,51 @@ public class PositionCalculatorImpl implements PositionCalculator {
     private ExecutorService executor;
 
     public PositionCalculatorImpl(ExecutorService executor, Collection<Tracker> drones, boolean isRunningAutomatically) {
-        this.executor = executor;
+        
+    	this.executor = executor;
         this.drones = drones;
         this.isRunningAutomatically = new AtomicBoolean(isRunningAutomatically);
     }
 
     public void startCalculate() {
-        // start calc tread if not already started
+        
+    	// start calc tread if not already started
         if(isRunningAutomatically.get() && !isRunning.getAndSet(true)) {
-            executor.execute(new Runnable() {
-                @Override
+        
+        	executor.execute(new Runnable() {
+            
+        		@Override
                 public void run() {
-                    long lastStarted = System.currentTimeMillis();
+                
+        			long lastStarted = System.currentTimeMillis();
                     isRunning.set(true);
 
                     while(isRunning.get()) {
-                        if(logger.isDebugEnabled()) logger.debug("run calc");
+                        
+                    	if(logger.isDebugEnabled()) logger.debug("run calc");
 
                         for(Tracker tracker : drones) {
-                            if(isRunning.get()) {
-                                // calc and update current positions
+                            
+                        	if(isRunning.get()) {
+                            
+                        		// calc and update current positions
                                 tracker.calculate();
+                            
                             } else {
-                                break;
+                                
+                            	break;
                             }
                         }
 
                         if(isRunning.get() && (System.currentTimeMillis() - lastStarted) < CALC_FREQUENCY ) {
-                            // sleep for rest time to CALC_FREQUENCY
+                        
+                        	// sleep for rest time to CALC_FREQUENCY
                             try {
                                 Thread.sleep(CALC_FREQUENCY - (System.currentTimeMillis() - lastStarted));
                             } catch (InterruptedException e) {
                             }
                             lastStarted = System.currentTimeMillis();
+                        
                         }
                     }
                 }
