@@ -35,8 +35,6 @@ public class TrackerServiceImpl implements TrackerService {
     public static ExecutorService getExecutor() {
         return executor;
     }	
-	
-    Map<String, Tracker> trackers = new ConcurrentHashMap<String, Tracker>();
 
     @PostConstruct
     public void initTrackerService() {
@@ -85,7 +83,7 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Collection<Tracker> getAll(Tracker.TrackerType trackerType) {
-    
+
     	return TrackerData.getInstance().getTrackers(trackerType);
     
     }

@@ -1,11 +1,15 @@
 package no.auke.drone.services.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.TrackerData;
+import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.services.PositionCalculator;
 
 import org.slf4j.Logger;
@@ -23,15 +27,16 @@ public class PositionCalculatorImpl implements PositionCalculator {
     private AtomicBoolean isRunning = new AtomicBoolean();
     private AtomicBoolean isRunningAutomatically = new AtomicBoolean(true);
 
-    private Collection<Tracker> drones;
-
     private ExecutorService executor;
 
-    public PositionCalculatorImpl(ExecutorService executor, Collection<Tracker> drones, boolean isRunningAutomatically) {
+    public PositionCalculatorImpl(ExecutorService executor, boolean isRunningAutomatically) {
         
     	this.executor = executor;
-        this.drones = drones;
         this.isRunningAutomatically = new AtomicBoolean(isRunningAutomatically);
+    }
+
+    private Collection<Tracker> getTrackers() {
+        return TrackerData.getInstance().getTrackers();
     }
 
     public void startCalculate() {
@@ -51,10 +56,10 @@ public class PositionCalculatorImpl implements PositionCalculator {
                         
                     	if(logger.isDebugEnabled()) logger.debug("run calc");
 
-                        for(Tracker tracker : drones) {
+                        for(Tracker tracker : getTrackers()) {
                             
                         	if(isRunning.get()) {
-                            
+                                logger.info("tracker " + tracker.getId() + " is calculating");
                         		// calc and update current positions
                                 tracker.calculate();
                             
