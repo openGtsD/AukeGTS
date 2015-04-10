@@ -4,11 +4,11 @@ function buildHTML(data) {
 			+ data.id + "'"
 			+ ") value='Start Moving'  /> | <input type='button' onclick=stop("
 			+ "'" + data.id + "'" + ") value='Stop Moving'  /> <ul>"
-			+ "<li>Drone ID:" + data.id + "</li>" + "<li>GPS: "
+			+ "<li>Drone ID:" + data.id + "</li><li>GPS: "
 			+ data.currentPosition.latitude + "/"
-			+ data.currentPosition.longitude + "</li>" + "<li>Speed:"
-			+ data.speed + "</li> " + "<li>Altitude: " + data.altitude
-			+ "</li></ul>"
+			+ data.currentPosition.longitude + "</li><li>Speed:" + data.speed
+			+ "</li><li>Altitude: " + data.altitude + "</li><li>Flying: "
+			+ data.flying + "</li></ul>"
 
 }
 
@@ -38,7 +38,7 @@ function load() {
 			$("#resultBoundary").html(southWestLat + " And " + northEastLat);
 			updateStatus(mgr.getMarkerCount(map.getZoom()));
 		});
-		
+
 		var interval = setInterval(function() {
 			loadDroneIncurrentView(layerId);
 		}, 5000);
@@ -69,7 +69,7 @@ function loadDroneIncurrentView(layerId) {
 				posn = new google.maps.LatLng(data[i].currentPosition.latitude,
 						data[i].currentPosition.longitude);
 				var marker = createMarker(data[i].id, posn, data[i].name,
-						'/auke-js/resources/images/drone.png');
+						'/auke-js/resources/images/drone.png', buildHTML(data[i]));
 				markers.push(marker);
 				allmarkers[data[i].id] = marker;
 			}
@@ -82,12 +82,13 @@ function loadDroneIncurrentView(layerId) {
 	});
 }
 
-function createMarker(id, posn, title, icon) {
+function createMarker(id, posn, title, icon, contentHTML) {
 	var markerOptions = {
 		id : id,
 		position : posn,
 		title : title,
-		icon : icon
+		icon : icon,
+		content: contentHTML
 	};
 	// if (icon !== false) {
 	// markerOptions.shadow = icon.shadow;
@@ -96,21 +97,7 @@ function createMarker(id, posn, title, icon) {
 	// }
 
 	var marker = new google.maps.Marker(markerOptions);
-	google.maps.event.addListener(marker, 'click', function() {
-		var infoWindow = new google.maps.InfoWindow();
-		$.ajax({
-			url : 'service/drone/' + marker.id,
-			dataType : 'json',
-			contentType : "text/html; charset=utf-8",
-			success : function(response) {
-				var infoWindow = new google.maps.InfoWindow();
-				var data = response.data[0];
-				var droneInfo = buildHTML(data);
-				infoWindow.setContent(droneInfo);
-				infoWindow.open(map, marker);
-			}
-		})
-	});
+	createInfoWindow(marker);
 	return marker;
 }
 
@@ -118,8 +105,27 @@ function updateStatus(html) {
 	document.getElementById("numberDrone").innerHTML = html;
 }
 
+var infoWindow = new google.maps.InfoWindow();
+function createInfoWindow(marker) {
+	google.maps.event.addListener(marker, 'click', function() {
+		infoWindow.setContent(marker.content);
+		infoWindow.open(map, marker);
+//		$.ajax({
+//			url : 'service/drone/' + marker.id,
+//			dataType : 'json',
+//			contentType : "text/html; charset=utf-8",
+//			success : function(response) {
+//				var data = response.data[0];
+//				var droneInfo = buildHTML(data);
+//				infoWindow.setContent(droneInfo);
+//				infoWindow.open(map, marker);
+//			}
+//		})
+	});
+}
+
 // ---- Test button
-function moveAll() {
+function startAll() {
 	var mapBound = map.getBounds();
 	for ( var i in allmarkers) {
 		var oldMarker = allmarkers[i];
@@ -161,7 +167,6 @@ function stop(id) {
 }
 
 function start(id) {
-	// var interval1 = setInterval(function() {
 	$.ajax({
 		url : 'service/drone/start/' + id,
 		dataType : 'json',
@@ -171,11 +176,6 @@ function start(id) {
 			changeMarkerPosition(data);
 		}
 	})
-	// if (counter == speed * 2) {
-	// clearInterval(interval1);
-	// }
-	// counter++;
-	// }, 20);
 }
 
 function changeMarkerPosition(data) {
