@@ -63,24 +63,17 @@ public class TrackerController {
     }
 
     @GET
-    @Path("/move/{id}/{speed}")
-    public JsonResponse move(@PathParam("id") String id, @PathParam("speed")int speed, @PathParam("course")int course) {
-        Tracker tracker = trackerService.move(id,speed,course);
+    @Path("/start/{id}")
+    public JsonResponse start(@PathParam("id") String id) {
+        Tracker tracker = trackerService.start(id);
         return new JsonResponse(tracker != null, tracker);
     }
 
     @GET
-    @Path("/start")
-    public JsonResponse start(@QueryParam("id") String id) {
-        Tracker tracker = trackerService.start(id);
-        return new JsonResponse(tracker == null, tracker);
-    }
-
-    @GET
-    @Path("/stop")
-    public JsonResponse stop(@QueryParam("id") String id) {
+    @Path("/stop/{id}")
+    public JsonResponse stop(@PathParam("id") String id) {
         Tracker tracker = trackerService.stop(id);
-        return new JsonResponse(tracker == null, tracker);
+        return new JsonResponse(tracker != null, tracker);
     }
     
     @POST

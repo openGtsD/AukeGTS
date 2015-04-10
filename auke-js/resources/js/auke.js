@@ -1,8 +1,9 @@
 function buildHTML(data) {
 
 	return "<h1>Drone Info</h1> <input type='button' onclick=start(" + "'"
-			+ data.id + "'" + ") value='Start Moving'  /> | <input type='button' onclick=stop(" + "'"
-			+ data.id + "'" + ") value='Stop Moving'  /> <ul>"
+			+ data.id + "'"
+			+ ") value='Start Moving'  /> | <input type='button' onclick=stop("
+			+ "'" + data.id + "'" + ") value='Stop Moving'  /> <ul>"
 			+ "<li>Drone ID:" + data.id + "</li>" + "<li>GPS: "
 			+ data.currentPosition.latitude + "/"
 			+ data.currentPosition.longitude + "</li>" + "<li>Speed:"
@@ -35,7 +36,10 @@ function load() {
 			var southWestLat = "Upper Left: " + sw.lat() + " / " + sw.lng();
 			var northEastLat = "Lower Right: " + ne.lat() + " / " + ne.lng();
 			$("#resultBoundary").html(southWestLat + " And " + northEastLat);
-			loadDroneIncurrentView(layerId);
+			var interval = setInterval(function() {
+				loadDroneIncurrentView(layerId);
+			}, 5000);
+
 			updateStatus(mgr.getMarkerCount(map.getZoom()));
 		});
 	});
@@ -46,7 +50,8 @@ function loadDroneIncurrentView(layerId) {
 	var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 	var sw = mapBound.getSouthWest();
 	$.ajax({
-		url : 'service/drone/load-drone-in-view/' + layerId + '/' + map.getZoom(),
+		url : 'service/drone/load-drone-in-view/' + layerId + '/'
+				+ map.getZoom(),
 		dataType : 'json',
 		contentType : "application/json; charset=utf-8",
 		data : JSON.stringify({
@@ -70,7 +75,7 @@ function loadDroneIncurrentView(layerId) {
 			}
 			// mgr.addMarkers(markers, data[i].minZoom, data[i].maxZoom); TODO:
 			// its use full for show drones in zoom factory
-			mgr.addMarkers(markers, 3, 12);
+			mgr.addMarkers(markers, 3, 13);
 			mgr.refresh();
 			updateStatus(mgr.getMarkerCount(map.getZoom()));
 		}
@@ -134,40 +139,43 @@ function stopAll() {
 	}
 }
 
-function showDroneFromLayer(sel){
-	layerId = sel.value; 
+function showDroneFromLayer(sel) {
+	layerId = sel.value;
 	loadDroneIncurrentView(layerId);
 }
-
 
 function reloadMarkers() {
 	loadDroneIncurrentView(layerId);
 }
 
-listDronesMoving = {}
-function stop(id){
-	clearInterval(listDronesMoving[id]);
+function stop(id) {
+	$.ajax({
+		url : 'service/drone/stop/' + id,
+		dataType : 'json',
+		contentType : "text/html; charset=utf-8",
+		success : function(response) {
+			var data = response.data[0];
+			changeMarkerPosition(data);
+		}
+	})
 }
 
 function start(id) {
-	var counter = 0;
-	var speed = 100; // just for test
-	var interval1 = setInterval(function() {
-		$.ajax({
-			url : 'service/drone/move/' + id + "/" + speed,
-			dataType : 'json',
-			contentType : "text/html; charset=utf-8",
-			success : function(response) {
-				var data = response.data[0];
-				changeMarkerPosition(data);
-			}
-		})
-		if (counter == speed * 2) {
-			clearInterval(interval1);
+	// var interval1 = setInterval(function() {
+	$.ajax({
+		url : 'service/drone/start/' + id,
+		dataType : 'json',
+		contentType : "text/html; charset=utf-8",
+		success : function(response) {
+			var data = response.data[0];
+			changeMarkerPosition(data);
 		}
-		counter++;
-	}, 20);
-	listDronesMoving[id] = interval1;
+	})
+	// if (counter == speed * 2) {
+	// clearInterval(interval1);
+	// }
+	// counter++;
+	// }, 20);
 }
 
 function changeMarkerPosition(data) {
