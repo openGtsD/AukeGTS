@@ -53,7 +53,7 @@ public class SimpleTracker extends TrackerBase {
             }
 
             if(course == null) {
-                course = ran.nextInt(1) + 180;
+                course = ran.nextInt(1) + 360;
             }
 
             // fly
