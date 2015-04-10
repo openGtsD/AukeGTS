@@ -72,6 +72,7 @@ public class SimpleTracker extends TrackerBase {
             // everytime you move is to heavy
             
             //LocationFunction.writeLocationHistoryByDroneId(id,currentPosition);
+            // TODO this would use an asynchronous method so it is easier to move
             
             logger.info(this.toString() + "finished moving");
             
