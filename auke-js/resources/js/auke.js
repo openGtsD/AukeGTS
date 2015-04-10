@@ -36,12 +36,12 @@ function load() {
 			var southWestLat = "Upper Left: " + sw.lat() + " / " + sw.lng();
 			var northEastLat = "Lower Right: " + ne.lat() + " / " + ne.lng();
 			$("#resultBoundary").html(southWestLat + " And " + northEastLat);
-			var interval = setInterval(function() {
-				loadDroneIncurrentView(layerId);
-			}, 5000);
-
 			updateStatus(mgr.getMarkerCount(map.getZoom()));
 		});
+		
+		var interval = setInterval(function() {
+			loadDroneIncurrentView(layerId);
+		}, 5000);
 	});
 }
 
@@ -75,7 +75,7 @@ function loadDroneIncurrentView(layerId) {
 			}
 			// mgr.addMarkers(markers, data[i].minZoom, data[i].maxZoom); TODO:
 			// its use full for show drones in zoom factory
-			mgr.addMarkers(markers, 3, 13);
+			mgr.addMarkers(markers, 3, 19);
 			mgr.refresh();
 			updateStatus(mgr.getMarkerCount(map.getZoom()));
 		}
