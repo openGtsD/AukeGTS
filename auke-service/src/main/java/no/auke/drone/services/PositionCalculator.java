@@ -1,6 +1,5 @@
 package no.auke.drone.services;
 
-
 /**
  * Created by huyduong on 3/26/2015.
  */

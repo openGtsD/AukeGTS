@@ -1,14 +1,7 @@
 package no.auke.drone.domain;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
-import no.auke.drone.utils.LocationFunction;
-
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +17,10 @@ public class SimpleTracker extends TrackerBase {
     	super();
     }
 
+    public SimpleTracker(String id) {
+    	super(id);
+    }
+    
 	@Override
     public void calculate() {
         
@@ -87,6 +84,8 @@ public class SimpleTracker extends TrackerBase {
     	
         
     }
+
+
 
 
 }

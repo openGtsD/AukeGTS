@@ -1,15 +1,12 @@
 package no.auke.drone.services.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerData;
-import no.auke.drone.domain.TrackerLayer;
+import no.auke.drone.domain.Tracker.TrackerType;
 import no.auke.drone.services.PositionCalculator;
 
 import org.slf4j.Logger;
@@ -22,7 +19,7 @@ public class PositionCalculatorImpl implements PositionCalculator {
     
 	private static final Logger logger = LoggerFactory.getLogger(PositionCalculator.class);
 
-    protected static final long CALC_FREQUENCY = 10000; // time in milliseconds
+    public static long CALC_FREQUENCY = 5000; // time in milliseconds
 
     private AtomicBoolean isRunning = new AtomicBoolean();
     private AtomicBoolean isRunningAutomatically = new AtomicBoolean(true);
@@ -33,10 +30,6 @@ public class PositionCalculatorImpl implements PositionCalculator {
         
     	this.executor = executor;
         this.isRunningAutomatically = new AtomicBoolean(isRunningAutomatically);
-    }
-
-    private Collection<Tracker> getTrackers() {
-        return TrackerData.getInstance().getTrackers();
     }
 
     public void startCalculate() {
@@ -50,18 +43,21 @@ public class PositionCalculatorImpl implements PositionCalculator {
                 public void run() {
                 
         			long lastStarted = System.currentTimeMillis();
-                    isRunning.set(true);
-
                     while(isRunning.get()) {
                         
                     	if(logger.isDebugEnabled()) logger.debug("run calc");
 
-                        for(Tracker tracker : getTrackers()) {
+                        for(Tracker tracker : TrackerData.getInstance().getTrackers()) {
                             
                         	if(isRunning.get()) {
-                                logger.info("tracker " + tracker.getId() + " is calculating");
-                        		// calc and update current positions
-                                tracker.calculate();
+
+                            	if(tracker.getTrackerType()==TrackerType.SIMULATED) {
+
+                            		logger.info("tracker " + tracker.getId() + " is calculating");
+                            		// calc and update current positions
+                                    tracker.calculate();
+                            		
+                            	}
                             
                             } else {
                                 

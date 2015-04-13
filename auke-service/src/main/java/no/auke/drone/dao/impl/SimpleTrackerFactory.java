@@ -41,7 +41,7 @@ public class SimpleTrackerFactory implements TrackerFactory {
         tracker.setName(name);
         tracker.setAltitude(altitude);
         tracker.setSpeed(speed);
-        tracker.setDroneType(droneType);
+        tracker.setTrackerType(droneType);
         tracker.setFlyer(flyer);
         tracker.setUsedCamera(hasCamera);
         tracker.setCurrentPosition(location);

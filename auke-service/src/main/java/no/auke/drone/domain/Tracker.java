@@ -7,7 +7,7 @@ import java.util.List;
  */
 public interface Tracker {
     
-	public enum TrackerType{
+	public enum TrackerType {
         
     	REAL("Real"),
     	SIMULATED("Simulated");
@@ -56,9 +56,9 @@ public interface Tracker {
 
     void setUsedCamera(boolean isUsedCamera);
 
-    void setDroneType(TrackerType name);
+    void setTrackerType(TrackerType name);
 
-    TrackerType getDroneType();
+    TrackerType getTrackerType();
 
     void setFlyer(Person person);
 

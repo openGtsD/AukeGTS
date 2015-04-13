@@ -39,6 +39,11 @@ public abstract class TrackerBase implements Tracker, Observer {
         positions = new ArrayList<MapPoint>();
         isFlying.set(true);
     }
+    
+    public TrackerBase(String id) {
+    	this();
+    	this.id = id;
+    }    
 
     public String getId() {
         return id;
@@ -157,12 +162,12 @@ public abstract class TrackerBase implements Tracker, Observer {
     }
 
     @Override
-    public void setDroneType(TrackerType type) {
+    public void setTrackerType(TrackerType type) {
         this.droneType = type;
     }
 
     @Override
-    public TrackerType getDroneType() {
+    public TrackerType getTrackerType() {
         return this.droneType;
     }
 

@@ -1,4 +1,4 @@
-package no.auke.drone.domain.test;
+package no.auke.drone.domain;
 
 import no.auke.drone.dao.impl.SimpleTrackerFactory;
 import no.auke.drone.domain.Tracker;
@@ -16,12 +16,12 @@ import org.junit.Test;
  * Created by huyduong on 3/29/2015.
  */
 
-public class TrackerDataTest {
+public class TrackerData2Test {
     private TrackerData trackerData;
 
     @Before
     public void setUp() {
-        trackerData = TrackerData.getInstance("",false);
+        trackerData = TrackerData.getInstance(false);
     }
 
     @After
