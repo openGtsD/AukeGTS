@@ -5,10 +5,13 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.Map;
 
+import javax.servlet.DispatcherType;
 import javax.ws.rs.Path;
 
+import no.auke.drone.ws.support.CrossDomainFilter;
 import no.auke.drone.ws.support.RestContextLoaderListener;
 import no.auke.drone.ws.support.XmlRestApplicationContext;
 
@@ -45,10 +48,10 @@ public class AukeService extends Service<AukeUiConfiguration> {
         final AssetsBundle assets = new AssetsBundle("/assets", 5);
         assets.initialize(env);
 
-        // Filters
-        //FilterConfiguration filterConfig = env.addFilter(DelegatingFilterProxy.class, "/*");
-        //filterConfig.setName("springSecurityFilterChain");
-
+        // Filters 
+        if(conf.getProfile().equalsIgnoreCase("dev")){
+            env.addFilter(CrossDomainFilter.class, "/*");
+        }
         // Servlet Listeners
         env.addServletListeners(new RestContextLoaderListener(appContext));
 

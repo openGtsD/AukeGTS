@@ -50,10 +50,10 @@ function loadDroneIncurrentView(layerId) {
 	var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 	var sw = mapBound.getSouthWest();
 	$.ajax({
-		url : 'service/drone/load-drone-in-view/' + layerId + '/'
+		url : 'http://localhost:8888/drone/load-drone-in-view/' + layerId + '/'
 				+ map.getZoom(),
 		dataType : 'json',
-		contentType : "application/json; charset=utf-8",
+		contentType : "application/json;charset=utf-8",
 		data : JSON.stringify({
 			southWestLat : sw.lat(),
 			southWestLon : sw.lng(),
@@ -69,7 +69,7 @@ function loadDroneIncurrentView(layerId) {
 				posn = new google.maps.LatLng(data[i].currentPosition.latitude,
 						data[i].currentPosition.longitude);
 				var marker = createMarker(data[i].id, posn, data[i].name,
-						'/auke-js/resources/images/drone.png',
+						'./images/drone.png',
 						buildHTML(data[i]));
 				markers.push(marker);
 				allmarkers[data[i].id] = marker;
@@ -79,7 +79,7 @@ function loadDroneIncurrentView(layerId) {
 			mgr.addMarkers(markers, 3, 19);
 			mgr.refresh();
 			updateStatus(mgr.getMarkerCount(map.getZoom()));
-//			autoCenter(markers);
+			// autoCenter(markers);
 		}
 	});
 }
@@ -158,7 +158,7 @@ function reloadMarkers() {
 
 function stop(id) {
 	$.ajax({
-		url : 'service/drone/stop/' + id,
+		url : 'http://localhost:8888/drone/stop/' + id,
 		dataType : 'json',
 		contentType : "text/html; charset=utf-8",
 		success : function(response) {
@@ -170,7 +170,7 @@ function stop(id) {
 
 function start(id) {
 	$.ajax({
-		url : 'service/drone/start/' + id,
+		url : 'http://localhost:8888/drone/start/' + id,
 		dataType : 'json',
 		contentType : "text/html; charset=utf-8",
 		success : function(response) {
