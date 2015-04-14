@@ -45,12 +45,13 @@ function load() {
 	});
 }
 
+var demoServer = "http://89.221.242.66:8888/";
 function loadDroneIncurrentView(layerId) {
 	var mapBound = map.getBounds();
 	var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 	var sw = mapBound.getSouthWest();
 	$.ajax({
-		url : 'http://localhost:8888/drone/load-drone-in-view/' + layerId + '/'
+		url : demoServer + 'drone/load-drone-in-view/' + layerId + '/'
 				+ map.getZoom(),
 		dataType : 'json',
 		contentType : "application/json;charset=utf-8",
@@ -112,17 +113,6 @@ function createInfoWindow(marker) {
 	google.maps.event.addListener(marker, 'click', function() {
 		infoWindow.setContent(marker.content);
 		infoWindow.open(map, marker);
-		// $.ajax({
-		// url : 'service/drone/' + marker.id,
-		// dataType : 'json',
-		// contentType : "text/html; charset=utf-8",
-		// success : function(response) {
-		// var data = response.data[0];
-		// var droneInfo = buildHTML(data);
-		// infoWindow.setContent(droneInfo);
-		// infoWindow.open(map, marker);
-		// }
-		// })
 	});
 }
 
@@ -158,7 +148,7 @@ function reloadMarkers() {
 
 function stop(id) {
 	$.ajax({
-		url : 'http://localhost:8888/drone/stop/' + id,
+		url : demoServer + 'drone/stop/' + id,
 		dataType : 'json',
 		contentType : "text/html; charset=utf-8",
 		success : function(response) {
@@ -170,7 +160,7 @@ function stop(id) {
 
 function start(id) {
 	$.ajax({
-		url : 'http://localhost:8888/drone/start/' + id,
+		url : demoServer + 'drone/start/' + id,
 		dataType : 'json',
 		contentType : "text/html; charset=utf-8",
 		success : function(response) {
