@@ -3,17 +3,9 @@ package no.auke.drone.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import no.auke.drone.services.PositionCalculator;
-import no.auke.drone.services.impl.PositionCalculatorImpl;
-import no.auke.drone.services.impl.TrackerServiceImpl;
-
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -35,35 +27,19 @@ public class TrackerData implements Subject {
 	}    
 
     public static synchronized TrackerData getInstance() {
-        return getInstance(true);
-    }    		
-    
-    public static synchronized TrackerData getInstance(boolean isRunningAutomatically) {
     	if (trackerData==null) {
-    		trackerData = new TrackerData(isRunningAutomatically);
+    		trackerData = new TrackerData();
         }
         return trackerData;
     }    		
 
-    private PositionCalculator positionCalculator;
-    
-    private TrackerData(boolean isRunningAutomatically) {
-        
+    private TrackerData() {
     	trackerLayers = new ArrayList<>();
-        
     	trackerLayers.add(new TrackerLayer("REAL"));
         trackerLayers.add(new TrackerLayer("SIMULATED"));
-
-        positionCalculator = new PositionCalculatorImpl(TrackerServiceImpl.getExecutor(), isRunningAutomatically);
-    
-    }
-
-    public PositionCalculator getPositionCalculator() {
-        return positionCalculator;
     }
 
     private TrackerLayer getTrackerLayer(String layerId) {
-        
     	for(TrackerLayer trackerLayer : trackerLayers) {
             if(layerId.equalsIgnoreCase(trackerLayer.getLayerName())) {
                 return trackerLayer;
@@ -133,38 +109,23 @@ public class TrackerData implements Subject {
     	Tracker tracker = (Tracker) drone;
     	
     	if(tracker.getLayerid()!=null) {
-
-    		getTrackerLayer(tracker.getLayerid()).getTrackers().put(tracker.getId(), tracker);
-            positionCalculator.startCalculate();
+    		getTrackerLayer(tracker.getLayerid()).addTracker(tracker);
 
     	} else if (tracker.getTrackerType()!=null){
-
-    		getTrackerLayer(tracker.getTrackerType().toString()).getTrackers().put(tracker.getId(), tracker);
-            positionCalculator.startCalculate();
-    		
+    		getTrackerLayer(tracker.getTrackerType().toString()).addTracker(tracker);
     	}
     
     }
 
     @Override
     public void remove(Observer drone) {
-        
     	Tracker tracker = (Tracker) drone;
 
     	if(tracker.getLayerid()!=null) {
-
-            getTrackerLayer(tracker.getLayerid()).getTrackers().remove(tracker.getId());
-
+            getTrackerLayer(tracker.getLayerid()).removeTracker(tracker);
     	} else if (tracker.getTrackerType()!=null){
-
-            getTrackerLayer(tracker.getTrackerType().toString()).getTrackers().remove(tracker.getId());
-    		
+            getTrackerLayer(tracker.getTrackerType().toString()).removeTracker(tracker);
     	}
-    	
-        if (getTrackers().size() == 0) {
-            positionCalculator.stopCalculate();
-        }
-        
     }
 
     @Override

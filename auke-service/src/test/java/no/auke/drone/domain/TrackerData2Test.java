@@ -21,7 +21,7 @@ public class TrackerData2Test {
 
     @Before
     public void setUp() {
-        trackerData = TrackerData.getInstance(false);
+        trackerData = TrackerData.getInstance();
     }
 
     @After
@@ -30,9 +30,7 @@ public class TrackerData2Test {
         for(Tracker tracker : trackerData.getTrackers(TrackerType.SIMULATED)) {
             trackerData.remove((Observer) tracker);
         }
-
-        // stop any threads running
-        trackerData.getPositionCalculator().stopCalculate();    }
+   }
 
     @Test
     public void shouldInitDroneData() {

@@ -158,6 +158,7 @@ public class TrackerServiceImpl implements TrackerService {
             // setting the tracker altitude to 100, this is for testing simulation
             // only
             tracker.setAltitude(100);
+            tracker.getCurrentPosition().setAltitude(100);
         
         }
         return tracker;
@@ -175,6 +176,7 @@ public class TrackerServiceImpl implements TrackerService {
         
     		// setting tracker altitude to 0, this is for testing simulation only
             tracker.setAltitude(0);
+            tracker.getCurrentPosition().setAltitude(0);
         }
     	
         return tracker;

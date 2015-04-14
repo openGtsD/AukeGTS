@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerData;
 import no.auke.drone.domain.Tracker.TrackerType;
+import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.services.PositionCalculator;
 
 import org.slf4j.Logger;
@@ -23,11 +24,11 @@ public class PositionCalculatorImpl implements PositionCalculator {
 
     private AtomicBoolean isRunning = new AtomicBoolean();
     private AtomicBoolean isRunningAutomatically = new AtomicBoolean(true);
-
+    private TrackerLayer trackerLayer;
     private ExecutorService executor;
 
-    public PositionCalculatorImpl(ExecutorService executor, boolean isRunningAutomatically) {
-        
+    public PositionCalculatorImpl(ExecutorService executor, TrackerLayer trackerLayer, boolean isRunningAutomatically) {
+        this.trackerLayer = trackerLayer;
     	this.executor = executor;
         this.isRunningAutomatically = new AtomicBoolean(isRunningAutomatically);
     }
@@ -47,7 +48,7 @@ public class PositionCalculatorImpl implements PositionCalculator {
                         
                     	if(logger.isDebugEnabled()) logger.debug("run calc");
 
-                        for(Tracker tracker : TrackerData.getInstance().getTrackers()) {
+                        for(Tracker tracker : trackerLayer.getTrackers().values()) {
                             
                         	if(isRunning.get()) {
 
