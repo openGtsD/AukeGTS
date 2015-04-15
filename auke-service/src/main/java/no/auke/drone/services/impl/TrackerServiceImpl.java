@@ -3,17 +3,19 @@ package no.auke.drone.services.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 
 import no.auke.drone.dao.impl.SimpleTrackerFactory;
-import no.auke.drone.domain.*;
+import no.auke.drone.domain.BoundingBox;
+import no.auke.drone.domain.MapPoint;
+import no.auke.drone.domain.Observer;
+import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.Tracker.TrackerType;
+import no.auke.drone.domain.TrackerData;
 import no.auke.drone.services.TrackerService;
 
 import org.slf4j.Logger;
@@ -135,8 +137,16 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Collection<Tracker> loadWithinView(BoundingBox boundary, TrackerType layerId) {
-        return TrackerData.getInstance().getTrackers(layerId);
-    }
+        List<Tracker> result =  new ArrayList<Tracker>();
+        for (Tracker positionUnit : TrackerData.getInstance().getTrackers(layerId)) {
+
+            if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
+                    boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
+                result .add(positionUnit);
+            }
+        }
+        return result;
+    };
 
     @Override
     public Tracker start(String id) {

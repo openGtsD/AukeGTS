@@ -63,7 +63,7 @@ public class PositionsCalculatorTest {
 		
 		PositionCalculatorImpl.CALC_FREQUENCY=10;
 
-		calculator=new PositionCalculatorImpl(getExecutor(),true);
+//		calculator=new PositionCalculatorImpl(getExecutor(),true);
 			
 	}
 
