@@ -135,8 +135,7 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Collection<Tracker> loadWithinView(BoundingBox boundary, TrackerType layerId) {
-        TrackerLayer trackerLayer = TrackerData.getInstance().getTrackerLayer(layerId.toString());
-    	return trackerLayer.getTrackers().values();
+        return TrackerData.getInstance().getTrackers(layerId);
     }
 
     @Override

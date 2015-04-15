@@ -64,7 +64,8 @@ public class SimpleTracker extends TrackerBase {
             MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude, this.getAltitude(), course, speed);
             
             setCurrentPosition(positionUnit);
-            
+            getLatestPositions().add(positionUnit);
+
             // LHA: move to stop drone
             // everytime you move is to heavy
             

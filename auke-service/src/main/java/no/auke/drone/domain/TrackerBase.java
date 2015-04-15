@@ -8,6 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import no.auke.drone.utils.LocationFunction;
 
+import org.apache.commons.collections.buffer.CircularFifoBuffer;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +32,8 @@ public abstract class TrackerBase implements Tracker, Observer {
     private boolean isUsedCamera;
     private MapPoint currentPosition;
     private List<MapPoint> positions;
+    private CircularFifoBuffer latestPositions;
+
     protected AtomicBoolean isFlying = new AtomicBoolean(); // default value
     
     protected ReentrantLock block = new ReentrantLock();
@@ -224,4 +227,15 @@ public abstract class TrackerBase implements Tracker, Observer {
         
     }
 
+
+    public CircularFifoBuffer getLatestPositions() {
+        if(latestPositions == null) {
+            latestPositions = new CircularFifoBuffer(5); // capacity of 5 latest positions
+        }
+        return latestPositions;
+    }
+
+    public void setLatestPositions(CircularFifoBuffer latestPositions) {
+        this.latestPositions = latestPositions;
+    }
 }
