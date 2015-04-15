@@ -10,7 +10,14 @@ public class BoundingBox implements Serializable {
 
     private double southWestLat, southWestLon, northEastLat, northEastLon;
 
-    public BoundingBox() {
+    public BoundingBox() {}
+
+    public BoundingBox(double southWestLat, double southWestLon, double northEastLat, double northEastLon ) {
+    	
+    	this.southWestLat=southWestLat;
+    	this.southWestLon=southWestLon;
+    	this.northEastLat=northEastLat;
+    	this.northEastLon=northEastLon;
     }
 
     public double getSouthWestLat() {

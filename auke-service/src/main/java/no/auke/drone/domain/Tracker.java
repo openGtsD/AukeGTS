@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * Created by huyduong on 3/24/2015.
  */
+
 public interface Tracker {
     
 	public enum TrackerType {
@@ -66,12 +67,9 @@ public interface Tracker {
 
     void update();
 
-
     MapPoint getCurrentPosition();
 
     void setCurrentPosition(MapPoint positionUnit);
-    
-    String getLayerid();
     
 	void setLayerid(String layerid);
 

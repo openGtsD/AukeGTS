@@ -1,12 +1,9 @@
 package no.auke.drone.services.impl;
 
-import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.TrackerData;
-import no.auke.drone.domain.Tracker.TrackerType;
 import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.services.PositionCalculator;
 
@@ -48,22 +45,19 @@ public class PositionCalculatorImpl implements PositionCalculator {
                         
                     	if(logger.isDebugEnabled()) logger.debug("run calc");
 
-                        for(Tracker tracker : trackerLayer.getTrackers().values()) {
+                        for(Tracker tracker : trackerLayer.getTrackers()) {
                             
                         	if(isRunning.get()) {
 
-                            	if(tracker.getTrackerType()==TrackerType.SIMULATED) {
-
-                            		logger.info("tracker " + tracker.getId() + " is calculating");
-                            		// calc and update current positions
-                                    tracker.calculate();
-                            		
-                            	}
+                        		logger.info("tracker " + tracker.getId() + " is calculating");
+                        		// calc and update current positions
+                                tracker.calculate();
                             
                             } else {
                                 
                             	break;
                             }
+                        	Thread.yield();
                         }
 
                         if(isRunning.get() && (System.currentTimeMillis() - lastStarted) < CALC_FREQUENCY ) {

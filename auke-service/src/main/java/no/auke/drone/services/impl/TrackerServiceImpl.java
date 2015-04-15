@@ -50,6 +50,8 @@ public class TrackerServiceImpl implements TrackerService {
         }
         logger.info("finished initializing tracker services");
     
+        TrackerData.getInstance().startCalculate();
+        
     }
 
     public TrackerServiceImpl() {
@@ -84,9 +86,9 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public Collection<Tracker> getAll(Tracker.TrackerType trackerType) {
+    public Collection<Tracker> getAll(String layerId) {
 
-    	return TrackerData.getInstance().getTrackers(trackerType);
+    	return TrackerData.getInstance().getTrackers(layerId);
     
     }
 
@@ -125,7 +127,7 @@ public class TrackerServiceImpl implements TrackerService {
                 MapPoint point = points.get(i);
                 for (int j = 1; j <= 10; j++) {
                     MapPoint rd = PointUtil.generateRandomMapPoint(point);
-                    Tracker tracker = new SimpleTrackerFactory().create(UUID.randomUUID().toString(), "Tracker" + i + "-"
+                    Tracker tracker = new SimpleTrackerFactory().create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + i + "-"
                             + j, 2 * j, 2 * j, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, rd);
                     result.add(tracker);
                 }
@@ -135,17 +137,14 @@ public class TrackerServiceImpl implements TrackerService {
 
     }
 
+    
+    //TODO: use function within trackerLayer
+    
     @Override
-    public Collection<Tracker> loadWithinView(BoundingBox boundary, TrackerType layerId) {
-        List<Tracker> result =  new ArrayList<Tracker>();
-        for (Tracker positionUnit : TrackerData.getInstance().getTrackers(layerId)) {
-
-            if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
-                    boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
-                result .add(positionUnit);
-            }
-        }
-        return result;
+    public Collection<Tracker> loadWithinView(BoundingBox boundary, int zoom, String layerId) {
+        
+    	return new ArrayList<Tracker>(TrackerData.getInstance().getTrackerLayer(layerId).loadWithinView(boundary,zoom));
+        
     };
 
     @Override

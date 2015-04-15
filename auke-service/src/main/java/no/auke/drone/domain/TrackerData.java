@@ -3,6 +3,8 @@ package no.auke.drone.domain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +22,10 @@ public class TrackerData implements Subject {
 	private static final Logger logger = LoggerFactory.getLogger(TrackerData.class);
 
     private static TrackerData trackerData;
-    private List<TrackerLayer> trackerLayers;
+    private Map<String,TrackerLayer> trackerLayers;
     
-	public List<TrackerLayer> getLayers() {
-		return trackerLayers;
+	public Collection<TrackerLayer> getLayers() {
+		return trackerLayers.values();
 	}    
 
     public static synchronized TrackerData getInstance() {
@@ -32,24 +34,26 @@ public class TrackerData implements Subject {
         }
         return trackerData;
     }    		
+    
+	public static void clear() {
+		trackerData=null;
+	}    
 
     private TrackerData() {
-    	trackerLayers = new ArrayList<>();
-    	trackerLayers.add(new TrackerLayer("REAL"));
-        trackerLayers.add(new TrackerLayer("SIMULATED"));
+    	trackerLayers = new ConcurrentHashMap<String,TrackerLayer>();
+    	trackerLayers.put("REAL",new TrackerLayer("REAL"));
+        trackerLayers.put("SIMULATED",new TrackerLayer("SIMULATED"));
     }
 
     public TrackerLayer getTrackerLayer(String layerId) {
-    	for(TrackerLayer trackerLayer : trackerLayers) {
-            if(layerId.equalsIgnoreCase(trackerLayer.getLayerName())) {
-                return trackerLayer;
-            }
-        }
     	
-    	// add a new layer
-    	TrackerLayer new_layer = new TrackerLayer(layerId);
-    	trackerLayers.add(new_layer);
-        return new_layer;
+    	TrackerLayer layer = trackerLayers.get(layerId); 
+    	if(layer==null) {
+        	// add a new layer
+        	layer = new TrackerLayer(layerId);
+        	trackerLayers.put(layer.getLayerName(),layer);
+    	}
+    	return layer;	
         
     }
 
@@ -57,16 +61,20 @@ public class TrackerData implements Subject {
         return getTrackers(null);
     }
 
-    public Collection<Tracker> getTrackers(Tracker.TrackerType trackerType) {
+    public Collection<Tracker> getTrackers(String LayerId) {
     	
     	List<Tracker> result = new ArrayList<>();
 
-        if(trackerType == null || trackerType.equals(Tracker.TrackerType.REAL)) {
-        	result.addAll(getTrackerLayer(Tracker.TrackerType.REAL.toString()).getTrackers().values());
-        }
+        if(LayerId == null) {
+        	
+        	for(TrackerLayer layer:trackerLayers.values()) {
+        		result.addAll(layer.getTrackers());
+        	}
+        	
+        } else {
 
-        if(trackerType == null || trackerType.equals(Tracker.TrackerType.SIMULATED)) {
-            result.addAll(getTrackerLayer(Tracker.TrackerType.SIMULATED.toString()).getTrackers().values());
+        	result.addAll(getTrackerLayer(LayerId).getTrackers());
+        	
         }
 
         return result;
@@ -94,9 +102,9 @@ public class TrackerData implements Subject {
 
     public Tracker getTracker(String id) {
     	
-    	for(TrackerLayer trackerLayer : trackerLayers) {
-    		if(trackerLayer.getTrackers().containsKey(id)) {
-    			return trackerLayer.getTrackers().get(id);
+    	for(TrackerLayer trackerLayer : trackerLayers.values()) {
+    		if(trackerLayer.exists(id)) {
+    			return trackerLayer.getTracker(id);
     		}
     	}
     	return null;
@@ -105,26 +113,15 @@ public class TrackerData implements Subject {
 
     @Override
     public void register(Observer drone) {
-    
-    	Tracker tracker = (Tracker) drone;
-    	
-    	if(tracker.getLayerid()!=null) {
-    		getTrackerLayer(tracker.getLayerid()).addTracker(tracker);
-
-    	} else if (tracker.getTrackerType()!=null){
-    		getTrackerLayer(tracker.getTrackerType().toString()).addTracker(tracker);
+    	if(drone.getLayerid()!=null) {
+    		getTrackerLayer(drone.getLayerid()).addTracker((Tracker)drone);
     	}
-    
     }
 
     @Override
     public void remove(Observer drone) {
-    	Tracker tracker = (Tracker) drone;
-
-    	if(tracker.getLayerid()!=null) {
-            getTrackerLayer(tracker.getLayerid()).removeTracker(tracker);
-    	} else if (tracker.getTrackerType()!=null){
-            getTrackerLayer(tracker.getTrackerType().toString()).removeTracker(tracker);
+    	if(drone.getLayerid()!=null) {
+    		getTrackerLayer(drone.getLayerid()).removeTracker((Tracker)drone);
     	}
     }
 
@@ -138,6 +135,17 @@ public class TrackerData implements Subject {
         logger.info(".......notifying finished......");
     
     }
+
+	public boolean exists(String layerId) {
+		return trackerLayers.containsKey(layerId);
+	}
+
+	public void startCalculate() {
+    	for(TrackerLayer trackerLayer : trackerLayers.values()) {
+    		trackerLayer.startCalculate();
+    	}
+		
+	}
 
 
 }

@@ -84,14 +84,15 @@ public abstract class TrackerBase implements Tracker, Observer {
     
     // LHA: something like this get position with a boundary
     @Override
-    public boolean withinView(double upperLat, double upperLon, double lowerLat, double lowerLon) {
+    public boolean withinView(double southWestLat, double southWestLon, double northEastLat, double northEastLon) {
         
+    	
     	try {
 
     		block.lock();
 
-    		return (this.currentPosition.getLongitude() >= upperLon && this.currentPosition.getLongitude() <= lowerLon)
-                    && (this.currentPosition.getLatitude() >= upperLat && this.currentPosition.getLatitude() <= lowerLat);
+    		return (this.currentPosition.getLongitude() >= southWestLon && this.currentPosition.getLongitude() <= northEastLon)
+                    && (this.currentPosition.getLatitude() >= southWestLat && this.currentPosition.getLatitude() <= northEastLat);
     		
     		
     	} finally {

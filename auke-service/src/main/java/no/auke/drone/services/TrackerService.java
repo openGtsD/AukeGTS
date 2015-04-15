@@ -16,13 +16,13 @@ public interface TrackerService {
     Tracker registerTracker(String id, String name);
     Tracker removeTracker(String id);
     Tracker getTracker(String id);
-    Collection<Tracker> getAll(Tracker.TrackerType trackerType);
+    Collection<Tracker> getAll(String layerId);
     Collection<Tracker> getAll();
     Tracker move(String id, Integer speed, Integer course);
     Tracker stop(String id);
     Tracker start(String id);
     Tracker update(Tracker tracker);
-    Collection<Tracker> loadWithinView(BoundingBox boundary, TrackerType layerId);
+    Collection<Tracker> loadWithinView(BoundingBox boundary, int zoom, String layerId);
     
     void stopService();
     

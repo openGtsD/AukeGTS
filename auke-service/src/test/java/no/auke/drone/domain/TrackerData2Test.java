@@ -17,7 +17,8 @@ import org.junit.Test;
  */
 
 public class TrackerData2Test {
-    private TrackerData trackerData;
+    
+	private TrackerData trackerData;
 
     @Before
     public void setUp() {
@@ -27,7 +28,7 @@ public class TrackerData2Test {
     @After
     public void tearDown() {
         // remove all drones available
-        for(Tracker tracker : trackerData.getTrackers(TrackerType.SIMULATED)) {
+        for(Tracker tracker : trackerData.getTrackers()) {
             trackerData.remove((Observer) tracker);
         }
    }
@@ -39,7 +40,8 @@ public class TrackerData2Test {
 
     @Test
     public void shouldRegisterNewDrone() {
-        Tracker tracker = new SimpleTrackerFactory().create("drone1", "my tracker");
+        
+    	Tracker tracker = new SimpleTrackerFactory().create("drone1", "my tracker");
         trackerData.register((Observer) tracker);
         Assert.assertEquals(1, trackerData.getTrackers().size());
 

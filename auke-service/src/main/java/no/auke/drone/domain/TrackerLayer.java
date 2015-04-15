@@ -17,17 +17,22 @@ public class TrackerLayer {
     private Map<String,Tracker> trackers;
 
     private PositionCalculator positionCalculator;
-
+    private boolean isRunningAutomatically;
 
     public TrackerLayer(String layerName, boolean isRunningAutomatically) {
-        this.layerName = layerName;
+        
+    	this.layerName = layerName;
+        this.isRunningAutomatically=isRunningAutomatically;
+        
         id = UUID.randomUUID().toString();
         trackers = new ConcurrentHashMap<>();
+    
         positionCalculator = new PositionCalculatorImpl(TrackerServiceImpl.getExecutor(), this, isRunningAutomatically);
+    
     }
 
     public TrackerLayer(String layerName) {
-        this(layerName,true);
+        this(layerName,false);
     }
 
     public TrackerLayer() {
@@ -42,11 +47,11 @@ public class TrackerLayer {
         this.layerName = layerName;
     }
 
-    public Map<String, Tracker> getTrackers() {
+    public Collection<Tracker> getTrackers() {
         if(trackers == null) {
             trackers = new HashMap<>();
         }
-        return trackers;
+        return trackers.values();
     }
 
     public void setTrackers(Map<String, Tracker> trackers) {
@@ -54,18 +59,26 @@ public class TrackerLayer {
     }
 
     public void addTracker(Tracker tracker) {
-        getTrackers().put(tracker.getId(),tracker);
-        positionCalculator.startCalculate();
+        if(trackers == null) {
+            trackers = new HashMap<>();
+        }
+
+        trackers.put(tracker.getId(),tracker);
+        if(isRunningAutomatically) {
+        	positionCalculator.startCalculate();
+        	
+        }
+        
     }
 
     public void removeTracker(Tracker tracker) {
-        getTrackers().remove(tracker.getId());
-        if (getTrackers().size() == 0) {
+    	trackers.remove(tracker.getId());
+        if (trackers.size() == 0) {
             positionCalculator.stopCalculate();
         }
     }
 
-    public List<Tracker> loadWithinView(BoundingBox boundary, Tracker.TrackerType layerId) {
+    public List<Tracker> loadWithinView(BoundingBox boundary, int zoom) {
 
         List<Tracker> result = new ArrayList<Tracker>();
         for (Tracker positionUnit : trackers.values()) {
@@ -78,4 +91,19 @@ public class TrackerLayer {
         }
         return result;
     }
+
+	public boolean exists(String id) {
+		return trackers.containsKey(id);
+	}
+
+	public Tracker getTracker(String layerId) {
+		return trackers.get(layerId);
+	}
+
+	public void startCalculate() {
+		isRunningAutomatically=true;
+		if(trackers.size()>0) {
+	    	positionCalculator.startCalculate();
+		}
+	}
 }

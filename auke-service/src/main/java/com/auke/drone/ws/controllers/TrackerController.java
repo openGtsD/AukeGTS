@@ -1,7 +1,6 @@
 package com.auke.drone.ws.controllers;
 
 import java.util.Collection;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -57,7 +56,7 @@ public class TrackerController {
 
     @GET
     @Path("/getall")
-    public JsonResponse getAll(@QueryParam("type") Tracker.TrackerType trackerType) {
+    public JsonResponse getAll(@QueryParam("type") String trackerType) {
         Collection<Tracker> trackers = trackerService.getAll(trackerType);
         return new JsonResponse(trackers != null, trackers);
     }
@@ -79,8 +78,8 @@ public class TrackerController {
     @POST
     @Path("/load-drone-in-view/{layerId}/{zoom}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public JsonResponse loadDroneWithinView(BoundingBox boundary, @PathParam("layerId") TrackerType layerId, @PathParam("zoom") int zoom) {
-        Collection<Tracker> data = trackerService.loadWithinView(boundary, layerId);
+    public JsonResponse loadDroneWithinView(BoundingBox boundary, @PathParam("layerId") String layerId, @PathParam("zoom") int zoom) {
+        Collection<Tracker> data = trackerService.loadWithinView(boundary, zoom, layerId);
         JsonResponse response = new JsonResponse(data != null, data);
         return response;
     }
