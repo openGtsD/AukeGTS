@@ -4,9 +4,7 @@ import no.auke.drone.services.PositionCalculator;
 import no.auke.drone.services.impl.PositionCalculatorImpl;
 import no.auke.drone.services.impl.TrackerServiceImpl;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -65,5 +63,19 @@ public class TrackerLayer {
         if (getTrackers().size() == 0) {
             positionCalculator.stopCalculate();
         }
+    }
+
+    public List<Tracker> loadWithinView(BoundingBox boundary, Tracker.TrackerType layerId) {
+
+        List<Tracker> result = new ArrayList<Tracker>();
+        for (Tracker positionUnit : trackers.values()) {
+
+            if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
+                    boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
+
+                result.add(positionUnit);
+            }
+        }
+        return result;
     }
 }

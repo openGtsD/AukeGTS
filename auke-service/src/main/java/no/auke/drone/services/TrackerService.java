@@ -22,7 +22,7 @@ public interface TrackerService {
     Tracker stop(String id);
     Tracker start(String id);
     Tracker update(Tracker tracker);
-    List<Tracker> loadWithinView(BoundingBox boundary, TrackerType layerId);
+    Collection<Tracker> loadWithinView(BoundingBox boundary, TrackerType layerId);
     
     void stopService();
     

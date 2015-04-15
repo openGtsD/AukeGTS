@@ -39,7 +39,7 @@ public class TrackerData implements Subject {
         trackerLayers.add(new TrackerLayer("SIMULATED"));
     }
 
-    private TrackerLayer getTrackerLayer(String layerId) {
+    public TrackerLayer getTrackerLayer(String layerId) {
     	for(TrackerLayer trackerLayer : trackerLayers) {
             if(layerId.equalsIgnoreCase(trackerLayer.getLayerName())) {
                 return trackerLayer;

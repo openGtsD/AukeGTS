@@ -80,7 +80,7 @@ public class TrackerController {
     @Path("/load-drone-in-view/{layerId}/{zoom}")
     @Consumes(MediaType.APPLICATION_JSON)
     public JsonResponse loadDroneWithinView(BoundingBox boundary, @PathParam("layerId") TrackerType layerId, @PathParam("zoom") int zoom) {
-        List<Tracker> data = trackerService.loadWithinView(boundary, layerId);
+        Collection<Tracker> data = trackerService.loadWithinView(boundary, layerId);
         JsonResponse response = new JsonResponse(data != null, data);
         return response;
     }

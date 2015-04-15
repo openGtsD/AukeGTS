@@ -134,18 +134,9 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public List<Tracker> loadWithinView(BoundingBox boundary, TrackerType layerId) {
-
-    	List<Tracker> result = new ArrayList<Tracker>();
-        for (Tracker positionUnit : getAll(layerId)) {
-        
-        	if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
-                    boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
-                
-        		result.add(positionUnit);
-            }
-        }
-        return result;
+    public Collection<Tracker> loadWithinView(BoundingBox boundary, TrackerType layerId) {
+        TrackerLayer trackerLayer = TrackerData.getInstance().getTrackerLayer(layerId.toString());
+    	return trackerLayer.getTrackers().values();
     }
 
     @Override
