@@ -5,10 +5,11 @@ import java.io.Serializable;
 public class MapPoint implements Serializable {
 
     private static final long serialVersionUID = 1026799887818657928L;
-    
+    private long time;
+
     private double latitude;
     private double longitude;
-    
+
     // Must have altitude to 
     private double altitude;
 
@@ -70,30 +71,35 @@ public class MapPoint implements Serializable {
 		this.course = course;
 	}
 
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
+    public MapPoint() {
+        this.time = System.currentTimeMillis();
+    }
 
     public MapPoint(double lat, double lon, double alt, Integer speed, Integer course) {
-        
+        this();
     	this.latitude = lat;
         this.longitude = lon;
         this.altitude = alt;
         this.course = course;
         this.speed = speed;
-        
     }
 
     public MapPoint(double lat, double lon) {
-        
-    	this.latitude = lat;
-        this.longitude = lon;
+        this(lat,lon,0,0,0);
         
     }
     
     public MapPoint(double lat, double lon, int numtrackers) {
-        
-    	this.latitude = lat;
-        this.longitude = lon;
+        this(lat,lon);
         this.numtrackers=numtrackers;
-        
     }    
 
 }
