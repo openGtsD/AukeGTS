@@ -6,16 +6,11 @@
 <urlrewrite use-query-string="true">
 
     <rule>
-        <from>/auke-js/resources/(.+)</from>
-        <to type="proxy">http://localhost:8080/auke-js/resources/$1</to>
+        <from>/auke-js/ui/(.+)</from>
+        <to type="proxy">http://localhost:8080/auke-js/ui/$1</to>
     </rule>
 	<rule>
 		<from>/service/(.+)</from>
-		<to type="proxy">http://localhost:8888/$1</to>
-	</rule>
-
-	<rule>
-		<from>/ui/(.+)</from>
 		<to type="proxy">http://localhost:8888/$1</to>
 	</rule>
 
