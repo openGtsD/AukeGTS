@@ -1,0 +1,10 @@
+.x-toolbar .headerBtn { 
+    min-width: 80px;
+    margin: 0 3px 0 3px !important;
+    border-color: #bbb !important;
+}
+
+.btnOver button{
+    font-weight: bold;
+    background-color: #D9D9D9;
+}

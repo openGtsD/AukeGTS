@@ -13,15 +13,12 @@ import javax.ws.rs.core.MediaType;
 
 import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.Tracker.TrackerType;
 import no.auke.drone.services.TrackerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.auke.drone.ws.dto.JsonResponse;
-
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -55,8 +52,8 @@ public class TrackerController {
     }
 
     @GET
-    @Path("/getall")
-    public JsonResponse getAll(@QueryParam("type") String trackerType) {
+    @Path("/get-all/{type}")
+    public JsonResponse getAll(@PathParam("type") String trackerType) {
         Collection<Tracker> trackers = trackerService.getAll(trackerType);
         return new JsonResponse(trackers != null, trackers);
     }
@@ -85,8 +82,9 @@ public class TrackerController {
     }
 
     @POST
+    @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public JsonResponse update(@RequestBody Tracker tracker) {
+    public JsonResponse update(Tracker tracker) {
         Tracker newTracker = trackerService.update(tracker);
         JsonResponse response = new JsonResponse(newTracker != null, newTracker);
         return response;

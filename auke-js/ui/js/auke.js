@@ -1,3 +1,40 @@
+Ext.ns('Auke.utils');
+
+Auke.utils.lastVisitedUrl = "{0}lastVisitedUrl=";
+
+Auke.utils.loadViewFromHash = function(hashString) {
+	if (!hashString) {
+		return;
+	}
+
+	var hashArr = hashString.split(':');
+	var viewName = hashArr[0];
+	var viewParams = hashArr.slice(1);
+
+	var viewContainer = Ext.getCmp('viewContainer');
+	var view = Ext.create('Auke.view.' + viewName, {
+		params : viewParams
+	});
+	if (viewContainer) {
+		viewContainer.removeAll(true);
+		viewContainer.add(view);
+	}
+};
+
+Auke.utils.loadView = function(viewName, viewParams) {
+	if (!viewName) {
+		return null;
+	}
+	oldToken = Ext.History.getToken();
+	newToken = viewName;
+	if (viewParams && viewParams.length) {
+		newToken += ':' + viewParams.join(':');
+	}
+	if (oldToken != newToken) {
+		Ext.History.add(newToken);
+	}
+};
+
 function buildHTML(data) {
 
 	return "<h1>Drone Info</h1> <input type='button' onclick=start(" + "'"
@@ -79,7 +116,7 @@ function loadDroneIncurrentView(layerId) {
 			mgr.addMarkers(markers, 3, 19);
 			mgr.refresh();
 			updateStatus(mgr.getMarkerCount(map.getZoom()));
-//			autoCenter(markers);
+			// autoCenter(markers);
 		}
 	});
 }
@@ -195,4 +232,4 @@ function autoCenter(markers) {
 	map.fitBounds(bounds);
 }
 
-google.maps.event.addDomListener(window, 'load', load);
+// google.maps.event.addDomListener(window, 'load', load);

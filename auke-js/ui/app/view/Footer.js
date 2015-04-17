@@ -12,10 +12,7 @@ Ext.define('Auke.view.Footer', {
                 flex : 1
             }, {
                 xtype : 'label',
-                html : 'Test.'
-            }, {
-                xtype: 'label',
-                html : 'Powered by AukeTeam'
+                html : 'Copyright &copy; 2015 Auke Team.'
             }, {
                 xtype: 'label',
                 cls  : 'version',
