@@ -21,7 +21,7 @@ Ext.define('Auke.view.grid.TrackerGrid', {
 				text : "IMEI/ESN Number",
 				flex : 1
 			}, {
-				dataIndex : 'sim',
+				dataIndex : 'simPhone',
 				text : "SIM Phone",
 				flex : 1
 			},

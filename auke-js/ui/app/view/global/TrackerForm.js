@@ -70,7 +70,7 @@ Ext.define('Auke.view.global.TrackerForm', {
                         afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
                     }, {
                         xtype : 'textfield',
-                        name : 'sim',
+                        name : 'simPhone',
                         fieldLabel : 'SIM Phone',
                         allowBlank : false,
                         afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"

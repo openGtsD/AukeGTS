@@ -81,7 +81,7 @@ Ext.define('Auke.controller.TrackerAction', {
 				success : function(response, opts) {
 					var res = Ext.JSON.decode(response.responseText);
 					if (res.success) {
-						console.log(res.success)
+						me.getTrackerGrid().getStore().add(record)
 					}
 				}
 			})
