@@ -1,7 +1,5 @@
 Ext.ns('Auke.utils');
 
-Auke.utils.lastVisitedUrl = "{0}lastVisitedUrl=";
-
 Auke.utils.loadViewFromHash = function(hashString) {
 	if (!hashString) {
 		return;
@@ -34,7 +32,7 @@ Auke.utils.loadView = function(viewName, viewParams) {
 		Ext.History.add(newToken);
 	}
 };
-
+// **************Use for Demo ***************
 function buildHTML(data) {
 
 	return "<h1>Drone Info</h1> <input type='button' onclick=start(" + "'"

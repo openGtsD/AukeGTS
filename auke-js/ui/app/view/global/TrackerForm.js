@@ -43,17 +43,17 @@ Ext.define('Auke.view.global.TrackerForm', {
                     },{
                         xtype: 'combo',
                         store: Ext.create('Ext.data.ArrayStore', {
-                            fields: [ 'layerid' ],
+                            fields: [ 'layerId' ],
                             data: [
                                 ['REAL'],
                                 ['SIMULATED']
                             ]
                         }),
-                        displayField: 'layerid',
+                        displayField: 'layerId',
                         fieldLabel: 'Layer ID',
                         queryMode: 'local',
                         selectOnTab: false,
-                        name: 'layerid',
+                        name: 'layerId',
                         allowBlank : false,
                         afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
                     }, {
@@ -74,23 +74,25 @@ Ext.define('Auke.view.global.TrackerForm', {
                         fieldLabel : 'SIM Phone',
                         allowBlank : false,
                         afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-                    }, {
-                    	 xtype: 'combo',
-                         store: Ext.create('Ext.data.ArrayStore', {
-                             fields: [ 'active' ],
-                             data: [
-                                 ['Yes'],
-                                 ['No']
-                             ]
-                         }),
-                         displayField: 'active',
-                         fieldLabel: 'Active',
-                         queryMode: 'local',
-                         selectOnTab: false,
-                         name: 'active',
-                         allowBlank : false,
-                         afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-                    }]
+                    }
+//                    , {
+//                    	 xtype: 'combo',
+//                         store: Ext.create('Ext.data.ArrayStore', {
+//                             fields: [ 'active' ],
+//                             data: [
+//                                 ['Yes'],
+//                                 ['No']
+//                             ]
+//                         }),
+//                         displayField: 'active',
+//                         fieldLabel: 'Active',
+//                         queryMode: 'local',
+//                         selectOnTab: false,
+//                         name: 'active',
+//                         allowBlank : false,
+//                         afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
+//                    }
+                    ]
                 } ],
                 buttonAlign : 'center',
                 buttons : {

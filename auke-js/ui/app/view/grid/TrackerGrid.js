@@ -9,7 +9,7 @@ Ext.define('Auke.view.grid.TrackerGrid', {
 				text : 'ID',
 				flex : 1
 			}, {
-				dataIndex : 'layerid',
+				dataIndex : 'layerId',
 				text : "Layer ID",
 				flex : 1
 			}, {
@@ -24,11 +24,13 @@ Ext.define('Auke.view.grid.TrackerGrid', {
 				dataIndex : 'sim',
 				text : "SIM Phone",
 				flex : 1
-			}, {
-				dataIndex : 'active',
-				text : "Active",
-				flex : 1
-			}, {
+			},
+//			{
+//				dataIndex : 'active',
+//				text : "Active",
+//				flex : 1
+//			}, 
+			{
 				dataIndex : 'createDate',
 				text : "Create Date",
 				flex : 1

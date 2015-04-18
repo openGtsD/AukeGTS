@@ -11,11 +11,11 @@
     <link rel="stylesheet" type="text/css" href="/auke-js/resources/css/auke.css" />
   </head>
   <body>
-	  <script src="http://maps.googleapis.com/maps/api/js"></script>
-	  <script type="text/javascript" src="/auke-js/ui/ext-all-dev.js"></script>
+	  <script src="http://maps.googleapis.com/maps/api/js"></script>	
+	  <script type="text/javascript" src="/auke-js/ui/ext-all-dev.js"></script>	  
+	  <script type="text/javascript" src="/auke-js/ui/js/GMapPanel3.js"></script>
 	  <script type="text/javascript" src="/auke-js/ui/js/auke.js"></script>
       <script type="text/javascript" src="/auke-js/ui/app/app.js"></script>
-      
   </body>
 </html>
 

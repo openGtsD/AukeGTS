@@ -5,6 +5,6 @@ package no.auke.drone.domain;
  */
 public interface Observer {
     String getId();
-    String getLayerid();
+    String getLayerId();
     void update();
 }

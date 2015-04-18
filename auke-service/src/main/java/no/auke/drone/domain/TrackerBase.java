@@ -1,8 +1,8 @@
 package no.auke.drone.domain;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -20,13 +20,10 @@ public abstract class TrackerBase implements Tracker, Observer {
     
 	private static final Logger logger = LoggerFactory.getLogger(TrackerBase.class);
 
-    private String id;
-    private String name;
     private long time;
     private double altitude;
     private double speed;
     private TrackerType droneType = TrackerType.SIMULATED;
-    private String layerid;
 
 	private Person flyer;
     private boolean isUsedCamera;
@@ -34,9 +31,17 @@ public abstract class TrackerBase implements Tracker, Observer {
     private List<MapPoint> positions;
     private CircularFifoBuffer latestPositions;
 
-    protected AtomicBoolean isFlying = new AtomicBoolean(); // default value
-    
+    protected AtomicBoolean isFlying = new AtomicBoolean(); // default value    
     protected ReentrantLock block = new ReentrantLock();
+    
+    // Thai Huynh: Some fields need update tracker  
+    private String id;
+    private String name;
+    private String layerId;
+    private String imei;
+    private String simPhone;
+    private Date createDate;
+    private Date modifiedDate;
 
     public TrackerBase() {
         positions = new ArrayList<MapPoint>();
@@ -64,12 +69,12 @@ public abstract class TrackerBase implements Tracker, Observer {
         this.name = name;
     }
     
-    public String getLayerid() {
-		return layerid;
+    public String getLayerId() {
+		return layerId;
 	}
 
-	public void setLayerid(String layerid) {
-		this.layerid = layerid;
+	public void setLayerId(String layerId) {
+		this.layerId = layerId;
 	}
     
     public void setCurrentPosition(MapPoint currentPosition) {
@@ -239,4 +244,37 @@ public abstract class TrackerBase implements Tracker, Observer {
     public void setLatestPositions(CircularFifoBuffer latestPositions) {
         this.latestPositions = latestPositions;
     }
+
+    public String getImei() {
+        return imei;
+    }
+
+    public void setImei(String imei) {
+        this.imei = imei;
+    }
+
+    public String getSimPhone() {
+        return simPhone;
+    }
+
+    public void setSimPhone(String simPhone) {
+        this.simPhone = simPhone;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+    
 }

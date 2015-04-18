@@ -39,9 +39,9 @@ public class TrackerDataTest {
 		when(tracker2.getTrackerType()).thenReturn(TrackerType.REAL);
 		when(tracker3.getTrackerType()).thenReturn(TrackerType.REAL);
 		
-		when(tracker1.getLayerid()).thenReturn("layer1");
-		when(tracker2.getLayerid()).thenReturn("layer2");
-		when(tracker3.getLayerid()).thenReturn("layer3");
+		when(tracker1.getLayerId()).thenReturn("layer1");
+		when(tracker2.getLayerId()).thenReturn("layer2");
+		when(tracker3.getLayerId()).thenReturn("layer3");
 
 		TrackerData.getInstance().register(tracker1);
 		TrackerData.getInstance().register(tracker2);
@@ -69,7 +69,7 @@ public class TrackerDataTest {
 		
 		SimpleTracker tracker4 = mock(SimpleTracker.class);
 		when(tracker4.getId()).thenReturn("tracker4");
-		when(tracker4.getLayerid()).thenReturn("layer4");		
+		when(tracker4.getLayerId()).thenReturn("layer4");		
 		TrackerData.getInstance().register(tracker4);
 		
 		assertEquals(6,TrackerData.getInstance().getLayers().size());		

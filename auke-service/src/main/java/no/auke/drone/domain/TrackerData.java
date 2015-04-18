@@ -113,15 +113,15 @@ public class TrackerData implements Subject {
 
     @Override
     public void register(Observer drone) {
-    	if(drone.getLayerid()!=null) {
-    		getTrackerLayer(drone.getLayerid()).addTracker((Tracker)drone);
+    	if(drone.getLayerId()!=null) {
+    		getTrackerLayer(drone.getLayerId()).addTracker((Tracker)drone);
     	}
     }
 
     @Override
     public void remove(Observer drone) {
-    	if(drone.getLayerid()!=null) {
-    		getTrackerLayer(drone.getLayerid()).removeTracker((Tracker)drone);
+    	if(drone.getLayerId()!=null) {
+    		getTrackerLayer(drone.getLayerId()).removeTracker((Tracker)drone);
     	}
     }
 

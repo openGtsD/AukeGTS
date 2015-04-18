@@ -1,4 +1,4 @@
-Ext.define('Auke.controller.CommonAction', {
+Ext.define('Auke.controller.TrackerAction', {
 	extend : 'Ext.app.Controller',
 
 	stores : [ 'Trackers' ],
@@ -9,7 +9,7 @@ Ext.define('Auke.controller.CommonAction', {
 		selector : 'trackerGrid'
 	}, {
 		ref : 'trackerForm',
-		selector : 'trackerForm'
+		selector : 'trackerForm form'
 	} ],
 	init : function() {
 		var me = this;
@@ -23,9 +23,16 @@ Ext.define('Auke.controller.CommonAction', {
 			},
 			'trackerForm form button[action=saveBtn]' : {
 				click : me.save
-			}
+			},
+			'gmappanel' : {
+				mapready : me.loadTracks
+			}	
 		});
 	},
+	loadTracks : function(gm){
+		
+	},
+	
 	loadAll : function(grid) {
 		this.getTrackerGrid().getStore().loadData([], false);
 		this.getStore('Trackers').load({
@@ -47,6 +54,8 @@ Ext.define('Auke.controller.CommonAction', {
 		if (linkClicked && fieldName == "actionColumn" && iRecord != null) {
 			if (action == 'Delete') {
 				alert("Comming soon")
+			} else if(action == 'Edit'){
+				me.getTrackerForm().loadRecord(iRecord);
 			}
 		}
 	},

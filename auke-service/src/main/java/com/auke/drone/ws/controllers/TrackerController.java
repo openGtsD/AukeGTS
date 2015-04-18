@@ -12,6 +12,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import no.auke.drone.domain.BoundingBox;
+import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.services.TrackerService;
 
@@ -84,7 +85,7 @@ public class TrackerController {
     @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public JsonResponse update(Tracker tracker) {
+    public JsonResponse update(SimpleTracker tracker) {
         Tracker newTracker = trackerService.update(tracker);
         JsonResponse response = new JsonResponse(newTracker != null, newTracker);
         return response;

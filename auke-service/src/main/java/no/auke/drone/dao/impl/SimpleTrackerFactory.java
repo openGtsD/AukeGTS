@@ -29,7 +29,7 @@ public class SimpleTrackerFactory implements TrackerFactory {
         
     	Tracker tracker = new SimpleTracker();
         tracker.setId(id);
-        tracker.setLayerid(trackerLayer);
+        tracker.setLayerId(trackerLayer);
         tracker.setName(name);
         tracker.setCurrentPosition(location);
         tracker.getPositions().add(tracker.getCurrentPosition());
@@ -44,7 +44,7 @@ public class SimpleTrackerFactory implements TrackerFactory {
         
     	Tracker tracker = new SimpleTracker();
         tracker.setId(id);
-        tracker.setLayerid(trackerLayer);
+        tracker.setLayerId(trackerLayer);
         tracker.setName(name);
         tracker.setAltitude(altitude);
         tracker.setSpeed(speed);
