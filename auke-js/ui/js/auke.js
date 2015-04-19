@@ -32,8 +32,8 @@ Auke.utils.loadView = function(viewName, viewParams) {
 		Ext.History.add(newToken);
 	}
 };
-// **************Use for Demo ***************
-function buildHTML(data) {
+
+Auke.utils.buildHTML = function(data) {
 
 	return "<h1>Drone Info</h1> <input type='button' onclick=start(" + "'"
 			+ data.id + "'"
@@ -104,7 +104,7 @@ function loadDroneIncurrentView(layerId) {
 				posn = new google.maps.LatLng(data[i].currentPosition.latitude,
 						data[i].currentPosition.longitude);
 				var marker = createMarker(data[i].id, posn, data[i].name,
-						'/auke-js/resources/images/drone.png',
+						'/auke-js/ui/images/drone.png',
 						buildHTML(data[i]));
 				markers.push(marker);
 				allmarkers[data[i].id] = marker;
@@ -119,7 +119,7 @@ function loadDroneIncurrentView(layerId) {
 	});
 }
 
-function createMarker(id, posn, title, icon, contentHTML) {
+Auke.utils.createMarker = function(id, posn, title, icon, contentHTML, map) {
 	var markerOptions = {
 		id : id,
 		position : posn,
@@ -134,7 +134,8 @@ function createMarker(id, posn, title, icon, contentHTML) {
 	// }
 
 	var marker = new google.maps.Marker(markerOptions);
-	createInfoWindow(marker);
+	Auke.utils.createInfoWindow(marker, map);
+	Auke.utils.centerZoom(marker, map);
 	return marker;
 }
 
@@ -143,21 +144,19 @@ function updateStatus(html) {
 }
 
 var infoWindow = new google.maps.InfoWindow();
-function createInfoWindow(marker) {
+Auke.utils.createInfoWindow = function(marker, map) {
 	google.maps.event.addListener(marker, 'click', function() {
 		infoWindow.setContent(marker.content);
 		infoWindow.open(map, marker);
-		// $.ajax({
-		// url : 'service/drone/' + marker.id,
-		// dataType : 'json',
-		// contentType : "text/html; charset=utf-8",
-		// success : function(response) {
-		// var data = response.data[0];
-		// var droneInfo = buildHTML(data);
-		// infoWindow.setContent(droneInfo);
-		// infoWindow.open(map, marker);
-		// }
-		// })
+	});
+}
+
+Auke.utils.centerZoom = function(marker, map) {
+	google.maps.event.addListener(marker, 'dblclick', function() {
+		var bounds = new google.maps.LatLngBounds();
+		bounds.extend(marker.position);
+		center = bounds.getCenter();
+		map.fitBounds(bounds);
 	});
 }
 
@@ -230,4 +229,4 @@ function autoCenter(markers) {
 	map.fitBounds(bounds);
 }
 
-// google.maps.event.addDomListener(window, 'load', load);
+//google.maps.event.addDomListener(window, 'load', load);
