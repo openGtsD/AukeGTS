@@ -1,4 +1,3 @@
-// Copyright (c) 2012 Health Market Science, Inc.
 package com.auke.drone.ws.dto;
 
 import java.util.Arrays;
@@ -13,17 +12,17 @@ import org.apache.commons.collections.MapUtils;
  * @author thaihuynh
  * 
  */
-public class JsonResponse extends HashMap<String, Object> {
+public class AukeResponse extends HashMap<String, Object> {
     private static final long serialVersionUID = 1L;
 
     public static final String DATA_FIELD = "data";
     public static final String SUCCESS_FIELD = "success";
     public static final String ERROR_FIELD = "error";
 
-    public JsonResponse() {
+    public AukeResponse() {
     }
 
-    public JsonResponse(Map<String, ?> data) {
+    public AukeResponse(Map<String, ?> data) {
         put(SUCCESS_FIELD, !MapUtils.isEmpty(data));
         
         if (data != null) {
@@ -31,7 +30,7 @@ public class JsonResponse extends HashMap<String, Object> {
         }
     }
     
-    public JsonResponse(boolean success, Object data) {
+    public AukeResponse(boolean success, Object data) {
         if (data != null && !(data instanceof Collection)) {
             data = Arrays.asList(data);
         }
@@ -42,7 +41,7 @@ public class JsonResponse extends HashMap<String, Object> {
         put(SUCCESS_FIELD, success);
     }
 
-    public JsonResponse(boolean success, Object data, String failMessage) {
+    public AukeResponse(boolean success, Object data, String failMessage) {
         if (data != null && !(data instanceof Collection)) {
             data = Arrays.asList(data);
         }
@@ -57,7 +56,7 @@ public class JsonResponse extends HashMap<String, Object> {
         }
     }
 
-    public JsonResponse(boolean success, String... keyValuePairs) {
+    public AukeResponse(boolean success, String... keyValuePairs) {
         if (keyValuePairs.length % 2 == 1) {
             throw new IllegalArgumentException("Mismatched number of key / value pairs");
         }
@@ -68,7 +67,7 @@ public class JsonResponse extends HashMap<String, Object> {
         }
     }
     
-    public JsonResponse(Exception ex) {
+    public AukeResponse(Exception ex) {
         this(false);
         this.putError(ex.getMessage());
     }

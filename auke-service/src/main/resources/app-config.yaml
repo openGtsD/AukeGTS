@@ -1,4 +1,4 @@
-# spring profile: prod|test|dev
+# spring profile: prod|dev
 profile: dev
 
 http:

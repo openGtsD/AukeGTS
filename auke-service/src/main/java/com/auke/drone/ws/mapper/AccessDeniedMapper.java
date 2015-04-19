@@ -1,4 +1,3 @@
-// Copyright (c) 2012 Health Market Science, Inc.
 package com.auke.drone.ws.mapper;
 
 import javax.ws.rs.core.Response;

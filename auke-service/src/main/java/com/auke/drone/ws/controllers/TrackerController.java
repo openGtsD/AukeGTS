@@ -19,7 +19,7 @@ import no.auke.drone.services.TrackerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.auke.drone.ws.dto.JsonResponse;
+import com.auke.drone.ws.dto.AukeResponse;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -33,61 +33,61 @@ public class TrackerController {
 
     @GET
     @Path("/register")
-    public JsonResponse register(@QueryParam("id") String id, @QueryParam("name") String name) {
+    public AukeResponse register(@QueryParam("id") String id, @QueryParam("name") String name) {
         Tracker tracker = trackerService.registerTracker(id, name);
-        return new JsonResponse(tracker == null, tracker);
+        return new AukeResponse(tracker == null, tracker);
     }
 
     @GET
     @Path("/remove")
-    public JsonResponse remove(@QueryParam("id") String id, @QueryParam("name") String name) {
+    public AukeResponse remove(@QueryParam("id") String id, @QueryParam("name") String name) {
         Tracker tracker = trackerService.removeTracker(id);
-        return new JsonResponse(tracker == null, tracker);
+        return new AukeResponse(tracker == null, tracker);
     }
 
     @GET
     @Path("/{id}")
-    public JsonResponse get(@PathParam("id") String id) {
+    public AukeResponse get(@PathParam("id") String id) {
         Tracker tracker = trackerService.getTracker(id);
-        return new JsonResponse(tracker != null, tracker);
+        return new AukeResponse(tracker != null, tracker);
     }
 
     @GET
     @Path("/get-all/{type}")
-    public JsonResponse getAll(@PathParam("type") String trackerType) {
+    public AukeResponse getAll(@PathParam("type") String trackerType) {
         Collection<Tracker> trackers = trackerService.getAll(trackerType);
-        return new JsonResponse(trackers != null, trackers);
+        return new AukeResponse(trackers != null, trackers);
     }
 
     @GET
     @Path("/start/{id}")
-    public JsonResponse start(@PathParam("id") String id) {
+    public AukeResponse start(@PathParam("id") String id) {
         Tracker tracker = trackerService.start(id);
-        return new JsonResponse(tracker != null, tracker);
+        return new AukeResponse(tracker != null, tracker);
     }
 
     @GET
     @Path("/stop/{id}")
-    public JsonResponse stop(@PathParam("id") String id) {
+    public AukeResponse stop(@PathParam("id") String id) {
         Tracker tracker = trackerService.stop(id);
-        return new JsonResponse(tracker != null, tracker);
+        return new AukeResponse(tracker != null, tracker);
     }
     
     @POST
     @Path("/load-drone-in-view/{layerId}/{zoom}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public JsonResponse loadDroneWithinView(BoundingBox boundary, @PathParam("layerId") String layerId, @PathParam("zoom") int zoom) {
+    public AukeResponse loadDroneWithinView(BoundingBox boundary, @PathParam("layerId") String layerId, @PathParam("zoom") int zoom) {
         Collection<Tracker> data = trackerService.loadWithinView(boundary, zoom, layerId);
-        JsonResponse response = new JsonResponse(data != null, data);
+        AukeResponse response = new AukeResponse(data != null, data);
         return response;
     }
 
     @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
-    public JsonResponse update(SimpleTracker tracker) {
+    public AukeResponse update(SimpleTracker tracker) {
         Tracker newTracker = trackerService.update(tracker);
-        JsonResponse response = new JsonResponse(newTracker != null, newTracker);
+        AukeResponse response = new AukeResponse(newTracker != null, newTracker);
         return response;
     }
 }

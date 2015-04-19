@@ -1,12 +1,9 @@
 package no.auke.drone.services;
 
+import java.util.Collection;
+
 import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.Tracker.TrackerType;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
 
 /**
  * Created by huyduong on 3/25/2015.

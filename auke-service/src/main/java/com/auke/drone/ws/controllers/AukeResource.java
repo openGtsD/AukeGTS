@@ -1,4 +1,3 @@
-// Copyright (c) 2012 Health Market Science, Inc.
 package com.auke.drone.ws.controllers;
 
 import java.io.IOException;
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Component;
 @Path("/ui")
 @Component
 @Produces(MediaType.APPLICATION_JSON)
-public class UIResource {
+public class AukeResource {
 
     @GET
     @Path("/{filename}")

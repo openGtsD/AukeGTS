@@ -5,15 +5,13 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.Map;
 
-import javax.servlet.DispatcherType;
 import javax.ws.rs.Path;
 
+import no.auke.drone.ws.support.ContextLoaderListener;
 import no.auke.drone.ws.support.CrossDomainFilter;
-import no.auke.drone.ws.support.RestContextLoaderListener;
-import no.auke.drone.ws.support.XmlRestApplicationContext;
+import no.auke.drone.ws.support.RestApplicationContext;
 
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -26,7 +24,7 @@ import com.yammer.dropwizard.json.Json;
 import com.yammer.dropwizard.tasks.Task;
 import com.yammer.metrics.core.HealthCheck;
 
-public class AukeService extends Service<AukeUiConfiguration> {
+public class AukeService extends Service<UiConfiguration> {
 
     private final static String DATETIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
@@ -35,12 +33,12 @@ public class AukeService extends Service<AukeUiConfiguration> {
     }
 
     private AukeService() {
-        super("webui");
+        super("ui");
     }
 
     @Override
-    protected void initialize(AukeUiConfiguration conf, Environment env) throws Exception {
-        XmlRestApplicationContext appContext = new XmlRestApplicationContext();
+    protected void initialize(UiConfiguration conf, Environment env) throws Exception {
+        RestApplicationContext appContext = new RestApplicationContext();
         appContext.setConfigLocation("classpath*:/spring/*-context.xml");
         appContext.getEnvironment().setActiveProfiles(conf.getProfile());
         appContext.registerShutdownHook();
@@ -53,7 +51,7 @@ public class AukeService extends Service<AukeUiConfiguration> {
             env.addFilter(CrossDomainFilter.class, "/*");
         }
         // Servlet Listeners
-        env.addServletListeners(new RestContextLoaderListener(appContext));
+        env.addServletListeners(new ContextLoaderListener(appContext));
 
         // Mappers
         env.addProvider(new AccessDeniedMapper());

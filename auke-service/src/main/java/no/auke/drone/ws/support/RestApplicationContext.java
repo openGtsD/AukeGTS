@@ -1,4 +1,3 @@
-// Copyright (c) 2012 Health Market Science, Inc.
 package no.auke.drone.ws.support;
 
 import org.springframework.beans.BeansException;
@@ -9,7 +8,7 @@ import org.springframework.web.context.support.XmlWebApplicationContext;
  * @author thaihuynh
  *
  */
-public class XmlRestApplicationContext extends XmlWebApplicationContext {
+public class RestApplicationContext extends XmlWebApplicationContext {
     private boolean active;
     
     @Override

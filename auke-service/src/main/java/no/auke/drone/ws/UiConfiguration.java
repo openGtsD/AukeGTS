@@ -1,6 +1,3 @@
-//
-// Copyright (c) 2012 Health Market Science, Inc.
-//
 package no.auke.drone.ws;
 
 import com.yammer.dropwizard.config.Configuration;
@@ -16,7 +13,7 @@ import javax.validation.constraints.NotNull;
  * @author thaihuynh
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AukeUiConfiguration extends Configuration {
+public class UiConfiguration extends Configuration {
     @Valid
     @NotNull
     @JsonProperty

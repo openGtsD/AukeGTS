@@ -14,7 +14,6 @@ import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Observer;
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.Tracker.TrackerType;
 import no.auke.drone.domain.TrackerData;
 import no.auke.drone.services.TrackerService;
 
