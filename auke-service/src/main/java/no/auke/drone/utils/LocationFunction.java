@@ -92,7 +92,7 @@ public class LocationFunction {
     
     }
 
-    public static void writeLocationHistoryByDroneId(String droneId, MapPoint mapPoint) {
+    public static void writeLocationHistoryByDroneId(String droneId, List<MapPoint> mapPoints) {
         
     	try {
 
@@ -101,7 +101,7 @@ public class LocationFunction {
 
     		
         	Gson gson = new Gson();
-            MapPointData mapPointData = new MapPointData(droneId,mapPoint);
+            MapPointData mapPointData = new MapPointData(droneId,mapPoints);
             
             
             
@@ -113,7 +113,7 @@ public class LocationFunction {
             	BufferedReader br = new BufferedReader(new FileReader(dataFile));
                 
             	mapPointData = gson.fromJson(br, MapPointData.class);
-                mapPointData.getMapPoints().add(mapPoint);
+                mapPointData.getMapPoints().addAll(mapPoints);
             
             } else {
             

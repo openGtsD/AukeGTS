@@ -1,6 +1,8 @@
 package no.auke.drone.domain;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +15,11 @@ public class SimpleTracker extends TrackerBase {
     
 	private static final Logger logger = LoggerFactory.getLogger(SimpleTracker.class);
 
+	AtomicLong stopFlightTime = new AtomicLong();  
+	AtomicLong startFlightTime = new AtomicLong();  
+	
+	Random rnd = new Random(System.nanoTime());
+	
     public SimpleTracker() {
     	super();
     }
@@ -21,18 +28,63 @@ public class SimpleTracker extends TrackerBase {
     	super(id);
     }
     
+    // LHA:
+    
+    // fly for a random period of time
+    // wait for a random period of time
+    // to make simulated flights
+ 
+    @Override
+    public void setFlying(boolean isFlying) {
+    	super.setFlying(isFlying);
+    	
+    	if(isFlying()) {
+    		
+    		// max simulate time
+    		stopFlightTime.set(System.currentTimeMillis() + (30 + rnd.nextInt(60 * 5)) * 1000);
+    		
+    	} else {
+    		
+    		// max simulate time
+    		startFlightTime.set(System.currentTimeMillis() + (30 + rnd.nextInt(60 * 5)*1000));
+    	}
+    }
+    
+    
 	@Override
     public void calculate() {
         
-    	if(isFlying.get()) {
+    	if(isFlying()) {
+    		
+    		if((stopFlightTime.get() - System.currentTimeMillis())<0) {
+    			
+    			// stop flight 
+    			logger.info(this.toString() + "stop calculate");
+    			setFlying(false);
+    			
+    		} else {
+
+    			logger.trace(this.toString() + "started calculating");
+                move(null,null);// fly randomly
+                logger.debug(this.toString() + "finished calculating");
+    			
+    		}
         
-    		logger.info(this.toString() + "started calculating");
-            move(null,null);// fly randomly
-            logger.info(this.toString() + "finished calculating");
         
     	} else {
+    		
+    		if((startFlightTime.get() - System.currentTimeMillis())<0) {
+
+    			// stop flight 
+    			logger.info(this.toString() + "start calculate");
+    			setFlying(true);
+    			
+    		} else {
+
+    			logger.debug(this.toString() + "is not flying!!!");
+    			
+    		}
             
-    		logger.info(this.toString() + "is not flying!!!");
         }
     }    
 
@@ -65,12 +117,6 @@ public class SimpleTracker extends TrackerBase {
             
             setCurrentPosition(positionUnit);
             getLatestPositions().add(positionUnit);
-
-            // LHA: move to stop drone
-            // everytime you move is to heavy
-            
-            //LocationFunction.writeLocationHistoryByDroneId(id,currentPosition);
-            // TODO this would use an asynchronous method so it is easier to move
             
             logger.info(this.toString() + "finished moving");
             

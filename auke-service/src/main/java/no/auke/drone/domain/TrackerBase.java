@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 import no.auke.drone.utils.LocationFunction;
@@ -42,6 +43,8 @@ public abstract class TrackerBase implements Tracker, Observer {
     private String simPhone;
     private Date createDate;
     private Date modifiedDate;
+    
+  
 
     public TrackerBase() {
         positions = new ArrayList<MapPoint>();
@@ -79,6 +82,8 @@ public abstract class TrackerBase implements Tracker, Observer {
     
     public void setCurrentPosition(MapPoint currentPosition) {
         this.currentPosition = currentPosition;
+        // set history
+        getPositions().add(currentPosition);
     }
 
     public void update() {
@@ -205,10 +210,12 @@ public abstract class TrackerBase implements Tracker, Observer {
         this.positions = positions;
     }
 
+    @Override
     public boolean isFlying() {
         return isFlying.get();
     }
 
+    @Override
     public void setFlying(boolean isFlying) {
         
         if(!isFlying && this.isFlying.getAndSet(false)) {
@@ -217,7 +224,10 @@ public abstract class TrackerBase implements Tracker, Observer {
 
         		block.lock();
         		logger.info("Save tracker " + id);
-            	LocationFunction.writeLocationHistoryByDroneId(this.getId(),getCurrentPosition());
+            	LocationFunction.writeLocationHistoryByDroneId(this.getId(),getPositions());
+            	
+            	// clear when save
+            	getPositions().clear();
         		
         		
         	} finally {
