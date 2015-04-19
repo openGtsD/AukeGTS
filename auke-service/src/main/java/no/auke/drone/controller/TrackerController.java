@@ -1,4 +1,4 @@
-package com.auke.drone.ws.controllers;
+package no.auke.drone.controller;
 
 import java.util.Collection;
 
@@ -11,7 +11,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.BoundingBox;
+import no.auke.drone.domain.Device;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.services.TrackerService;
@@ -19,7 +21,7 @@ import no.auke.drone.services.TrackerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.auke.drone.ws.dto.AukeResponse;
+import no.auke.drone.dto.AukeResponse;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -30,11 +32,14 @@ import com.auke.drone.ws.dto.AukeResponse;
 public class TrackerController {
     @Autowired
     private TrackerService trackerService;
+    @Autowired
+    private CRUDDao<Device> crudDao;
 
     @GET
     @Path("/register")
     public AukeResponse register(@QueryParam("id") String id, @QueryParam("name") String name) {
         Tracker tracker = trackerService.registerTracker(id, name);
+        crudDao.create(new Device().from(tracker));
         return new AukeResponse(tracker == null, tracker);
     }
 
@@ -53,7 +58,7 @@ public class TrackerController {
     }
 
     @GET
-    @Path("/get-all/{type}")
+    @Path("/get-all/{type:.*}")
     public AukeResponse getAll(@PathParam("type") String trackerType) {
         Collection<Tracker> trackers = trackerService.getAll(trackerType);
         return new AukeResponse(trackers != null, trackers);

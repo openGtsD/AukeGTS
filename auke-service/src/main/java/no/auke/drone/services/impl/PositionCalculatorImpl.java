@@ -31,7 +31,7 @@ public class PositionCalculatorImpl implements PositionCalculator {
     }
 
     public void startCalculate() {
-        
+        logger.info("starting calculating" + isRunningAutomatically + isRunning);
     	// start calc tread if not already started
         if(isRunningAutomatically.get() && !isRunning.getAndSet(true)) {
         

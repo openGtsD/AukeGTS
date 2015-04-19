@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.auke.drone.ws.util.PointUtil;
+import no.auke.drone.utils.PointUtil;
 
 /**
  * Created by huyduong on 3/25/2015.
