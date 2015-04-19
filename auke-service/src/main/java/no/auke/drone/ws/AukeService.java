@@ -16,7 +16,7 @@ import no.auke.drone.ws.support.RestApplicationContext;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.auke.drone.ws.mapper.AccessDeniedMapper;
+import no.auke.drone.mapper.AccessDeniedMapper;
 import com.yammer.dropwizard.Service;
 import com.yammer.dropwizard.bundles.AssetsBundle;
 import com.yammer.dropwizard.config.Environment;

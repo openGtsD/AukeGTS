@@ -1,4 +1,4 @@
-package com.auke.drone.ws.controllers;
+package no.auke.drone.controller;
 
 import java.util.Collection;
 
@@ -19,7 +19,7 @@ import no.auke.drone.services.TrackerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.auke.drone.ws.dto.AukeResponse;
+import no.auke.drone.dto.AukeResponse;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -53,7 +53,7 @@ public class TrackerController {
     }
 
     @GET
-    @Path("/get-all/{type}")
+    @Path("/get-all/{type:.*}")
     public AukeResponse getAll(@PathParam("type") String trackerType) {
         Collection<Tracker> trackers = trackerService.getAll(trackerType);
         return new AukeResponse(trackers != null, trackers);

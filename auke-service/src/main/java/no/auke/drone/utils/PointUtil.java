@@ -1,4 +1,4 @@
-package com.auke.drone.ws.util;
+package no.auke.drone.utils;
 
 import java.util.Random;
 
