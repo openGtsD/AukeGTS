@@ -11,7 +11,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.BoundingBox;
+import no.auke.drone.domain.Device;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.services.TrackerService;
@@ -30,11 +32,14 @@ import no.auke.drone.dto.AukeResponse;
 public class TrackerController {
     @Autowired
     private TrackerService trackerService;
+    @Autowired
+    private CRUDDao<Device> crudDao;
 
     @GET
     @Path("/register")
     public AukeResponse register(@QueryParam("id") String id, @QueryParam("name") String name) {
         Tracker tracker = trackerService.registerTracker(id, name);
+        crudDao.create(new Device().from(tracker));
         return new AukeResponse(tracker == null, tracker);
     }
 

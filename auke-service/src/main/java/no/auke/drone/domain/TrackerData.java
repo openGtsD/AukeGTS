@@ -43,7 +43,7 @@ public class TrackerData implements Subject {
     private TrackerData() {
     	trackerLayers = new ConcurrentHashMap<String,TrackerLayer>();
     	trackerLayers.put("REAL",new TrackerLayer("REAL"));
-        trackerLayers.put("SIMULATED",new TrackerLayer("SIMULATED",true));
+        trackerLayers.put("SIMULATED",new TrackerLayer("SIMULATED"));
     }
 
     public TrackerLayer getTrackerLayer(String layerId) {
