@@ -1,5 +1,6 @@
 package no.auke.drone.domain;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -88,5 +89,21 @@ public interface Tracker {
     void calculate();
 
     Tracker move(Integer speed, Integer course);
+    
+    String getImei();
+    
+    void setImei(String imei);
+    
+    String getSimPhone();
+    
+    void setSimPhone(String simPhone);
 
+    Date getCreateDate();
+    
+    void setCreateDate(Date date);
+    
+    Date getModifiedDate();
+    
+    void setModifiedDate(Date data);
+    
 }

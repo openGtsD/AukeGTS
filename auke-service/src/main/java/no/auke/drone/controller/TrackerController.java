@@ -41,20 +41,11 @@ public class TrackerController {
         crudDeviceDao.setPersistentClass(Device.class);
     }
 
-
-    @GET
-    @Path("/register")
-    public AukeResponse register(@QueryParam("id") String id, @QueryParam("name") String name) {
-        Tracker tracker = trackerService.registerTracker(id, name);
-        crudDeviceDao.create(new Device().from(tracker));
-        return new AukeResponse(tracker == null, tracker);
-    }
-
-    @GET
-    @Path("/remove")
-    public AukeResponse remove(@QueryParam("id") String id, @QueryParam("name") String name) {
+    @POST
+    @Path("/remove/{id}")
+    public AukeResponse remove(@PathParam("id") String id) {
         Tracker tracker = trackerService.removeTracker(id);
-        return new AukeResponse(tracker == null, tracker);
+        return new AukeResponse(tracker != null, tracker);
     }
 
     @GET

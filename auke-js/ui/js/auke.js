@@ -35,9 +35,9 @@ Auke.utils.loadView = function(viewName, viewParams) {
 
 Auke.utils.buildHTML = function(data) {
 
-	return "<h1>Drone Info</h1> <input type='button' onclick=start(" + "'"
+	return "<h1>Drone Info</h1> <input type='button' onclick=Auke.utils.start(" + "'"
 			+ data.id + "'"
-			+ ") value='Start Moving'  /> | <input type='button' onclick=stop("
+			+ ") value='Start Moving'  /> | <input type='button' onclick=Auke.utils.stop("
 			+ "'" + data.id + "'" + ") value='Stop Moving'  /> <ul>"
 			+ "<li>Drone ID:" + data.id + "</li><li>GPS: "
 			+ data.currentPosition.latitude + "/"
@@ -50,7 +50,8 @@ Auke.utils.buildHTML = function(data) {
 var map;
 var mgr;
 var icons = {};
-var allmarkers = {};
+Auke.utils.markers = [];
+Auke.utils.allmarkers = {};
 var layerId = "SIMULATED";
 function load() {
 	var myOptions = {
@@ -77,45 +78,6 @@ function load() {
 		var interval = setInterval(function() {
 			loadDroneIncurrentView(layerId);
 		}, 5000);
-	});
-}
-
-function loadDroneIncurrentView(layerId) {
-	var mapBound = map.getBounds();
-	var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
-	var sw = mapBound.getSouthWest();
-	$.ajax({
-		url : 'service/drone/load-drone-in-view/' + layerId + '/'
-				+ map.getZoom(),
-		dataType : 'json',
-		contentType : "application/json; charset=utf-8",
-		data : JSON.stringify({
-			southWestLat : sw.lat(),
-			southWestLon : sw.lng(),
-			northEastLat : ne.lat(),
-			northEastLon : ne.lng()
-		}),
-		type : 'POST',
-		success : function(response) {
-			var data = response.data;
-			mgr.clearMarkers();
-			var markers = [];
-			for (var i = 0; i < data.length; i++) {
-				posn = new google.maps.LatLng(data[i].currentPosition.latitude,
-						data[i].currentPosition.longitude);
-				var marker = createMarker(data[i].id, posn, data[i].name,
-						'/auke-js/ui/images/drone.png',
-						buildHTML(data[i]));
-				markers.push(marker);
-				allmarkers[data[i].id] = marker;
-			}
-			// mgr.addMarkers(markers, data[i].minZoom, data[i].maxZoom); TODO:
-			// its use full for show drones in zoom factory
-			mgr.addMarkers(markers, 3, 19);
-			mgr.refresh();
-			updateStatus(mgr.getMarkerCount(map.getZoom()));
-			// autoCenter(markers);
-		}
 	});
 }
 
@@ -155,28 +117,27 @@ Auke.utils.centerZoom = function(marker, map) {
 	google.maps.event.addListener(marker, 'dblclick', function() {
 		var bounds = new google.maps.LatLngBounds();
 		bounds.extend(marker.position);
-		center = bounds.getCenter();
 		map.fitBounds(bounds);
 	});
 }
 
 // ---- Test button
-function startAll() {
+Auke.utils.startAll = function() {
 	var mapBound = map.getBounds();
 	for ( var i in allmarkers) {
 		var oldMarker = allmarkers[i];
 		if (mapBound.contains(oldMarker.getPosition())) {
-			start(oldMarker.id)
+			Auke.utils.start(oldMarker.id)
 		}
 	}
 }
 
-function stopAll() {
+Auke.utils.stopAll = function() {
 	var mapBound = map.getBounds();
 	for ( var i in allmarkers) {
 		var oldMarker = allmarkers[i];
 		if (mapBound.contains(oldMarker.getPosition())) {
-			stop(oldMarker.id)
+			Auke.utils.stop(oldMarker.id)
 		}
 	}
 }
@@ -190,34 +151,34 @@ function reloadMarkers() {
 	loadDroneIncurrentView(layerId);
 }
 
-function stop(id) {
+Auke.utils.stop = function(id) {
 	$.ajax({
 		url : 'service/drone/stop/' + id,
 		dataType : 'json',
 		contentType : "text/html; charset=utf-8",
 		success : function(response) {
 			var data = response.data[0];
-			changeMarkerPosition(data);
+			Auke.utils.changeMarkerPosition(data);
 		}
 	})
 }
 
-function start(id) {
+Auke.utils.start = function(id) {
 	$.ajax({
 		url : 'service/drone/start/' + id,
 		dataType : 'json',
 		contentType : "text/html; charset=utf-8",
 		success : function(response) {
 			var data = response.data[0];
-			changeMarkerPosition(data);
+			Auke.utils.changeMarkerPosition(data);
 		}
 	})
 }
 
-function changeMarkerPosition(data) {
+Auke.utils.changeMarkerPosition = function(data) {
 	var newPosition = new google.maps.LatLng(data.currentPosition.latitude,
 			data.currentPosition.longitude);
-	var marker = allmarkers[data.id];
+	var marker = Auke.utils.allmarkers[data.id];
 	marker.setPosition(newPosition);
 }
 

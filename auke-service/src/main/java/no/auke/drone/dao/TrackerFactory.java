@@ -11,5 +11,5 @@ public interface TrackerFactory {
 	Tracker create(String id, String name);
     Tracker create(String trackerLayer, String id, String name);
     Tracker create(String trackerLayer, String id, String name, MapPoint location);
-    Tracker create(String trackerLayer, String id, String name, double altitude, double speed, long time, Tracker.TrackerType droneType, Person flyer, boolean hasCamera, MapPoint location);
+    Tracker create(String trackerLayer, String id, String name, double altitude, double speed, long time, Tracker.TrackerType droneType, Person flyer, boolean hasCamera, MapPoint location, String imei, String simPhone);
 }

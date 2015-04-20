@@ -69,7 +69,7 @@ public class TrackerServiceImpl implements TrackerService {
     @Override
     public Tracker removeTracker(String id) {
         
-    	Tracker tracker = new SimpleTrackerFactory().create(id, "");
+    	Tracker tracker = TrackerData.getInstance().getTracker(id);
         TrackerData.getInstance().remove((Observer) tracker);
         return tracker;
     
@@ -127,7 +127,7 @@ public class TrackerServiceImpl implements TrackerService {
                 for (int j = 1; j <= 10; j++) {
                     MapPoint rd = PointUtil.generateRandomMapPoint(point);
                     Tracker tracker = new SimpleTrackerFactory().create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + i + "-"
-                            + j, 2 * j, 2 * j, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, rd);
+                            + j, 2 * j, 2 * j, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, rd, "0123222" + i, "123123123" + j);
                     result.add(tracker);
                 }
             }

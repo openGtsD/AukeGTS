@@ -24,7 +24,13 @@ Ext.define('Auke.view.global.Home', {
                  },
                  maplisteners: {
                 	 idle : function(){
-                		 me.loadTracks(this.getMap());
+                		 var map = this.getMap();
+                		 me.clearMarkers();
+                		 me.loadTracks(map);
+                		 var interval = setInterval(function() {
+                			 me.clearMarkers();
+                			 me.loadTracks(map);
+                		}, 8000);
                 	 }
                  }
              }
@@ -51,8 +57,6 @@ Ext.define('Auke.view.global.Home', {
 			success : function(response) {
 				var res = Ext.JSON.decode(response.responseText);
 				var data = res.data;
-//				mgr.clearMarkers();
-				var markers = [];
 				for (var i = 0; i < data.length; i++) {
 					posn = new google.maps.LatLng(data[i].currentPosition.latitude,
 							data[i].currentPosition.longitude);
@@ -60,18 +64,18 @@ Ext.define('Auke.view.global.Home', {
 							'/auke-js/ui/images/drone.png',
 							Auke.utils.buildHTML(data[i]), map);
 					marker.setMap(map);
-					markers.push(marker);
-//					allmarkers[data[i].id] = marker;
+					Auke.utils.markers.push(marker);
+					Auke.utils.allmarkers[data[i].id] = marker;
 				}
-				Ext.fly("trackerNumber").update(markers.length);
-//				// mgr.addMarkers(markers, data[i].minZoom, data[i].maxZoom); TODO:
-//				// its use full for show drones in zoom factory
-//				mgr.addMarkers(markers, 3, 19);
-//				mgr.refresh();
-//				updateStatus(mgr.getMarkerCount(map.getZoom()));
-				// autoCenter(markers);
+				Ext.fly("trackerNumber").update(Auke.utils.markers.length);
 			}
 		});
 	},
-
+	clearMarkers : function(){
+		for(var i = 0; i < Auke.utils.markers.length; i++){
+			var marker = Auke.utils.markers[i];
+			marker.setMap(null);
+		}
+		Auke.utils.markers = [];
+	}
 });

@@ -52,11 +52,36 @@ Ext.define('Auke.controller.TrackerAction', {
 		var action = actionType == 'Edit' ? actionType : 'Delete';
 		if (linkClicked && fieldName == "actionColumn" && iRecord != null) {
 			if (action == 'Delete') {
-				alert("Comming soon")
+				Ext.Msg.confirm("Confirm", "Are you sure delete this tracker. ", function(btn, text) {
+			            if (btn != 'yes') {
+			                return;
+			            } else {
+			            	me.deleteTracker(iRecord);
+			            }
+			    })
 			} else if(action == 'Edit'){
 				me.getTrackerForm().loadRecord(iRecord);
 			}
 		}
+	},
+	
+	deleteTracker : function(tracker){
+		var me = this;
+		Ext.Ajax.request({
+			url : 'service/drone/remove/' + tracker.get('id'),
+			method : 'POST',
+			success : function(response, opts) {
+				var res = Ext.JSON.decode(response.responseText);
+				if (res.success) {
+					Ext.Msg.alert('Success', 'Delete Successfully');
+					me.getTrackerGrid().getStore().remove(tracker);
+				}
+			},
+			failure : function(response) {
+				var res = response.responseText;
+				Ext.Msg.alert('Errors', res);
+			}
+		})
 	},
 
 	clear : function(button) {

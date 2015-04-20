@@ -18,24 +18,24 @@ import org.slf4j.LoggerFactory;
  * Created by huyduong on 3/24/2015.
  */
 public abstract class TrackerBase implements Tracker, Observer {
-    
-	private static final Logger logger = LoggerFactory.getLogger(TrackerBase.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(TrackerBase.class);
 
     private long time;
     private double altitude;
     private double speed;
     private TrackerType droneType = TrackerType.SIMULATED;
 
-	private Person flyer;
+    private Person flyer;
     private boolean isUsedCamera;
     private MapPoint currentPosition;
     private List<MapPoint> positions;
     private CircularFifoBuffer latestPositions;
 
-    protected AtomicBoolean isFlying = new AtomicBoolean(); // default value    
+    protected AtomicBoolean isFlying = new AtomicBoolean(); // default value
     protected ReentrantLock block = new ReentrantLock();
-    
-    // Thai Huynh: Some fields need update tracker  
+
+    // Thai Huynh: Some fields need update tracker
     private String id;
     private String name;
     private String layerId;
@@ -43,18 +43,16 @@ public abstract class TrackerBase implements Tracker, Observer {
     private String simPhone;
     private Date createDate;
     private Date modifiedDate;
-    
-  
 
     public TrackerBase() {
         positions = new ArrayList<MapPoint>();
         isFlying.set(true);
     }
-    
+
     public TrackerBase(String id) {
-    	this();
-    	this.id = id;
-    }    
+        this();
+        this.id = id;
+    }
 
     public String getId() {
         return id;
@@ -71,15 +69,15 @@ public abstract class TrackerBase implements Tracker, Observer {
     public void setName(String name) {
         this.name = name;
     }
-    
-    public String getLayerId() {
-		return layerId;
-	}
 
-	public void setLayerId(String layerId) {
-		this.layerId = layerId;
-	}
-    
+    public String getLayerId() {
+        return layerId;
+    }
+
+    public void setLayerId(String layerId) {
+        this.layerId = layerId;
+    }
+
     public void setCurrentPosition(MapPoint currentPosition) {
         this.currentPosition = currentPosition;
         // set history
@@ -90,33 +88,31 @@ public abstract class TrackerBase implements Tracker, Observer {
         calculate();
     }
 
-
-    
     // LHA: something like this get position with a boundary
     @Override
     public boolean withinView(double southWestLat, double southWestLon, double northEastLat, double northEastLon) {
-        
-    	
-    	try {
 
-    		block.lock();
+        try {
 
-    		return (this.currentPosition.getLongitude() >= southWestLon && this.currentPosition.getLongitude() <= northEastLon)
+            block.lock();
+
+            return (this.currentPosition.getLongitude() >= southWestLon && this.currentPosition.getLongitude() <= northEastLon)
                     && (this.currentPosition.getLatitude() >= southWestLat && this.currentPosition.getLatitude() <= northEastLat);
-    		
-    		
-    	} finally {
-    		
-    		block.unlock();
-    	}
-    
-    }    
+
+        } finally {
+
+            block.unlock();
+        }
+
+    }
 
     @Override
     public boolean equals(Object obj) {
         Tracker tracker = (Tracker) obj;
         return StringUtils.trim(this.id).equalsIgnoreCase(StringUtils.trimToEmpty(tracker.getId()))
-                && StringUtils.trim(this.name).equalsIgnoreCase(StringUtils.trimToEmpty(tracker.getName()));
+                && StringUtils.trim(this.name).equalsIgnoreCase(StringUtils.trimToEmpty(tracker.getName()))
+                && layerId.equals(tracker.getLayerId()) && simPhone.equals(tracker.getSimPhone())
+                && imei.equals(tracker.getImei());
     }
 
     @Override
@@ -128,8 +124,8 @@ public abstract class TrackerBase implements Tracker, Observer {
 
     @Override
     public String toString() {
-        
-    	return "drone id: " + id + ", name:" + name + ", latitude " + currentPosition.getLatitude() + ", longitude"
+
+        return "drone id: " + id + ", name:" + name + ", latitude " + currentPosition.getLatitude() + ", longitude"
                 + currentPosition.getLongitude();
     }
 
@@ -217,36 +213,34 @@ public abstract class TrackerBase implements Tracker, Observer {
 
     @Override
     public void setFlying(boolean isFlying) {
-        
-        if(!isFlying && this.isFlying.getAndSet(false)) {
-        	
-        	try {
 
-        		block.lock();
-        		logger.info("Save tracker " + id);
-            	LocationFunction.writeLocationHistoryByDroneId(this.getId(),getPositions());
-            	
-            	// clear when save
-            	getPositions().clear();
-        		
-        		
-        	} finally {
-        		
-        		block.unlock();
-        	}
-        	
-        	
+        if (!isFlying && this.isFlying.getAndSet(false)) {
+
+            try {
+
+                block.lock();
+                logger.info("Save tracker " + id);
+                LocationFunction.writeLocationHistoryByDroneId(this.getId(), getPositions());
+
+                // clear when save
+                getPositions().clear();
+
+            } finally {
+
+                block.unlock();
+            }
+
         } else {
-        	
-        	this.isFlying.set(true);
+
+            this.isFlying.set(true);
         }
-        
+
     }
 
-
     public CircularFifoBuffer getLatestPositions() {
-        if(latestPositions == null) {
-            latestPositions = new CircularFifoBuffer(5); // capacity of 5 latest positions
+        if (latestPositions == null) {
+            latestPositions = new CircularFifoBuffer(5); // capacity of 5 latest
+                                                         // positions
         }
         return latestPositions;
     }
@@ -286,5 +280,5 @@ public abstract class TrackerBase implements Tracker, Observer {
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
-    
+
 }

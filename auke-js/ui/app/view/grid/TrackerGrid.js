@@ -33,11 +33,17 @@ Ext.define('Auke.view.grid.TrackerGrid', {
 			{
 				dataIndex : 'createDate',
 				text : "Create Date",
-				flex : 1
+				flex : 1,
+				renderer : function(value, meta, record) {
+					return Ext.util.Format.date(value, 'm/d/Y H:i:s');
+				}
 			},  {
 				dataIndex : 'modifiedDate',
 				text : "Modify Date",
-				flex : 1
+				flex : 1,
+				renderer : function(value, meta, record) {
+					return Ext.util.Format.date(value, 'm/d/Y H:i:s');
+				}
 			},{
                 menuDisabled : true,
                 sortable : false,

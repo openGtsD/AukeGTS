@@ -91,7 +91,7 @@ public class TrackerData implements Subject {
     public Tracker update(Tracker newTracker) {
         if(StringUtils.isEmpty(newTracker.getId())) {
             //Thai Huynh: Temp fix for case create new. Need refactor later
-            Tracker tracker = new SimpleTrackerFactory().create(newTracker.getLayerId(), UUID.randomUUID().toString(), newTracker.getName());
+            Tracker tracker = new SimpleTrackerFactory().create(newTracker.getLayerId(), UUID.randomUUID().toString(), newTracker.getName(), newTracker.getImei(), newTracker.getSimPhone());
             register((Observer)tracker);
             return tracker;
         }
