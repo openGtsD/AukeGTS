@@ -1,7 +1,6 @@
 package no.auke.drone.domain;
 
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;

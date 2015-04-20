@@ -80,8 +80,21 @@ Ext.define('Auke.controller.TrackerAction', {
 				success : function(response, opts) {
 					var res = Ext.JSON.decode(response.responseText);
 					if (res.success) {
-						me.getTrackerGrid().getStore().add(record)
+						Ext.Msg.alert('Success', 'Update Successfully');
+						var store = me.getTrackerGrid().getStore();
+						if (record.data.id != ""){
+							recToUpdate = store.getById(record.data.id);
+							recToUpdate.set(res.data[0]);
+							recToUpdate.commit();
+							me.getTrackerGrid().getView().refreshNode(store.indexOfId(record.data.id));
+						} else {
+							me.getTrackerGrid().getStore().add(res.data[0]);
+						}
 					}
+				},
+				failure : function(response) {
+					var res = response.responseText;
+					Ext.Msg.alert('Errors', res);
 				}
 			})
 

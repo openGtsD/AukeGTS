@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+
+import no.auke.drone.dao.impl.SimpleTrackerFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -87,7 +90,10 @@ public class TrackerData implements Subject {
 
     public Tracker update(Tracker newTracker) {
         if(StringUtils.isEmpty(newTracker.getId())) {
-            register((Observer)newTracker);
+            //Thai Huynh: Temp fix for case create new. Need refactor later
+            Tracker tracker = new SimpleTrackerFactory().create(newTracker.getLayerId(), UUID.randomUUID().toString(), newTracker.getName());
+            register((Observer)tracker);
+            return tracker;
         }
 
     	Tracker tracker = getTracker(newTracker.getId());

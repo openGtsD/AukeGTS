@@ -34,12 +34,14 @@ Ext.define('Auke.view.global.TrackerForm', {
                         labelWidth : 150,
                         width : 420
                     },
-                    items : [ {
+                    items : [
+                             {
                         xtype : 'textfield',
                         name : 'id',
-                        fieldLabel : 'Tracker ID',
-                        allowBlank : false,
-                        afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
+                        fieldLabel : 'Tracker ID (Read Only)',
+                        readOnly: true
+                       // allowBlank : false,
+                        //afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
                     },{
                         xtype: 'combo',
                         store: Ext.create('Ext.data.ArrayStore', {

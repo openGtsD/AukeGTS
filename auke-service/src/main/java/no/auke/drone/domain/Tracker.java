@@ -71,6 +71,8 @@ public interface Tracker {
 
     void setCurrentPosition(MapPoint positionUnit);
     
+    String getLayerId();
+    
 	void setLayerId(String layerid);
 
     List<MapPoint> getPositions();
