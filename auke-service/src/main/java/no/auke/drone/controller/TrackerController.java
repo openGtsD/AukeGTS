@@ -2,6 +2,7 @@ package no.auke.drone.controller;
 
 import java.util.Collection;
 
+import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -12,10 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import no.auke.drone.dao.CRUDDao;
-import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.Device;
-import no.auke.drone.domain.SimpleTracker;
-import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.*;
 import no.auke.drone.services.TrackerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +31,22 @@ public class TrackerController {
     @Autowired
     private TrackerService trackerService;
     @Autowired
-    private CRUDDao<Device> crudDao;
+    private CRUDDao<Device> crudDeviceDao;
+    @Autowired
+    private CRUDDao<EventData> crudEventDao;
+
+    @PostConstruct
+    public void init() {
+        crudEventDao.setPersistentClass(EventData.class);
+        crudDeviceDao.setPersistentClass(Device.class);
+    }
+
 
     @GET
     @Path("/register")
     public AukeResponse register(@QueryParam("id") String id, @QueryParam("name") String name) {
         Tracker tracker = trackerService.registerTracker(id, name);
-        crudDao.create(new Device().from(tracker));
+        crudDeviceDao.create(new Device().from(tracker));
         return new AukeResponse(tracker == null, tracker);
     }
 
@@ -94,5 +101,12 @@ public class TrackerController {
         Tracker newTracker = trackerService.update(tracker);
         AukeResponse response = new AukeResponse(newTracker != null, newTracker);
         return response;
+    }
+
+    @GET
+    @Path("/get-all-event")
+    public AukeResponse getAll() {
+        Collection<EventData> events = crudEventDao.getAll();
+        return new AukeResponse(events != null, events);
     }
 }

@@ -7,8 +7,9 @@ import java.util.List;
  */
 public interface CRUDDao<T> {
     T create(T entity);
-    T read(String id);
+    T read(String field, String value);
     T update(T entity);
-    void delete(String id);
+    void delete(String field, String value);
     List<T> getAll();
+    void setPersistentClass(Class<T> persistentClass);
 }
