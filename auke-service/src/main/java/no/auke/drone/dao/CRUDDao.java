@@ -1,6 +1,7 @@
 package no.auke.drone.dao;
 
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by huyduong on 4/19/2015.
@@ -12,4 +13,5 @@ public interface CRUDDao<T> {
     void delete(String field, String value);
     List<T> getAll();
     void setPersistentClass(Class<T> persistentClass);
+    List getByProperties(Properties properties);
 }

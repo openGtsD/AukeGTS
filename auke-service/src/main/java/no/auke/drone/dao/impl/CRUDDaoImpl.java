@@ -152,4 +152,28 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
 
         return entities;
     }
+
+    private String prepareWhereClause(Properties properties) {
+        StringBuilder sb = new StringBuilder();
+        if(properties.size() > 0) {
+            sb.append(" WHERE ");
+            List<String> strings = new ArrayList<>();
+            for(Object o : properties.keySet()) {
+                strings.add(o.toString() + " = '" + properties.get(o).toString() + "'");
+            }
+            sb.append(StringUtils.join(strings.toArray()," AND "));
+        }
+        return sb.toString();
+    }
+
+    @Override
+    public List getByProperties(Properties properties) {
+        Class<T> entityClass = getPersistentClass();
+        String sql = "SELECT * FROM " + entityClass.getSimpleName();
+        sql += prepareWhereClause(properties);
+        List<T> entities  = getJdbcTemplate().query(sql,
+                new BeanPropertyRowMapper<T>(persistentClass));
+
+        return entities;
+    }
 }
