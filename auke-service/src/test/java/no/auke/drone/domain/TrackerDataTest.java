@@ -53,8 +53,8 @@ public class TrackerDataTest {
 		assertTrue(TrackerData.getInstance().exists("REAL"));
 		assertTrue(TrackerData.getInstance().exists("SIMULATED"));
 		
-		assertTrue(TrackerData.getInstance().exists("layer1"));
-		assertTrue(TrackerData.getInstance().getTrackerLayer("layer1").exists(tracker1.getId()));
+		assertTrue(TrackerData.getInstance().exists("LAYER1"));
+		assertTrue(TrackerData.getInstance().getTrackerLayer("LAYER1").exists(tracker1.getId()));
 		
 		
 	}
@@ -69,7 +69,7 @@ public class TrackerDataTest {
 		
 		SimpleTracker tracker4 = mock(SimpleTracker.class);
 		when(tracker4.getId()).thenReturn("tracker4");
-		when(tracker4.getLayerId()).thenReturn("layer4");		
+		when(tracker4.getLayerId()).thenReturn("LAYER4");		
 		TrackerData.getInstance().register(tracker4);
 		
 		assertEquals(6,TrackerData.getInstance().getLayers().size());		

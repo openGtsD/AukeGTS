@@ -19,20 +19,7 @@ public class MapPoint implements Serializable {
     // possibly speed
     private double speed;
     
-    // number of trackers on this positions
-    private int numtrackers;
-    
-    public int getNumtrackers() {
-		return numtrackers;
-	}
 
-	public void setNumtrackers(int numtrackers) {
-		this.numtrackers = numtrackers;
-	}
-	
-	public void incrementTrackers() {
-		this.numtrackers++;
-	}
 
 	public double getLatitude() {
         return latitude;
@@ -100,10 +87,6 @@ public class MapPoint implements Serializable {
         this(lat,lon,0,0,0);
         
     }
-    
-    public MapPoint(double lat, double lon, int numtrackers) {
-        this(lat,lon);
-        this.numtrackers=numtrackers;
-    }    
+     
 
 }

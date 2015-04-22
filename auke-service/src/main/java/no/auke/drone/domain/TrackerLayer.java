@@ -8,11 +8,12 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import no.auke.drone.services.LayerHandling;
 import no.auke.drone.services.PositionCalculator;
-import no.auke.drone.services.ZoomLayer;
+import no.auke.drone.services.ZoomLayerService;
 import no.auke.drone.services.impl.PositionCalculatorImpl;
 import no.auke.drone.services.impl.TrackerServiceImpl;
-import no.auke.drone.services.impl.ZoomLayerImpl;
+import no.auke.drone.services.impl.ZoomLayerServiceImpl;
 
 /**
  * Created by huyduong on 4/10/2015.
@@ -22,11 +23,11 @@ public class TrackerLayer implements LayerHandling {
     private String id;
 
     // Layer list and layer handling
-    private Map<Integer,ZoomLayer> zoomLayers;
-    public Map<Integer,ZoomLayer> getZoomLayers() {
+    private Map<Integer,ZoomLayerService> zoomLayers;
+    public Map<Integer,ZoomLayerService> getZoomLayers() {
 		return zoomLayers;
 	}
-	public void setZoomLayers(Map<Integer, ZoomLayer> zoomLayers) {
+	public void setZoomLayers(Map<Integer, ZoomLayerService> zoomLayers) {
 		this.zoomLayers = zoomLayers;
 	}
 
@@ -42,10 +43,10 @@ public class TrackerLayer implements LayerHandling {
         
         id = UUID.randomUUID().toString();
         trackers = new ConcurrentHashMap<String,Tracker>();
-        zoomLayers = new ConcurrentHashMap<Integer,ZoomLayer>();
+        zoomLayers = new ConcurrentHashMap<Integer,ZoomLayerService>();
 
         for(int zoom = 1;zoom<15;zoom++) {
-        	zoomLayers.put(zoom, new ZoomLayerImpl(this,zoom));
+        	zoomLayers.put(zoom, new ZoomLayerServiceImpl(this,zoom));
         }
 
         positionCalculator = new PositionCalculatorImpl(TrackerServiceImpl.getExecutor(), this, isRunningAutomatically);
@@ -127,5 +128,10 @@ public class TrackerLayer implements LayerHandling {
 		if(trackers.size()>0) {
 	    	positionCalculator.startCalculate();
 		}
+	}
+
+	@Override
+	public Collection<Tracker> getPositions() {
+		return trackers.values();
 	}
 }

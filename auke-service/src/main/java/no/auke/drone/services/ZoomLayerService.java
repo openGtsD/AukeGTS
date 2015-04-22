@@ -4,11 +4,11 @@ import java.util.Collection;
 
 import no.auke.drone.domain.MapPoint;
 
-public interface ZoomLayer {
+public interface ZoomLayerService {
 
-	Collection<MapPoint> getPositions();
 	void calculate();
 	double zoomLongitude(Double longitude);
 	double zoomLatitude(Double latitude);
+	int getZoomFactor();
 
 }

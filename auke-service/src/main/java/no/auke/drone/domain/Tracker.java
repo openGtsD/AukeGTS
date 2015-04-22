@@ -12,7 +12,8 @@ public interface Tracker {
 	public enum TrackerType {
         
     	REAL("Real"),
-    	SIMULATED("Simulated");
+    	SIMULATED("Simulated"),
+    	SUMMARIZED("summarized");
     
     	private String value;
 
@@ -105,5 +106,11 @@ public interface Tracker {
     Date getModifiedDate();
     
     void setModifiedDate(Date data);
+
+	int getNumtrackers();
+
+	void setNumtrackers(int numtrackers);
+
+	void incrementTrackers();
     
 }

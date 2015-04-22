@@ -14,8 +14,8 @@ public class SimpleTracker extends TrackerBase {
     
 	private static final Logger logger = LoggerFactory.getLogger(SimpleTracker.class);
 
-	AtomicLong stopFlightTime = new AtomicLong();  
-	AtomicLong startFlightTime = new AtomicLong();  
+	AtomicLong stopFlightTime = new AtomicLong(System.currentTimeMillis());  
+	AtomicLong startFlightTime = new AtomicLong(System.currentTimeMillis());  
 	
 	Random rnd = new Random(System.nanoTime());
 	
@@ -25,6 +25,7 @@ public class SimpleTracker extends TrackerBase {
 
     public SimpleTracker(String id) {
     	super(id);
+    	
     }
     
     // LHA:
@@ -130,6 +131,19 @@ public class SimpleTracker extends TrackerBase {
     	
         
     }
+
+	@Override
+	public int getNumtrackers() {
+		return 1;
+	}
+
+	@Override
+	public void setNumtrackers(int numtrackers) {
+	}
+
+	@Override
+	public void incrementTrackers() {
+	}
 
 
 

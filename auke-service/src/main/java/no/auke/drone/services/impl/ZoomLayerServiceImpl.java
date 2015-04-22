@@ -9,33 +9,37 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.LayerHandling;
-import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerLayer;
-import no.auke.drone.services.ZoomLayer;
+import no.auke.drone.domain.TrackerSum;
+import no.auke.drone.services.LayerHandling;
+import no.auke.drone.services.ZoomLayerService;
 
-public class ZoomLayerImpl implements ZoomLayer, LayerHandling {
+public class ZoomLayerServiceImpl implements ZoomLayerService, LayerHandling {
 
     private ReentrantLock block = new ReentrantLock();
-    private Collection<MapPoint> positions = new ConcurrentLinkedQueue<MapPoint>();
+    private Collection<Tracker> positions = new ConcurrentLinkedQueue<Tracker>();
 	private TrackerLayer trackerLayer;
 	private int zoomFactor;
 	
-    
-    @Override
+	@Override
+    public int getZoomFactor() {
+		return zoomFactor;
+	}
+
+	@Override
 	public double zoomLongitude(Double longitude) {
     	long x = zoomFactor;
-    	return 0;
+    	return longitude;
     }
 
     @Override
 	public double zoomLatitude(Double latitude) {
     	long x = zoomFactor;
-    	return 0;
+    	return latitude;
     }
     
-	public ZoomLayerImpl(TrackerLayer trackerLayer, int zoomFactor){
+	public ZoomLayerServiceImpl(TrackerLayer trackerLayer, int zoomFactor){
 		
 		this.trackerLayer=trackerLayer;
 		this.zoomFactor=zoomFactor;
@@ -45,28 +49,28 @@ public class ZoomLayerImpl implements ZoomLayer, LayerHandling {
 	@Override
 	public void calculate() {
 		
-	    Map<String,MapPoint> new_positions = new HashMap<String,MapPoint>();
+	    Map<Long,Tracker> new_positions = new HashMap<Long,Tracker>();
 		
         for(Tracker tracker : trackerLayer.getTrackers()) {
         	
         	double lon = zoomLongitude(tracker.getCurrentPosition().getLongitude());
         	double lat = zoomLatitude(tracker.getCurrentPosition().getLatitude());
 
-        	String index = String.valueOf(lon) + ":" + String.valueOf(lat);
-        	
-        	MapPoint point;
-        	
-        	if(!new_positions.containsKey(index)) {
+        	Tracker point;
+        	if(!new_positions.containsKey(getIndex(lon,lat))) {
         		
-        		point=new MapPoint();
-        		point.setLatitude(lat);
-        		point.setLongitude(lon);
+        		point=new TrackerSum();
+        		point.setId(String.valueOf(getIndex(lon,lat)));
+        		point.setName("Tracker withing long=" + String.valueOf(lon) +  " lat=" +String.valueOf(lat));
         		
-        		new_positions.put(index, point);
+        		point.getCurrentPosition().setLatitude(lat);
+        		point.getCurrentPosition().setLongitude(lon);
+        		
+        		new_positions.put(getIndex(lon,lat), point);
         		
         	} else {
 
-        		point = new_positions.get(index);
+        		point = new_positions.get(getIndex(lon,lat));
         		
         	}
         	point.incrementTrackers();
@@ -85,12 +89,14 @@ public class ZoomLayerImpl implements ZoomLayer, LayerHandling {
             block.unlock();
         }
         
-		
-		
 	}
 	
-    @Override
-    public Collection<MapPoint> getPositions() {
+    private Long getIndex(double lon, double lat) {
+		return (long) ((lon * 10000000L) + (lat * 10000000L));
+	}
+
+	@Override
+    public Collection<Tracker> getPositions() {
         return positions;
     }
 
