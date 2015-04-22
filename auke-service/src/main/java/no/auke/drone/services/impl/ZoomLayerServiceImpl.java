@@ -1,5 +1,7 @@
 package no.auke.drone.services.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,17 +28,22 @@ public class ZoomLayerServiceImpl implements ZoomLayerService, LayerHandling {
     public int getZoomFactor() {
 		return zoomFactor;
 	}
+	
+	// Zoom Longitude = ROUND( LONGITUDE / ( 360 / ( 2 ^^(ZOOMLEVEL-1) ) ) , 1) * 10
+	// Zoom Latitude = ROUND( LATITUDE / ( 180 / ( 2 ^^(ZOOMLEVEL-1) ) ) , 1) * 10	
 
 	@Override
 	public double zoomLongitude(Double longitude) {
-    	long x = zoomFactor;
-    	return longitude;
+    	
+		return (Math.round((longitude / (360 / (Math.pow(2,(zoomFactor-1))))) * 10 ));
+		
     }
 
     @Override
 	public double zoomLatitude(Double latitude) {
-    	long x = zoomFactor;
-    	return latitude;
+ 
+		return (Math.round((latitude / (180 / (Math.pow(2,(zoomFactor-1))))) * 10 ));
+
     }
     
 	public ZoomLayerServiceImpl(TrackerLayer trackerLayer, int zoomFactor){
@@ -56,21 +63,23 @@ public class ZoomLayerServiceImpl implements ZoomLayerService, LayerHandling {
         	double lon = zoomLongitude(tracker.getCurrentPosition().getLongitude());
         	double lat = zoomLatitude(tracker.getCurrentPosition().getLatitude());
 
+        	Long index = getIndex(lon,lat);
+
         	Tracker point;
-        	if(!new_positions.containsKey(getIndex(lon,lat))) {
+        	if(!new_positions.containsKey(index)) {
         		
         		point=new TrackerSum();
-        		point.setId(String.valueOf(getIndex(lon,lat)));
+        		point.setId(String.valueOf(index));
         		point.setName("Tracker withing long=" + String.valueOf(lon) +  " lat=" +String.valueOf(lat));
         		
         		point.getCurrentPosition().setLatitude(lat);
         		point.getCurrentPosition().setLongitude(lon);
         		
-        		new_positions.put(getIndex(lon,lat), point);
+        		new_positions.put(index, point);
         		
         	} else {
 
-        		point = new_positions.get(getIndex(lon,lat));
+        		point = new_positions.get(index);
         		
         	}
         	point.incrementTrackers();

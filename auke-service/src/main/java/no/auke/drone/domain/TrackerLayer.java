@@ -81,7 +81,8 @@ public class TrackerLayer implements LayerHandling {
     }
 
     public void addTracker(Tracker tracker) {
-        if(trackers == null) {
+        
+    	if(trackers == null) {
             trackers = new HashMap<>();
         }
 
