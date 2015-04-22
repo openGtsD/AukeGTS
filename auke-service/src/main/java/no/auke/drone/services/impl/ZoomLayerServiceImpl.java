@@ -1,7 +1,5 @@
 package no.auke.drone.services.impl;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -112,26 +110,59 @@ public class ZoomLayerServiceImpl implements ZoomLayerService, LayerHandling {
     @Override
     public List<Tracker> loadWithinView(BoundingBox boundary, int zoom) {
 
+    	// zoom factor not in use
+        List<Tracker> result = new ArrayList<Tracker>();
+        
+    	if(zoom == getZoomFactor()) {
+    		
+            try {
+
+                block.lock();
+
+                for (Tracker positionUnit : getPositions()) {
+
+                    if (
+                    		positionUnit.withinView
+                    			(
+                    				zoomLatitude(boundary.getSouthWestLat()), 
+                    				zoomLongitude(boundary.getSouthWestLon()),
+                    				zoomLatitude(boundary.getNorthEastLat()), 
+                    				zoomLongitude(boundary.getNorthEastLon())
+                    			)
+                    	
+                    	) {
+
+                        result.add(positionUnit);
+                    }
+                }
+                
+                
+            } finally {
+
+                block.unlock();
+            }
+    		
+    	}
+    	
+    	return result;
+        
+    }
+
+	@Override
+	public void clear() {
+		
         try {
 
             block.lock();
-
-            List<Tracker> result = new ArrayList<Tracker>();
-//            for (Tracker positionUnit : trackers.values()) {
-//
-//                if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
-//                        boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
-//
-//                    result.add(positionUnit);
-//                }
-//            }
-            return result;
+    		positions.clear();
             
         } finally {
 
             block.unlock();
         }
+
         
-    }
+
+	}
     
 }

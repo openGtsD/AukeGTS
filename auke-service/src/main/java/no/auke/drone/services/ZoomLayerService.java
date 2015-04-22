@@ -6,5 +6,6 @@ public interface ZoomLayerService {
 	double zoomLongitude(Double longitude);
 	double zoomLatitude(Double latitude);
 	int getZoomFactor();
+	void clear();
 
 }

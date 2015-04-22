@@ -24,8 +24,8 @@ public class TrackerLayer implements LayerHandling {
 
     // Layer list and layer handling
     private Map<Integer,ZoomLayerService> zoomLayers;
-    public Map<Integer,ZoomLayerService> getZoomLayers() {
-		return zoomLayers;
+    public Collection<ZoomLayerService> getZoomLayers() {
+		return zoomLayers.values();
 	}
 	public void setZoomLayers(Map<Integer, ZoomLayerService> zoomLayers) {
 		this.zoomLayers = zoomLayers;
@@ -36,7 +36,13 @@ public class TrackerLayer implements LayerHandling {
     private PositionCalculator positionCalculator;
     private boolean isRunningAutomatically;
 
-    public TrackerLayer(String layerName, boolean isRunningAutomatically) {
+    public boolean isRunningAutomatically() {
+		return isRunningAutomatically;
+	}
+	public void setRunningAutomatically(boolean isRunningAutomatically) {
+		this.isRunningAutomatically = isRunningAutomatically;
+	}
+	public TrackerLayer(String layerName, boolean isRunningAutomatically) {
         
     	this.layerName = layerName;
         this.isRunningAutomatically=isRunningAutomatically;
@@ -88,8 +94,7 @@ public class TrackerLayer implements LayerHandling {
 
         trackers.put(tracker.getId(),tracker);
         if(isRunningAutomatically) {
-        	positionCalculator.startCalculate();
-        	
+        	positionCalculator.startCalculate();      	
         }
         
     }

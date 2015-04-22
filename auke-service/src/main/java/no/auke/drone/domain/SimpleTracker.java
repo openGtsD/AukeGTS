@@ -145,7 +145,4 @@ public class SimpleTracker extends TrackerBase {
 	public void incrementTrackers() {
 	}
 
-
-
-
 }

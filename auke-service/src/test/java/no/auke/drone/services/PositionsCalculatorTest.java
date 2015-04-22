@@ -47,10 +47,14 @@ public class PositionsCalculatorTest {
 		tracker2 = mock(SimpleTracker.class);
 		tracker3 = mock(SimpleTracker.class);
 		
-		when(tracker1.getId()).thenReturn("tracker1");
-		when(tracker2.getId()).thenReturn("tracker2");
-		when(tracker3.getId()).thenReturn("tracker3");
+		when(tracker1.getId()).thenReturn("TRACKER1");
+		when(tracker2.getId()).thenReturn("TRACKER2");
+		when(tracker3.getId()).thenReturn("TRACKER3");
 
+		when(tracker1.getLayerId()).thenReturn("SIMULATED");
+		when(tracker2.getLayerId()).thenReturn("REAL");
+		when(tracker3.getLayerId()).thenReturn("REAL");
+		
 		when(tracker1.getTrackerType()).thenReturn(TrackerType.SIMULATED);
 		when(tracker2.getTrackerType()).thenReturn(TrackerType.REAL);
 		when(tracker3.getTrackerType()).thenReturn(TrackerType.REAL);
@@ -58,6 +62,7 @@ public class PositionsCalculatorTest {
 		TrackerData.getInstance().register(tracker1);
 		TrackerData.getInstance().register(tracker2);
 		TrackerData.getInstance().register(tracker3);
+		
 		assertEquals(3,TrackerData.getInstance().getTrackers().size());
 		assertEquals(2,TrackerData.getInstance().getLayers().size());
 		

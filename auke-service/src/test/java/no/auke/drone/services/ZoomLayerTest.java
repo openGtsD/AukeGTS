@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
@@ -67,17 +68,26 @@ public class ZoomLayerTest {
 		
 		for(int i=0;i<num;i++) {
 			
-			SimpleTracker tracker = mock(SimpleTracker.class);
+			SimpleTracker tracker = new SimpleTracker();
 			
-			when(tracker.getId()).thenReturn("TRACKER" + String.valueOf(i));
-			when(tracker.getLayerId()).thenReturn("DEFAULT");
+			tracker.setId("TRACKER" + i);
+			tracker.setLayerId("DEFAULT");
 			
-			MapPoint point = new MapPoint();
+			tracker.getCurrentPosition().setLatitude((rnd.nextDouble() * 180) - 90);
+			tracker.getCurrentPosition().setLongitude((rnd.nextDouble() * 360) - 180);
 			
-			point.setLatitude((rnd.nextDouble() * 180) - 90);
-			point.setLongitude((rnd.nextDouble() * 360) - 180);
 			
-			when(tracker.getCurrentPosition()).thenReturn(point);
+//			SimpleTracker tracker = mock(SimpleTracker.class);
+//			
+//			when(tracker.getId()).thenReturn("TRACKER" + String.valueOf(i));
+//			when(tracker.getLayerId()).thenReturn("DEFAULT");
+//			
+//			MapPoint point = new MapPoint();
+//			
+//			point.setLatitude((rnd.nextDouble() * 180) - 90);
+//			point.setLongitude((rnd.nextDouble() * 360) - 180);
+//			
+//			when(tracker.getCurrentPosition()).thenReturn(point);
 			
 			TrackerData.getInstance().register(tracker);
 			
@@ -163,17 +173,13 @@ public class ZoomLayerTest {
 			
 			for(double lat=-90;lat<=90;lat+=10) {
 
-				SimpleTracker tracker = mock(SimpleTracker.class);
+				SimpleTracker tracker = new SimpleTracker();
 				
-				when(tracker.getId()).thenReturn("TRACKER" + String.valueOf(lat) + String.valueOf(lon));
-				when(tracker.getLayerId()).thenReturn("DEFAULT");
+				tracker.setId("TRACKER" + String.valueOf(lat) + String.valueOf(lon));
+				tracker.setLayerId("DEFAULT");
 				
-				MapPoint point = new MapPoint();
-				
-				point.setLatitude(lat);
-				point.setLongitude(lon);
-				
-				when(tracker.getCurrentPosition()).thenReturn(point);
+				tracker.getCurrentPosition().setLatitude(lat);
+				tracker.getCurrentPosition().setLongitude(lon);
 				
 				TrackerData.getInstance().register(tracker);
 
@@ -193,6 +199,12 @@ public class ZoomLayerTest {
 		System.out.println("---------");
 		System.out.println("test_calculate_loadWithinView: time calculate " + (System.currentTimeMillis() - timecalc));		
 		
+		// test positions
+		// test overall position
+		BoundingBox boundary =  new BoundingBox(-90, -180, 90, 180);
+		for(ZoomLayerServiceImpl serv:services) {
+			assertTrue("zoom factor " + serv.getZoomFactor(), serv.loadWithinView(boundary, serv.getZoomFactor()).size()>0);
+		}
 		
 		
 	}

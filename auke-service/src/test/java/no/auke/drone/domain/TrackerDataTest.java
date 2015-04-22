@@ -82,17 +82,20 @@ public class TrackerDataTest {
 	public void test_withinView() {
 		
 		TrackerData.clear();
+		TrackerLayer layer = TrackerData.getInstance().getTrackerLayer("DEFAULT");
+		layer.setRunningAutomatically(false);
 		
 		TrackerData.getInstance().register((Observer) new SimpleTrackerFactory().create("drone1", "my tracker"));
-		TrackerLayer layer = TrackerData.getInstance().getTrackerLayer("DEFAULT");
+		
 		assertNotNull(layer);
 		assertEquals(1,layer.getTrackers().size());
 		
-		assertEquals(0,layer.loadWithinView(new BoundingBox(1,1,1,1), 0).size());
-		assertEquals(1,layer.loadWithinView(new BoundingBox(0,0,0,0), 0).size());
-
+		assertEquals(1,layer.loadWithinView(new BoundingBox(-1,-1,1,1), 0).size());
+		assertEquals(1,layer.loadWithinView(new BoundingBox(-90,-180,90,180), 0).size());
+		assertEquals(1,layer.loadWithinView(new BoundingBox(-90,179,90,-179), 0).size());
 		
 		TrackerData.getInstance().getTrackerLayer("DEFAULT").getTracker("drone1").setCurrentPosition(new MapPoint(10,10,0,0,0));
+
 		assertEquals(0,layer.loadWithinView(new BoundingBox(0,0,0,0), 0).size());
 		assertEquals(1,layer.loadWithinView(new BoundingBox(0,0,100,100), 0).size());
 

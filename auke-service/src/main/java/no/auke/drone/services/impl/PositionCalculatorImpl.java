@@ -1,11 +1,14 @@
 package no.auke.drone.services.impl;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.services.PositionCalculator;
+import no.auke.drone.services.ZoomLayerService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +34,9 @@ public class PositionCalculatorImpl implements PositionCalculator {
     }
 
     public void startCalculate() {
-        logger.info("starting calculating" + isRunningAutomatically + isRunning);
+        
+    	logger.info("starting calculating" + isRunningAutomatically + isRunning);
+    	
     	// start calc tread if not already started
         if(isRunningAutomatically.get() && !isRunning.getAndSet(true)) {
         
@@ -43,7 +48,8 @@ public class PositionCalculatorImpl implements PositionCalculator {
         			long lastStarted = System.currentTimeMillis();
                     while(isRunning.get()) {
                         
-                    	if(logger.isDebugEnabled()) logger.debug("run calc");
+                    	if(logger.isDebugEnabled()) 
+                    		logger.debug("run calc");
 
                         for(Tracker tracker : trackerLayer.getTrackers()) {
                             
@@ -59,6 +65,14 @@ public class PositionCalculatorImpl implements PositionCalculator {
                             }
                         	Thread.yield();
                         }
+                        
+                        if(logger.isDebugEnabled()) 
+                        	logger.debug("run calc zoomlevels");
+                        
+                        // LHA: calculate zoomLayers
+                		for(ZoomLayerService serv:trackerLayer.getZoomLayers()) {
+                			serv.calculate();
+                		}
 
                         if(isRunning.get() && (System.currentTimeMillis() - lastStarted) < CALC_FREQUENCY ) {
                         
@@ -78,6 +92,9 @@ public class PositionCalculatorImpl implements PositionCalculator {
     }
 
     public void stopCalculate() {
+		for(ZoomLayerService serv:trackerLayer.getZoomLayers()) {
+			serv.clear();
+		}
         isRunning.set(false);
     }
 }

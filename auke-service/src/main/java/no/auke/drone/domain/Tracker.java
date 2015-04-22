@@ -3,6 +3,8 @@ package no.auke.drone.domain;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.collections.buffer.CircularFifoBuffer;
+
 /**
  * Created by huyduong on 3/24/2015.
  */
@@ -35,10 +37,10 @@ public interface Tracker {
         }
     };
 
-    void setId(String id);
-
     String getId();
-
+    
+	void setId(String id);
+    
     void setName(String name);
 
     String getName();
@@ -74,6 +76,8 @@ public interface Tracker {
     void setCurrentPosition(MapPoint positionUnit);
     
     String getLayerId();
+    
+    
     
 	void setLayerId(String layerid);
 
@@ -112,5 +116,11 @@ public interface Tracker {
 	void setNumtrackers(int numtrackers);
 
 	void incrementTrackers();
+
+	CircularFifoBuffer getLatestPositions();
+
+	void setLatestPositions(CircularFifoBuffer latestPositions);
+
+
     
 }
