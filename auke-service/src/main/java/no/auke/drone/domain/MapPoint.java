@@ -29,6 +29,10 @@ public class MapPoint implements Serializable {
 	public void setNumtrackers(int numtrackers) {
 		this.numtrackers = numtrackers;
 	}
+	
+	public void incrementTrackers() {
+		this.numtrackers++;
+	}
 
 	public double getLatitude() {
         return latitude;

@@ -9,17 +9,28 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import no.auke.drone.services.PositionCalculator;
+import no.auke.drone.services.ZoomLayer;
 import no.auke.drone.services.impl.PositionCalculatorImpl;
 import no.auke.drone.services.impl.TrackerServiceImpl;
+import no.auke.drone.services.impl.ZoomLayerImpl;
 
 /**
  * Created by huyduong on 4/10/2015.
  */
-public class TrackerLayer {
+public class TrackerLayer implements LayerHandling {
     private String layerName;
     private String id;
 
-    private Map<String,Tracker> trackers;
+    // Layer list and layer handling
+    private Map<Integer,ZoomLayer> zoomLayers;
+    public Map<Integer,ZoomLayer> getZoomLayers() {
+		return zoomLayers;
+	}
+	public void setZoomLayers(Map<Integer, ZoomLayer> zoomLayers) {
+		this.zoomLayers = zoomLayers;
+	}
+
+	private Map<String,Tracker> trackers;
 
     private PositionCalculator positionCalculator;
     private boolean isRunningAutomatically;
@@ -30,8 +41,13 @@ public class TrackerLayer {
         this.isRunningAutomatically=isRunningAutomatically;
         
         id = UUID.randomUUID().toString();
-        trackers = new ConcurrentHashMap<>();
-    
+        trackers = new ConcurrentHashMap<String,Tracker>();
+        zoomLayers = new ConcurrentHashMap<Integer,ZoomLayer>();
+
+        for(int zoom = 1;zoom<15;zoom++) {
+        	zoomLayers.put(zoom, new ZoomLayerImpl(this,zoom));
+        }
+
         positionCalculator = new PositionCalculatorImpl(TrackerServiceImpl.getExecutor(), this, isRunningAutomatically);
     
     }
@@ -83,6 +99,7 @@ public class TrackerLayer {
         }
     }
 
+    @Override
     public List<Tracker> loadWithinView(BoundingBox boundary, int zoom) {
 
         List<Tracker> result = new ArrayList<Tracker>();
