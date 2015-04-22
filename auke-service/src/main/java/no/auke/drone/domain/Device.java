@@ -8,8 +8,10 @@ import java.util.Date;
 
 
 public class Device {
-    private String accountID;
+    @ID
     private String deviceID;
+    private String accountID;
+
     private String description;
 //    private long lastUpdateTime;
 //    private long creationTime;

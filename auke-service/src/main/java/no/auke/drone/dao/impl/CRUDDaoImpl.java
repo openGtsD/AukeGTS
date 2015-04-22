@@ -1,13 +1,13 @@
 package no.auke.drone.dao.impl;
 
 import no.auke.drone.dao.CRUDDao;
+import no.auke.drone.domain.ID;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.support.JdbcDaoSupport;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -56,6 +56,17 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
                     ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         }
         return persistentClass;
+    }
+
+    private List<String> getIdFields() {
+        List<String> ids = new ArrayList<>();
+        Field[] fields = getPersistentClass().getDeclaredFields();
+        for(Field field : fields) {
+            if(field.isAnnotationPresent(ID.class)) {
+                ids.add(field.getName());
+            }
+        }
+        return ids;
     }
 
     private String[] getFieldNames(T entity, String prefix) {
@@ -129,10 +140,53 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         return entity;
     }
 
+    Properties prepareUpdateParameter(T entity) {
+        Properties properties = new Properties();
+        String[] fields = getFieldNames(entity,"");
+        try {
+            for(String field : fields) {
+                properties.put(field, BeanUtils.getProperty(entity,field));
+            }
+        } catch (Exception e) {
+            logger.error(e.toString());
+        }
+
+        return properties;
+    }
+
+    private String prepareIdentificationQuery(T entity) {
+        Properties properties = new Properties();
+        try{
+            for(String field : getIdFields()) {
+                properties.put(field,BeanUtils.getProperty(entity,field));
+            }
+        } catch (Exception e) {
+            logger.error(e.toString());
+        }
+
+        return prepareEqualAndClause(properties);
+    }
+
+    private String prepareUpdateQuery(T entity) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("UPDATE ");
+        sb.append(entity.getClass().getSimpleName());
+        sb.append(" SET ");
+        Properties properties = prepareUpdateParameter(entity);
+        sb.append(prepareEqualAndClause(properties));
+        sb.append(" WHERE ");
+        sb.append(prepareIdentificationQuery(entity));
+        return sb.toString();
+    }
+
     @Override
     public T update(T entity) {
-        // TODO
-        return null;
+        String sql = prepareUpdateQuery(entity);
+        Object[] parameters = prepareParameter(entity);
+        logger.info("processing sql " + sql + " " + parameters);
+        getJdbcTemplate().update(sql, parameters);
+
+        return entity;
     }
 
     @Override
@@ -153,10 +207,9 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         return entities;
     }
 
-    private String prepareWhereClause(Properties properties) {
+    private String prepareEqualAndClause(Properties properties) {
         StringBuilder sb = new StringBuilder();
         if(properties.size() > 0) {
-            sb.append(" WHERE ");
             List<String> strings = new ArrayList<>();
             for(Object o : properties.keySet()) {
                 strings.add(o.toString() + " = '" + properties.get(o).toString() + "'");
@@ -170,7 +223,11 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     public List getByProperties(Properties properties) {
         Class<T> entityClass = getPersistentClass();
         String sql = "SELECT * FROM " + entityClass.getSimpleName();
-        sql += prepareWhereClause(properties);
+        if(properties.size() > 0) {
+            sql += " WHERE ";
+            sql += prepareEqualAndClause(properties);
+        }
+
         List<T> entities  = getJdbcTemplate().query(sql,
                 new BeanPropertyRowMapper<T>(persistentClass));
 
