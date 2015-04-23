@@ -59,12 +59,14 @@ Ext.define('Auke.view.Viewport', {
 			                    items: [
 			                        {
 			                            text: 'Manage Tracker',
-			                            id: 'mgTracker'
+			                            id: 'mgTracker',
+			                            view: 'admin.ManageTracker'
 			                        },
 			                        '-',
 			                        {
 			                            text: 'Manage Layer',
-			                            id: 'mgLayer'
+			                            id: 'mgLayer',
+			                            view: 'admin.ManageLayer'
 			                        },
 			                        '-',
 			                        {

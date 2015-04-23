@@ -7,7 +7,6 @@ Ext.define('Auke.view.global.Home', {
 		Ext.applyIf(me, {
 			 items: {
                  xtype: 'gmappanel',
-                 id: 'mymap',
                  zoomLevel: 3,
                  gmapType: 'map',
                  width:'100%',

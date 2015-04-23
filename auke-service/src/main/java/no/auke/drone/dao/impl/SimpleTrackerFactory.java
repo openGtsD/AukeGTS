@@ -7,6 +7,7 @@ import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Person;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
+import no.auke.drone.utils.PointUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +74,10 @@ public class SimpleTrackerFactory implements TrackerFactory {
         tracker.setSimPhone(simPhone);
         tracker.setCreateDate(new Date());
         tracker.setModifiedDate(new Date());
+        //Make default for test TODO: refactoring later
+        MapPoint rd = PointUtil.generateRandomMapPoint(new MapPoint(59.913869, 10.752245,0,0,0));
+        tracker.setCurrentPosition(rd);
+        tracker.getPositions().add(tracker.getCurrentPosition());
         return tracker;
     }
 

@@ -42,14 +42,14 @@ public class TrackerServiceImpl implements TrackerService {
         
     	logger.info("initializing tracker services");
         
-    	List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
-        
-        for (Tracker tracker : trackers) {
-            TrackerData.getInstance().register((Observer) tracker);
-        }
-        logger.info("finished initializing tracker services");
-    
-        TrackerData.getInstance().startCalculate();
+//    	List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
+//        
+//        for (Tracker tracker : trackers) {
+//            TrackerData.getInstance().register((Observer) tracker);
+//        }
+//        logger.info("finished initializing tracker services");
+//    
+//        TrackerData.getInstance().startCalculate();
         
     }
 

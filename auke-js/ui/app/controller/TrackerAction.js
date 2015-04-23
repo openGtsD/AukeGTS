@@ -24,9 +24,7 @@ Ext.define('Auke.controller.TrackerAction', {
 			'trackerForm form button[action=saveBtn]' : {
 				click : me.save
 			},
-			'loginForm form button[action=loginBtn]' : {
-				click : me.login
-			},
+			
 			'gmappanel' : {
 //				mapready : me.loadTracks
 			}
@@ -109,14 +107,16 @@ Ext.define('Auke.controller.TrackerAction', {
 					var res = Ext.JSON.decode(response.responseText);
 					if (res.success) {
 						Ext.Msg.alert('Success', 'Update Successfully');
-						var store = me.getTrackerGrid().getStore();
-						if (record.data.id != ""){
-							recToUpdate = store.getById(record.data.id);
-							recToUpdate.set(res.data[0]);
-							recToUpdate.commit();
-							me.getTrackerGrid().getView().refreshNode(store.indexOfId(record.data.id));
-						} else {
-							me.getTrackerGrid().getStore().add(res.data[0]);
+						if(me.getTrackerGrid()) {
+							var store = me.getTrackerGrid().getStore();
+							if (record.data.id != ""){
+								recToUpdate = store.getById(record.data.id);
+								recToUpdate.set(res.data[0]);
+								recToUpdate.commit();
+								me.getTrackerGrid().getView().refreshNode(store.indexOfId(record.data.id));
+							} else {
+								me.getTrackerGrid().getStore().add(res.data[0]);
+							}
 						}
 					}
 				},
@@ -127,32 +127,5 @@ Ext.define('Auke.controller.TrackerAction', {
 			})
 
 		}
-	},
-	
-	login : function(button) {
-		var me = this;
-		var formContainer = button.up('form');
-		var form = formContainer.getForm();
-		if (form.isValid()) {
-			form.loadRecord(Ext.create('Auke.model.User', form.getValues()));
-			var record = form.getRecord();
-			Ext.Ajax.request({
-				url : Auke.utils.buildURL('drone/login', true),
-				method : 'POST',
-				jsonData : record.data,
-				success : function(response, opts) {
-					var res = Ext.JSON.decode(response.responseText);
-					if (res.success) {
-						Ext.Msg.alert('Success', 'Login Successfully');
-					}
-				},
-				failure : function(response) {
-					var res = response.responseText;
-					Ext.Msg.alert('Errors', res);
-				}
-			})
-
-		}
-	}
-
+	}	
 })
