@@ -106,18 +106,28 @@ public class TrackerLayer implements LayerHandling {
         }
     }
 
+    
+    
     @Override
     public List<Tracker> loadWithinView(BoundingBox boundary, int zoom) {
 
         List<Tracker> result = new ArrayList<Tracker>();
-        for (Tracker positionUnit : trackers.values()) {
+        if(zoomLayers.containsKey(zoom)) {
+        	
+        	
+        } else {
+        	
+            for (Tracker positionUnit : trackers.values()) {
 
-            if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
-                    boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
+                if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
+                        boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
 
-                result.add(positionUnit);
+                    result.add(positionUnit);
+                }
             }
+        	
         }
+        
         return result;
     }
 

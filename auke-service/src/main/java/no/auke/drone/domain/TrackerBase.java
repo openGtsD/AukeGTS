@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by huyduong on 3/24/2015.
  */
+
 public abstract class TrackerBase extends TrackerPositionBase {
 
     private static final Logger logger = LoggerFactory.getLogger(TrackerBase.class);
@@ -45,88 +46,52 @@ public abstract class TrackerBase extends TrackerPositionBase {
         super(id);
     }
 
-    public String getName() {
+    final public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    final public void setName(String name) {
         this.name = name;
     }
     
     @Override
-    public List<MapPoint> getPositions() {
+    final public List<MapPoint> getPositions() {
     	if(positions==null) {
     		positions = new ArrayList<MapPoint>();
     	}
         return positions;
     }
     
-    public void setCurrentPosition(MapPoint currentPosition) {
+    @Override
+    final public void setCurrentPosition(MapPoint currentPosition) {
         super.setCurrentPosition(currentPosition);
         // set history
         getPositions().add(currentPosition);
     }    
 
     @Override
-    public void setPositions(List<MapPoint> positions) {
+    final public void setPositions(List<MapPoint> positions) {
         this.positions = positions;
     }
 
     @Override
-    public CircularFifoBuffer getLatestPositions() {
+    final public CircularFifoBuffer getLatestPositions() {
         if (latestPositions == null) {
             latestPositions = new CircularFifoBuffer(5); // capacity of 5 latest
                                                          // positions
         }
         return latestPositions;
     }
+    
     @Override
-    public void setLatestPositions(CircularFifoBuffer latestPositions) {
+    final public void setLatestPositions(CircularFifoBuffer latestPositions) {
         this.latestPositions = latestPositions;
     }    
 
     public void update() {
         calculate();
     }
-
-    @Override
-    public String toString() {
-
-        return "drone id: " + getId() + ", name:" + name + ", latitude " + getCurrentPosition().getLatitude() + ", longitude"
-                + getCurrentPosition().getLongitude();
-    }
-
-    @Override
-    public boolean isUsedCamera() {
-        return isUsedCamera;
-    }
-
-    @Override
-    public void setUsedCamera(boolean isUsedCamera) {
-        this.isUsedCamera = isUsedCamera;
-    }
-
-    @Override
-    public void setTrackerType(TrackerType type) {
-        this.droneType = type;
-    }
-
-    @Override
-    public TrackerType getTrackerType() {
-        return this.droneType;
-    }
-
-    @Override
-    public void setFlyer(Person person) {
-        this.flyer = person;
-    }
-
-    @Override
-    public Person getFlyer() {
-        return flyer;
-    }
-
-
+    
     //
     // Override because used to save positions
     //
@@ -156,36 +121,84 @@ public abstract class TrackerBase extends TrackerPositionBase {
             this.ismoving.set(true);
         }
 
+    }    
+
+    @Override
+    public String toString() {
+
+        return "id: " + getId() + ", name:" + name + ", latitude " + getCurrentPosition().getLatitude() + ", longitude"
+                + getCurrentPosition().getLongitude();
+    }
+    
+
+    @Override
+    final public TrackerType getTrackerType() {
+        return this.droneType;
+    }
+    
+    @Override
+    final public void setTrackerType(TrackerType type) {
+        this.droneType = type;
+    }
+    
+    
+    // TODO: Lha move this infor to a associated children class
+    @Override
+    public boolean isUsedCamera() {
+        return isUsedCamera;
     }
 
+    @Override
+    public void setUsedCamera(boolean isUsedCamera) {
+        this.isUsedCamera = isUsedCamera;
+    }
+
+    @Override
+    public void setFlyer(Person person) {
+        this.flyer = person;
+    }
+
+    @Override
+    public Person getFlyer() {
+        return flyer;
+    }
+
+    @Override
     public String getImei() {
         return imei;
     }
 
+    @Override
     public void setImei(String imei) {
         this.imei = imei;
     }
 
+    @Override
     public String getSimPhone() {
         return simPhone;
     }
 
+    @Override
     public void setSimPhone(String simPhone) {
         this.simPhone = simPhone;
     }
 
+    @Override
     public Date getCreateDate() {
         return createDate;
     }
 
+    @Override
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
+    @Override
     public Date getModifiedDate() {
         return modifiedDate;
     }
 
+    @Override
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
