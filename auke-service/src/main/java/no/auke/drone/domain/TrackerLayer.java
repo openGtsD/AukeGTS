@@ -114,18 +114,19 @@ public class TrackerLayer  {
         }
     }
 
-    public List<Tracker> loadWithinView(BoundingBox boundary, int zoom) {
+    public Collection<Tracker> loadWithinView(BoundingBox boundary, int zoom) {
 
-        List<Tracker> result = new ArrayList<Tracker>();
         
         try {
         	
             if(zoomLayers.containsKey(zoom)) {
             	
                 // LHA: if summarized exists, got trackerSUM from there
-            	zoomLayers.get(zoom).loadWithinView(boundary, zoom);
+            	return zoomLayers.get(zoom).loadWithinView(boundary, zoom);
             	
             } else {
+
+            	List<Tracker> result = new ArrayList<Tracker>();
             	
                 // LHA: got tracker from there
                 for (Tracker positionUnit : trackers.values()) {
@@ -136,6 +137,8 @@ public class TrackerLayer  {
                         result.add(positionUnit);
                     }
                 }
+                
+                return result;
             	
             }
         	
@@ -146,7 +149,7 @@ public class TrackerLayer  {
 
         }
         
-        return result;
+        return new ArrayList<Tracker>();
     }
 
 	public boolean exists(String id) {
@@ -167,4 +170,33 @@ public class TrackerLayer  {
 	public Collection<Tracker> getPositions() {
 		return trackers.values();
 	}
+	
+	//
+	// do all calculations
+	// 
+	public void calculateAll() {
+		calulateTrackerFeed();
+		calculateZoomLayers();
+	}
+	
+	//
+	// calculate incoming tracker feed
+	// ref. from open GTS 
+	// 
+	public void calulateTrackerFeed() {
+		
+		
+	}
+
+	//
+	// Summarize all positions to zoomlayers
+	// 
+	public void calculateZoomLayers() {
+        // LHA: calculate zoomLayers
+		for(ZoomLayerService serv:getZoomLayers()) {
+			serv.calculate();
+		}
+		
+	}
+
 }

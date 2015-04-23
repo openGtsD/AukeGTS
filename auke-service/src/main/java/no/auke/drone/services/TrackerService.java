@@ -22,6 +22,7 @@ public interface TrackerService {
     Collection<Tracker> loadWithinView(BoundingBox boundary, int zoom, String layerId);
     
     void stopService();
+	void calculateAll();
     
     
 }

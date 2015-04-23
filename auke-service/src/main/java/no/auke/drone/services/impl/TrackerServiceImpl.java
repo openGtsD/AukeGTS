@@ -15,6 +15,7 @@ import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Observer;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerData;
+import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.services.TrackerService;
 
 import org.slf4j.Logger;
@@ -86,9 +87,7 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Collection<Tracker> getAll(String layerId) {
-
     	return TrackerData.getInstance().getTrackers(layerId);
-    
     }
 
     @Override
@@ -136,9 +135,7 @@ public class TrackerServiceImpl implements TrackerService {
 
     }
 
-    
     //TODO: use function within trackerLayer
-    
     @Override
     public Collection<Tracker> loadWithinView(BoundingBox boundary, int zoom, String layerId) {
         
@@ -146,6 +143,17 @@ public class TrackerServiceImpl implements TrackerService {
         
     };
 
+    @Override
+    public void calculateAll() {
+    	
+    	for(TrackerLayer layer:TrackerData.getInstance().getLayers()) {
+    		
+    		layer.calculateAll();
+    		
+    	}
+        
+    };
+    
     @Override
     public Tracker start(String id) {
         
@@ -191,6 +199,7 @@ public class TrackerServiceImpl implements TrackerService {
 	public void stopService() {
 		
 		getExecutor().shutdownNow();
+		TrackerData.clear();
 		
 	}
 }

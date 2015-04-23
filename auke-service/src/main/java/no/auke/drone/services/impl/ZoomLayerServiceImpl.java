@@ -107,10 +107,10 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
     }
 
     @Override
-    public List<Tracker> loadWithinView(BoundingBox boundary, int zoom) {
+    public Collection<Tracker> loadWithinView(BoundingBox boundary, int zoom) {
 
     	// zoom factor not in use
-        List<Tracker> result = new ArrayList<Tracker>();
+    	Collection<Tracker> result = new ArrayList<Tracker>();
         
     	if(zoom == getZoomFactor()) {
     		
@@ -142,7 +142,7 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
             }
     		
     	}
-    	
+
     	return result;
         
     }

@@ -67,10 +67,8 @@ public class PositionCalculatorImpl implements PositionCalculator {
                         if(logger.isDebugEnabled()) 
                         	logger.debug("run calc zoomlevels");
                         
-                        // LHA: calculate zoomLayers
-                		for(ZoomLayerService serv:trackerLayer.getZoomLayers()) {
-                			serv.calculate();
-                		}
+                        trackerLayer.calculateZoomLayers();
+                        
 
                         if(isRunning.get() && (System.currentTimeMillis() - lastStarted) < CALC_FREQUENCY ) {
                         
