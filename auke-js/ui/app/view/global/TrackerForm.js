@@ -2,7 +2,6 @@
  * @author thaihuynh
  */
 Ext.define('Auke.view.global.TrackerForm', {
-	extend : 'Ext.panel.Panel',
     extend : 'Ext.container.Container',
     alias : 'widget.trackerForm',
 
@@ -34,15 +33,7 @@ Ext.define('Auke.view.global.TrackerForm', {
                         labelWidth : 150,
                         width : 420
                     },
-                    items : [
-                             {
-                        xtype : 'textfield',
-                        name : 'id',
-                        fieldLabel : 'Tracker ID (Read Only)',
-                        readOnly: true
-                       // allowBlank : false,
-                        //afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-                    },{
+                    items : [ {
                         xtype: 'combo',
                         store: Ext.create('Ext.data.ArrayStore', {
                             fields: [ 'layerId' ],
@@ -76,25 +67,7 @@ Ext.define('Auke.view.global.TrackerForm', {
                         fieldLabel : 'SIM Phone',
                         allowBlank : false,
                         afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-                    }
-//                    , {
-//                    	 xtype: 'combo',
-//                         store: Ext.create('Ext.data.ArrayStore', {
-//                             fields: [ 'active' ],
-//                             data: [
-//                                 ['Yes'],
-//                                 ['No']
-//                             ]
-//                         }),
-//                         displayField: 'active',
-//                         fieldLabel: 'Active',
-//                         queryMode: 'local',
-//                         selectOnTab: false,
-//                         name: 'active',
-//                         allowBlank : false,
-//                         afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-//                    }
-                    ]
+                    } ]
                 } ],
                 buttonAlign : 'center',
                 buttons : {

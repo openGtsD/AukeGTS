@@ -8,15 +8,13 @@ Ext.define('Auke.controller.Navigation', {
 		this.control({
 			'container #pageHeader button' : {
 				click : function(button) {
-					if (button.view == 'global.Help') {
-
+					if (button.view == 'global.Home') {
+						Auke.utils.loadView(button.view, null);
 					} else if (button.view == 'global.Login') {
-						alert('Comming soon');
+						Auke.utils.loadView(button.view, null);
 					} else if (button.view == 'global.Register') {
 						Auke.utils.loadView(button.view, null);
-					} else {
-						Auke.utils.loadView(button.view, null);
-					}
+					} 
 				}
 			},
 

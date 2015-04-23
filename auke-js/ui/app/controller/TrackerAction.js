@@ -18,11 +18,14 @@ Ext.define('Auke.controller.TrackerAction', {
 				afterrender : me.loadAll,
 				cellclick : me.editOrDelete
 			},
-			'trackerForm form button[action=clearBtn]' : {
+			'trackerForm form button[action=clearBtn], loginForm form button[action=clearBtn]' : {
 				click : me.clear
 			},
 			'trackerForm form button[action=saveBtn]' : {
 				click : me.save
+			},
+			'loginForm form button[action=loginBtn]' : {
+				click : me.login
 			},
 			'gmappanel' : {
 //				mapready : me.loadTracks
@@ -68,7 +71,7 @@ Ext.define('Auke.controller.TrackerAction', {
 	deleteTracker : function(tracker){
 		var me = this;
 		Ext.Ajax.request({
-			url : 'service/drone/remove/' + tracker.get('id'),
+			url : Auke.utils.buildURL('drone/remove/', true) + tracker.get('id'),
 			method : 'POST',
 			success : function(response, opts) {
 				var res = Ext.JSON.decode(response.responseText);
@@ -99,7 +102,7 @@ Ext.define('Auke.controller.TrackerAction', {
 			form.loadRecord(Ext.create('Auke.model.Tracker', form.getValues()));
 			var record = form.getRecord();
 			Ext.Ajax.request({
-				url : 'service/drone/update',
+				url : Auke.utils.buildURL('drone/update', true),
 				method : 'POST',
 				jsonData : record.data,
 				success : function(response, opts) {
@@ -115,6 +118,32 @@ Ext.define('Auke.controller.TrackerAction', {
 						} else {
 							me.getTrackerGrid().getStore().add(res.data[0]);
 						}
+					}
+				},
+				failure : function(response) {
+					var res = response.responseText;
+					Ext.Msg.alert('Errors', res);
+				}
+			})
+
+		}
+	},
+	
+	login : function(button) {
+		var me = this;
+		var formContainer = button.up('form');
+		var form = formContainer.getForm();
+		if (form.isValid()) {
+			form.loadRecord(Ext.create('Auke.model.User', form.getValues()));
+			var record = form.getRecord();
+			Ext.Ajax.request({
+				url : Auke.utils.buildURL('drone/login', true),
+				method : 'POST',
+				jsonData : record.data,
+				success : function(response, opts) {
+					var res = Ext.JSON.decode(response.responseText);
+					if (res.success) {
+						Ext.Msg.alert('Success', 'Login Successfully');
 					}
 				},
 				failure : function(response) {

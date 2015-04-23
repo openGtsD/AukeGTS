@@ -1,4 +1,13 @@
 Ext.ns('Auke.utils');
+// Change url when go live
+Auke.utils.baseURL = "http://localhost:8080/";
+Auke.utils.serviceURL = "http://localhost:8888/";
+
+Auke.utils.buildURL = function (url, isUseService) {
+    var domain = isUseService ? Auke.utils.serviceURL : Auke.utils.baseURL;
+    return domain + url;
+};
+
 
 Auke.utils.loadViewFromHash = function(hashString) {
 	if (!hashString) {
@@ -81,28 +90,17 @@ function load() {
 	});
 }
 
-Auke.utils.createMarker = function(id, posn, title, icon, contentHTML, map) {
+Auke.utils.createMarker = function(id, posn, title, contentHTML, map) {
 	var markerOptions = {
 		id : id,
 		position : posn,
 		title : title,
-		icon : icon,
 		content : contentHTML
 	};
-	// if (icon !== false) {
-	// markerOptions.shadow = icon.shadow;
-	// markerOptions.icon = icon.icon;
-	// markerOptions.shape = icon.shape;
-	// }
-
 	var marker = new google.maps.Marker(markerOptions);
 	Auke.utils.createInfoWindow(marker, map);
 	Auke.utils.centerZoom(marker, map);
 	return marker;
-}
-
-function updateStatus(html) {
-	document.getElementById("numberDrone").innerHTML = html;
 }
 
 var infoWindow = new google.maps.InfoWindow();
@@ -121,39 +119,9 @@ Auke.utils.centerZoom = function(marker, map) {
 	});
 }
 
-// ---- Test button
-Auke.utils.startAll = function() {
-	var mapBound = map.getBounds();
-	for ( var i in allmarkers) {
-		var oldMarker = allmarkers[i];
-		if (mapBound.contains(oldMarker.getPosition())) {
-			Auke.utils.start(oldMarker.id)
-		}
-	}
-}
-
-Auke.utils.stopAll = function() {
-	var mapBound = map.getBounds();
-	for ( var i in allmarkers) {
-		var oldMarker = allmarkers[i];
-		if (mapBound.contains(oldMarker.getPosition())) {
-			Auke.utils.stop(oldMarker.id)
-		}
-	}
-}
-
-function showDroneFromLayer(sel) {
-	layerId = sel.value;
-	loadDroneIncurrentView(layerId);
-}
-
-function reloadMarkers() {
-	loadDroneIncurrentView(layerId);
-}
-
 Auke.utils.stop = function(id) {
 	$.ajax({
-		url : 'service/drone/stop/' + id,
+		url : Auke.utils.buildURL('service/drone/stop/') + id,
 		dataType : 'json',
 		contentType : "text/html; charset=utf-8",
 		success : function(response) {
@@ -165,7 +133,7 @@ Auke.utils.stop = function(id) {
 
 Auke.utils.start = function(id) {
 	$.ajax({
-		url : 'service/drone/start/' + id,
+		url : Auke.utils.buildURL('service/drone/start/') + id,
 		dataType : 'json',
 		contentType : "text/html; charset=utf-8",
 		success : function(response) {
@@ -189,5 +157,3 @@ function autoCenter(markers) {
 	});
 	map.fitBounds(bounds);
 }
-
-//google.maps.event.addDomListener(window, 'load', load);

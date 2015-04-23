@@ -27,10 +27,6 @@ Ext.define('Auke.view.global.Home', {
                 		 var map = this.getMap();
                 		 me.clearMarkers();
                 		 me.loadTracks(map);
-                		 var interval = setInterval(function() {
-                			 me.clearMarkers();
-                			 me.loadTracks(map);
-                		}, 8000);
                 	 }
                  }
              }
@@ -45,8 +41,7 @@ Ext.define('Auke.view.global.Home', {
 		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 		var sw = mapBound.getSouthWest();
 		Ext.Ajax.request({
-			url : 'service/drone/load-drone-in-view/SIMULATED/'
-					+ map.getZoom(),
+			url : Auke.utils.buildURL('drone/load-drone-in-view/SIMULATED/', true) + map.getZoom(),
 			jsonData : JSON.stringify({
 				southWestLat : sw.lat(),
 				southWestLon : sw.lng(),
@@ -60,9 +55,7 @@ Ext.define('Auke.view.global.Home', {
 				for (var i = 0; i < data.length; i++) {
 					posn = new google.maps.LatLng(data[i].currentPosition.latitude,
 							data[i].currentPosition.longitude);
-					var marker = Auke.utils.createMarker(data[i].id, posn, data[i].name,
-							'/auke-js/ui/images/drone.png',
-							Auke.utils.buildHTML(data[i]), map);
+					var marker = Auke.utils.createMarker(data[i].id, posn, data[i].name, Auke.utils.buildHTML(data[i]), map);
 					marker.setMap(map);
 					Auke.utils.markers.push(marker);
 					Auke.utils.allmarkers[data[i].id] = marker;
