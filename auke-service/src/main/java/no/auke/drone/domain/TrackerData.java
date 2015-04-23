@@ -2,6 +2,7 @@ package no.auke.drone.domain;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -85,6 +86,9 @@ public class TrackerData implements Subject {
         oldTracker.setUsedCamera(newTracker.isUsedCamera());
         oldTracker.setTrackerType(newTracker.getTrackerType());
         oldTracker.setFlyer(newTracker.getFlyer());
+        oldTracker.setImei(newTracker.getImei());
+        oldTracker.setSimPhone(newTracker.getSimPhone());
+        oldTracker.setModifiedDate(new Date());
     
     }
 
