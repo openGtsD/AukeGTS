@@ -34,6 +34,11 @@ Ext.define('Auke.view.global.TrackerForm', {
                         width : 420
                     },
                     items : [ {
+                        xtype : 'textfield',
+                        name : 'id',
+                        fieldLabel : 'ID',
+                        hidden: true
+                    }, {
                         xtype: 'combo',
                         store: Ext.create('Ext.data.ArrayStore', {
                             fields: [ 'layerId' ],
