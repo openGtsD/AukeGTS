@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import no.auke.drone.services.LayerHandling;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import no.auke.drone.services.PositionCalculator;
 import no.auke.drone.services.ZoomLayerService;
 import no.auke.drone.services.impl.PositionCalculatorImpl;
@@ -18,8 +20,15 @@ import no.auke.drone.services.impl.ZoomLayerServiceImpl;
 /**
  * Created by huyduong on 4/10/2015.
  */
-public class TrackerLayer implements LayerHandling {
-    private String layerName;
+
+
+// TODO: LHA: Should be renamed to LayerService and moved to services name space
+
+public class TrackerLayer  {
+	
+    private static final Logger logger = LoggerFactory.getLogger(TrackerLayer.class);
+
+	private String layerName;
     private String id;
 
     // Layer list and layer handling
@@ -54,7 +63,6 @@ public class TrackerLayer implements LayerHandling {
         for(int zoom = 1;zoom<15;zoom++) {
         	zoomLayers.put(zoom, new ZoomLayerServiceImpl(this,zoom));
         }
-
         positionCalculator = new PositionCalculatorImpl(TrackerServiceImpl.getExecutor(), this, isRunningAutomatically);
     
     }
@@ -106,26 +114,36 @@ public class TrackerLayer implements LayerHandling {
         }
     }
 
-    
-    
-    @Override
     public List<Tracker> loadWithinView(BoundingBox boundary, int zoom) {
 
         List<Tracker> result = new ArrayList<Tracker>();
-        if(zoomLayers.containsKey(zoom)) {
+        
+        try {
         	
-        	
-        } else {
-        	
-            for (Tracker positionUnit : trackers.values()) {
+            if(zoomLayers.containsKey(zoom)) {
+            	
+                // LHA: if summarized exists, got trackerSUM from there
+            	zoomLayers.get(zoom).loadWithinView(boundary, zoom);
+            	
+            } else {
+            	
+                // LHA: got tracker from there
+                for (Tracker positionUnit : trackers.values()) {
 
-                if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
-                        boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
+                    if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
+                            boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
 
-                    result.add(positionUnit);
+                        result.add(positionUnit);
+                    }
                 }
+            	
             }
         	
+        	
+        } catch (Exception ex ) {
+        	
+        	logger.warn("loadWithinView: error ",ex);
+
         }
         
         return result;
@@ -146,7 +164,6 @@ public class TrackerLayer implements LayerHandling {
 		}
 	}
 
-	@Override
 	public Collection<Tracker> getPositions() {
 		return trackers.values();
 	}

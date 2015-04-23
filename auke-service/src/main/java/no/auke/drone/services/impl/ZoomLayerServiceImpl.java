@@ -12,10 +12,9 @@ import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.domain.TrackerSum;
-import no.auke.drone.services.LayerHandling;
 import no.auke.drone.services.ZoomLayerService;
 
-public class ZoomLayerServiceImpl implements ZoomLayerService, LayerHandling {
+public class ZoomLayerServiceImpl implements ZoomLayerService {
 
     private ReentrantLock block = new ReentrantLock();
     private Collection<Tracker> positions = new ConcurrentLinkedQueue<Tracker>();
