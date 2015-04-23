@@ -14,7 +14,6 @@
 	  <script src="http://maps.googleapis.com/maps/api/js"></script>
 	
 	  <script type="text/javascript" src="/auke-js/ui/ext-all-dev.js"></script>
-	  <script type="text/javascript" src="/auke-js/ui/js/jquery.min.js"></script>
 	  	<script type="text/javascript" src="/auke-js/ui/js/markermanager.js"></script>
 	  <script type="text/javascript" src="/auke-js/ui/js/GMapPanel3.js"></script>
 

@@ -1,7 +1,5 @@
 package no.auke.drone.services.impl;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
