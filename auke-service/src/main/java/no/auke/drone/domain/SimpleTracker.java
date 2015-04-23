@@ -35,10 +35,10 @@ public class SimpleTracker extends TrackerBase {
     // to make simulated flights
  
     @Override
-    public void setFlying(boolean isFlying) {
-    	super.setFlying(isFlying);
+    public void setMoving(boolean isFlying) {
+    	super.setMoving(isFlying);
     	
-    	if(isFlying()) {
+    	if(isMoving()) {
     		
     		// max simulate time
     		stopFlightTime.set(System.currentTimeMillis() + (30 + rnd.nextInt(60 * 5)) * 1000);
@@ -54,13 +54,13 @@ public class SimpleTracker extends TrackerBase {
 	@Override
     public void calculate() {
         
-    	if(isFlying()) {
+    	if(isMoving()) {
     		
     		if((stopFlightTime.get() - System.currentTimeMillis())<0) {
     			
     			// stop flight 
     			logger.info(this.toString() + "stop calculate");
-    			setFlying(false);
+    			setMoving(false);
     			
     		} else {
 
@@ -77,7 +77,7 @@ public class SimpleTracker extends TrackerBase {
 
     			// stop flight 
     			logger.info(this.toString() + "start calculate");
-    			setFlying(true);
+    			setMoving(true);
     			
     		} else {
 

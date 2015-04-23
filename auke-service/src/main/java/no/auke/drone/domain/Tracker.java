@@ -87,9 +87,9 @@ public interface Tracker {
 
     boolean withinView(double upperLat, double upperLon, double lowerLat, double lowerLon);
 
-    boolean isFlying();
+    boolean isMoving();
 
-    void setFlying(boolean isFlying);
+    void setMoving(boolean isFlying);
 
     void calculate();
 

@@ -29,7 +29,6 @@ public abstract class TrackerBase extends TrackerPositionBase {
     private Person flyer;
     private boolean isUsedCamera;
 
-    protected AtomicBoolean isFlying = new AtomicBoolean(); // default value
 
     // Thai Huynh: Some fields need update tracker
     private String name;
@@ -40,12 +39,10 @@ public abstract class TrackerBase extends TrackerPositionBase {
 
     public TrackerBase() {
     	super();
-        isFlying.set(true);
     }
 
     public TrackerBase(String id) {
         super(id);
-        isFlying.set(true);
     }
 
     public String getName() {
@@ -129,20 +126,21 @@ public abstract class TrackerBase extends TrackerPositionBase {
         return flyer;
     }
 
-    @Override
-    public boolean isFlying() {
-        return isFlying.get();
-    }
 
+    //
+    // Override because used to save positions
+    //
+    
     @Override
-    public void setFlying(boolean isFlying) {
+    public void setMoving(boolean isFlying) {
 
-        if (!isFlying && this.isFlying.getAndSet(false)) {
+        if (!isFlying && this.ismoving.getAndSet(false)) {
 
             try {
 
                 block.lock();
                 logger.info("Save tracker " + getId());
+                
                 LocationFunction.writeLocationHistoryByDroneId(this.getId(), getPositions());
 
                 // clear when save
@@ -155,7 +153,7 @@ public abstract class TrackerBase extends TrackerPositionBase {
 
         } else {
 
-            this.isFlying.set(true);
+            this.ismoving.set(true);
         }
 
     }

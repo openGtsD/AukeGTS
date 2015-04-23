@@ -21,6 +21,8 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
 
     private static final Logger logger = LoggerFactory.getLogger(TrackerPositionBase.class);
 
+    protected AtomicBoolean ismoving = new AtomicBoolean(true); // default value
+    
     private long time;
     private double altitude;
     private double speed;
@@ -42,22 +44,22 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
     }
 
     @Override
-    public String getId() {
+    final public String getId() {
         return id;
     }
 
     @Override
-    public void setId(String id) {
+    final public void setId(String id) {
         this.id = id;
     }
 
     @Override
-    public String getLayerId() {
+    final public String getLayerId() {
         return layerId;
     }
 
     @Override
-    public void setLayerId(String layerId) {
+    final public void setLayerId(String layerId) {
         this.layerId = layerId;
     }
 
@@ -73,42 +75,51 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
     }
 
     @Override
-    public long getTime() {
+    final public long getTime() {
         return time;
     }
 
     @Override
-    public void setTime(long time) {
+    final public void setTime(long time) {
         this.time = time;
 
     }
 
     @Override
-    public double getSpeed() {
+    final public double getSpeed() {
         return speed;
     }
 
     @Override
-    public void setSpeed(double speed) {
+    final public void setSpeed(double speed) {
         this.speed = speed;
     }
 
     @Override
-    public double getAltitude() {
+    final public double getAltitude() {
         return altitude;
     }
 
     @Override
-    public void setAltitude(double altitude) {
+    final public void setAltitude(double altitude) {
         this.altitude = altitude;
 
     }
 
     @Override
-    public MapPoint getCurrentPosition() {
+    final public MapPoint getCurrentPosition() {
         return currentPosition;
     }
 
+    @Override
+    final public boolean isMoving() {
+        return ismoving.get();
+    }
+    
+    @Override
+    public void setMoving(boolean isMoving) {
+    	this.ismoving.set(isMoving);
+    }
 
     
     @Override

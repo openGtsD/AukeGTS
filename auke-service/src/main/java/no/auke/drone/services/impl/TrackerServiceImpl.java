@@ -152,7 +152,7 @@ public class TrackerServiceImpl implements TrackerService {
     	Tracker tracker = getTracker(id);
         if (tracker != null) {
         
-        	tracker.setFlying(true);
+        	tracker.setMoving(true);
             // setting the tracker altitude to 100, this is for testing simulation
             // only
             tracker.setAltitude(100);
@@ -170,7 +170,7 @@ public class TrackerServiceImpl implements TrackerService {
         
     	if (tracker != null) {
         
-    		tracker.setFlying(false);
+    		tracker.setMoving(false);
         
     		// setting tracker altitude to 0, this is for testing simulation only
             tracker.setAltitude(0);

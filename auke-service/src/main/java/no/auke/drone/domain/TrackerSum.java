@@ -7,7 +7,6 @@ import org.apache.commons.collections.buffer.CircularFifoBuffer;
 
 public class TrackerSum extends TrackerPositionBase {
 
-    private String id="";
     private String name="";	
 	
 	public TrackerSum() {}
@@ -36,16 +35,6 @@ public class TrackerSum extends TrackerPositionBase {
 	}
 
 	@Override
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	@Override
-	public String getId() {
-		return id;
-	}
-
-	@Override
 	public void setName(String name) {
 		this.name=name;
 	}
@@ -54,32 +43,6 @@ public class TrackerSum extends TrackerPositionBase {
 	public String getName() {
 		return name;
 	}
-
-	@Override
-	public long getTime() {
-		return 0;
-	}
-
-	@Override
-	public void setTime(long time) {
-	}
-
-	@Override
-	public double getSpeed() {
-		return 0;
-	}
-
-	@Override
-	public void setSpeed(double speed) {
-	}
-
-	@Override
-	public double getAltitude() {
-		return 0;
-	}
-
-	@Override
-	public void setAltitude(double sltitude) {}
 
 	@Override
 	public boolean isUsedCamera() {
@@ -116,12 +79,7 @@ public class TrackerSum extends TrackerPositionBase {
 	public void setPositions(List<MapPoint> positions) {}
 
 	@Override
-	public boolean isFlying() {
-		return false;
-	}
-
-	@Override
-	public void setFlying(boolean isFlying) {}
+	public void setMoving(boolean ismoving) {}
 
 	@Override
 	public void calculate() {}
