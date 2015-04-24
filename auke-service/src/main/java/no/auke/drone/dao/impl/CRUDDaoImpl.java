@@ -1,6 +1,7 @@
 package no.auke.drone.dao.impl;
 
 import no.auke.drone.dao.CRUDDao;
+import no.auke.drone.dao.QueryBuilder;
 import no.auke.drone.domain.ID;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -198,10 +199,18 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
 
     @Override
     public List getAll() {
-        Class<T> entityClass = getPersistentClass();
-        String sql = "SELECT * FROM " + entityClass.getSimpleName();
+        String query = new QueryBuilder().buildSelect(getPersistentClass().getName())
+                .build();
 
-        List<T> entities  = getJdbcTemplate().query(sql,
+        List<T> entities  = getJdbcTemplate().query(query,
+                new BeanPropertyRowMapper<T>(persistentClass));
+
+        return entities;
+    }
+
+    @Override
+    public List get(String query) {
+        List<T> entities  = getJdbcTemplate().query(query,
                 new BeanPropertyRowMapper<T>(persistentClass));
 
         return entities;
@@ -221,16 +230,20 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
 
     @Override
     public List getByProperties(Properties properties) {
-        Class<T> entityClass = getPersistentClass();
-        String sql = "SELECT * FROM " + entityClass.getSimpleName();
-        if(properties.size() > 0) {
-            sql += " WHERE ";
-            sql += prepareEqualAndClause(properties);
+        if(properties == null || properties.size() == 0) {
+            return getAll();
         }
 
-        List<T> entities  = getJdbcTemplate().query(sql,
+        String query = new QueryBuilder().buildSelect(getPersistentClass().getName())
+                                                      .buildWhere()
+                                                      .buildEqualClause(properties)
+                                                      .build();
+
+        List<T> entities  = getJdbcTemplate().query(query,
                 new BeanPropertyRowMapper<T>(persistentClass));
 
         return entities;
     }
+
+
 }

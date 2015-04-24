@@ -1,6 +1,7 @@
 package no.auke.drone.controller;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.*;
+import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
 
 import org.apache.commons.lang.StringUtils;
@@ -36,6 +38,8 @@ public class TrackerController {
     private CRUDDao<Device> crudDeviceDao;
     @Autowired
     private CRUDDao<EventData> crudEventDao;
+    @Autowired
+    private EventService eventService;
 
     @PostConstruct
     public void init() {
@@ -99,16 +103,17 @@ public class TrackerController {
     @GET
     @Path("/get-event")
     public AukeResponse getEvent(@QueryParam("accountID")String accountID, @QueryParam("deviceID")String deviceID) {
-        Properties properties = new Properties();
-        if(StringUtils.isNotEmpty(accountID)) {
-            properties.put("accountID", accountID);
-        }
-
-        if(StringUtils.isNotEmpty(deviceID)) {
-            properties.put("deviceID", deviceID);
-        }
-
-        Collection<EventData> events = crudEventDao.getByProperties(properties);
+//        Properties properties = new Properties();
+//        if(StringUtils.isNotEmpty(accountID)) {
+//            properties.put("accountID", accountID);
+//        }
+//
+//        if(StringUtils.isNotEmpty(deviceID)) {
+//            properties.put("deviceID", deviceID);
+//        }
+//
+//        Collection<EventData> events = crudEventDao.getByProperties(properties);
+        List<EventData> events = eventService.getEventDatas();
         return new AukeResponse(events != null, events);
     }
 }
