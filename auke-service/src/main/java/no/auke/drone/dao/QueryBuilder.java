@@ -34,16 +34,16 @@ public class QueryBuilder {
             rightQuotation = "' ";
         }
 
-
         if(properties != null && properties.size() > 0) {
             List<String> strings = new ArrayList<>();
             for(Object o : properties.keySet()) {
-                strings.add(o.toString() + " " + operator + leftQuotation + properties.get(o).toString() + rightQuotation);
+                strings.add(o.toString() + " " + operator + " " + leftQuotation + properties.get(o).toString() +  rightQuotation);
             }
             sb.append(StringUtils.join(strings.toArray()," AND "));
         }
         return sb.toString();
     }
+
 
     public QueryBuilder() {
         sb = new StringBuilder();
@@ -73,6 +73,22 @@ public class QueryBuilder {
 
     public QueryBuilder buildMoreThanClause(Properties properties) {
         sb.append(prepareWhereClause(properties,MORE_THAN));
+        return this;
+    }
+
+    public QueryBuilder buildParam(String param) {
+        sb.append(" " + param + " ");
+        return this;
+    }
+
+
+    public QueryBuilder buildInnerQuery(String query) {
+        sb.append("(" + query + ")");
+        return this;
+    }
+
+    public QueryBuilder buildMoreThan() {
+        sb.append(" " + MORE_THAN_EQUAL + " ");
         return this;
     }
 

@@ -113,6 +113,7 @@ public class TrackerController {
 //        }
 //
 //        Collection<EventData> events = crudEventDao.getByProperties(properties);
+        eventService.fetchEventData();
         List<EventData> events = eventService.getEventDatas();
         return new AukeResponse(events != null, events);
     }

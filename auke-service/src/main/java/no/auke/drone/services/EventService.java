@@ -10,5 +10,6 @@ import java.util.Map;
  */
 public interface EventService {
     void fetchEvents();
-    public List<EventData> getEventDatas();
+    List<EventData> getEventDatas();
+    void fetchEventData();
 }

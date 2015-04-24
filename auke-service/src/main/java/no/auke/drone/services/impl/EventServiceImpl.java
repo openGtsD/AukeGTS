@@ -29,6 +29,7 @@ public class EventServiceImpl implements EventService {
     @PostConstruct
     public void init() {
         logger.info("initializing EventServiceImpl");
+        crudDao.setPersistentClass(EventData.class);
         fetchEvents();
     }
 
@@ -43,15 +44,14 @@ public class EventServiceImpl implements EventService {
         return eventDatas;
     }
 
-    private void fetchEventData() {
-        QueryBuilder timeBuilder = new QueryBuilder().buildSelect("max(timestamp) - 100",EventData.class.getName())
-                .buildWhere();
+    public void fetchEventData() {
+        QueryBuilder timeBuilder = new QueryBuilder().buildSelect("max(timestamp) - 100",EventData.class.getSimpleName());
 
-        Properties properties = new Properties();
-        properties.put("timestamp",timeBuilder.build());
-        QueryBuilder queryBuilder = new QueryBuilder().buildSelect(EventData.class.getName())
+        QueryBuilder queryBuilder = new QueryBuilder().buildSelect(EventData.class.getSimpleName())
                 .buildWhere()
-                .buildMoreThanEqualClause(properties);
+                .buildParam("timestamp")
+                .buildMoreThan()
+                .buildInnerQuery(timeBuilder.build());
 
         eventDatas = crudDao.get(queryBuilder.build());
     }
