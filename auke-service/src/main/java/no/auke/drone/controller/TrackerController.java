@@ -2,7 +2,6 @@ package no.auke.drone.controller;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
@@ -15,15 +14,17 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import no.auke.drone.dao.CRUDDao;
-import no.auke.drone.domain.*;
+import no.auke.drone.domain.BoundingBox;
+import no.auke.drone.domain.Device;
+import no.auke.drone.domain.EventData;
+import no.auke.drone.domain.SimpleTracker;
+import no.auke.drone.domain.Tracker;
+import no.auke.drone.dto.AukeResponse;
 import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import no.auke.drone.dto.AukeResponse;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -47,12 +48,7 @@ public class TrackerController {
         crudDeviceDao.setPersistentClass(Device.class);
     }
 
-    @POST
-    @Path("/remove/{id}")
-    public AukeResponse remove(@PathParam("id") String id) {
-        Tracker tracker = trackerService.removeTracker(id);
-        return new AukeResponse(tracker != null, tracker);
-    }
+   
 
     @GET
     @Path("/{id}")
@@ -99,7 +95,7 @@ public class TrackerController {
         AukeResponse response = new AukeResponse(newTracker != null, newTracker);
         return response;
     }
-
+    
     @GET
     @Path("/get-event")
     public AukeResponse getEvent(@QueryParam("accountID")String accountID, @QueryParam("deviceID")String deviceID) {
@@ -116,5 +112,22 @@ public class TrackerController {
         eventService.fetchEventData();
         List<EventData> events = eventService.getEventDatas();
         return new AukeResponse(events != null, events);
+    }
+    
+    @POST
+    @Path("/register")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse register(String id) {
+        Tracker newTracker = trackerService.registerTracker(id, "");
+        AukeResponse response = new AukeResponse(newTracker != null, newTracker);
+        return response;
+    }
+    
+    @POST
+    @Path("/remove")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse remove(String id) {
+        Tracker tracker = trackerService.removeTracker(id);
+        return new AukeResponse(tracker != null, tracker);
     }
 }

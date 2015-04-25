@@ -1,18 +1,18 @@
-Ext.define('Auke.view.global.Register', {
+Ext.define('Auke.view.global.Delete', {
 	extend : 'Ext.panel.Panel',
-	alias : 'widget.register',
+	alias : 'widget.delete',
 	layout : {
 		align : 'stretch',
 		type : 'vbox'
 	},
-	title : 'Register Trackers',
-	border: 0,
+	title : 'Delete Trackers',
+	
 	initComponent : function() {
 		var me = this;
 		Ext.apply(me, {
 			items : [ {
 				xtype : 'trackerForm',
-				mode: 'Add'
+				mode: 'Delete'
 			} ]
 		});
 		me.callParent(arguments);

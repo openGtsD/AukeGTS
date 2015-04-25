@@ -10,10 +10,14 @@ Ext.define('Auke.controller.TrackerAction', {
 	}, {
 		ref : 'trackerForm',
 		selector : 'trackerForm form'
-	} ],
+	}],
 	init : function() {
 		var me = this;
 		me.control({
+			'trackerForm form' : {
+				afterrender : me.allowEnterOnForm
+			},
+			
 			'trackerGrid' : {
 				afterrender : me.loadAll,
 				cellclick : me.editOrDelete
@@ -21,18 +25,25 @@ Ext.define('Auke.controller.TrackerAction', {
 			'trackerForm form button[action=clearBtn], loginForm form button[action=clearBtn]' : {
 				click : me.clear
 			},
-			'trackerForm form button[action=saveBtn]' : {
-				click : me.save
+			'trackerForm form button[action=Add], trackerForm form button[action=Delete]' : {
+				click : me.updateTracker
 			},
-			
-			'gmappanel' : {
-//				mapready : me.loadTracks
-			}
-			
+//			'trackerForm form button[action=Info]' : {
+//				click : me.getTracker
+//			}
 		});
 	},
 	
-	
+	 allowEnterOnForm : function(form) {
+		 var myMode = form.up().mode;
+	     this.keyNav = Ext.create('Ext.util.KeyNav', form.el, {
+	            enter : function() {
+	            	this.updateTracker(form.down('button[action='+myMode+']'));
+	            },
+	            scope : this
+	        });
+	 },
+	 
 	loadAll : function(grid) {
 		this.getTrackerGrid().getStore().loadData([], false);
 		this.getStore('Trackers').load({
@@ -57,7 +68,7 @@ Ext.define('Auke.controller.TrackerAction', {
 			            if (btn != 'yes') {
 			                return;
 			            } else {
-			            	me.deleteTracker(iRecord);
+			            	me.remove(iRecord.get('id'));
 			            }
 			    })
 			} else if(action == 'Edit'){
@@ -66,58 +77,50 @@ Ext.define('Auke.controller.TrackerAction', {
 		}
 	},
 	
-	deleteTracker : function(tracker){
-		var me = this;
-		Ext.Ajax.request({
-			url : Auke.utils.buildURL('drone/remove/', true) + tracker.get('id'),
-			method : 'POST',
-			success : function(response, opts) {
-				var res = Ext.JSON.decode(response.responseText);
-				if (res.success) {
-					Ext.Msg.alert('Success', 'Delete Successfully');
-					me.getTrackerGrid().getStore().remove(tracker);
-				}
-			},
-			failure : function(response) {
-				var res = response.responseText;
-				Ext.Msg.alert('Errors', res);
-			}
-		})
-	},
-
 	clear : function(button) {
 		var me = this;
 		var formContainer = button.up('form');
 		var form = formContainer.getForm();
 		form.reset();
 	},
+	
+	buildURLFromMode : function(mode){
+		if(mode === 'Add') {
+			return Auke.utils.buildURL('drone/register', true)
+		} else if(mode === 'Delete'){
+			return Auke.utils.buildURL('drone/remove', true)
+		}
+	},
 
-	save : function(button) {
+	updateTracker : function(button) {
 		var me = this;
 		var formContainer = button.up('form');
+		var mode = formContainer.up().mode;
 		var form = formContainer.getForm();
 		if (form.isValid()) {
 			form.loadRecord(Ext.create('Auke.model.Tracker', form.getValues()));
 			var record = form.getRecord();
+			var request = me.buildURLFromMode(mode);
 			Ext.Ajax.request({
-				url : Auke.utils.buildURL('drone/update', true),
+				url : request, 
 				method : 'POST',
-				jsonData : record.data,
+				jsonData : record.get('id'),
 				success : function(response, opts) {
 					var res = Ext.JSON.decode(response.responseText);
 					if (res.success) {
-						Ext.Msg.alert('Success', 'Update Successfully');
-						if(me.getTrackerGrid()) {
-							var store = me.getTrackerGrid().getStore();
-							if (record.data.id != ""){
-								recToUpdate = store.getById(record.data.id);
-								recToUpdate.set(res.data[0]);
-								recToUpdate.commit();
-								me.getTrackerGrid().getView().refreshNode(store.indexOfId(record.data.id));
-							} else {
-								me.getTrackerGrid().getStore().add(res.data[0]);
-							}
-						}
+						Ext.Msg.alert('Success', mode + ' Successfully');
+//						if(me.getTrackerGrid()) {
+//							var store = me.getTrackerGrid().getStore();
+//							if (record.data.id != ""){
+//								recToUpdate = store.getById(record.data.id);
+//								recToUpdate.set(res.data[0]);
+//								recToUpdate.commit();
+//								me.getTrackerGrid().getView().refreshNode(store.indexOfId(record.data.id));
+//							} else {
+//								me.getTrackerGrid().getStore().add(res.data[0]);
+//								form.findField('id').setValue(res.data[0].id);
+//							}
+//						}
 					}
 				},
 				failure : function(response) {
@@ -125,7 +128,6 @@ Ext.define('Auke.controller.TrackerAction', {
 					Ext.Msg.alert('Errors', res);
 				}
 			})
-
 		}
 	}	
 })

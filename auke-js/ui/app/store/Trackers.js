@@ -6,7 +6,7 @@ Ext.define("Auke.store.Trackers", {
         headers : {
             'Content-Type' : 'application/json; charset=utf-8'
         },
-        url : Auke.utils.buildURL('drone/get-all/SIMULATED', true),
+        url : Auke.utils.buildURL('drone/get-all/REAL', true),
         reader : {
             type : 'json',
             root : 'data',

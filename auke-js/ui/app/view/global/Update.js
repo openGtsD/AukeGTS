@@ -1,18 +1,18 @@
-Ext.define('Auke.view.global.Register', {
+Ext.define('Auke.view.global.Update', {
 	extend : 'Ext.panel.Panel',
-	alias : 'widget.register',
+	alias : 'widget.update',
 	layout : {
 		align : 'stretch',
 		type : 'vbox'
 	},
-	title : 'Register Trackers',
-	border: 0,
+	title : 'Update Trackers',
+	
 	initComponent : function() {
 		var me = this;
 		Ext.apply(me, {
 			items : [ {
 				xtype : 'trackerForm',
-				mode: 'Add'
+				mode: 'Info'
 			} ]
 		});
 		me.callParent(arguments);

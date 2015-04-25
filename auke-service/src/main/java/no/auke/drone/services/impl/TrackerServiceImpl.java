@@ -3,7 +3,6 @@ package no.auke.drone.services.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,12 +16,12 @@ import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerData;
 import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.services.TrackerService;
+import no.auke.drone.utils.PointUtil;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import no.auke.drone.utils.PointUtil;
 
 /**
  * Created by huyduong on 3/25/2015.
@@ -51,7 +50,6 @@ public class TrackerServiceImpl implements TrackerService {
 //        logger.info("finished initializing tracker services");
 //    
 //        TrackerData.getInstance().startCalculate();
-        
     }
 
     public TrackerServiceImpl() {
@@ -60,11 +58,17 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Tracker registerTracker(String id, String name) {
+        if(StringUtils.isEmpty(id)) {
+            return null;
+        }
         
-    	Tracker tracker = new SimpleTrackerFactory().create(id, name);
-        TrackerData.getInstance().register((Observer) tracker);
+        Tracker tracker = getTracker(id);
+        if(tracker == null) {
+            tracker = new SimpleTrackerFactory().create(id, name);
+            TrackerData.getInstance().register((Observer) tracker);
+        }
+        // else do no things. that's mean tracker exists in system
         return tracker;
-    
     }
 
     @Override
@@ -125,9 +129,9 @@ public class TrackerServiceImpl implements TrackerService {
                 MapPoint point = points.get(i);
                 for (int j = 1; j <= 10; j++) {
                     MapPoint rd = PointUtil.generateRandomMapPoint(point);
-                    Tracker tracker = new SimpleTrackerFactory().create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + i + "-"
-                            + j, 2 * j, 2 * j, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, rd, "0123222" + i, "123123123" + j);
-                    result.add(tracker);
+//                    Tracker tracker = new SimpleTrackerFactory().create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + i + "-"
+//                            + j, 2 * j, 2 * j, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, rd, "0123222" + i, "123123123" + j);
+//                    result.add(tracker);
                 }
             }
             return result;

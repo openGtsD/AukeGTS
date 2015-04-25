@@ -20,7 +20,7 @@ public class SimpleTrackerFactory implements TrackerFactory {
 
     @Override
     public Tracker create(String id, String name) {
-        return create("DEFAULT",id, name, new MapPoint(0,0,0,0,0));
+        return create("REAL",id, name, new MapPoint(0,0,0,0,0));
     }
     
     @Override

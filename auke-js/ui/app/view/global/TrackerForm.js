@@ -4,13 +4,11 @@
 Ext.define('Auke.view.global.TrackerForm', {
     extend : 'Ext.container.Container',
     alias : 'widget.trackerForm',
-
-    style : 'border: 1px solid #ccc; background-color: #ffffff; padding-top: 5px',
-    bodyStyle : 'background-color: #ffffff;',
-
+    config : {
+    	mode: 'Add'
+    },
     initComponent : function(config) {
         var me = this;
-       
         Ext.applyIf(me, {
             items : [  {
                 xtype : 'form',
@@ -26,71 +24,52 @@ Ext.define('Auke.view.global.TrackerForm', {
                 border : 0,
                 items : [ {
                     xtype : 'container',
-                    padding : '0 100 0 0',
+                    padding : '5 99 0 0',
                     border : 1,
-                    title : '',
                     defaults : {
-                        labelWidth : 150,
+                        labelWidth : 175,
                         width : 420
                     },
                     items : [ {
                         xtype : 'textfield',
                         name : 'id',
-                        fieldLabel : 'ID',
-                        hidden: true
-                    }, {
-                        xtype: 'combo',
-                        store: Ext.create('Ext.data.ArrayStore', {
-                            fields: [ 'layerId' ],
-                            data: [
-                                ['REAL'],
-                                ['SIMULATED']
-                            ]
-                        }),
-                        displayField: 'layerId',
-                        fieldLabel: 'Layer ID',
-                        queryMode: 'local',
-                        selectOnTab: false,
-                        name: 'layerId',
+                        fieldLabel : 'Tracker ID(IMEI/ESN Number)',
                         allowBlank : false,
                         afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-                    }, {
-                        xtype : 'textfield',
-                        name : 'name',
-                        fieldLabel : 'Name',
-                        allowBlank : false,
-                        afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-                    },{
-                        xtype : 'textfield',
-                        name : 'imei',
-                        fieldLabel : 'IMEI/ESN Number',
-                        allowBlank : false,
-                        afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-                    }, {
-                        xtype : 'textfield',
-                        name : 'simPhone',
-                        fieldLabel : 'SIM Phone',
-                        allowBlank : false,
-                        afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-                    } ]
+                    }
+//                    , {
+//                        xtype : 'textfield',
+//                        name : 'name',
+//                        fieldLabel : 'Name',
+//                        allowBlank : false,
+//                        afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
+//                    }, {
+//                        xtype : 'textfield',
+//                        name : 'simPhone',
+//                        fieldLabel : 'SIM Phone',
+//                        allowBlank : false,
+//                        afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
+//                    } 
+                    ]
                 } ],
                 buttonAlign : 'center',
                 buttons : {
                     items : [ {
                         xtype : 'button',
                         overCls : 'btnOver',
-                        text : 'Save',
-                        action : 'saveBtn'
+                        text : me.mode == 'Info' ? 'Get Tracker' : me.mode,
+                        action : me.mode
                     }, {
                         xtype : 'button',
                         action : 'clearBtn',
                         overCls : 'btnOver',
-                        text : 'Clear'
+                        text : 'Clear',
+                        hidden: me.mode == 'Delete' || me.mode == 'Info'
                     } ]
                 }
             } ]
         });
-        Ext.apply(me, config);
+//        Ext.apply(me, config);
         me.callParent(arguments);
     }
 });

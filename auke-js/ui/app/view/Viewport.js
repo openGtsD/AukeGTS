@@ -36,18 +36,30 @@ Ext.define('Auke.view.Viewport', {
 							view : 'global.Home'
 						}, {
 							xtype : 'button',
-							text : 'Register',
+							text : 'Register Trackers',
 							overCls : 'btnOver',
-							width : 80,
 							cls : 'headerBtn',
 							view : 'global.Register'
+						},  {
+							xtype : 'button',
+							text : 'Update Trackers',
+							overCls : 'btnOver',
+							cls : 'headerBtn',
+							view : 'global.Update'
+						},  {
+							xtype : 'button',
+							text : 'Delete Trackers',
+							overCls : 'btnOver',
+							cls : 'headerBtn',
+							view : 'global.Delete'
 						}, {
 							xtype : 'button',
 							text : 'Login',
 							overCls : 'btnOver',
 							width : 80,
 							cls : 'headerBtn',
-							view : 'global.Login'
+							view : 'global.Login',
+							action: 'loginBtn'
 						}, {
 			                xtype: 'splitbutton',
 			                text: 'Administrator',
@@ -87,16 +99,12 @@ Ext.define('Auke.view.Viewport', {
 					items : [ {
 						xtype : 'container',
 						id : 'viewContainer',
-						overflowY : 'hidden',
-						autoScroll : true,
-						layout : {
-							type : 'fit'
-						}
+//						overflowY : 'hidden',
+//						autoScroll : true,
+//						layout : {
+//							type : 'fit'
+//						}
 					} ]
-				}, {
-					xtype : 'pageFooter',
-					itemId : 'pageFooter',
-					region : 'south'
 				} ]
 			} ]
 		});

@@ -16,13 +16,7 @@ Ext.define('Auke.controller.Navigation', {
 		this.control({
 			'container #pageHeader button' : {
 				click : function(button) {
-					if (button.view == 'global.Home') {
-						Auke.utils.loadView(button.view, null);
-					} else if (button.view == 'global.Login') {
-						Auke.utils.loadView(button.view, null);
-					} else if (button.view == 'global.Register') {
-						Auke.utils.loadView(button.view, null);
-					} 
+					Auke.utils.loadView(button.view, null);
 				}
 			},
 
@@ -64,12 +58,25 @@ Ext.define('Auke.controller.Navigation', {
 					Auke.utils.loadView(button.view, null);
 				}
 			},
-			
+
 			'container #pageHeader #mgLayer' : {
 				click : function(button) {
 					Ext.Msg.alert('Info', 'Soon Comming...');
 				}
+			},
+
+			'loginForm form' : {
+				afterrender : this.allowEnterOnForm
 			}
+		});
+	},
+
+	allowEnterOnForm : function(form) {
+		this.keyNav = Ext.create('Ext.util.KeyNav', form.el, {
+			enter : function() {
+				this.login(form.down('button[action=loginBtn]'));
+			},
+			scope : this
 		});
 	},
 
