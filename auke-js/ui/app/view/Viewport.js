@@ -49,11 +49,18 @@ Ext.define('Auke.view.Viewport', {
 							flex : 1
 						}, {
 							xtype : 'button',
+							text : 'View All Trackers',
+							overCls : 'btnOver',
+							cls : 'headerBtn',
+							view : 'admin.ManageTracker'
+						}, {
+							xtype : 'button',
 							text : 'Login as Administrator',
 							overCls : 'btnOver',
 							cls : 'headerBtn',
 							view : 'global.Login',
-							action: 'loginBtn'
+							action: 'loginBtn',
+							hidden: true // TODO remove when apply authen 
 						}, {
 			                xtype: 'splitbutton',
 			                text: 'Administrator',
