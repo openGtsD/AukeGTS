@@ -7,7 +7,6 @@ import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Person;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.utils.PointUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,28 +29,26 @@ public class SimpleTrackerFactory implements TrackerFactory {
 
     @Override
     public Tracker create(String trackerLayer, String id, String name, MapPoint location) {
-        
     	Tracker tracker = new SimpleTracker();
         tracker.setId(id);
         tracker.setLayerId(trackerLayer);
         tracker.setName(name);
+        tracker.setCreateDate(new Date());
+        tracker.setModifiedDate(new Date());
         tracker.setCurrentPosition(location);
         tracker.getPositions().add(tracker.getCurrentPosition());
         logger.info("created tracker: " + tracker.toString());
-        
         return tracker;
     }
 
     @Override
     public Tracker create(String trackerLayer, String id, String name, double altitude, double speed, long time, Tracker.TrackerType droneType,
                           Person flyer, boolean hasCamera, MapPoint location, String imei, String simPhone) {
-        
     	Tracker tracker = new SimpleTracker();
         tracker.setId(id);
         tracker.setLayerId(trackerLayer);
         tracker.setName(name);
         tracker.setAltitude(altitude);
-        tracker.setImei(imei);
         tracker.setSimPhone(simPhone);
         tracker.setCreateDate(new Date());
         tracker.setModifiedDate(new Date());
@@ -62,23 +59,5 @@ public class SimpleTrackerFactory implements TrackerFactory {
         tracker.setCurrentPosition(location);
         tracker.getPositions().add(tracker.getCurrentPosition());
         return tracker;
-    
     }
-
-    public Tracker create(String layerId, String id, String name, String imei, String simPhone) {
-        Tracker tracker = new SimpleTracker();
-        tracker.setId(id);
-        tracker.setLayerId(layerId);
-        tracker.setName(name);
-        tracker.setImei(imei);
-        tracker.setSimPhone(simPhone);
-        tracker.setCreateDate(new Date());
-        tracker.setModifiedDate(new Date());
-        //Make default for test TODO: refactoring later
-        MapPoint rd = PointUtil.generateRandomMapPoint(new MapPoint(59.913869, 10.752245,0,0,0));
-        tracker.setCurrentPosition(rd);
-        tracker.getPositions().add(tracker.getCurrentPosition());
-        return tracker;
-    }
-
 }

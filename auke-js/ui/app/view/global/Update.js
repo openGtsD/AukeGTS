@@ -5,8 +5,8 @@ Ext.define('Auke.view.global.Update', {
 		align : 'stretch',
 		type : 'vbox'
 	},
-	title : 'Update Trackers',
-	
+	title : 'Update Your Trackers',
+	border: 0,
 	initComponent : function() {
 		var me = this;
 		Ext.apply(me, {

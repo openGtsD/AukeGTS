@@ -77,8 +77,6 @@ public interface Tracker {
     
     String getLayerId();
     
-    
-    
 	void setLayerId(String layerid);
 
     List<MapPoint> getPositions();
@@ -94,10 +92,6 @@ public interface Tracker {
     void calculate();
 
     Tracker move(Integer speed, Integer course);
-    
-    String getImei();
-    
-    void setImei(String imei);
     
     String getSimPhone();
     

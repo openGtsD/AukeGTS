@@ -1,6 +1,7 @@
 Ext.define('Auke.view.global.Home', {
 	extend : 'Ext.panel.Panel',
 	alias : 'widget.home',
+	border: 0,
 	title : 'Zoom Factory <span id="zoomId" style="color: red"></span>  - Number tracker in current view is <span id="trackerNumber" style="color: red"></span>',
 	initComponent : function() {
 		var me = this;
@@ -9,7 +10,7 @@ Ext.define('Auke.view.global.Home', {
                  xtype: 'gmappanel',
                  zoomLevel: 3,
                  gmapType: 'map',
-                 width:'100%',
+                 width: '100%',
                  height: 560,
                  border: false,
                  x: 0,

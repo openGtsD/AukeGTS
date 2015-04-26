@@ -17,7 +17,6 @@ Ext.define('Auke.controller.TrackerAction', {
 			'trackerForm form' : {
 				afterrender : me.allowEnterOnForm
 			},
-			
 			'trackerGrid' : {
 				afterrender : me.loadAll,
 				cellclick : me.editOrDelete
@@ -25,26 +24,26 @@ Ext.define('Auke.controller.TrackerAction', {
 			'trackerForm form button[action=clearBtn], loginForm form button[action=clearBtn]' : {
 				click : me.clear
 			},
-			'trackerForm form button[action=Add], trackerForm form button[action=Delete]' : {
-				click : me.updateTracker
+			'trackerForm form button[action=Add], trackerForm form button[action=Delete], trackerForm form button[action=Info]' : {
+				click : me.saveTracker
 			},
-//			'trackerForm form button[action=Info]' : {
-//				click : me.getTracker
-//			}
+			'trackerForm form button[action=Update]' : {
+				click:  me.updateTracker
+			}
 		});
 	},
 	
-	 allowEnterOnForm : function(form) {
+	allowEnterOnForm : function(form) {
 		 var myMode = form.up().mode;
 	     this.keyNav = Ext.create('Ext.util.KeyNav', form.el, {
 	            enter : function() {
-	            	this.updateTracker(form.down('button[action='+myMode+']'));
+	            	this.saveTracker(form.down('button[action='+myMode+']'));
 	            },
 	            scope : this
 	        });
 	 },
 	 
-	loadAll : function(grid) {
+	 loadAll : function(grid) {
 		this.getTrackerGrid().getStore().loadData([], false);
 		this.getStore('Trackers').load({
 			scope : this,
@@ -68,7 +67,7 @@ Ext.define('Auke.controller.TrackerAction', {
 			            if (btn != 'yes') {
 			                return;
 			            } else {
-			            	me.remove(iRecord.get('id'));
+			            	me.removeTracker(iRecord);
 			            }
 			    })
 			} else if(action == 'Edit'){
@@ -89,10 +88,62 @@ Ext.define('Auke.controller.TrackerAction', {
 			return Auke.utils.buildURL('drone/register', true)
 		} else if(mode === 'Delete'){
 			return Auke.utils.buildURL('drone/remove', true)
+		} else if(mode == 'Info'){
+			return Auke.utils.buildURL('drone/get-tracker', true)
 		}
 	},
-
-	updateTracker : function(button) {
+	removeTracker : function(tracker) {
+		var me = this;
+		Ext.Ajax.request({
+			url : Auke.utils.buildURL('drone/remove', true), 
+			method : 'POST',
+			jsonData : tracker.get('id'),
+			success : function(response, opts) {
+				var res = Ext.JSON.decode(response.responseText);
+				if (res.success) {
+					Ext.Msg.alert('Success', 'Delete Successfully');
+					if(me.getTrackerGrid()) {
+						me.getTrackerGrid().getStore().remove(tracker);
+					}
+				} else { // get tracker no exist
+					Ext.Msg.alert('Information', 'Tracker not exist, please try again!');
+				}
+			},
+			failure : function(response) {
+				var res = response.responseText;
+				Ext.Msg.alert('Errors', res);
+			}
+		})
+	},
+	
+	updateTracker : function(button){
+		var me = this;
+		var formContainer = button.up('form');
+		var form = formContainer.getForm();
+		if (form.isValid()) {
+			form.loadRecord(Ext.create('Auke.model.Tracker', form.getValues()));
+			var record = form.getRecord();
+			Ext.Ajax.request({
+				url : Auke.utils.buildURL('drone/update', true), 
+				method : 'POST',
+				jsonData : record.data,
+				success : function(response, opts) {
+					var res = Ext.JSON.decode(response.responseText);
+					if (res.success) {
+						Ext.Msg.alert('Success', 'Update Successfully');
+					} else { // get tracker no exist
+						Ext.Msg.alert('Information', 'Tracker not exist, please try again!');
+					}
+				},
+				failure : function(response) {
+					var res = response.responseText;
+					Ext.Msg.alert('Errors', res);
+				}
+			})
+		}
+	},
+	
+	saveTracker : function(button) {
 		var me = this;
 		var formContainer = button.up('form');
 		var mode = formContainer.up().mode;
@@ -108,19 +159,18 @@ Ext.define('Auke.controller.TrackerAction', {
 				success : function(response, opts) {
 					var res = Ext.JSON.decode(response.responseText);
 					if (res.success) {
-						Ext.Msg.alert('Success', mode + ' Successfully');
-//						if(me.getTrackerGrid()) {
-//							var store = me.getTrackerGrid().getStore();
-//							if (record.data.id != ""){
-//								recToUpdate = store.getById(record.data.id);
-//								recToUpdate.set(res.data[0]);
-//								recToUpdate.commit();
-//								me.getTrackerGrid().getView().refreshNode(store.indexOfId(record.data.id));
-//							} else {
-//								me.getTrackerGrid().getStore().add(res.data[0]);
-//								form.findField('id').setValue(res.data[0].id);
-//							}
-//						}
+						if(mode === 'Info') {
+							form.getFields().each(function(e) {
+								e.show();
+							})
+							button.setText('Update');
+							button.action = 'Update';
+							form.loadRecord(Ext.create('Auke.model.Tracker', res.data[0]));
+						} else {
+							Ext.Msg.alert('Success', mode + ' Successfully');
+						}
+					} else { // get tracker no exist
+						Ext.Msg.alert('Information', 'Tracker not exist, please try again!');
 					}
 				},
 				failure : function(response) {

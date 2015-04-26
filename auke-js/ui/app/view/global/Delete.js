@@ -5,8 +5,8 @@ Ext.define('Auke.view.global.Delete', {
 		align : 'stretch',
 		type : 'vbox'
 	},
-	title : 'Delete Trackers',
-	
+	title : 'Delete Your Trackers',
+	border: 0,
 	initComponent : function() {
 		var me = this;
 		Ext.apply(me, {

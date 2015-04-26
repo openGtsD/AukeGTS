@@ -6,19 +6,11 @@ Ext.define('Auke.view.grid.TrackerGrid', {
 		Ext.applyIf(me, {
 			columns : [ {
 				dataIndex : 'id',
-				text : 'ID',
-				flex : 1
-			}, {
-				dataIndex : 'layerId',
-				text : "Layer ID",
+				text : 'Tracker ID',
 				flex : 1
 			}, {
 				dataIndex : 'name',
 				text : "Name",
-				flex : 1
-			}, {
-				dataIndex : 'imei',
-				text : "IMEI/ESN Number",
 				flex : 1
 			}, {
 				dataIndex : 'simPhone',
@@ -60,7 +52,11 @@ Ext.define('Auke.view.grid.TrackerGrid', {
 	},
 	
 	renderButton : function(value, metaData, record, rowIndex, colIndex, store){
-        return '<button type="button" class="action_button" actionType="Edit">' + 'Edit' 
-            + '</button></span>&nbsp;&nbsp;<button type="button" class="action_button"" actionType="Delete">'  +  'Delete' + '</button>';
+        return '</button></span>&nbsp;&nbsp;<button type="button" class="action_button"" actionType="Delete">'  +  'Delete' + '</button>';
     }
+	
+//	renderButton : function(value, metaData, record, rowIndex, colIndex, store){
+//        return '<button type="button" class="action_button" actionType="Edit">' + 'Edit' 
+//            + '</button></span>&nbsp;&nbsp;<button type="button" class="action_button"" actionType="Delete">'  +  'Delete' + '</button>';
+//    }
 });

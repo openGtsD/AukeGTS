@@ -88,15 +88,6 @@ public class TrackerSum extends TrackerPositionBase {
 	public Tracker move(Integer speed, Integer course) {
 		return null;
 	}
-
-	@Override
-	public String getImei() {
-		return null;
-	}
-
-	@Override
-	public void setImei(String imei) {}
-
 	@Override
 	public String getSimPhone() {
 		return null;

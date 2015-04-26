@@ -3,7 +3,8 @@ Ext.define('Auke.view.Viewport', {
 	id : 'viewport',
 	alias : 'widget.aukeViewport',
 	layout : {
-		type : 'fit'
+		 pack : 'center',
+         type : 'hbox'
 	},
 
 	initComponent : function() {
@@ -12,26 +13,17 @@ Ext.define('Auke.view.Viewport', {
 			items : [ {
 				xtype : 'container',
 				itemId : 'parentContainer',
-				minWidth : 1000,
-
+				width: 990,
 				items : [ {
 					xtype : 'container',
 					itemId : 'pageHeader',
 					region : 'north',
-					margin : '0 5 0 0',
 					items : [ {
 						xtype : 'toolbar',
 						items : [ {
-							xtype : 'tbspacer',
-							flex : 1
-						}, {
-							xtype : 'label',
-							cls : 'fullName'
-						}, {
 							xtype : 'button',
 							overCls : 'btnOver',
 							text : 'Home',
-							width : 80,
 							cls : 'headerBtn',
 							view : 'global.Home'
 						}, {
@@ -53,10 +45,12 @@ Ext.define('Auke.view.Viewport', {
 							cls : 'headerBtn',
 							view : 'global.Delete'
 						}, {
+							xtype : 'tbspacer',
+							flex : 1
+						}, {
 							xtype : 'button',
-							text : 'Login',
+							text : 'Login as Administrator',
 							overCls : 'btnOver',
-							width : 80,
 							cls : 'headerBtn',
 							view : 'global.Login',
 							action: 'loginBtn'
@@ -101,9 +95,9 @@ Ext.define('Auke.view.Viewport', {
 						id : 'viewContainer',
 //						overflowY : 'hidden',
 //						autoScroll : true,
-//						layout : {
-//							type : 'fit'
-//						}
+						layout : {
+							type : 'fit'
+						}
 					} ]
 				} ]
 			} ]

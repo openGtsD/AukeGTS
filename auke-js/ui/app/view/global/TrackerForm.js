@@ -36,20 +36,17 @@ Ext.define('Auke.view.global.TrackerForm', {
                         fieldLabel : 'Tracker ID(IMEI/ESN Number)',
                         allowBlank : false,
                         afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-                    }
-//                    , {
-//                        xtype : 'textfield',
-//                        name : 'name',
-//                        fieldLabel : 'Name',
-//                        allowBlank : false,
-//                        afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-//                    }, {
-//                        xtype : 'textfield',
-//                        name : 'simPhone',
-//                        fieldLabel : 'SIM Phone',
-//                        allowBlank : false,
-//                        afterLabelTextTpl: "<span style='color:red;font-weight:bold' data-qtip='Required'>*</span>"
-//                    } 
+                    } , {
+                        xtype : 'textfield',
+                        name : 'name',
+                        fieldLabel : 'Name',
+                        hidden: true
+                    }, {
+                        xtype : 'textfield',
+                        name : 'simPhone',
+                        fieldLabel : 'SIM Phone',
+                        hidden: true
+                    } 
                     ]
                 } ],
                 buttonAlign : 'center',

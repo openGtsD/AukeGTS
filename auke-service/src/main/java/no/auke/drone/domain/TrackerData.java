@@ -86,21 +86,18 @@ public class TrackerData implements Subject {
         oldTracker.setUsedCamera(newTracker.isUsedCamera());
         oldTracker.setTrackerType(newTracker.getTrackerType());
         oldTracker.setFlyer(newTracker.getFlyer());
-        oldTracker.setImei(newTracker.getImei());
         oldTracker.setSimPhone(newTracker.getSimPhone());
         oldTracker.setModifiedDate(new Date());
     
     }
 
     public Tracker update(Tracker newTracker) {
-        if(StringUtils.isEmpty(newTracker.getId())) {
-            //Thai Huynh: Temp fix for case create new. Need refactor later
-            Tracker tracker = new SimpleTrackerFactory().create(newTracker.getLayerId(), UUID.randomUUID().toString(), newTracker.getName(), newTracker.getImei(), newTracker.getSimPhone());
-            register((Observer)tracker);
-            return tracker;
-        }
-
     	Tracker tracker = getTracker(newTracker.getId());
+    	if(tracker == null) {
+    	    tracker = new SimpleTrackerFactory().create(newTracker.getId(), newTracker.getName());
+            TrackerData.getInstance().register((Observer) tracker);
+    	}
+    	
         if(tracker.equals(newTracker)) {
             return tracker;// do nothing
         }

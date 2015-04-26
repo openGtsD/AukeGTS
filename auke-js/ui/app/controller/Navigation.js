@@ -9,8 +9,7 @@ Ext.define('Auke.controller.Navigation', {
 
 	}, {
 		ref : 'loginTab',
-		selector : 'container #pageHeader button[text=Login]'
-
+		selector : 'container #pageHeader button[action=loginBtn]'
 	} ],
 	init : function() {
 		this.control({
@@ -101,9 +100,7 @@ Ext.define('Auke.controller.Navigation', {
 						me.getLoginTab().hide();
 						Auke.utils.loadView('admin.ManageTracker', null);
 					} else {
-						Ext.Msg
-								.alert('Error',
-										'Login Fails, Please try again!');
+						Ext.Msg.alert('Error', 'Login Fails, Please try again!');
 					}
 				},
 				failure : function(response) {

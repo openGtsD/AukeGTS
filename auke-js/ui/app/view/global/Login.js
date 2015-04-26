@@ -4,7 +4,7 @@ Ext.define('Auke.view.global.Login', {
 	bodyStyle : {
 		padding : '7px'
 	},
-
+	title: 'Login as Administrator',
 	initComponent : function(config) {
         var me = this;
         Ext.applyIf(me, {

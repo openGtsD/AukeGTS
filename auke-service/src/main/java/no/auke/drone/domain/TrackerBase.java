@@ -33,7 +33,6 @@ public abstract class TrackerBase extends TrackerPositionBase {
 
     // Thai Huynh: Some fields need update tracker
     private String name;
-    private String imei;
     private String simPhone;
     private Date createDate;
     private Date modifiedDate;
@@ -161,16 +160,6 @@ public abstract class TrackerBase extends TrackerPositionBase {
     @Override
     public Person getFlyer() {
         return flyer;
-    }
-
-    @Override
-    public String getImei() {
-        return imei;
-    }
-
-    @Override
-    public void setImei(String imei) {
-        this.imei = imei;
     }
 
     @Override

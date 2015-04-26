@@ -25,15 +25,12 @@ public class SimpleTracker extends TrackerBase {
 
     public SimpleTracker(String id) {
     	super(id);
-    	
     }
     
     // LHA:
-    
     // fly for a random period of time
     // wait for a random period of time
     // to make simulated flights
- 
     @Override
     public void setMoving(boolean isFlying) {
     	super.setMoving(isFlying);
@@ -144,5 +141,4 @@ public class SimpleTracker extends TrackerBase {
 	@Override
 	public void incrementTrackers() {
 	}
-
 }

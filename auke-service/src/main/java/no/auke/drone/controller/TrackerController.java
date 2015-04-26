@@ -48,15 +48,6 @@ public class TrackerController {
         crudDeviceDao.setPersistentClass(Device.class);
     }
 
-   
-
-    @GET
-    @Path("/{id}")
-    public AukeResponse get(@PathParam("id") String id) {
-        Tracker tracker = trackerService.getTracker(id);
-        return new AukeResponse(tracker != null, tracker);
-    }
-
     @GET
     @Path("/get-all/{type:.*}")
     public AukeResponse getAll(@PathParam("type") String trackerType) {
@@ -87,15 +78,6 @@ public class TrackerController {
         return response;
     }
 
-    @POST
-    @Path("/update")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse update(SimpleTracker tracker) {
-        Tracker newTracker = trackerService.update(tracker);
-        AukeResponse response = new AukeResponse(newTracker != null, newTracker);
-        return response;
-    }
-    
     @GET
     @Path("/get-event")
     public AukeResponse getEvent(@QueryParam("accountID")String accountID, @QueryParam("deviceID")String deviceID) {
@@ -129,5 +111,22 @@ public class TrackerController {
     public AukeResponse remove(String id) {
         Tracker tracker = trackerService.removeTracker(id);
         return new AukeResponse(tracker != null, tracker);
+    }
+    
+    @POST
+    @Path("/get-tracker")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse getTracker(String id) {
+        Tracker tracker = trackerService.getTracker(id);
+        return new AukeResponse(tracker != null, tracker);
+    }
+    
+    @POST
+    @Path("/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse update(SimpleTracker tracker) {
+        Tracker newTracker = trackerService.update(tracker);
+        AukeResponse response = new AukeResponse(newTracker != null, newTracker);
+        return response;
     }
 }
