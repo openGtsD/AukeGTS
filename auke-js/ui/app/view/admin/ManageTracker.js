@@ -13,6 +13,7 @@ Ext.define('Auke.view.admin.ManageTracker', {
 //			}, 
 			{
 				xtype : 'trackerGrid',
+				border : 0,
 				store : 'Trackers'
 			} ]
 		});

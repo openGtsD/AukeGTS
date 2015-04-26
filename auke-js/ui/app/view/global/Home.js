@@ -41,7 +41,7 @@ Ext.define('Auke.view.global.Home', {
 		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 		var sw = mapBound.getSouthWest();
 		Ext.Ajax.request({
-			url : Auke.utils.buildURL('drone/load-drone-in-view/SIMULATED/', true) + map.getZoom(),
+			url : Auke.utils.buildURL('drone/load-drone-in-view/REAL/', true) + map.getZoom(),
 			jsonData : JSON.stringify({
 				southWestLat : sw.lat(),
 				southWestLon : sw.lng(),
