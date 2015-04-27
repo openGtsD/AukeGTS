@@ -31,6 +31,8 @@
     <context:component-scan base-package="no.auke.drone.controller" />
     <context:component-scan base-package="no.auke.drone.ws" />
     <context:component-scan base-package="no.auke.drone.services.impl" />
+    <context:component-scan base-package="no.auke.drone.application.impl" />
+
 
 
 </beans>

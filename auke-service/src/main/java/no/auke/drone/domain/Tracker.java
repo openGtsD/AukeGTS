@@ -3,6 +3,7 @@ package no.auke.drone.domain;
 import java.util.Date;
 import java.util.List;
 
+import no.auke.drone.application.TrackerUpdater;
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 
 /**
@@ -115,6 +116,6 @@ public interface Tracker {
 
 	void setLatestPositions(CircularFifoBuffer latestPositions);
 
-
+    void setTrackerUpdater(TrackerUpdater trackerUpdater);
     
 }

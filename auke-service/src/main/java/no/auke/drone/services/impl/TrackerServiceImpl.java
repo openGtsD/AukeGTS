@@ -9,19 +9,16 @@ import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 
-import no.auke.drone.dao.impl.SimpleTrackerFactory;
-import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.MapPoint;
-import no.auke.drone.domain.Observer;
-import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.TrackerData;
-import no.auke.drone.domain.TrackerLayer;
+import no.auke.drone.application.impl.SimpleTrackerFactory;
+import no.auke.drone.dao.CRUDDao;
+import no.auke.drone.domain.*;
 import no.auke.drone.services.TrackerService;
 import no.auke.drone.utils.PointUtil;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,7 +27,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TrackerServiceImpl implements TrackerService {
-    
+    @Autowired
+    private CRUDDao<Device> crudDeviceDao;
+
 	private static final Logger logger = LoggerFactory.getLogger(TrackerServiceImpl.class);
 
     private static ExecutorService executor = Executors.newCachedThreadPool();
@@ -40,7 +39,7 @@ public class TrackerServiceImpl implements TrackerService {
 
     @PostConstruct
     public void initTrackerService() {
-        
+        crudDeviceDao.setPersistentClass(Device.class);
     	logger.info("initializing tracker services");
         
     	List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
@@ -67,6 +66,7 @@ public class TrackerServiceImpl implements TrackerService {
         if(tracker == null) {
             tracker = new SimpleTrackerFactory().create(id, name);
             TrackerData.getInstance().register((Observer) tracker);
+            crudDeviceDao.create(new Device().from(tracker));
         }
         // else do no things. that's mean tracker exists in system
         return tracker;

@@ -184,8 +184,9 @@ public class TrackerLayer  {
 	// ref. from open GTS 
 	// 
 	public void calulateTrackerFeed() {
-		
-		
+		for(Tracker tracker : trackers.values()) {
+            tracker.calculate();
+        }
 	}
 
 	//

@@ -2,6 +2,7 @@ package no.auke.drone.controller;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.ws.rs.Consumes;
@@ -23,6 +24,8 @@ import no.auke.drone.dto.AukeResponse;
 import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
 
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -81,17 +84,15 @@ public class TrackerController {
     @GET
     @Path("/get-event")
     public AukeResponse getEvent(@QueryParam("accountID")String accountID, @QueryParam("deviceID")String deviceID) {
-//        Properties properties = new Properties();
-//        if(StringUtils.isNotEmpty(accountID)) {
-//            properties.put("accountID", accountID);
-//        }
-//
-//        if(StringUtils.isNotEmpty(deviceID)) {
-//            properties.put("deviceID", deviceID);
-//        }
-//
-//        Collection<EventData> events = crudEventDao.getByProperties(properties);
-        eventService.fetchEventData();
+        Properties properties = new Properties();
+        if(StringUtils.isNotEmpty(accountID)) {
+            properties.put("accountID", accountID);
+        }
+
+        if(StringUtils.isNotEmpty(deviceID)) {
+            properties.put("deviceID", deviceID);
+        }
+
         List<EventData> events = eventService.getEventDatas();
         return new AukeResponse(events != null, events);
     }
@@ -99,7 +100,7 @@ public class TrackerController {
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse register(String id) {
+    public AukeResponse register(@QueryParam("id")String id) {
         Tracker newTracker = trackerService.registerTracker(id, "");
         AukeResponse response = new AukeResponse(newTracker != null, newTracker);
         return response;

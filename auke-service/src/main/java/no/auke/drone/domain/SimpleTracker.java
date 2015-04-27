@@ -62,7 +62,7 @@ public class SimpleTracker extends TrackerBase {
     		} else {
 
     			logger.trace(this.toString() + "started calculating");
-                move(null,null);// fly randomly
+                trackerUpdater.update(this);
                 logger.debug(this.toString() + "finished calculating");
     			
     		}

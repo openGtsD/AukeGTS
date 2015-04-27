@@ -59,7 +59,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public void fetchEvents() {
 
-        if(isRunning.getAndSet(true)) {
+        if(!isRunning.getAndSet(true)) {
             executor.execute(new Runnable() {
                 @Override
                 public void run() {

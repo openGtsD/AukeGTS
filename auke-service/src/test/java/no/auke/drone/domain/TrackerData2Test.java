@@ -1,6 +1,6 @@
 package no.auke.drone.domain;
 
-import no.auke.drone.dao.impl.SimpleTrackerFactory;
+import no.auke.drone.application.impl.SimpleTrackerFactory;
 
 import org.junit.After;
 import org.junit.Assert;

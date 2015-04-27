@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
+import no.auke.drone.application.TrackerUpdater;
 import no.auke.drone.utils.LocationFunction;
 
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
@@ -21,6 +22,8 @@ import org.slf4j.LoggerFactory;
 public abstract class TrackerBase extends TrackerPositionBase {
 
     private static final Logger logger = LoggerFactory.getLogger(TrackerBase.class);
+
+    protected TrackerUpdater trackerUpdater;
 
     private TrackerType droneType = TrackerType.SIMULATED;
     
@@ -192,4 +195,8 @@ public abstract class TrackerBase extends TrackerPositionBase {
         this.modifiedDate = modifiedDate;
     }
 
+    @Override
+    public void setTrackerUpdater(TrackerUpdater trackerUpdater) {
+        this.trackerUpdater = trackerUpdater;
+    }
 }

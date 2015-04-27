@@ -1,4 +1,4 @@
-package no.auke.drone.dao;
+package no.auke.drone.application;
 
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.MapPoint;

@@ -5,10 +5,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import no.auke.drone.dao.impl.SimpleTrackerFactory;
+import no.auke.drone.application.impl.SimpleTrackerFactory;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -47,7 +46,7 @@ public class TrackerData implements Subject {
     private TrackerData() {
     	trackerLayers = new ConcurrentHashMap<String,TrackerLayer>();
     	trackerLayers.put("REAL",new TrackerLayer("REAL"));
-        trackerLayers.put("SIMULATED",new TrackerLayer("SIMULATED",true));
+        trackerLayers.put("SIMULATED",new TrackerLayer("SIMULATED",false)); // for testing only
     }
 
     public TrackerLayer getTrackerLayer(String layerId) {

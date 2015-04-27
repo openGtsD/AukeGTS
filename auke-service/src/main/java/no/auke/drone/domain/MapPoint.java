@@ -74,7 +74,7 @@ public class MapPoint implements Serializable {
         this.time = System.currentTimeMillis();
     }
 
-    public MapPoint(double lat, double lon, double alt, Integer speed, Integer course) {
+    public MapPoint(double lat, double lon, double alt, Integer speed, double course) {
         this();
     	this.latitude = lat;
         this.longitude = lon;
@@ -88,5 +88,7 @@ public class MapPoint implements Serializable {
         
     }
      
-
+    public MapPoint (EventData eventData) {
+        this(eventData.getLatitude(), eventData.getLongitude(), eventData.getAltitude(), 0, eventData.getHeading());
+    }
 }
