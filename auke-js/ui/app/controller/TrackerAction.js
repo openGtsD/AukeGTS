@@ -100,21 +100,20 @@ Ext.define('Auke.controller.TrackerAction', {
 		form.reset();
 	},
 	
-	buildURLFromMode : function(mode){
+	buildURLFromMode : function(mode, id){
 		if(mode === 'Add') {
-			return Auke.utils.buildURL('drone/register', true)
+			return Auke.utils.buildURL('drone/register/', true) + id
 		} else if(mode === 'Delete'){
-			return Auke.utils.buildURL('drone/remove', true)
+			return Auke.utils.buildURL('drone/remove/', true) + id
 		} else if(mode == 'Info'){
-			return Auke.utils.buildURL('drone/get-tracker', true)
+			return Auke.utils.buildURL('drone/get-tracker/', true) + id
 		}
 	},
 	removeTracker : function(tracker) {
 		var me = this;
 		Ext.Ajax.request({
-			url : Auke.utils.buildURL('drone/remove', true), 
+			url : Auke.utils.buildURL('drone/remove/', true) + tracker.get('id'), 
 			method : 'POST',
-			jsonData : tracker.get('id'),
 			success : function(response, opts) {
 				var res = Ext.JSON.decode(response.responseText);
 				if (res.success) {
@@ -168,11 +167,10 @@ Ext.define('Auke.controller.TrackerAction', {
 		if (form.isValid()) {
 			form.loadRecord(Ext.create('Auke.model.Tracker', form.getValues()));
 			var record = form.getRecord();
-			var request = me.buildURLFromMode(mode);
+			var request = me.buildURLFromMode(mode, record.get('id'));
 			Ext.Ajax.request({
 				url : request, 
 				method : 'POST',
-				jsonData : record.get('id'),
 				success : function(response, opts) {
 					var res = Ext.JSON.decode(response.responseText);
 					if (res.success) {

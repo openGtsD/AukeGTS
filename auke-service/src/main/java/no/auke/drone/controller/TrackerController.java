@@ -98,26 +98,26 @@ public class TrackerController {
     }
     
     @POST
-    @Path("/register")
+    @Path("/register/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse register(String id) {
+    public AukeResponse register(@PathParam("id")String id) {
         Tracker newTracker = trackerService.registerTracker(id, "");
         AukeResponse response = new AukeResponse(newTracker != null, newTracker);
         return response;
     }
     
     @POST
-    @Path("/remove")
+    @Path("/remove/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse remove(String id) {
+    public AukeResponse remove(@PathParam("id") String id) {
         Tracker tracker = trackerService.removeTracker(id);
         return new AukeResponse(tracker != null, tracker);
     }
     
     @POST
-    @Path("/get-tracker")
+    @Path("/get-tracker/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse getTracker(String id) {
+    public AukeResponse getTracker(@PathParam("id") String id) {
         Tracker tracker = trackerService.getTracker(id);
         return new AukeResponse(tracker != null, tracker);
     }

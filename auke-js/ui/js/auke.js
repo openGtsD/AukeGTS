@@ -43,10 +43,7 @@ Auke.utils.loadView = function(viewName, viewParams) {
 };
 
 Auke.utils.buildHTML = function(data) {
-	return "<h1>Drone Info</h1> <input type='button' onclick=Auke.utils.start(" + "'"
-			+ data.id + "'"
-			+ ") value='Start Moving'  /> | <input type='button' onclick=Auke.utils.stop("
-			+ "'" + data.id + "'" + ") value='Stop Moving'  /> <ul>"
+	return "<h1>Drone Info</h1><ul>"
 			+ "<li>Drone ID:" + data.id + "</li><li>GPS: "
 			+ data.currentPosition.latitude + "/"
 			+ data.currentPosition.longitude + "</li><li>Speed:" + data.speed
@@ -98,7 +95,7 @@ Auke.utils.createMarker = function(id, posn, title, contentHTML, map) {
 	};
 	var marker = new google.maps.Marker(markerOptions);
 	Auke.utils.createInfoWindow(marker, map);
-	Auke.utils.centerZoom(marker, map);
+//	Auke.utils.centerZoom(marker, map);
 	return marker;
 }
 
