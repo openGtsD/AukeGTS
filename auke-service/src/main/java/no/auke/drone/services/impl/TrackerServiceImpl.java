@@ -15,6 +15,7 @@ import no.auke.drone.domain.*;
 import no.auke.drone.services.TrackerService;
 import no.auke.drone.utils.PointUtil;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,9 @@ public class TrackerServiceImpl implements TrackerService {
     @Autowired
     private CRUDDao<Device> crudDeviceDao;
 
+    @Autowired
+    private SimpleTrackerFactory simpleTrackerFactory;
+
 	private static final Logger logger = LoggerFactory.getLogger(TrackerServiceImpl.class);
 
     private static ExecutorService executor = Executors.newCachedThreadPool();
@@ -40,15 +44,22 @@ public class TrackerServiceImpl implements TrackerService {
     @PostConstruct
     public void initTrackerService() {
         crudDeviceDao.setPersistentClass(Device.class);
-    	logger.info("initializing tracker services");
+    	logger.info("initializing SIMULATED tracker services");
         
     	List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
         
         for (Tracker tracker : trackers) {
             TrackerData.getInstance().register((Observer) tracker);
         }
-        logger.info("finished initializing tracker services");
-    
+        logger.info("finished initializing SIMULATED tracker services");
+
+        List<Device> devices = crudDeviceDao.getAll();
+        if(CollectionUtils.isNotEmpty(devices)) {
+            for(Device device : devices) {
+                TrackerData.getInstance().register((Observer) simpleTrackerFactory.from(device) );
+            }
+        }
+
         TrackerData.getInstance().startCalculate();
     }
 
@@ -64,7 +75,7 @@ public class TrackerServiceImpl implements TrackerService {
         
         Tracker tracker = getTracker(id);
         if(tracker == null) {
-            tracker = new SimpleTrackerFactory().create(id, name);
+            tracker = simpleTrackerFactory.create(id, name);
             TrackerData.getInstance().register((Observer) tracker);
             crudDeviceDao.create(new Device().from(tracker));
         }
@@ -134,7 +145,7 @@ public class TrackerServiceImpl implements TrackerService {
                 MapPoint point = points.get(i);
                 for (int j = 1; j <= 10; j++) {
                     MapPoint rd = PointUtil.generateRandomMapPoint(point);
-                    Tracker tracker = new SimpleTrackerFactory().create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + i + "-"
+                    Tracker tracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + i + "-"
                             + j, 2 * j, 2 * j, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, rd, "0123222" + i, "123123123" + j);
                     result.add(tracker);
                 }

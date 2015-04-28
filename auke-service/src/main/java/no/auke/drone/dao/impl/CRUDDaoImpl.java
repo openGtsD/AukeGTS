@@ -197,7 +197,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
 
     @Override
     public List getAll() {
-        String query = new QueryBuilder().buildSelect(getPersistentClass().getName())
+        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName())
                 .build();
 
         List<T> entities  = getJdbcTemplate().query(query,

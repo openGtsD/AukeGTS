@@ -4,10 +4,7 @@ import java.util.Date;
 
 import no.auke.drone.application.TrackerUpdater;
 import no.auke.drone.application.TrackerFactory;
-import no.auke.drone.domain.MapPoint;
-import no.auke.drone.domain.Person;
-import no.auke.drone.domain.SimpleTracker;
-import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +34,11 @@ public class SimpleTrackerFactory implements TrackerFactory {
     @Override
     public Tracker create(String trackerLayer, String id, String name, MapPoint location) {
     	return create(trackerLayer, id, name, 0, 0, 0, null, null, false, location, "" , "");
+    }
+
+    @Override
+    public Tracker from(Device device) {
+        return create(Tracker.TrackerType.REAL.toString(), device.getDeviceID(), device.getDescription());
     }
 
     @Override
