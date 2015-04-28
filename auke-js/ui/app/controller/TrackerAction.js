@@ -29,7 +29,10 @@ Ext.define('Auke.controller.TrackerAction', {
 			},
 			'trackerForm form button[action=Update]' : {
 				click:  me.updateTracker
-			}
+			},
+			'manageTracker combo' : {
+	            select : me.loadTracker
+	        },
 		});
 	},
 	
@@ -42,8 +45,22 @@ Ext.define('Auke.controller.TrackerAction', {
 	            scope : this
 	        });
 	 },
+	 loadTracker : function(combo, records, eOpts ){
+		 this.getTrackerGrid().getStore().proxy.url =  Auke.utils.buildURL('drone/get-all/', true) + combo.getValue(),
+			this.getTrackerGrid().getStore().loadData([], false);
+			this.getStore('Trackers').load({
+				scope : this,
+				callback : function(records, operation, success) {
+				}
+			});
+	 },
+	 
+	 getLayerId : function(){
+		 
+	 },
 	 
 	 loadAll : function(grid) {
+		this.getTrackerGrid().getStore().proxy.url =  Auke.utils.buildURL('drone/get-all/', true) + this.getLayerId(),
 		this.getTrackerGrid().getStore().loadData([], false);
 		this.getStore('Trackers').load({
 			scope : this,

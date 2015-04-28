@@ -98,7 +98,6 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Tracker getTracker(String id) {
-    
     	Tracker tracker = TrackerData.getInstance().getTracker(id) != null ? (Tracker) TrackerData.getInstance().getTracker(id)
                 : null;
         return tracker;

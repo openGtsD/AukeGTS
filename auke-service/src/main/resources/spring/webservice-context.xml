@@ -16,7 +16,7 @@
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://localhost:3306/gts" />
         <property name="username" value="root" />
-        <property name="password" value="radarteam$#@1" />
+        <property name="password" value="root" />
     </bean>
 
     <bean id="crudDAO" class="no.auke.drone.dao.impl.CRUDDaoImpl" scope="prototype">
