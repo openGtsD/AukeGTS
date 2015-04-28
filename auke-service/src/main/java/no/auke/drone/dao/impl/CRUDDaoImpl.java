@@ -174,7 +174,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         sb.append(entity.getClass().getSimpleName());
         sb.append(" SET ");
         Properties properties = prepareUpdateParameter(entity);
-        sb.append(prepareEqualAndClause(properties));
+        sb.append(prepareEqualAndClause(properties,","));
         sb.append(" WHERE ");
         sb.append(prepareIdentificationQuery(entity));
         return sb.toString();
@@ -183,8 +183,6 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     @Override
     public T update(T entity) {
         String sql = prepareUpdateQuery(entity);
-        Object[] parameters = prepareParameter(entity);
-        logger.info("processing sql " + sql + " " + parameters);
         getJdbcTemplate().update(sql);
 
         return entity;
@@ -217,13 +215,17 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     }
 
     private String prepareEqualAndClause(Properties properties) {
+        return prepareEqualAndClause(properties, " AND ");
+    }
+
+    private String prepareEqualAndClause(Properties properties, String parameter) {
         StringBuilder sb = new StringBuilder();
         if(properties.size() > 0) {
             List<String> strings = new ArrayList<>();
             for(Object o : properties.keySet()) {
                 strings.add(o.toString() + " = '" + properties.get(o).toString() + "'");
             }
-            sb.append(StringUtils.join(strings.toArray()," AND "));
+            sb.append(StringUtils.join(strings.toArray()," " + parameter + " "));
         }
         return sb.toString();
     }

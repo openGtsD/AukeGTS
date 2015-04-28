@@ -100,7 +100,7 @@ public class TrackerController {
     @POST
     @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse register(@QueryParam("id")String id) {
+    public AukeResponse register(String id) {
         Tracker newTracker = trackerService.registerTracker(id, "");
         AukeResponse response = new AukeResponse(newTracker != null, newTracker);
         return response;
