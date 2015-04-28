@@ -185,15 +185,15 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         String sql = prepareUpdateQuery(entity);
         Object[] parameters = prepareParameter(entity);
         logger.info("processing sql " + sql + " " + parameters);
-        getJdbcTemplate().update(sql, parameters);
+        getJdbcTemplate().update(sql);
 
         return entity;
     }
 
     @Override
-    public void delete(String field, String value) {
+    public void delete(T entity) {
         Class<T> entityClass = getPersistentClass();
-        String sql = "SELECT * FROM " + entityClass.getSimpleName() + " WHERE " + field + "  = ?";
+        String sql = "DELETE FROM " + entityClass.getSimpleName() + " WHERE " + prepareIdentificationQuery(entity);
         getJdbcTemplate().update(sql);
     }
 

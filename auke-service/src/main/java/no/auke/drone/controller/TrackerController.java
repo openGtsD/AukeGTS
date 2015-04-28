@@ -130,4 +130,14 @@ public class TrackerController {
         AukeResponse response = new AukeResponse(newTracker != null, newTracker);
         return response;
     }
+
+    @GET
+    @Path("/updatetest")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse update(@QueryParam("id")String id) {
+        Tracker tracker = trackerService.getTracker(id);
+        Tracker newTracker = trackerService.update(tracker);
+        AukeResponse response = new AukeResponse(newTracker != null, newTracker);
+        return response;
+    }
 }

@@ -79,6 +79,7 @@ public class TrackerServiceImpl implements TrackerService {
     	if(tracker == null) {
     	   return null;
     	}
+        crudDeviceDao.delete(new Device().from(tracker));
         TrackerData.getInstance().remove((Observer) tracker);
         return tracker;
     
@@ -198,7 +199,7 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Tracker update(Tracker tracker) {
-        
+        crudDeviceDao.update(new Device().from(tracker));
     	return TrackerData.getInstance().update(tracker);
     
     }
