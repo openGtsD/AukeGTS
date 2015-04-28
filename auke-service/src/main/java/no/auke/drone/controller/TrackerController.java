@@ -140,4 +140,13 @@ public class TrackerController {
         AukeResponse response = new AukeResponse(newTracker != null, newTracker);
         return response;
     }
+
+    @GET
+    @Path("/deletetest")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse delete(@QueryParam("id")String id) {
+        Tracker newTracker = trackerService.removeTracker(id);
+        AukeResponse response = new AukeResponse(newTracker != null, newTracker);
+        return response;
+    }
 }
