@@ -2,16 +2,39 @@ Ext.define('Auke.view.global.Home', {
 	extend : 'Ext.panel.Panel',
 	alias : 'widget.home',
 	border: 0,
+	layer: 'SIMULATED',
+	myMap: '',
 	title : 'Zoom Factory <span id="zoomId" style="color: red"></span>  - Number tracker in current view is <span id="trackerNumber" style="color: red"></span>',
 	initComponent : function() {
 		var me = this;
 		Ext.applyIf(me, {
-			 items: {
+			 items:[ {
+                     xtype: 'combo',
+                     padding: '5 0 0 0',
+                     store: Ext.create('Ext.data.ArrayStore', {
+                         fields: [ 'layerId' ],
+                         data: [
+                             ['REAL'],
+                             ['SIMULATED']
+                         ]
+                     }),
+                     displayField: 'layerId',
+                     fieldLabel: 'Select Layer',
+                     queryMode: 'local',
+                     selectOnTab: false,
+                     name: 'layerId',
+                     value: 'SIMULATED',
+                     listeners: {
+                         select: function( combo, records, eOpts ){
+                        	 me.layer = combo.getValue();
+                        	 me.loadTracks(me.myMap);
+                         }
+                     }
+	            }, {
                  xtype: 'gmappanel',
                  zoomLevel: 3,
                  gmapType: 'map',
-                 width: '100%',
-                 height: 560,
+                 height: 580,
                  border: false,
                  x: 0,
                  y: 0,
@@ -25,23 +48,25 @@ Ext.define('Auke.view.global.Home', {
                  maplisteners: {
                 	 idle : function(){
                 		 var map = this.getMap();
+                		 me.myMap =  map;
                 		 me.clearMarkers();
                 		 me.loadTracks(map);
                 	 }
                  }
-             }
+             }]
 		});
 		me.callParent(arguments);
 	},
 	
 
 	loadTracks : function(map){
+		var me = this;
 		Ext.fly("zoomId").update(map.getZoom())
 		var mapBound = map.getBounds();
 		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 		var sw = mapBound.getSouthWest();
 		Ext.Ajax.request({
-			url : Auke.utils.buildURL('drone/load-drone-in-view/REAL/', true) + map.getZoom(),
+			url : Auke.utils.buildURL('drone/load-drone-in-view/', true) + this.layer + '/' + map.getZoom(),
 			jsonData : JSON.stringify({
 				southWestLat : sw.lat(),
 				southWestLon : sw.lng(),
@@ -52,6 +77,9 @@ Ext.define('Auke.view.global.Home', {
 			success : function(response) {
 				var res = Ext.JSON.decode(response.responseText);
 				var data = res.data;
+				if(data.length == 0) {
+					me.clearMarkers();
+				}
 				for (var i = 0; i < data.length; i++) {
 					posn = new google.maps.LatLng(data[i].currentPosition.latitude,
 							data[i].currentPosition.longitude);
@@ -60,7 +88,7 @@ Ext.define('Auke.view.global.Home', {
 					Auke.utils.markers.push(marker);
 					Auke.utils.allmarkers[data[i].id] = marker;
 				}
-				Ext.fly("trackerNumber").update(Auke.utils.markers.length);
+				Ext.fly("trackerNumber").update(data.length);
 			}
 		});
 	},

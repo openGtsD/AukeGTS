@@ -43,7 +43,6 @@ Auke.utils.loadView = function(viewName, viewParams) {
 };
 
 Auke.utils.buildHTML = function(data) {
-
 	return "<h1>Drone Info</h1> <input type='button' onclick=Auke.utils.start(" + "'"
 			+ data.id + "'"
 			+ ") value='Start Moving'  /> | <input type='button' onclick=Auke.utils.stop("
@@ -120,24 +119,22 @@ Auke.utils.centerZoom = function(marker, map) {
 }
 
 Auke.utils.stop = function(id) {
-	$.ajax({
-		url : Auke.utils.buildURL('service/drone/stop/') + id,
-		dataType : 'json',
-		contentType : "text/html; charset=utf-8",
+	Ext.Ajax.request({
+		url : Auke.utils.buildURL('drone/stop/', true) + id,
 		success : function(response) {
-			var data = response.data[0];
+			var res = Ext.JSON.decode(response.responseText);
+			var data = res[0];
 			Auke.utils.changeMarkerPosition(data);
 		}
 	})
 }
 
 Auke.utils.start = function(id) {
-	$.ajax({
-		url : Auke.utils.buildURL('service/drone/start/') + id,
-		dataType : 'json',
-		contentType : "text/html; charset=utf-8",
+	Ext.Ajax.request({
+		url : Auke.utils.buildURL('drone/start/', true) + id,
 		success : function(response) {
-			var data = response.data[0];
+			var res = Ext.JSON.decode(response.responseText);
+			var data = res[0];
 			Auke.utils.changeMarkerPosition(data);
 		}
 	})

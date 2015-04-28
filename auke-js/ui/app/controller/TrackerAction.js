@@ -106,7 +106,7 @@ Ext.define('Auke.controller.TrackerAction', {
 						me.getTrackerGrid().getStore().remove(tracker);
 					}
 				} else { // get tracker no exist
-					Ext.Msg.alert('Information', 'Tracker not exist, please try again!');
+					Ext.Msg.alert('Information', 'Tracker not exists, please try again!');
 				}
 			},
 			failure : function(response) {
