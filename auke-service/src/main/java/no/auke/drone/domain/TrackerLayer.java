@@ -119,8 +119,9 @@ public class TrackerLayer  {
         
         try {
         	
-            //if(zoomLayers.containsKey(zoom)) { for testing purpose, temporary removing this from current version
-            if(false) {
+            if(zoomLayers.containsKey(zoom)) { 
+            //for testing purpose, temporary removing this from current version
+            //if(false) {
                 // LHA: if summarized exists, got trackerSUM from there
             	return zoomLayers.get(zoom).loadWithinView(boundary, zoom);
             	

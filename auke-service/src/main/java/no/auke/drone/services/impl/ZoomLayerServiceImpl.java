@@ -32,17 +32,30 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 	@Override
 	public double zoomLongitude(Double longitude) {
     	
-		return (Math.round((longitude / (360 / (Math.pow(2,(zoomFactor-1))))) * 10 ));
+		return Math.round((longitude / (360 / (Math.pow(2,(zoomFactor-1))))) * 10000 ) / 1000;
 		
     }
 
     @Override
 	public double zoomLatitude(Double latitude) {
  
-		return (Math.round((latitude / (180 / (Math.pow(2,(zoomFactor-1))))) * 10 ));
+		return Math.round((latitude / (180 / (Math.pow(2,(zoomFactor-1))))) * 10000 ) / 1000;
 
     }
-    
+
+	@Override
+	public double Longitude(Double zoomlongitude) {
+    	
+		return Math.round(((360 / (Math.pow(2,(zoomFactor-1)))) / 10 ) * zoomlongitude * 100) / 100;
+		
+    }
+
+    @Override
+	public double Latitude(Double zoomlatitude) {
+ 
+		return Math.round(((180 / (Math.pow(2,(zoomFactor-1)))) / 10 ) * zoomlatitude * 100) / 100;
+
+    }    
 	public ZoomLayerServiceImpl(TrackerLayer trackerLayer, int zoomFactor){
 		
 		this.trackerLayer=trackerLayer;
@@ -98,7 +111,7 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 	}
 	
     private Long getIndex(double lon, double lat) {
-		return (long) ((lon * 10000000L) + (lat * 10000000L));
+		return (long) ((lon * 100000000L) + lat);
 	}
 
 	@Override
@@ -161,6 +174,37 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
         }
 
         
+
+	}
+
+	@Override
+	public List<BoundingBox> getMapAreas() {
+		
+		double lonsize = (360 / (Math.pow(2,(getZoomFactor()-1))));
+		double latsize = (180 / (Math.pow(2,(getZoomFactor()-1))));
+		
+		List<BoundingBox> boundaries = new ArrayList<BoundingBox>();
+
+		for(double lon=-180;lon<180;lon+=lonsize) {
+		
+			for(double lat=-90;lat<90;lat+=latsize) {
+				
+				BoundingBox boundary = new BoundingBox(lat,lon,lat+latsize,lon+lonsize);
+				boundaries.add(boundary);
+				
+//				System.out.println("zoom"+getZoomFactor() + 
+//						" getSouthWestLon " + boundary.getSouthWestLon() +
+//						" getSouthWestLat " + boundary.getSouthWestLat() + 
+//						" getNorthEastLon " + boundary.getNorthEastLon() + 
+//						" getNorthEastLat " + boundary.getNorthEastLat()  
+//						);
+					
+
+			}
+		
+		}	
+		
+		return boundaries;
 
 	}
     

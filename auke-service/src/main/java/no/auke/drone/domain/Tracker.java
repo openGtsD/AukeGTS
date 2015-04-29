@@ -84,7 +84,7 @@ public interface Tracker {
 
     void setPositions(List<MapPoint> positions);
 
-    boolean withinView(double upperLat, double upperLon, double lowerLat, double lowerLon);
+    boolean withinView(double southWestLat, double southWestLon, double northEastLat, double northEastLon);    
 
     boolean isMoving();
 

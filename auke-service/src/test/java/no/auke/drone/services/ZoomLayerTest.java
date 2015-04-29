@@ -1,8 +1,10 @@
 package no.auke.drone.services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -209,6 +211,112 @@ public class ZoomLayerTest {
 		
 	}
 	
+	@Test
+	public void test_calculate_loadWithinView_one_position() {
+		
+		System.out.println("---------");
+		System.out.println("test_calculate_loadWithinView: time calculate ");		
+
+		for(double lon=-180+90;lon<=180-90;lon+=180) {
+			
+			for(double lat=-90+45;lat<=90-45;lat+=90) {
+
+				SimpleTracker tracker = new SimpleTracker();
+				tracker.setId(UUID.randomUUID().toString());
+				tracker.setLayerId("DEFAULT");
+				tracker.getCurrentPosition().setLongitude(lon);
+				tracker.getCurrentPosition().setLatitude(lat);
+				TrackerData.getInstance().register(tracker);
+
+				System.out.println("tracker:" + " lat " + lat + " lon " + lon);		
+				
+			}
+			
+		}
+		
+		assertEquals(4,TrackerData.getInstance().getTrackers().size());
+		
+		for(ZoomLayerServiceImpl serv:services) {
+			serv.calculate();
+			assertEquals("zoom"+serv.getZoomFactor(),4,serv.getPositions().size());
+		}
+		
+		
+		// test positions
+		// test overall position
+		assertEquals(4,services.get(0).loadWithinView(new BoundingBox(-90, 180, 90, -180), 1).size());
+		
+		assertEquals(1,services.get(1).loadWithinView(new BoundingBox(   0,   0, 180, 90), 2).size());
+		assertEquals(1,services.get(1).loadWithinView(new BoundingBox(-180,   0,   0, 90), 2).size());
+		assertEquals(1,services.get(1).loadWithinView(new BoundingBox(   0, -90, 180,  0), 2).size());
+		assertEquals(1,services.get(1).loadWithinView(new BoundingBox(-180, -90,   0,  0), 2).size());
+		
+		for(ZoomLayerServiceImpl serv:services) {
+			
+			if(serv.getZoomFactor()<5) {
+				
+				List<BoundingBox> boundaries = serv.getMapAreas();
+				
+				System.out.println("zoom"+serv.getZoomFactor()+ " maps " + boundaries.size());
+				
+				for(BoundingBox boundary:boundaries) {
+					
+					Collection<Tracker> tracks = serv.loadWithinView(boundary, serv.getZoomFactor());
+					
+					if(tracks.size()>0) {
+						
+						for(Tracker track:tracks) {
+							
+							System.out.println("found "+serv.getZoomFactor() + 
+									" lon " + serv.Longitude(track.getCurrentPosition().getLongitude()) + 
+									" lat " + serv.Latitude(track.getCurrentPosition().getLatitude()) + 
+									" getSouthWestLon " + boundary.getSouthWestLon() +
+									" getNorthEastLon " + boundary.getNorthEastLon() + 
+									" getSouthWestLat " + boundary.getSouthWestLat() + 
+									" getNorthEastLat " + boundary.getNorthEastLat()  
+									);
+							
+						}
+						
+					} else {
+						
+						System.out.println("not found "+serv.getZoomFactor() + 
+								" getSouthWestLon " + boundary.getSouthWestLon() +
+								" getNorthEastLon " + boundary.getNorthEastLon() + 
+								" getSouthWestLat " + boundary.getSouthWestLat() + 
+								" getNorthEastLat " + boundary.getNorthEastLat()  
+								);
+						
+						
+					}
+						
+				}
+				
+			}			
+			
+		}	
+		
+	}	
+	
+	
+	@Test
+	public void test_zoomlongitude_zoomLatitude() {
+		
+		for(double lon=-180;lon<=180;lon+=10) {
+			
+			for(ZoomLayerServiceImpl serv:services) {
+				System.out.println("zoom " + serv.getZoomFactor() + " lon " + lon + " zoom lon " + serv.zoomLongitude(lon) + " lon3 " + serv.Longitude(serv.zoomLongitude(lon)));				
+			}
+			
+		}
+
+		for(double lat=-90;lat<=90;lat+=10) {
+			
+			//System.out.println("lat " + lat + " zoom lat " + services.get(0).zoomLatitude(lat));
+			
+		}		
+		
+	}
 	
 //	@Test
 //	public void test_calculate_100000() {
