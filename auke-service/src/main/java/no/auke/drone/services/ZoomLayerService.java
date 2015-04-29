@@ -12,14 +12,20 @@ public interface ZoomLayerService {
 	
 	double zoomLongitude(Double longitude);
 	double zoomLatitude(Double latitude);
-	double Longitude(Double zoomlongitude);
-	double Latitude(Double zoomlatitude);	
-
+	double longitude(Double zoomlongitude);
+	double latitude(Double zoomlatitude);	
+	double latitudeWith();
+	double longitudeWith();
+	
 	int getZoomFactor();
 	void clear();
 	
 	Collection<Tracker> loadWithinView(BoundingBox boundary, int zoom);
 	Collection<Tracker> getPositions();
 	List<BoundingBox> getMapAreas();
+
+
+
+
 
 }

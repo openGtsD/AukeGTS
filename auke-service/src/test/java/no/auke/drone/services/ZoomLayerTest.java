@@ -211,90 +211,57 @@ public class ZoomLayerTest {
 		
 	}
 	
+
+	
 	@Test
 	public void test_calculate_loadWithinView_one_position() {
 		
 		System.out.println("---------");
-		System.out.println("test_calculate_loadWithinView: time calculate ");		
+		System.out.println("test_calculate_loadWithinView_one_position");		
 
-		for(double lon=-180+90;lon<=180-90;lon+=180) {
-			
-			for(double lat=-90+45;lat<=90-45;lat+=90) {
-
-				SimpleTracker tracker = new SimpleTracker();
-				tracker.setId(UUID.randomUUID().toString());
-				tracker.setLayerId("DEFAULT");
-				tracker.getCurrentPosition().setLongitude(lon);
-				tracker.getCurrentPosition().setLatitude(lat);
-				TrackerData.getInstance().register(tracker);
-
-				System.out.println("tracker:" + " lat " + lat + " lon " + lon);		
+		double lon = 89;
+		double lat = 50;
 				
-			}
-			
-		}
 		
-		assertEquals(4,TrackerData.getInstance().getTrackers().size());
+		SimpleTracker tracker = new SimpleTracker();
+		tracker.setId(UUID.randomUUID().toString());
+		tracker.setLayerId("DEFAULT");
+		tracker.getCurrentPosition().setLongitude(lon);
+		tracker.getCurrentPosition().setLatitude(lat);
+		TrackerData.getInstance().register(tracker);
+
+		System.out.println("base tracker:" + " lat " + lat + " lon " + lon);			
+		
+		assertEquals(1,TrackerData.getInstance().getTrackers().size());
 		
 		for(ZoomLayerServiceImpl serv:services) {
 			serv.calculate();
-			assertEquals("zoom"+serv.getZoomFactor(),4,serv.getPositions().size());
+			assertEquals("zoom"+serv.getZoomFactor(),1,serv.getPositions().size());
+			
+			for(Tracker tracker1:serv.getPositions()) {
+				
+				System.out.println("zoom tracker:" + serv.getZoomFactor() + " lat " + tracker1.getCurrentPosition().getLatitude() 
+						+ " lon " + tracker1.getCurrentPosition().getLongitude());			
+				
+			}
 		}
+
+		assertEquals(1,services.get(1).loadWithinView(new BoundingBox(0, 0, 90, 180), 2).size());
+		assertEquals(1,services.get(2).loadWithinView(new BoundingBox(40, 80, 90, 180), 3).size());
+		assertEquals(1,services.get(3).loadWithinView(new BoundingBox(40, 80, 90, 180), 4).size());
+		assertEquals(1,services.get(4).loadWithinView(new BoundingBox(40, 80, 50, 90), 5).size());
+		assertEquals(1,services.get(5).loadWithinView(new BoundingBox(40, 80, 50, 90), 6).size());
+		assertEquals(1,services.get(6).loadWithinView(new BoundingBox(40, 80, 50, 90), 7).size());
+		assertEquals(1,services.get(7).loadWithinView(new BoundingBox(40, 80, 50, 90), 8).size());
+		assertEquals(1,services.get(8).loadWithinView(new BoundingBox(40, 80, 50, 90), 9).size());
+		assertEquals(1,services.get(9).loadWithinView(new BoundingBox(40, 80, 50, 90), 10).size());
+		assertEquals(1,services.get(10).loadWithinView(new BoundingBox(40, 80, 50, 90),11).size());
+		assertEquals(1,services.get(11).loadWithinView(new BoundingBox(40, 80, 50, 90),12).size());
+		assertEquals(1,services.get(12).loadWithinView(new BoundingBox(40, 80, 50, 90),13).size());
+		assertEquals(1,services.get(13).loadWithinView(new BoundingBox(40, 80, 50, 90),14).size());
+		assertEquals(1,services.get(14).loadWithinView(new BoundingBox(40, 80, 50, 90),15).size());
 		
-		
-		// test positions
-		// test overall position
-		assertEquals(4,services.get(0).loadWithinView(new BoundingBox(-90, 180, 90, -180), 1).size());
-		
-		assertEquals(1,services.get(1).loadWithinView(new BoundingBox(   0,   0, 180, 90), 2).size());
-		assertEquals(1,services.get(1).loadWithinView(new BoundingBox(-180,   0,   0, 90), 2).size());
-		assertEquals(1,services.get(1).loadWithinView(new BoundingBox(   0, -90, 180,  0), 2).size());
-		assertEquals(1,services.get(1).loadWithinView(new BoundingBox(-180, -90,   0,  0), 2).size());
-		
-		for(ZoomLayerServiceImpl serv:services) {
-			
-			if(serv.getZoomFactor()<5) {
-				
-				List<BoundingBox> boundaries = serv.getMapAreas();
-				
-				System.out.println("zoom"+serv.getZoomFactor()+ " maps " + boundaries.size());
-				
-				for(BoundingBox boundary:boundaries) {
-					
-					Collection<Tracker> tracks = serv.loadWithinView(boundary, serv.getZoomFactor());
-					
-					if(tracks.size()>0) {
-						
-						for(Tracker track:tracks) {
-							
-							System.out.println("found "+serv.getZoomFactor() + 
-									" lon " + serv.Longitude(track.getCurrentPosition().getLongitude()) + 
-									" lat " + serv.Latitude(track.getCurrentPosition().getLatitude()) + 
-									" getSouthWestLon " + boundary.getSouthWestLon() +
-									" getNorthEastLon " + boundary.getNorthEastLon() + 
-									" getSouthWestLat " + boundary.getSouthWestLat() + 
-									" getNorthEastLat " + boundary.getNorthEastLat()  
-									);
-							
-						}
-						
-					} else {
-						
-						System.out.println("not found "+serv.getZoomFactor() + 
-								" getSouthWestLon " + boundary.getSouthWestLon() +
-								" getNorthEastLon " + boundary.getNorthEastLon() + 
-								" getSouthWestLat " + boundary.getSouthWestLat() + 
-								" getNorthEastLat " + boundary.getNorthEastLat()  
-								);
-						
-						
-					}
-						
-				}
-				
-			}			
-			
-		}	
+	
 		
 	}	
 	
@@ -302,19 +269,19 @@ public class ZoomLayerTest {
 	@Test
 	public void test_zoomlongitude_zoomLatitude() {
 		
-		for(double lon=-180;lon<=180;lon+=10) {
-			
-			for(ZoomLayerServiceImpl serv:services) {
-				System.out.println("zoom " + serv.getZoomFactor() + " lon " + lon + " zoom lon " + serv.zoomLongitude(lon) + " lon3 " + serv.Longitude(serv.zoomLongitude(lon)));				
-			}
-			
-		}
-
-		for(double lat=-90;lat<=90;lat+=10) {
-			
-			//System.out.println("lat " + lat + " zoom lat " + services.get(0).zoomLatitude(lat));
-			
-		}		
+//		for(double lon=-180;lon<=180;lon+=10) {
+//			
+//			for(ZoomLayerServiceImpl serv:services) {
+//				System.out.println("zoom " + serv.getZoomFactor() + " lon " + lon + " zoom lon " + serv.zoomLongitude(lon) + " lon3 " + serv.Longitude(serv.zoomLongitude(lon)));				
+//			}
+//			
+//		}
+//
+//		for(double lat=-90;lat<=90;lat+=10) {
+//			
+//			//System.out.println("lat " + lat + " zoom lat " + services.get(0).zoomLatitude(lat));
+//			
+//		}		
 		
 	}
 	

@@ -30,30 +30,42 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 	// Zoom Latitude = ROUND( LATITUDE / ( 180 / ( 2 ^^(ZOOMLEVEL-1) ) ) , 1) * 10	
 
 	@Override
+	public double longitudeWith() {
+		
+		return 360 / Math.pow(2,zoomFactor - 1);
+	}
+	
+	@Override
+	public double latitudeWith() {
+		
+		return 180 / Math.pow(2,zoomFactor - 1);
+	}	
+	
+	@Override
 	public double zoomLongitude(Double longitude) {
     	
-		return Math.round((longitude / (360 / (Math.pow(2,(zoomFactor-1))))) * 10000 ) / 1000;
+		return Math.round((longitude / longitudeWith()) * 10000 ) / 1000;
 		
     }
 
     @Override
 	public double zoomLatitude(Double latitude) {
  
-		return Math.round((latitude / (180 / (Math.pow(2,(zoomFactor-1))))) * 10000 ) / 1000;
+		return Math.round((latitude / latitudeWith()) * 10000 ) / 1000;
 
     }
 
 	@Override
-	public double Longitude(Double zoomlongitude) {
+	public double longitude(Double zoomlongitude) {
     	
-		return Math.round(((360 / (Math.pow(2,(zoomFactor-1)))) / 10 ) * zoomlongitude * 100) / 100;
+		return Math.round((longitudeWith() / 10 ) * zoomlongitude * 100) / 100;
 		
     }
 
     @Override
-	public double Latitude(Double zoomlatitude) {
+	public double latitude(Double zoomlatitude) {
  
-		return Math.round(((180 / (Math.pow(2,(zoomFactor-1)))) / 10 ) * zoomlatitude * 100) / 100;
+		return Math.round((latitudeWith() / 10 ) * zoomlatitude * 100) / 100;
 
     }    
 	public ZoomLayerServiceImpl(TrackerLayer trackerLayer, int zoomFactor){
@@ -80,10 +92,13 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
         		
         		point=new TrackerSum();
         		point.setId(String.valueOf(index));
-        		point.setName("Tracker withing long=" + String.valueOf(lon) +  " lat=" +String.valueOf(lat));
+        		point.setName("Tracker within long=" + String.valueOf(lon) +  " lat=" +String.valueOf(lat));
         		
-        		point.getCurrentPosition().setLatitude(lat);
-        		point.getCurrentPosition().setLongitude(lon);
+        		point.getCurrentPosition().setLatitude(latitude(lat));
+        		point.getCurrentPosition().setLongitude(longitude(lon));
+
+        		//point.getCurrentPosition().setLatitude(lat);
+        		//point.getCurrentPosition().setLongitude(lon);
         		
         		new_positions.put(index, point);
         		
@@ -136,10 +151,10 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
                     if (
                     		positionUnit.withinView
                     			(
-                    				zoomLatitude(boundary.getSouthWestLat()), 
-                    				zoomLongitude(boundary.getSouthWestLon()),
-                    				zoomLatitude(boundary.getNorthEastLat()), 
-                    				zoomLongitude(boundary.getNorthEastLon())
+                    				boundary.getSouthWestLat(), 
+                    				boundary.getSouthWestLon(),
+                    				boundary.getNorthEastLat(), 
+                    				boundary.getNorthEastLon()
                     			)
                     	
                     	) {
