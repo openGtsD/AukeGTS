@@ -60,7 +60,7 @@ public class TrackerLayer  {
         trackers = new ConcurrentHashMap<String,Tracker>();
         zoomLayers = new ConcurrentHashMap<Integer,ZoomLayerService>();
 
-        for(int zoom = 1;zoom<15;zoom++) {
+        for(int zoom = 1;zoom<11;zoom++) {
         	zoomLayers.put(zoom, new ZoomLayerServiceImpl(this,zoom));
         }
         positionCalculator = new PositionCalculatorImpl(TrackerServiceImpl.getExecutor(), this, isRunningAutomatically);

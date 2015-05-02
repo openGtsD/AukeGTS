@@ -65,6 +65,13 @@ public class TrackerData implements Subject {
         return getTrackers(null);
     }
 
+    public Collection<Tracker> getActiveTrackers() {
+    	
+    	// LHA: we need distinct between active and passive trackers
+    	
+    	return getTrackers(null);
+    }
+    
     public Collection<Tracker> getTrackers(String layerId) {
     	List<Tracker> result = new ArrayList<>();
 

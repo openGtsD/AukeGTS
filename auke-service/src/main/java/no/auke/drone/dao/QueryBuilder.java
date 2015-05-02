@@ -10,7 +10,8 @@ import java.util.Properties;
  * Created by huyduong on 4/24/2015.
  */
 public class QueryBuilder {
-    public final String EQUAL = "=";
+    
+	public final String EQUAL = "=";
     public final String MORE_THAN = ">";
     public final String MORE_THAN_EQUAL = ">=";
     public final String LESS_THAN = "<";

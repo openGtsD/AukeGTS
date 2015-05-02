@@ -99,9 +99,9 @@ public abstract class TrackerBase extends TrackerPositionBase {
     //
     
     @Override
-    public void setMoving(boolean isFlying) {
+    public void setMoving(boolean isMoving) {
 
-        if (!isFlying && this.ismoving.getAndSet(false)) {
+        if (!isMoving && this.ismoving.getAndSet(false)) {
 
             try {
 
@@ -199,4 +199,6 @@ public abstract class TrackerBase extends TrackerPositionBase {
     public void setTrackerUpdater(TrackerUpdater trackerUpdater) {
         this.trackerUpdater = trackerUpdater;
     }
+    
+
 }

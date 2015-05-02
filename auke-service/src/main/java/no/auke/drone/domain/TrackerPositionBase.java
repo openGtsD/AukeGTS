@@ -1,16 +1,8 @@
 package no.auke.drone.domain;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
+
 import java.util.concurrent.locks.ReentrantLock;
-
-import no.auke.drone.utils.LocationFunction;
-
-import org.apache.commons.collections.buffer.CircularFifoBuffer;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -164,6 +156,15 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
             block.unlock();
         }
 
+    }    
+    
+    @Override
+    public boolean checkIfPassive() {
+    
+    	// LHA: check if tracker dont have position measure for a
+    	// period if time = is passive
+    	
+    	return false;
     }    
 
 

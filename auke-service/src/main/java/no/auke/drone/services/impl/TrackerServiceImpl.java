@@ -141,9 +141,12 @@ public class TrackerServiceImpl implements TrackerService {
             points.add(new MapPoint(56.130366, -106.346771,0,0,0));// Canada
 
             for (int i = 0; i < points.size(); i++) {
-                MapPoint point = points.get(i);
-                for (int j = 1; j <= 10; j++) {
-                    MapPoint rd = PointUtil.generateRandomMapPoint(point);
+                
+            	MapPoint point = points.get(i);
+                
+            	for (int j = 1; j <= 10; j++) {
+                
+            		MapPoint rd = PointUtil.generateRandomMapPoint(point);
                     Tracker tracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + i + "-"
                             + j, 2 * j, 2 * j, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, rd, "0123222" + i, "123123123" + j);
                     result.add(tracker);

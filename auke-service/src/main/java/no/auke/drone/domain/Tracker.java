@@ -117,5 +117,7 @@ public interface Tracker {
 	void setLatestPositions(CircularFifoBuffer latestPositions);
 
     void setTrackerUpdater(TrackerUpdater trackerUpdater);
+
+	boolean checkIfPassive();
     
 }

@@ -1,5 +1,6 @@
 package no.auke.drone.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
@@ -81,11 +82,19 @@ public class TrackerController {
         return response;
     }
 
+    
+    //
+    // LHA: What is this for ?
+    // Event service only hold current event for all trackers active
+    // To get history, it should be stored on the tracker
+    
     @GET
     @Path("/get-event")
     public AukeResponse getEvent(@QueryParam("accountID")String accountID, @QueryParam("deviceID")String deviceID) {
-        Properties properties = new Properties();
-        if(StringUtils.isNotEmpty(accountID)) {
+       
+    	Properties properties = new Properties();
+        
+    	if(StringUtils.isNotEmpty(accountID)) {
             properties.put("accountID", accountID);
         }
 
@@ -93,7 +102,7 @@ public class TrackerController {
             properties.put("deviceID", deviceID);
         }
 
-        List<EventData> events = eventService.getEventDatas();
+        List<EventData> events = new ArrayList<EventData>(eventService.getEventDatas().values());
         return new AukeResponse(events != null, events);
     }
     
