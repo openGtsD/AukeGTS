@@ -163,9 +163,12 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
     
     	// LHA: check if tracker dont have position measure for a
     	// period if time = is passive
-    	
+        long timeout = 5 * 60 * 1000; // HUY: if it exceeds 5 minutes
+        long deltaTime = System.currentTimeMillis() - currentPosition.getTime();
+        if(deltaTime > timeout) {
+            return true;
+        }
     	return false;
     }    
-
 
 }

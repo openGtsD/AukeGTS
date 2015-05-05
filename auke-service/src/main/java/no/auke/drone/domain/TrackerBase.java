@@ -41,11 +41,13 @@ public abstract class TrackerBase extends TrackerPositionBase {
     private Date modifiedDate;
 
     public TrackerBase() {
-    	super();
+        super();
+        latestPositions = new CircularFifoBuffer(5); // HUY: temporary set the latest positions at 5, will update it with parameter
     }
 
     public TrackerBase(String id) {
         super(id);
+        latestPositions = new CircularFifoBuffer(5); // HUY: temporary set the latest positions at 5, will update with parameters
     }
 
     final public String getName() {
