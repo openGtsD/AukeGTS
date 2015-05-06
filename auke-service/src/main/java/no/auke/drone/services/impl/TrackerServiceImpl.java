@@ -136,9 +136,6 @@ public class TrackerServiceImpl implements TrackerService {
         
             points.add(new MapPoint(10.823099, 106.629664,0,0,0));// HCM
             points.add(new MapPoint(59.913869, 10.752245,0,0,0));// OSLO
-            points.add(new MapPoint(59.7383239, 10.1893038,0,0,0));// Drammen Stig
-            points.add(new MapPoint(59.7222469, 10.2131203,0,0,0));// Drammen LHF
-
             points.add(new MapPoint(51.507351, -0.127758,0,0,0));// London
             points.add(new MapPoint(56.130366, -106.346771,0,0,0));// Canada
 
@@ -154,6 +151,18 @@ public class TrackerServiceImpl implements TrackerService {
                     result.add(tracker);
                 }
             }
+
+            //create 2 trackers for Stig and LHF
+            MapPoint stig = new MapPoint(59.744076, 10.204455,0,0,0); // Stig
+            Tracker stigTracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "Stig" + "-"
+                    + "Stig", 2, 2, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, stig, "0123222" + 1, "123123123" + 1);
+            result.add(stigTracker);
+
+            MapPoint lhf = new MapPoint(59.722268, 10.213038,0,0,0);
+            Tracker lhfTracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "LHF" + "-"
+                    + "LHF", 2, 2, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, lhf, "0123222" + 1, "123123123" + 1);
+            result.add(lhfTracker);
+
             return result;
         }
 
