@@ -95,7 +95,7 @@ public class SimpleTracker extends TrackerBase {
         	logger.info(this.toString() + "started moving");
             Random ran = new Random();
             if(speed == null) {
-                speed = 100 * (ran.nextInt(1) + 10);
+                speed = 25 * (ran.nextInt(1) + 10);
             }
 
             if(course == null) {

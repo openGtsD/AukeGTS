@@ -136,7 +136,9 @@ public class TrackerServiceImpl implements TrackerService {
         
             points.add(new MapPoint(10.823099, 106.629664,0,0,0));// HCM
             points.add(new MapPoint(59.913869, 10.752245,0,0,0));// OSLO
-            points.add(new MapPoint(55.378051, -3.435973,0,0,0));// UK
+            points.add(new MapPoint(59.7383239, 10.1893038,0,0,0));// Drammen Stig
+            points.add(new MapPoint(59.7222469, 10.2131203,0,0,0));// Drammen LHF
+
             points.add(new MapPoint(51.507351, -0.127758,0,0,0));// London
             points.add(new MapPoint(56.130366, -106.346771,0,0,0));// Canada
 
