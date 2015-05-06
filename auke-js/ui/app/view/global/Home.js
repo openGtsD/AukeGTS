@@ -32,7 +32,7 @@ Ext.define('Auke.view.global.Home', {
                      }
 	            }, {
                  xtype: 'gmappanel',
-                 zoomLevel: 3,
+                 zoomLevel: 1,
                  gmapType: 'map',
                  height: 580,
                  border: false,
