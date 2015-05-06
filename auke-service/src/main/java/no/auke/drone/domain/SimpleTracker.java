@@ -134,11 +134,11 @@ public class SimpleTracker extends TrackerBase {
 		return 1;
 	}
 
-	@Override
-	public void setNumtrackers(int numtrackers) {
-	}
+
 
 	@Override
 	public void incrementTrackers() {
 	}
+
+
 }

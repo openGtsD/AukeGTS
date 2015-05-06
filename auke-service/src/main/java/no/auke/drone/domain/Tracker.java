@@ -119,5 +119,8 @@ public interface Tracker {
     void setTrackerUpdater(TrackerUpdater trackerUpdater);
 
 	boolean checkIfPassive();
-    
+
+    void addInnerTrackers(Tracker tracker);
+
+    List<String> getInnerTrackers();
 }

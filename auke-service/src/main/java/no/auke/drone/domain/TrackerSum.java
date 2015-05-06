@@ -2,6 +2,7 @@ package no.auke.drone.domain;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import no.auke.drone.application.TrackerUpdater;
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
@@ -9,7 +10,9 @@ import org.apache.commons.collections.buffer.CircularFifoBuffer;
 public class TrackerSum extends TrackerPositionBase {
 
     private String name="";	
-	
+
+    private Set<String> innerTrackers;
+
 	public TrackerSum() {}
 
     // number of trackers on this positions
@@ -125,4 +128,6 @@ public class TrackerSum extends TrackerPositionBase {
     public void setTrackerUpdater(TrackerUpdater trackerUpdater) {
 
     }
+
+
 }

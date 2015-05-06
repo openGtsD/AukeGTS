@@ -108,7 +108,7 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
         		
         	}
         	point.incrementTrackers();
-
+            point.addInnerTrackers(tracker);
         }
         
         try {

@@ -1,5 +1,7 @@
 package no.auke.drone.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -12,6 +14,8 @@ import org.slf4j.LoggerFactory;
 public abstract class TrackerPositionBase implements Tracker, Observer {
 
     private static final Logger logger = LoggerFactory.getLogger(TrackerPositionBase.class);
+
+    private List<String> innerTrackers;
 
     protected AtomicBoolean ismoving = new AtomicBoolean(true); // default value
     
@@ -156,7 +160,11 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
             block.unlock();
         }
 
-    }    
+    }
+
+    @Override
+    public void setNumtrackers(int numtrackers) {
+    }
     
     @Override
     public boolean checkIfPassive() {
@@ -169,6 +177,20 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
             return true;
         }
     	return false;
-    }    
+    }
 
+
+    @Override
+    public void addInnerTrackers(Tracker tracker) {
+        if(innerTrackers == null) {
+            innerTrackers = new ArrayList<>();
+        }
+        innerTrackers.add(tracker.getId());
+    }
+
+    @Override
+
+    public List<String> getInnerTrackers() {
+        return this.innerTrackers;
+    }
 }
