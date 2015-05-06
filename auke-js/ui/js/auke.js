@@ -1,7 +1,7 @@
 Ext.ns('Auke.utils');
 // Change url when go live
-Auke.utils.baseURL = "http://89.221.242.66:8080/";
-Auke.utils.serviceURL = "http://89.221.242.66:8888/";
+Auke.utils.baseURL = "http://localhost:8080/";
+Auke.utils.serviceURL = "http://localhost:8888/";
 
 Auke.utils.buildURL = function (url, isUseService) {
     var domain = isUseService ? Auke.utils.serviceURL : Auke.utils.baseURL;
@@ -43,12 +43,11 @@ Auke.utils.loadView = function(viewName, viewParams) {
 };
 
 Auke.utils.buildHTML = function(data) {
-	return "<h1>Drone Info</h1><ul>"
-			+ "<li>Drone ID:" + data.id + "</li><li>GPS: "
-			+ data.currentPosition.latitude + "/"
-			+ data.currentPosition.longitude + "</li><li>Speed:" + data.speed
-			+ "</li><li>Altitude: " + data.altitude + "</li><li>Flying: "
-			+ data.flying + "</li></ul>"
+	return "<h1>Position Info</h1><ul>" + "<li>Drone ID:" + data.id
+			+ "</li><li>GPS: " + data.currentPosition.latitude + "/"
+			+ data.currentPosition.longitude + "</li><li>numtrackers:"
+			+ data.numtrackers
+	"</li></ul>"
 
 }
 
