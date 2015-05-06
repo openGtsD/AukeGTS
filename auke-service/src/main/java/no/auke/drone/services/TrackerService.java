@@ -1,6 +1,7 @@
 package no.auke.drone.services;
 
 import java.util.Collection;
+import java.util.List;
 
 import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.Tracker;
@@ -15,6 +16,7 @@ public interface TrackerService {
     Tracker getTracker(String id);
     Collection<Tracker> getAll(String layerId);
     Collection<Tracker> getAll();
+    Collection<Tracker> getTrackersByIds(List<String> ids);
     Tracker move(String id, Integer speed, Integer course);
     Tracker stop(String id);
     Tracker start(String id);

@@ -26,7 +26,6 @@ import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
 
 import org.apache.commons.lang.StringUtils;
-import org.eclipse.jetty.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -129,6 +128,14 @@ public class TrackerController {
     public AukeResponse getTracker(@PathParam("id") String id) {
         Tracker tracker = trackerService.getTracker(id);
         return new AukeResponse(tracker != null, tracker);
+    }
+
+    @GET
+    @Path("/get-trackers/{ids}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse getTrackersByIds(@PathParam("ids") List<String> ids) {
+        Collection<Tracker> trackers = trackerService.getTrackersByIds(ids);
+        return new AukeResponse(trackers != null, trackers);
     }
     
     @POST

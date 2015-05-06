@@ -115,6 +115,22 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
+    public Collection<Tracker> getTrackersByIds(List<String> ids) {
+        List<Tracker> trackers = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(ids)) {
+            for(Tracker tracker : getAll()) {
+                for(String id : ids) {
+                    if(tracker.getId().equalsIgnoreCase(id)) {
+                        trackers.add(tracker);
+                    }
+                }
+            }
+        }
+
+        return trackers;
+    }
+
+    @Override
     public Tracker move(String id, Integer speed, Integer course) {
     
     	Tracker tracker = TrackerData.getInstance().getTracker(id) != null ? (Tracker) TrackerData.getInstance().getTracker(id): null;
