@@ -97,17 +97,10 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
         		point.getCurrentPosition().setLatitude(tracker.getCurrentPosition().getLatitude());
         		point.getCurrentPosition().setLongitude(tracker.getCurrentPosition().getLongitude());
 
-        		//point.getCurrentPosition().setLatitude(lat);
-        		//point.getCurrentPosition().setLongitude(lon);
-        		
         		new_positions.put(index, point);
         		
         	} else {
 
-        		// make average
-        		
-
-        		
         		point = new_positions.get(index);
         		
         		
@@ -143,14 +136,11 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
         	// to retrieve tracker information in each point when user click the point on map
         	
         	// Add this information when calculate, but remove from json sent to UI
-        	// (add to tracker SUM class, instead if tracker class)
+        	// (add to trackerSUM class, instead if tracker class)
         	
             point.addInnerTrackers(tracker);
             
         }
-        
-        // LHA: make the calculate average positions
-        
         
         try {
 
