@@ -191,6 +191,9 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
     @Override
 
     public List<String> getInnerTrackers() {
+        if(this.innerTrackers == null) {
+            this.innerTrackers = new ArrayList<>();
+        }
         return this.innerTrackers;
     }
 }

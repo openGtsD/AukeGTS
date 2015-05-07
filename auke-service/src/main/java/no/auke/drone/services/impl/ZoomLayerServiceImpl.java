@@ -8,11 +8,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
-import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.TrackerLayer;
-import no.auke.drone.domain.TrackerSum;
+import no.auke.drone.domain.*;
 import no.auke.drone.services.ZoomLayerService;
+import org.apache.commons.lang.SerializationUtils;
 
 public class ZoomLayerServiceImpl implements ZoomLayerService {
 
@@ -92,8 +90,7 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
         		
         		point=new TrackerSum();
         		point.setId(String.valueOf(index));
-        		point.setName("Tracker within long=" + String.valueOf(lon) +  " lat=" +String.valueOf(lat));
-        		
+        		point.setName("Tracker within long=" + String.valueOf(lon) + " lat=" + String.valueOf(lat));
         		point.getCurrentPosition().setLatitude(latitude(lat));
         		point.getCurrentPosition().setLongitude(longitude(lon));
 
@@ -115,9 +112,19 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 
             block.lock();
 
+            for(Tracker tracker : new_positions.values()) {
+                Tracker persistingTracker = new TrackerSum();
+                persistingTracker.setId(tracker.getId());
+                persistingTracker.setName(tracker.getName());
+                persistingTracker.setLayerId(Tracker.TrackerType.SUMMARIZED.toString());
+                persistingTracker.getInnerTrackers().addAll(tracker.getInnerTrackers());
+                tracker.getInnerTrackers().clear();
+                persistingTracker.setCurrentPosition(tracker.getCurrentPosition());
+                TrackerData.getInstance().register((Observer)persistingTracker);
+            }
+
             positions.clear();
-        	positions.addAll(new_positions.values());
-            
+            positions.addAll(new_positions.values());
         } finally {
 
             block.unlock();
