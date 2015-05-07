@@ -13,10 +13,10 @@
                         http://www.springframework.org/schema/task
                         http://www.springframework.org/schema/task/spring-task-3.0.xsd">
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/gts" />
-        <property name="username" value="root" />
-        <property name="password" value="root" />
+         <property name="driverClassName" value="${jdbc.drone.driver}" />
+        <property name="url" value="${jdbc.drone.url}" />
+        <property name="username" value="${jdbc.drone.username}" />
+        <property name="password" value="${jdbc.drone.password}" />
     </bean>
 
     <bean id="crudDAO" class="no.auke.drone.dao.impl.CRUDDaoImpl" scope="prototype">

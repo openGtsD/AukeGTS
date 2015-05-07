@@ -20,7 +20,8 @@ rss-generation:
 server: 
     domain: http://localhost:8080/drone
     url: http://localhost:8888/rss/
-    
+    #domain: http://89.221.242.66:8080/drone
+    #url: http://89.221.242.66:8888/rss/
 
 track:
     maxActive: 10
