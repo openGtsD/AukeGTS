@@ -26,5 +26,7 @@ public interface TrackerService {
     void stopService();
 	void calculateAll();
     
+	// THAI - Need make RSS feed
+	Collection<Tracker> getActiveTrackers();
     
 }

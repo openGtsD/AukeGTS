@@ -157,5 +157,10 @@ public class YmlPropertiesPersister implements PropertiesPersister {
         Object obj = getProperty().get(key);
         return obj != null ? obj.toString().trim() : getPropertyDefaultValue(key);
     }
+    
+    public int getNumberByKey(String key) {
+        Object obj = getProperty().get(key);
+        return obj != null ?  Integer.parseInt(obj.toString().trim()) : 10;
+    }
 
 }

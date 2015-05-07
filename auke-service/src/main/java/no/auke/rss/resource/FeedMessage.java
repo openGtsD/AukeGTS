@@ -4,11 +4,10 @@ import java.io.Serializable;
 
 public class FeedMessage implements Serializable {
     private static final long serialVersionUID = -8515136120660923154L;
-    String title = "fff";
+    String title;
     String description;
     String link;
     String author;
-    String guid;
     
     public FeedMessage() {
     }
@@ -45,17 +44,10 @@ public class FeedMessage implements Serializable {
         this.author = author;
     }
 
-    public String getGuid() {
-        return guid;
-    }
-
-    public void setGuid(String guid) {
-        this.guid = guid;
-    }
 
     @Override
     public String toString() {
         return "FeedMessage [title=" + title + ", description=" + description + ", link=" + link + ", author=" + author
-                + ", guid=" + guid + "]";
+                + "]";
     }
 }

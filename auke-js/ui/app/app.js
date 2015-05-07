@@ -10,7 +10,7 @@ Ext.application({
 			'Auke.view.grid.TrackerGrid', 'Auke.view.global.TrackerForm',
 			'Auke.view.global.Register', 'Auke.view.global.Update',
 			'Auke.view.global.Delete', 'Auke.view.global.Login',
-			'Auke.view.admin.ManageTracker' ],
+			'Auke.view.admin.ManageTracker', 'Auke.view.global.RssFeed', 'Auke.view.grid.FeedGrid' ],
 	controllers : [ 'Navigation', 'TrackerAction' ],
 	appFolder : Auke.utils.buildURL('auke-js/ui/app'),
 	autoCreateViewport : true,

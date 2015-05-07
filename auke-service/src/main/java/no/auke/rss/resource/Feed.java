@@ -12,6 +12,8 @@ public class Feed {
     final String pubDate;
 
     final List<FeedMessage> entries = new ArrayList<FeedMessage>();
+    
+    String url;
 
     public Feed(String title, String link, String description, String language, String copyright, String pubDate) {
         this.title = title;
@@ -48,6 +50,14 @@ public class Feed {
 
     public String getPubDate() {
         return pubDate;
+    }
+    
+    public String getUrl(){
+        return this.url;
+    }
+    
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override

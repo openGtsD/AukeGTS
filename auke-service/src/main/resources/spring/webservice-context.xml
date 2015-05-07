@@ -16,7 +16,7 @@
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://localhost:3306/gts" />
         <property name="username" value="root" />
-        <property name="password" value="radarteam$#@1" />
+        <property name="password" value="root" />
     </bean>
 
     <bean id="crudDAO" class="no.auke.drone.dao.impl.CRUDDaoImpl" scope="prototype">
@@ -32,7 +32,13 @@
     <context:component-scan base-package="no.auke.drone.ws" />
     <context:component-scan base-package="no.auke.drone.services.impl" />
     <context:component-scan base-package="no.auke.drone.application.impl" />
+    <context:component-scan base-package="no.auke.rss.resource" />
 
-
+     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations" value="classpath:app-config.yaml" />
+        <property name="propertiesPersister" ref="ymlPropertiesPersister" />
+    </bean>
+    
+    <bean id="ymlPropertiesPersister" class="no.auke.drone.utils.YmlPropertiesPersister" />
 
 </beans>

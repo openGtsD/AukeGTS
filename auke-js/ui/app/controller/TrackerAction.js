@@ -1,8 +1,8 @@
 Ext.define('Auke.controller.TrackerAction', {
 	extend : 'Ext.app.Controller',
 
-	stores : [ 'Trackers' ],
-	models : [ 'Tracker' ],
+	stores : [ 'Trackers', 'Feeds'],
+	models : [ 'Tracker', 'Feed'],
 
 	refs : [ {
 		ref : 'trackerGrid',
@@ -10,7 +10,10 @@ Ext.define('Auke.controller.TrackerAction', {
 	}, {
 		ref : 'trackerForm',
 		selector : 'trackerForm form'
-	}],
+	},  {
+		ref : 'feedGrid',
+		selector : 'feedGrid'
+	},],
 	init : function() {
 		var me = this;
 		me.control({
@@ -33,6 +36,10 @@ Ext.define('Auke.controller.TrackerAction', {
 			'manageTracker combo' : {
 	            select : me.loadTracker
 	        },
+	        'feedGrid' : {
+				afterrender : me.loadAllFeed,
+				cellclick : me.openNewWindow
+			}
 		});
 	},
 	
@@ -67,6 +74,24 @@ Ext.define('Auke.controller.TrackerAction', {
 			callback : function(records, operation, success) {
 			}
 		});
+	},
+	
+	loadAllFeed : function(grid) {
+		this.getFeedGrid().getStore().loadData([], false);
+		this.getStore('Feeds').load({
+			scope : this,
+			callback : function(records, operation, success) {
+			}
+		});
+	},
+	
+	openNewWindow : function(iView, iCellEl, iColIdx, iRecord, iRowEl, iRowIdx,
+			iEvent) {
+		 var fieldName = iView.getGridColumns()[iColIdx].dataIndex;
+	        var linkClicked = (iEvent.target.tagName.toUpperCase() == 'SPAN');
+	        if (linkClicked) {
+	        	window.open(iRecord.get('url'));
+	        }
 	},
 
 	editOrDelete : function(iView, iCellEl, iColIdx, iRecord, iRowEl, iRowIdx,

@@ -14,6 +14,7 @@ import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.*;
 import no.auke.drone.services.TrackerService;
 import no.auke.drone.utils.PointUtil;
+import no.auke.drone.utils.YmlPropertiesPersister;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -33,6 +34,9 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Autowired
     private SimpleTrackerFactory simpleTrackerFactory;
+    
+    @Autowired
+    private YmlPropertiesPersister propertiesPersister;
 
 	private static final Logger logger = LoggerFactory.getLogger(TrackerServiceImpl.class);
 
@@ -251,4 +255,9 @@ public class TrackerServiceImpl implements TrackerService {
 		TrackerData.clear();
 		
 	}
+
+    @Override
+    public List<Tracker> getActiveTrackers() {
+        return new ArrayList<>(TrackerData.getInstance().getActiveTrackers()).subList(0, propertiesPersister.getNumberByKey("track.maxActive"));
+    }
 }

@@ -45,6 +45,12 @@ Ext.define('Auke.view.Viewport', {
 							cls : 'headerBtn',
 							view : 'global.Delete'
 						}, {
+							xtype : 'button',
+							text : 'RSS Feed',
+							overCls : 'btnOver',
+							cls : 'headerBtn',
+							view : 'global.RssFeed'
+						}, {
 							xtype : 'tbspacer',
 							flex : 1
 						}, {

@@ -72,7 +72,6 @@ public class RSSFeedWriter {
             createNode(eventWriter, "description", entry.getDescription());
             createNode(eventWriter, "link", entry.getLink());
             createNode(eventWriter, "author", entry.getAuthor());
-            createNode(eventWriter, "guid", entry.getGuid());
             eventWriter.add(end);
             eventWriter.add(eventFactory.createEndElement("", "", "item"));
             eventWriter.add(end);

@@ -13,3 +13,9 @@
 	margin: 10px;
 	font-size: 12px;
 }
+
+.my-link {
+    text-decoration: underline;
+    cursor: pointer;
+    color: blue;
+}

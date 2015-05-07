@@ -25,7 +25,6 @@ public class WriteTest {
         feed.setTitle("RSSFeed");
         feed.setDescription("This is a description");
         feed.setAuthor("thaihuynh@gmail.com");
-        feed.setGuid("http://localhost/drone/RSSFeed/article.html");
         feed.setLink("http://localhost/drone/RSSFeed/article.html");
         rssFeeder.getMessages().add(feed);
 
