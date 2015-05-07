@@ -4,3 +4,6 @@ profile: dev
 http:
     port: 8888
     adminPort: 9091
+    
+rss-generation:    
+    output-dir: /opt/rss
