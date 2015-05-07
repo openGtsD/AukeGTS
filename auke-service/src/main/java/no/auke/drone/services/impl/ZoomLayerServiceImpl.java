@@ -91,21 +91,52 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
         		point=new TrackerSum();
         		point.setId(String.valueOf(index));
         		point.setName("Tracker within long=" + String.valueOf(lon) + " lat=" + String.valueOf(lat));
-        		point.getCurrentPosition().setLatitude(latitude(lat));
-        		point.getCurrentPosition().setLongitude(longitude(lon));
+        		point.getCurrentPosition().setLatitude(tracker.getCurrentPosition().getLatitude());
+        		point.getCurrentPosition().setLongitude(tracker.getCurrentPosition().getLongitude());
 
-        		//point.getCurrentPosition().setLatitude(lat);
-        		//point.getCurrentPosition().setLongitude(lon);
-        		
         		new_positions.put(index, point);
         		
         	} else {
 
         		point = new_positions.get(index);
         		
+        		
         	}
+        	
+    		
         	point.incrementTrackers();
+
+        	// LHA: We show average positions for all trackers on current summarized positions
+        	
+    		point.getCurrentPosition().setLatitude(
+    				( ( 
+    					point.getCurrentPosition().getLatitude() * point.getNumtrackers()
+    				  ) + tracker.getCurrentPosition().getLatitude() ) / 2
+    				);  
+
+    		point.getCurrentPosition().setLongitude(
+    				( (
+    					point.getCurrentPosition().getLongitude() * point.getNumtrackers() 
+    				  ) + tracker.getCurrentPosition().getLongitude() ) / 2
+    				);
+        	
+        	
+        	// LHA: Don't think a good idea to serve all tracker info in each point
+        	
+        	// will destroy performance on low zoom levels
+        	// On reason for doing a zoom summarize is t reduce
+        	// size of query data to map (every 10 second)
+        	// with a list of trackers on each point
+        	// we still send a lot of information (same as without summarize)
+        	
+        	// Instead we should make a second call from UI
+        	// to retrieve tracker information in each point when user click the point on map
+        	
+        	// Add this information when calculate, but remove from json sent to UI
+        	// (add to trackerSUM class, instead if tracker class)
+        	
             point.addInnerTrackers(tracker);
+            
         }
         
         try {

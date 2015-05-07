@@ -124,10 +124,14 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
         try {
 
             block.lock();
-            
+
+        	// LHA: look closer, not sure if correct
+            // must be fixed
+            // it give wrong result when crossing data line in a map view
+
             if(southWestLon > northEastLon) {
             	
-            	// TODO: LHA: look closer, not sure if correct
+            	
             	
             	return (
             			
