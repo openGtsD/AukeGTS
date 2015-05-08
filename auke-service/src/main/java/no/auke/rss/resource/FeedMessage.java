@@ -6,6 +6,7 @@ public class FeedMessage implements Serializable {
     private static final long serialVersionUID = -8515136120660923154L;
     String title;
     String description;
+    String guid;
     String link;
     String author;
     
@@ -44,6 +45,13 @@ public class FeedMessage implements Serializable {
         this.author = author;
     }
 
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
 
     @Override
     public String toString() {

@@ -1,7 +1,7 @@
 Ext.ns('Auke.utils');
 // Change url when go live
-Auke.utils.baseURL = "http://localhost:8080/";
-Auke.utils.serviceURL = "http://localhost:8888/";
+Auke.utils.baseURL = "http://89.221.242.66:8080/";
+Auke.utils.serviceURL = "http://89.221.242.66:8888/";
 
 Auke.utils.buildURL = function (url, isUseService) {
     var domain = isUseService ? Auke.utils.serviceURL : Auke.utils.baseURL;

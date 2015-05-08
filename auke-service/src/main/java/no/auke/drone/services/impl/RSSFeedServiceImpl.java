@@ -1,5 +1,6 @@
 package no.auke.drone.services.impl;
 
+import java.awt.SystemColor;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -77,7 +78,7 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
 
             createNode(eventWriter, "title", rssfeed.getTitle());
 
-            createNode(eventWriter, "link", rssfeed.getLink());
+            createNode(eventWriter, "link", rssfeed.getLink() + fileName);
 
             createNode(eventWriter, "description", rssfeed.getDescription());
 
@@ -85,7 +86,7 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
 
             createNode(eventWriter, "copyright", rssfeed.getCopyright());
 
-            createNode(eventWriter, "pubdate", rssfeed.getPubDate());
+            createNode(eventWriter, "pubDate", rssfeed.getPubDate());
             
             for (FeedMessage entry : rssfeed.getMessages()) {
                 eventWriter.add(eventFactory.createStartElement("", "", "item"));
@@ -93,6 +94,7 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
                 createNode(eventWriter, "title", entry.getTitle());
                 createNode(eventWriter, "description", entry.getDescription());
                 createNode(eventWriter, "link", entry.getLink());
+                createNode(eventWriter, "guid", entry.getGuid());
                 createNode(eventWriter, "author", entry.getAuthor());
                 eventWriter.add(end);
                 eventWriter.add(eventFactory.createEndElement("", "", "item"));
@@ -182,13 +184,14 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
         Date creationDate = cal.getTime();
         SimpleDateFormat date_format = new SimpleDateFormat("EEE', 'dd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US);
         String pubdate = date_format.format(creationDate);
-        Feed rssFeeder = new Feed(title, propertiesPersister.getPropertyByKey("server.domain"), description, language, copyright, pubdate);
+        Feed rssFeeder = new Feed(title, propertiesPersister.getPropertyByKey("server.url"), description, language, copyright, pubdate);
         for (Tracker tracker : trackers) {
             FeedMessage feed = new FeedMessage();
             feed.setTitle(tracker.getName());
             feed.setDescription(tracker.getName());
-            feed.setAuthor(tracker.getFlyer() != null ? tracker.getFlyer().getEmail() : "auketeam@gmail.com");
+            feed.setAuthor(tracker.getFlyer() != null ? tracker.getFlyer().getEmail() : "auketeam@gmail.com" + "(Auke Team) ");
             feed.setLink(propertiesPersister.getPropertyByKey("server.domain"));
+            feed.setGuid(propertiesPersister.getPropertyByKey("server.domain") + "/" + System.currentTimeMillis());
             rssFeeder.getMessages().add(feed);
         }
         return rssFeeder;

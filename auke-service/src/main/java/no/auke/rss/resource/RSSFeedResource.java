@@ -37,7 +37,7 @@ public class RSSFeedResource {
 
     @GET
     @Path("/{filename}")
-    @Produces(MediaType.APPLICATION_XHTML_XML)
+    @Produces(MediaType.APPLICATION_XML)
     public Response getContent(@PathParam(value = "filename") String filename) throws FileNotFoundException {
         StreamingOutput stream = feedServices.getContent(filename);
         return Response.ok(stream).build();
