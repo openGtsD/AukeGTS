@@ -70,7 +70,7 @@ public abstract class TrackerBase extends TrackerPositionBase {
     final public void setCurrentPosition(MapPoint currentPosition) {
         super.setCurrentPosition(currentPosition);
         // set history
-        getPositions().add(currentPosition);
+        // getPositions().add(currentPosition);
     }    
 
     @Override
