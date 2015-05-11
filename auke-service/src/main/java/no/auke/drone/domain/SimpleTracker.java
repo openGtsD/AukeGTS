@@ -56,7 +56,7 @@ public class SimpleTracker extends TrackerBase {
     		if((stopFlightTime.get() - System.currentTimeMillis())<0) {
     			
     			// stop flight 
-    			logger.info(this.toString() + "stop calculate");
+    			logger.debug(this.toString() + "stop calculate");
     			setMoving(false);
     			
     		} else {
@@ -73,7 +73,7 @@ public class SimpleTracker extends TrackerBase {
     		if((startFlightTime.get() - System.currentTimeMillis())<0) {
 
     			// stop flight 
-    			logger.info(this.toString() + "start calculate");
+    			logger.debug(this.toString() + "start calculate");
     			setMoving(true);
     			
     		} else {
@@ -92,7 +92,10 @@ public class SimpleTracker extends TrackerBase {
 
     		block.lock();
 
-        	logger.info(this.toString() + "started moving");
+            if(logger.isDebugEnabled()) {
+                logger.debug(this.toString() + "started moving");
+            }
+
             Random ran = new Random();
             if(speed == null) {
                 speed = 25 * (ran.nextInt(1) + 10);
@@ -114,11 +117,12 @@ public class SimpleTracker extends TrackerBase {
             
             setCurrentPosition(positionUnit);
             getLatestPositions().add(positionUnit);
-            
-            logger.info(this.toString() + "finished moving");
+
+            if(logger
+                    .isDebugEnabled())
+                     logger.debug(this.toString() + "finished moving");
             
             return this;
-    		
     		
     	} finally {
     		

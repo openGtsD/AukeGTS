@@ -2,7 +2,9 @@ package no.auke.drone.dao;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -23,6 +25,15 @@ public class QueryBuilder {
 
     private String prepareWhereClause(Properties properties) {
         return prepareWhereClause(properties, EQUAL);
+    }
+
+    private String[] getFieldNames(Object entity, String prefix) {
+        Field[] fields = entity.getClass().getDeclaredFields();
+        String[] str = new String[fields.length];
+        for(int i = 0; i < fields.length; i++) {
+            str[i] = prefix + fields[i].getName();
+        }
+        return str;
     }
 
     private String prepareWhereClause(Properties properties, String operator) {
@@ -54,6 +65,28 @@ public class QueryBuilder {
         sb.append("SELECT ");
         sb.append(select);
         sb.append(" FROM ");
+        sb.append(entity);
+        return this;
+    }
+
+    public QueryBuilder buildInsert(Object entity) {
+        sb.append("INSERT INTO ");
+        sb.append(entity.getClass().getSimpleName());
+        sb.append(" (");
+        Field[] fields = entity.getClass().getDeclaredFields();
+        sb.append(StringUtils.join(getFieldNames(entity,""),","));
+        sb.append(") ");
+        sb.append("VALUES (");
+        String[] str = new String[fields.length];
+        Arrays.fill(str, "?");
+        sb.append(StringUtils.join(str, ", "));
+        sb.append(") ");
+
+        return this;
+    }
+
+    public QueryBuilder buildDelete(String entity) {
+        sb.append("DELETE FROM  ");
         sb.append(entity);
         return this;
     }

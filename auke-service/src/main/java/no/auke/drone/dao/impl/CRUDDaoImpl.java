@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.annotation.PostConstruct;
+
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -79,23 +80,6 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         return str;
     }
 
-    private String prepareInsertQuery(T entity) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("INSERT INTO ");
-        sb.append(entity.getClass().getSimpleName());
-        sb.append(" (");
-        Field[] fields = entity.getClass().getDeclaredFields();
-        sb.append(StringUtils.join(getFieldNames(entity,""),","));
-        sb.append(") ");
-        sb.append("VALUES (");
-        String[] str = new String[fields.length];
-        Arrays.fill(str,"?");
-        sb.append(StringUtils.join(str, ", "));
-        sb.append(") ");
-
-        return sb.toString();
-    }
-
     private Object[] prepareParameter(T entity) {
         Object[] parameters = null;
         try {
@@ -122,7 +106,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
 
     @Override
     public T create(T entity) {
-        String sql = prepareInsertQuery(entity);
+        String sql = new QueryBuilder().buildInsert(entity).build();
         Object[] parameters = prepareParameter(entity);
         logger.info("processing sql " + sql + " " + parameters);
         getJdbcTemplate().update(sql, parameters);
@@ -141,7 +125,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         return entity;
     }
 
-    Properties prepareUpdateParameter(T entity) {
+    private Properties prepareUpdateParameter(T entity) {
         Properties properties = new Properties();
         String[] fields = getFieldNames(entity,"");
         try {
@@ -191,7 +175,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     @Override
     public void delete(T entity) {
         Class<T> entityClass = getPersistentClass();
-        String sql = "DELETE FROM " + entityClass.getSimpleName() + " WHERE " + prepareIdentificationQuery(entity);
+        String sql = new QueryBuilder().buildDelete(entityClass.getSimpleName()).buildWhere().build() + prepareIdentificationQuery(entity);
         getJdbcTemplate().update(sql);
     }
 
