@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
@@ -191,7 +192,7 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
             feed.setDescription(tracker.getName());
             feed.setAuthor(tracker.getFlyer() != null ? tracker.getFlyer().getEmail() : "auketeam@gmail.com" + "(Auke Team) ");
             feed.setLink(propertiesPersister.getPropertyByKey("server.domain"));
-            feed.setGuid(propertiesPersister.getPropertyByKey("server.domain") + "/" + System.currentTimeMillis());
+            feed.setGuid(propertiesPersister.getPropertyByKey("server.domain") + "/" + UUID.randomUUID().toString());
             rssFeeder.getMessages().add(feed);
         }
         return rssFeeder;

@@ -16,7 +16,20 @@ Ext.define('Auke.view.grid.TrackerGrid', {
 				dataIndex : 'simPhone',
 				text : "SIM Phone",
 				flex : 1
+			},  {
+				dataIndex : 'lon',
+				text : "Longitude",
+				flex : 1
+			},  {
+				dataIndex : 'lat',
+				text : "Lagitude",
+				flex : 1
+			}, {
+				dataIndex : 'alt',
+				text : "Altitude",
+				flex : 1
 			},
+			
 //			{
 //				dataIndex : 'active',
 //				text : "Active",

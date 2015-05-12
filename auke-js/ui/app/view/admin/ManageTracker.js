@@ -12,13 +12,15 @@ Ext.define('Auke.view.admin.ManageTracker', {
 				padding : '5 0 0 0',
 				store : Ext.create('Ext.data.ArrayStore', {
 					fields : [ 'layerId' ],
-					data : [ [ 'REAL' ], [ 'SIMULATED' ] ]
+					data : [ [ 'REAL' ], [ 'SIMULATED' ], ['SUMMARIZED'] ]
 				}),
 				displayField : 'layerId',
 				fieldLabel : 'Select Layer',
 				queryMode : 'local',
 				selectOnTab : false,
-				name : 'layerId'
+				name : 'layerId',
+				value: 'REAL'
+				
 			}, {
 				xtype : 'trackerGrid',
 				border : 0,

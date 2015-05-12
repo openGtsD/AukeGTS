@@ -62,12 +62,8 @@ Ext.define('Auke.controller.TrackerAction', {
 			});
 	 },
 	 
-	 getLayerId : function(){
-		 
-	 },
-	 
 	 loadAll : function(grid) {
-		this.getTrackerGrid().getStore().proxy.url =  Auke.utils.buildURL('drone/get-all/', true) + this.getLayerId(),
+		this.getTrackerGrid().getStore().proxy.url =  Auke.utils.buildURL('drone/get-all/REAL', true),
 		this.getTrackerGrid().getStore().loadData([], false);
 		this.getStore('Trackers').load({
 			scope : this,

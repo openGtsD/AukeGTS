@@ -177,11 +177,27 @@ public class TrackerServiceImpl implements TrackerService {
             Tracker stigTracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "Stig" + "-"
                     + "Stig", 2, 2, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, stig, "0123222" + 1, "123123123" + 1);
             result.add(stigTracker);
+            
+            // THAI - add more data for test
+            for (int k = 1; k <= 50; k++) {
+                MapPoint rd = PointUtil.generateRandomMapPoint(stig);
+                Tracker tracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "Stig" + "-"
+                        + "Stig", 2, 2, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, rd, "0123222" + 1, "123123123" + 1);
+                result.add(tracker);
+            }
 
             MapPoint lhf = new MapPoint(59.722268, 10.213038,0,0,0);
             Tracker lhfTracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "LHF" + "-"
                     + "LHF", 2, 2, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, lhf, "0123222" + 1, "123123123" + 1);
             result.add(lhfTracker);
+            
+            // THAI - add more data for test
+            for (int l = 1; l <= 50; l++) {
+                MapPoint rd = PointUtil.generateRandomMapPoint(lhf);
+                Tracker tracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "LHF" + "-"
+                        + "Stig", 2, 2, System.currentTimeMillis(), Tracker.TrackerType.SIMULATED, null, true, rd, "0123222" + 1, "123123123" + 1);
+                result.add(tracker);
+            }
 
             return result;
         }
