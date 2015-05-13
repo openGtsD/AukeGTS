@@ -139,7 +139,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         return properties;
     }
 
-    private String prepareIdentificationQuery(T entity) {
+    private Properties buildIdentificationProperty(T entity){
         Properties properties = new Properties();
         try{
             for(String field : getIdFields()) {
@@ -148,7 +148,11 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         } catch (Exception e) {
             logger.error(e.toString());
         }
+        return properties;
+    }
 
+    private String prepareIdentificationQuery(T entity) {
+        Properties properties = buildIdentificationProperty(entity);
         return prepareEqualAndClause(properties);
     }
 
@@ -180,6 +184,13 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     }
 
     @Override
+    public void deleteAll() {
+        Class<T> entityClass = getPersistentClass();
+        String sql = new QueryBuilder().buildDelete(entityClass.getSimpleName()).build();
+        getJdbcTemplate().update(sql);
+    }
+
+    @Override
     public List getAll() {
         String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName())
                 .build();
@@ -196,6 +207,17 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
                 new BeanPropertyRowMapper<T>(persistentClass));
 
         return entities;
+    }
+
+    @Override
+    public T getById(String id) {
+        Properties properties = new Properties();
+        properties.put(getIdFields().get(0),id);
+        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName()).buildWhere().buildEqualClause(properties).build();
+        List<T> entities  = getJdbcTemplate().query(query,
+                new BeanPropertyRowMapper<T>(persistentClass));
+
+        return entities.size() > 0 ? entities.get(0) : null;
     }
 
     private String prepareEqualAndClause(Properties properties) {
@@ -220,7 +242,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
             return getAll();
         }
 
-        String query = new QueryBuilder().buildSelect(getPersistentClass().getName())
+        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName())
                                                       .buildWhere()
                                                       .buildEqualClause(properties)
                                                       .build();

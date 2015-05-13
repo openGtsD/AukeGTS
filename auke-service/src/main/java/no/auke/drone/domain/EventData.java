@@ -4,14 +4,28 @@ package no.auke.drone.domain;
  * Created by huyduong on 4/20/2015.
  */
 public class EventData {
+    @ID
     private String accountID;
+
+    @ID
     private String deviceID;
-    private String statusCode;
+
+    @ID
+    private Integer statusCode;
+
+    @ID
+    private Integer timestamp;
+
     private double latitude;
     private double longitude;
     private double altitude;
     private double heading;
     private Long creationTime;
+
+    public EventData() {
+        Long timestamp = System.currentTimeMillis();
+        this.timestamp = timestamp.intValue();
+    }
 
     public String getAccountID() {
         return accountID;
@@ -29,11 +43,11 @@ public class EventData {
         this.deviceID = deviceID;
     }
 
-    public String getStatusCode() {
+    public Integer getStatusCode() {
         return statusCode;
     }
 
-    public void setStatusCode(String statusCode) {
+    public void setStatusCode(Integer statusCode) {
         this.statusCode = statusCode;
     }
 
@@ -75,5 +89,13 @@ public class EventData {
 
     public void setCreationTime(Long creationTime) {
         this.creationTime = creationTime;
+    }
+
+    public Integer getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Integer timestamp) {
+        this.timestamp = timestamp;
     }
 }
