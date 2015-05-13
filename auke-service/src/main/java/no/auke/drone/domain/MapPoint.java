@@ -90,5 +90,9 @@ public class MapPoint implements Serializable {
      
     public MapPoint (EventData eventData) {
         this(eventData.getLatitude(), eventData.getLongitude(), eventData.getAltitude(), 0, eventData.getHeading());
+        this.time = eventData.getCreationTime();
+
+        // HUY: This is the format of time in OpenGTS DateTime dt = new DateTime(time); // GMT
+        // located in EventUtil.java 631
     }
 }

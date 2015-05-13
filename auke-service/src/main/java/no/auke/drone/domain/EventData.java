@@ -11,6 +11,7 @@ public class EventData {
     private double longitude;
     private double altitude;
     private double heading;
+    private Long creationTime;
 
     public String getAccountID() {
         return accountID;
@@ -66,5 +67,13 @@ public class EventData {
 
     public void setHeading(double heading) {
         this.heading = heading;
+    }
+
+    public Long getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(Long creationTime) {
+        this.creationTime = creationTime;
     }
 }
