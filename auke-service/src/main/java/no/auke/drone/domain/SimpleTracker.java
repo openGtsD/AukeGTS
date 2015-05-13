@@ -144,5 +144,17 @@ public class SimpleTracker extends TrackerBase {
 	public void incrementTrackers() {
 	}
 
+	// Suppot View Data on UI
+	public double getLon() {
+	    return getCurrentPosition().getLongitude();
+	}
+	
+	public double getLat() {
+        return getCurrentPosition().getLatitude();
+    }
+	
+	public double getAlt() {
+        return getCurrentPosition().getAltitude();
+    }
 
 }
