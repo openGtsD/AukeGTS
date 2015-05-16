@@ -36,9 +36,8 @@ Ext.define('Auke.controller.TrackerAction', {
 			'manageTracker combo' : {
 	            select : me.loadTracker
 	        },
-	        'feedGrid' : {
-				afterrender : me.loadAllFeed,
-				cellclick : me.openNewWindow
+	        'textareafield' : {
+				afterrender : me.loadAllFeed
 			}
 		});
 	},
@@ -72,13 +71,19 @@ Ext.define('Auke.controller.TrackerAction', {
 		});
 	},
 	
-	loadAllFeed : function(grid) {
-		this.getFeedGrid().getStore().loadData([], false);
-		this.getStore('Feeds').load({
-			scope : this,
-			callback : function(records, operation, success) {
+	loadAllFeed : function(text) {
+		Ext.Ajax.request({
+			url : Auke.utils.buildURL('rss/gettrackerlist/', true), 
+			method : 'GET',
+			success : function(response, opts) {
+				var res = response.responseText
+				text.setRawValue(res);
+			},
+			failure : function(response) {
+				var res = response.responseText;
+				Ext.Msg.alert('Errors', res);
 			}
-		});
+		})
 	},
 	
 	openNewWindow : function(iView, iCellEl, iColIdx, iRecord, iRowEl, iRowIdx,

@@ -106,8 +106,6 @@ Ext.define('Auke.view.Viewport', {
 					items : [ {
 						xtype : 'container',
 						id : 'viewContainer',
-//						overflowY : 'hidden',
-//						autoScroll : true,
 						layout : {
 							type : 'fit'
 						}

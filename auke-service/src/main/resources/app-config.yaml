@@ -5,23 +5,27 @@ profile: dev
 jdbc:
     drone:
         driver: com.mysql.jdbc.Driver
-        url: "jdbc:mysql://localhost:3306/gts"
+        url: "jdbc:mysql://89.221.242.66:3306/gts"
         username: root
-        password: root
-        #password: radarteam$#@1
+        password: radarteam$#@1
+        #password: root
 
 http:
     port: 8888
     adminPort: 9091
     
-rss-generation:
-    output-dir: /opt/rss
+rss:
+    type: "rss_2.0"
+    title: "RSS feed by Auke Team"
+    description: "RSS feed by Auke Team"
+    language: "en"
+    copyright: "Copyright by Auke Team"
     
 server: 
-    domain: http://localhost:8080/drone
-    url: http://localhost:8888/rss/
-    #domain: http://89.221.242.66:8080/drone
-    #url: http://89.221.242.66:8888/rss/
+    domain: http://89.221.242.66:8080/drone
+    url: http://89.221.242.66:8888/rss/
+    #domain: http://localhost:8080/drone
+    #url: http://localhost:8888/rss/
 
 track:
     maxActive: 10
