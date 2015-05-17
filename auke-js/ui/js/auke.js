@@ -1,7 +1,8 @@
 Ext.ns('Auke.utils');
+Auke.utils.mgr = "";
 // Change url when go live
-Auke.utils.baseURL = "http://89.221.242.66:8080/";
-Auke.utils.serviceURL = "http://89.221.242.66:8888/";
+Auke.utils.baseURL = "http://localhost:8080/";
+Auke.utils.serviceURL = "http://localhost:8888/";
 
 Auke.utils.buildURL = function (url, isUseService) {
     var domain = isUseService ? Auke.utils.serviceURL : Auke.utils.baseURL;
@@ -52,7 +53,6 @@ Auke.utils.buildHTML = function(data) {
 }
 
 var map;
-var mgr;
 var icons = {};
 Auke.utils.markers = [];
 Auke.utils.allmarkers = {};
@@ -85,15 +85,14 @@ function load() {
 	});
 }
 
-Auke.utils.createMarker = function(id, posn, title, contentHTML, map) {
+Auke.utils.createMarker = function(id, posn, title) {
 	var markerOptions = {
 		id : id,
 		position : posn,
-		title : title,
-		content : contentHTML
+		title : title
 	};
 	var marker = new google.maps.Marker(markerOptions);
-	Auke.utils.createInfoWindow(marker, map);
+//	Auke.utils.createInfoWindow(marker, map);
 //	Auke.utils.centerZoom(marker, map);
 	return marker;
 }
@@ -101,7 +100,8 @@ Auke.utils.createMarker = function(id, posn, title, contentHTML, map) {
 var infoWindow = new google.maps.InfoWindow();
 Auke.utils.createInfoWindow = function(marker, map) {
 	google.maps.event.addListener(marker, 'click', function() {
-		infoWindow.setContent(marker.content);
+//		infoWindow.setContent(marker.content);
+		// Send request at here
 		infoWindow.open(map, marker);
 	});
 }

@@ -10,10 +10,12 @@ import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
+import no.auke.drone.domain.CustomSyndFeed;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.services.RSSFeedServices;
 import no.auke.drone.services.TrackerService;
@@ -26,7 +28,6 @@ import com.sun.syndication.feed.synd.SyndContentImpl;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
-import com.sun.syndication.feed.synd.SyndFeedImpl;
 import com.sun.syndication.io.SyndFeedOutput;
 
 @Service
@@ -66,7 +67,7 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
 
     private SyndFeed buildFeed(String type) {
         Collection<Tracker> trackers = trackerService.getActiveTrackers();
-        SyndFeed feed = new SyndFeedImpl();
+        SyndFeed feed = new CustomSyndFeed();
         feed.setFeedType(propertiesPersister.getPropertyByKey("rss.type"));
         feed.setTitle(propertiesPersister.getPropertyByKey("rss.title"));
         feed.setDescription(propertiesPersister.getPropertyByKey("rss.description"));
@@ -78,7 +79,6 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
         } catch (ParseException e) {
             feed.setPublishedDate(new GregorianCalendar().getTime());
         }
-
         List<SyndEntry> entries = new ArrayList<SyndEntry>();
         for (Tracker tracker : trackers) {
             SyndEntryImpl entry = new SyndEntryImpl();
@@ -90,6 +90,7 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
             entry.setAuthor(tracker.getFlyer() != null ? tracker.getFlyer().getEmail() : "auketeam@gmail.com"
                     + "(Auke Team) ");
             entry.setLink(propertiesPersister.getPropertyByKey("server.domain"));
+            entry.setUri(propertiesPersister.getPropertyByKey("server.domain") + "/" + UUID.randomUUID().toString());
             entries.add(entry);
         }
         feed.setEntries(entries);

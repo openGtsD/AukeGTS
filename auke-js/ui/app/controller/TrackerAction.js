@@ -34,10 +34,52 @@ Ext.define('Auke.controller.TrackerAction', {
 				click:  me.updateTracker
 			},
 			'manageTracker combo' : {
-	            select : me.loadTracker
+	            select : me.loadAllTracker
 	        },
 	        'textareafield' : {
 				afterrender : me.loadAllFeed
+			},
+			'home gmappanel' : {
+				mapready: me.initMarkerManager,
+				idle: me.loadTrackers
+			}
+		});
+	},
+	
+	initMarkerManager : function(gmappanel) {
+		Auke.utils.mgr = new MarkerManager(gmappanel.getMap());
+	},
+	
+	loadTrackers : function(gmappanel){
+		var me = this;
+		var map = gmappanel.getMap();
+		var mapBound = map.getBounds();
+		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
+		var sw = mapBound.getSouthWest();
+		Ext.Ajax.request({
+			url : Auke.utils.buildURL('drone/load-drone-in-view/', true) + 'SIMULATED/' + map.getZoom(),
+			jsonData : JSON.stringify({
+				southWestLat : sw.lat(),
+				southWestLon : sw.lng(),
+				northEastLat : ne.lat(),
+				northEastLon : ne.lng()
+			}),
+			method : 'POST',
+			success : function(response) {
+				var res = Ext.JSON.decode(response.responseText);
+				var data = res.data;
+				Auke.utils.mgr.clearMarkers();
+				var markers = [];
+				for (var i = 0; i < data.length; i++) {
+					var posn = new google.maps.LatLng(data[i].currentPosition.latitude,
+							data[i].currentPosition.longitude);
+					var marker = Auke.utils.createMarker(data[i].id, posn, data[i].name);
+					markers.push(marker);
+				}
+				Auke.utils.mgr.addMarkers(markers,3);
+				Auke.utils.mgr.refresh();
+				Ext.fly("zoomId").update(map.getZoom())
+				Ext.fly("trackerNumber").update(Auke.utils.mgr.getMarkerCount(map.getZoom()));
 			}
 		});
 	},
@@ -51,7 +93,7 @@ Ext.define('Auke.controller.TrackerAction', {
 	            scope : this
 	        });
 	 },
-	 loadTracker : function(combo, records, eOpts ){
+	 loadAllTracker : function(combo, records, eOpts ){
 		 this.getTrackerGrid().getStore().proxy.url =  Auke.utils.buildURL('drone/get-all/', true) + combo.getValue(),
 			this.getTrackerGrid().getStore().loadData([], false);
 			this.getStore('Trackers').load({

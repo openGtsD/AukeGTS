@@ -1,6 +1,6 @@
 Ext.define("Auke.model.Tracker", {
 	extend : 'Ext.data.Model',
-	fields : [ 'id', 'name', 'simPhone', 'active', 'lon', 'lat', 'altitude', {
+	fields : [ 'id', 'name', 'simPhone', 'active', 'lon', 'lat', 'alt', {
 		name : 'createDate',
 		type : 'date',
 		convert : function(value, record) {

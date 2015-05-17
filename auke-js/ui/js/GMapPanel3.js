@@ -317,7 +317,8 @@ markers: [{
               
               google.maps.event.addListenerOnce(this.getMap(), 'tilesloaded', Ext.Function.bind(this.onMapReady, this));
               google.maps.event.addListener(this.getMap(), 'dragend', Ext.Function.bind(this.dragEnd, this));
-
+              // THAI add support for call from controller
+              google.maps.event.addListener(this.getMap(), 'idle', Ext.Function.bind(this.onIdle, this));
               
               if (typeof this.setCenter === 'object') {
                   if (typeof this.setCenter.geoCodeAddr === 'string'){
@@ -367,6 +368,10 @@ markers: [{
         this.addMapListeners();
         
         this.fireEvent('mapready', this, this.getMap());
+        return this;
+    },
+    onIdle : function(){
+        this.fireEvent('idle', this, this.getMap());
         return this;
     },
     // private
