@@ -57,11 +57,7 @@ public class ZoomLayerTest {
 
 	@After
 	public void tearDown() throws Exception {
-		
 		TrackerData.clear();
-		
-		//getExecutor().shutdownNow();
-
 	}
 
 	private void init_trackers(int num) {
