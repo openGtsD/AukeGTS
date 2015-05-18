@@ -71,8 +71,8 @@ public class MapPoint implements Serializable {
     }
 
     public MapPoint() {
-        this.time = System.currentTimeMillis();
-    }
+        Long timestamp = System.currentTimeMillis()/1000;
+        this.time = timestamp.intValue();    }
 
     public MapPoint(double lat, double lon, double alt, Integer speed, double course) {
         this();
@@ -94,5 +94,9 @@ public class MapPoint implements Serializable {
 
         // HUY: This is the format of time in OpenGTS DateTime dt = new DateTime(time); // GMT
         // located in EventUtil.java 631
+    }
+
+    public String toString() {
+        return "{latitude: " + latitude + ", longitude:" + longitude + ", altitude:" + altitude + " ,time:" + time + "}";
     }
 }

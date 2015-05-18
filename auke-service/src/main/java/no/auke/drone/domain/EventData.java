@@ -23,7 +23,7 @@ public class EventData {
     private Long creationTime;
 
     public EventData() {
-        Long timestamp = System.currentTimeMillis();
+        Long timestamp = System.currentTimeMillis()/1000;
         this.timestamp = timestamp.intValue();
     }
 
@@ -97,5 +97,9 @@ public class EventData {
 
     public void setTimestamp(Integer timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String toString() {
+        return "EventData {accountID:" + accountID + ", deviceID:" + deviceID + ", statusCode:" + statusCode + " ,timestamp:" + timestamp;
     }
 }

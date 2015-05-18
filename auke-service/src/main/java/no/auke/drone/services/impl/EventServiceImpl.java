@@ -1,14 +1,12 @@
 package no.auke.drone.services.impl;
 
-import no.auke.drone.application.TrackerUpdater;
-import no.auke.drone.application.impl.TrackerUpdaterImpl;
+import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.dao.QueryBuilder;
-import no.auke.drone.domain.EventData;
-import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.TrackerData;
+import no.auke.drone.domain.*;
 import no.auke.drone.services.EventService;
 
+import no.auke.drone.services.TrackerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +14,11 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by huyduong on 4/24/2015.
@@ -33,12 +28,22 @@ public class EventServiceImpl implements EventService {
     private static final Logger logger = LoggerFactory.getLogger(EventServiceImpl.class);
 
     @Autowired
-    private CRUDDao<EventData> crudDao;
+    private CRUDDao<EventData> eventCrudDao;
+
+    @Autowired
+    private CRUDDao<Device> deviceCrudDao;
+
+    @Autowired
+    private TrackerService trackerService;
+
+    @Autowired
+    private SimpleTrackerFactory simpleTrackerFactory;
 
     @PostConstruct
     public void init() {
         logger.info("initializing EventServiceImpl");
-        crudDao.setPersistentClass(EventData.class);
+        eventCrudDao.setPersistentClass(EventData.class);
+        deviceCrudDao.setPersistentClass(Device.class);
         fetchEvents();
     }
 
@@ -52,20 +57,23 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Map<String,EventData> getEventDatas() {
+        if(eventDatas == null) {
+            eventDatas = new HashMap<>();
+        }
     	return eventDatas;
     }
 
     @Override    
     public void fetchEventData() {
-        QueryBuilder timeBuilder = new QueryBuilder().buildSelect("max(timestamp) - 100",EventData.class.getSimpleName());
+        QueryBuilder timeBuilder = new QueryBuilder().buildSelect("max(timestamp) - 5000",EventData.class.getSimpleName());
 
         QueryBuilder queryBuilder = new QueryBuilder().buildSelect(EventData.class.getSimpleName())
                 .buildWhere()
                 .buildParam("timestamp")
                 .buildMoreThan()
                 .buildInnerQuery(timeBuilder.build());
-
-        List<EventData> eventFetched = crudDao.get(queryBuilder.build());
+//        System.out.println("fetching eventData " + queryBuilder.build());
+        List<EventData> eventFetched = eventCrudDao.get(queryBuilder.build());
         
         eventDatas.clear();
         for(EventData event:eventFetched) {
@@ -78,8 +86,22 @@ public class EventServiceImpl implements EventService {
 	private void addMissingTrackers() {
 		
 		// LHA: check registrated trackers, and add the ones missing
-		
-		
+		// HUY: now I'm implementing it
+        Set<String> activeTrackers = new HashSet<>();
+        Set<String> persistedTrackers = new HashSet<>(eventDatas.keySet());
+        for(Tracker tracker : trackerService.getAll()) {
+            activeTrackers.add(tracker.getId());
+        }
+
+        persistedTrackers.retainAll(activeTrackers);
+
+        for(String trackerId : persistedTrackers) {
+            Device device = deviceCrudDao.getById(trackerId);
+            if(device != null) {
+                TrackerData.getInstance().register((no.auke.drone.domain.Observer) simpleTrackerFactory.from(device));
+            }
+        }
+
 	}    
 
     @Override
