@@ -117,45 +117,58 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
     }
 
     
+    private boolean checkLogitude(double southWestLon, double northEastLon) {
+    	
+        if(southWestLon < northEastLon) 
+    	
+        	return (
+        			
+        			currentPosition.getLongitude() <= northEastLon && 
+        			currentPosition.getLongitude() >= southWestLon
+        			
+        			);
+    	
+    	
+        else {
+        	
+        	// timeline
+        	return currentPosition.getLongitude() >= southWestLon || currentPosition.getLongitude() <= northEastLon; 
+        	
+        }    	
+    	
+    }
+
+    private boolean checkLatitude(double southWestLat, double northEastLat) {
+    	
+        if(southWestLat < northEastLat) {
+        	
+        	return  ( this.currentPosition.getLatitude() >= southWestLat && 
+        			  this.currentPosition.getLatitude() <= northEastLat
+        			);
+        	
+        } else {
+        	
+        	// over pole
+
+        	return ( this.currentPosition.getLatitude() >= southWestLat || 
+        			  this.currentPosition.getLatitude() <= northEastLat
+        		   );            	
+        }
+            	
+    	
+    }    
     @Override
     public boolean withinView(double southWestLat, double southWestLon, double northEastLat, double northEastLon) {
 
+    	// logitude are horizontal -> value -180 to 180
+    	// latitude are vertical -> value -90 to 90
+    	
         try {
 
             block.lock();
 
-        	// LHA: look closer, not sure if correct
-            // must be fixed
-            // it give wrong result when crossing data line in a map view
-
-            if(southWestLon > northEastLon) {
-            	
-            	
-            	
-            	return (
-            			
-            			this.currentPosition.getLongitude() <= southWestLon && 
-            			this.currentPosition.getLongitude() >= northEastLon
-            			
-            			) && 
-            			
-            			( this.currentPosition.getLatitude() >= southWestLat && 
-            			  this.currentPosition.getLatitude() <= northEastLat
-            			);
-            	
-            } else {
-
-            	return (
-            			
-            			this.currentPosition.getLongitude() >= southWestLon && 
-            			this.currentPosition.getLongitude() <= northEastLon
-            			
-            			) && 
-            			
-            			( this.currentPosition.getLatitude() >= southWestLat && 
-            			  this.currentPosition.getLatitude() <= northEastLat
-            			);            	
-            }
+        	// LHA: fixed
+            return checkLogitude(southWestLon,northEastLon) && checkLatitude(southWestLat,northEastLat);
 
 
         } finally {

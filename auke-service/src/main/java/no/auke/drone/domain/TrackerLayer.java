@@ -58,11 +58,14 @@ public class TrackerLayer  {
         
         id = UUID.randomUUID().toString();
         trackers = new ConcurrentHashMap<String,Tracker>();
-        zoomLayers = new ConcurrentHashMap<Integer,ZoomLayerService>();
 
+        // Adding zoom layer
+        zoomLayers = new ConcurrentHashMap<Integer,ZoomLayerService>();
         for(int zoom = 1;zoom<11;zoom++) {
         	zoomLayers.put(zoom, new ZoomLayerServiceImpl(this,zoom));
         }
+        
+        // adding the position calculator 
         positionCalculator = new PositionCalculatorImpl(TrackerServiceImpl.getExecutor(), this, isRunningAutomatically);
     
     }

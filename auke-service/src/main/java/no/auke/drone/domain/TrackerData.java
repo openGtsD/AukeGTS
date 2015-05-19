@@ -68,7 +68,6 @@ public class TrackerData implements Subject {
     public Collection<Tracker> getActiveTrackers() {
     	
     	// LHA: we need distinct between active and passive trackers
-    	
     	return getTrackers(null);
     }
     
