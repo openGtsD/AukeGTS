@@ -100,6 +100,6 @@ public class EventData {
     }
 
     public String toString() {
-        return "EventData {accountID:" + accountID + ", deviceID:" + deviceID + ", statusCode:" + statusCode + " ,timestamp:" + timestamp;
+        return "EventData {accountID:" + accountID + ", deviceID:" + deviceID + ", statusCode:" + statusCode + " ,timestamp:" + timestamp + " ,latitude:" + latitude + " ,longitude:" + longitude + " ,altitude:" + altitude + "}";
     }
 }

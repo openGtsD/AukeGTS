@@ -72,7 +72,6 @@ public class EventServiceImpl implements EventService {
                 .buildParam("timestamp")
                 .buildMoreThan()
                 .buildInnerQuery(timeBuilder.build());
-//        System.out.println("fetching eventData " + queryBuilder.build());
         List<EventData> eventFetched = eventCrudDao.get(queryBuilder.build());
         
         eventDatas.clear();
@@ -102,7 +101,16 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-	}    
+	}
+
+    private void updateTrackers() {
+        for(EventData eventData : getEventDatas().values()) {
+            Tracker tracker = trackerService.getTracker(eventData.getDeviceID());
+            if(tracker != null) {
+                tracker.setCurrentPosition(new MapPoint(eventData));
+            }
+        }
+    }
 
     @Override
     public void fetchEvents() {
@@ -119,8 +127,11 @@ public class EventServiceImpl implements EventService {
 
                         // querying
                         fetchEventData();
+
                         addMissingTrackers();
-                        
+
+//                        updateTrackers();
+
                         if(isRunning.get() && (System.currentTimeMillis() - lastStarted) < CALC_FREQUENCY ) {
                             // sleep for rest time to CALC_FREQUENCY
                             try {

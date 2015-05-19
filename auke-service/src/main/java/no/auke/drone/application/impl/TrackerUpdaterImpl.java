@@ -39,7 +39,6 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
     		// LHA: Better use a map collection
     		Map<String,EventData> eventDatas = eventService.getEventDatas();
     		if(eventDatas.containsKey(tracker.getId())) {
-    			
     			tracker.setCurrentPosition(new MapPoint(eventDatas.get(tracker.getId())));
     			
     		} else {

@@ -241,18 +241,8 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 		for(double lon=-180;lon<180;lon+=lonsize) {
 		
 			for(double lat=-90;lat<90;lat+=latsize) {
-				
 				BoundingBox boundary = new BoundingBox(lat,lon,lat+latsize,lon+lonsize);
 				boundaries.add(boundary);
-				
-//				System.out.println("zoom"+getZoomFactor() + 
-//						" getSouthWestLon " + boundary.getSouthWestLon() +
-//						" getSouthWestLat " + boundary.getSouthWestLat() + 
-//						" getNorthEastLon " + boundary.getNorthEastLon() + 
-//						" getNorthEastLat " + boundary.getNorthEastLat()  
-//						);
-					
-
 			}
 		
 		}	

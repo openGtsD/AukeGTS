@@ -46,42 +46,50 @@ public class SimpleTracker extends TrackerBase {
     		startFlightTime.set(System.currentTimeMillis() + (30 + rnd.nextInt(60 * 5)*1000));
     	}
     }
-    
+
+    private void calculateSimulatedTrackers() {
+        if(isMoving()) {
+
+            if((stopFlightTime.get() - System.currentTimeMillis())<0) {
+
+                // stop flight
+                logger.debug(this.toString() + "stop calculate");
+                setMoving(false);
+
+            } else {
+
+                logger.trace(this.toString() + "started calculating");
+                trackerUpdater.update(this);
+                logger.debug(this.toString() + "finished calculating");
+
+            }
+
+
+        } else {
+
+            if((startFlightTime.get() - System.currentTimeMillis())<0) {
+
+                // stop flight
+                logger.debug(this.toString() + "start calculate");
+                setMoving(true);
+
+            } else {
+
+                logger.debug(this.toString() + "is not flying!!!");
+
+            }
+
+        }
+    }
     
 	@Override
     public void calculate() {
-        
-    	if(isMoving()) {
-    		
-    		if((stopFlightTime.get() - System.currentTimeMillis())<0) {
-    			
-    			// stop flight 
-    			logger.debug(this.toString() + "stop calculate");
-    			setMoving(false);
-    			
-    		} else {
-
-    			logger.trace(this.toString() + "started calculating");
-                trackerUpdater.update(this);
-                logger.debug(this.toString() + "finished calculating");
-    			
-    		}
-        
-        
-    	} else {
-    		
-    		if((startFlightTime.get() - System.currentTimeMillis())<0) {
-
-    			// stop flight 
-    			logger.debug(this.toString() + "start calculate");
-    			setMoving(true);
-    			
-    		} else {
-
-    			logger.debug(this.toString() + "is not flying!!!");
-    			
-    		}
-            
+        if(TrackerType.REAL.toString().equalsIgnoreCase(this.getLayerId())) {
+            logger.trace(this.toString() + "started calculating");
+            trackerUpdater.update(this);
+            logger.debug(this.toString() + "finished calculating");
+        } else {
+            calculateSimulatedTrackers();
         }
     }    
 

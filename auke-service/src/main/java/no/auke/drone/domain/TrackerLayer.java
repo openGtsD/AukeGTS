@@ -68,7 +68,7 @@ public class TrackerLayer  {
     }
 
     public TrackerLayer(String layerName) {
-        this(layerName,false);
+        this(layerName,true);
     }
 
     public TrackerLayer() {

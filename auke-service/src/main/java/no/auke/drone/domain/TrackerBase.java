@@ -130,8 +130,7 @@ public abstract class TrackerBase extends TrackerPositionBase {
     @Override
     public String toString() {
 
-        return "id: " + getId() + ", name:" + name + ", latitude " + getCurrentPosition().getLatitude() + ", longitude"
-                + getCurrentPosition().getLongitude();
+        return "{id: " + getId() + ", name:" + name + " layer:" + getLayerId() + " ,position: " + getCurrentPosition().toString() + " }";
     }
     
 

@@ -57,20 +57,20 @@ public class TrackerServiceThreadingIntegrationTest extends AbstractIntegrationT
             EventData eventData = new EventData();
             eventData.setDeviceID(device1Id);
             eventData.setAccountID("demo");
-            eventData.setLongitude(1121);
-            eventData.setLatitude(1131);
-            eventData.setAltitude(1141);
-            eventData.setStatusCode(1151);
+            eventData.setLongitude(1121 + i * 3);
+            eventData.setLatitude(1131 + i * 3);
+            eventData.setAltitude(1141 + i * 3);
+            eventData.setStatusCode(1151 + i * 3);
             eventDataCRUDDao.create(eventData);
             System.out.println("created event1 " + eventData.toString());
 
             EventData eventData2 = new EventData();
             eventData2.setDeviceID(device2Id);
             eventData2.setAccountID("demo");
-            eventData2.setLongitude(1121);
-            eventData2.setLatitude(1131);
-            eventData2.setAltitude(1141);
-            eventData2.setStatusCode(1151);
+            eventData2.setLongitude(1121 + i * 3);
+            eventData2.setLatitude(1131 + i * 3);
+            eventData2.setAltitude(1141 + i * 3);
+            eventData2.setStatusCode(1151 + i * 3);
             System.out.println("created event2 " + eventData2.toString());
             eventDataCRUDDao.create(eventData2);
 
