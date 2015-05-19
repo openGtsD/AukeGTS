@@ -160,7 +160,7 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
     @Override
     public boolean withinView(double southWestLat, double southWestLon, double northEastLat, double northEastLon) {
 
-    	// logitude are horizontal -> value -180 to 180
+    	// longitude are horizontal -> value -180 to 180
     	// latitude are vertical -> value -90 to 90
     	
         try {
