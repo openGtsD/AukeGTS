@@ -5,18 +5,23 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 import no.auke.drone.domain.*;
 import no.auke.drone.services.ZoomLayerService;
+
 import org.apache.commons.lang.SerializationUtils;
 
 public class ZoomLayerServiceImpl implements ZoomLayerService {
 
     private ReentrantLock block = new ReentrantLock();
     private Collection<Tracker> positions = new ConcurrentLinkedQueue<Tracker>();
-	private TrackerLayer trackerLayer;
+    
+    private Map<Long,TrackerSum> trackerSUM = new ConcurrentHashMap<Long,TrackerSum>();
+	
+    private TrackerLayer trackerLayer;
 	private int zoomFactor;
 	
 	@Override
@@ -76,65 +81,57 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 	@Override
 	public void calculate() {
 		
-	    Map<Long,Tracker> new_positions = new HashMap<Long,Tracker>();
+	    Map<Long,TrackerSum> new_positions = new HashMap<Long,TrackerSum>();
 		
         for(Tracker tracker : trackerLayer.getTrackers()) {
         	
         	double lon = zoomLongitude(tracker.getCurrentPosition().getLongitude());
         	double lat = zoomLatitude(tracker.getCurrentPosition().getLatitude());
 
-        	Long index = getIndex(lon,lat);
+        	Long id = getIndex(lon,lat);
 
-        	Tracker point;
-        	if(!new_positions.containsKey(index)) {
+        	TrackerSum point;
+        	if(!new_positions.containsKey(id)) {
         		
         		point=new TrackerSum();
-        		point.setId(String.valueOf(index));
+        		point.setId(String.valueOf(id));
         		point.setName("Tracker within long=" + String.valueOf(lon) + " lat=" + String.valueOf(lat));
         		point.getCurrentPosition().setLatitude(tracker.getCurrentPosition().getLatitude());
         		point.getCurrentPosition().setLongitude(tracker.getCurrentPosition().getLongitude());
 
-        		new_positions.put(index, point);
+        		new_positions.put(id, point);
         		
         	} else {
 
-        		point = new_positions.get(index);
-        		
+        		point = new_positions.get(id);
         		
         	}
         	
     		
         	point.incrementTrackers();
+        	
+        	// LHA: use this to get trackers included in the point
+        	// See function, getIncludedTracker(Id)
+
 
         	// LHA: We show average positions for all trackers on current summarized positions
         	
     		point.getCurrentPosition().setLatitude(
     				( ( 
     					point.getCurrentPosition().getLatitude() * point.getNumtrackers()
-    				  ) + tracker.getCurrentPosition().getLatitude() ) / 2
+    				  ) + tracker.getCurrentPosition().getLatitude() ) / (point.getNumtrackers() + 1)
     				);  
 
     		point.getCurrentPosition().setLongitude(
     				( (
     					point.getCurrentPosition().getLongitude() * point.getNumtrackers() 
-    				  ) + tracker.getCurrentPosition().getLongitude() ) / 2
+    				  ) + tracker.getCurrentPosition().getLongitude() ) / (point.getNumtrackers() + 1)
     				);
         	
         	
-        	// LHA: Don't think a good idea to serve all tracker info in each point
-        	
-        	// will destroy performance on low zoom levels
-        	// On reason for doing a zoom summarize is t reduce
-        	// size of query data to map (every 10 second)
-        	// with a list of trackers on each point
-        	// we still send a lot of information (same as without summarize)
-        	
-        	// Instead we should make a second call from UI
-        	// to retrieve tracker information in each point when user click the point on map
-        	
-        	// Add this information when calculate, but remove from json sent to UI
-        	// (add to trackerSUM class, instead if tracker class)
-        	
+        	// LHA: use this to get trackers included in the point
+        	// See function, getIncluded(Id)
+
             point.addInnerTrackers(tracker);
             
         }
@@ -142,20 +139,31 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
         try {
 
             block.lock();
-
-            for(Tracker tracker : new_positions.values()) {
-                Tracker persistingTracker = new TrackerSum();
-                persistingTracker.setId(tracker.getId());
-                persistingTracker.setName(tracker.getName());
-                persistingTracker.setLayerId(Tracker.TrackerType.SUMMARIZED.toString());
-                persistingTracker.getInnerTrackers().addAll(tracker.getInnerTrackers());
-                tracker.getInnerTrackers().clear();
-                persistingTracker.setCurrentPosition(tracker.getCurrentPosition());
-                TrackerData.getInstance().register((Observer)persistingTracker);
-            }
-
+            
+            // LHA: this will cause summarized tracker lit to grow out to big
+            // 
+//
+//            
+//            for(Tracker tracker : new_positions.values()) {
+//                Tracker persistingTracker = new TrackerSum();
+//                persistingTracker.setId(tracker.getId());
+//                persistingTracker.setName(tracker.getName());
+//                persistingTracker.setLayerId(Tracker.TrackerType.SUMMARIZED.toString());
+//                persistingTracker.getInnerTrackers().addAll(tracker.getInnerTrackers());
+//                tracker.getInnerTrackers().clear();
+//                persistingTracker.setCurrentPosition(tracker.getCurrentPosition());
+//                TrackerData.getInstance().register((Observer)persistingTracker);
+//            }
+            
+           
             positions.clear();
             positions.addAll(new_positions.values());
+
+            // for getting tracker info
+            trackerSUM.clear();
+            trackerSUM.putAll(new_positions);
+            
+            
         } finally {
 
             block.unlock();
@@ -211,6 +219,23 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 
     	return result;
         
+    }
+    
+    // LHA: Use this to get the list of included trackers
+    @Override
+    public Collection<Tracker> getIncludedTrackers(String trackerId) {
+    	try {
+    		
+        	Long id = Long.valueOf(trackerId);
+        	if(trackerSUM.containsKey(id)) {
+        		return trackerSUM.get(id).getIncludedTrackers();
+        	}
+    		
+    	} catch (Exception ex) {
+    	}
+    	return null;
+    	
+    	
     }
 
 	@Override

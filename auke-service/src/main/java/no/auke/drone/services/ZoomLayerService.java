@@ -24,8 +24,6 @@ public interface ZoomLayerService {
 	Collection<Tracker> getPositions();
 	List<BoundingBox> getMapAreas();
 
-
-
-
+	Collection<Tracker> getIncludedTrackers(String Id);
 
 }

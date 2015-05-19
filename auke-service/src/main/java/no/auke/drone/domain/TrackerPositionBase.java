@@ -1,6 +1,5 @@
 package no.auke.drone.domain;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -184,20 +183,19 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
     }
 
 
-    @Override
-    public void addInnerTrackers(Tracker tracker) {
-        if(innerTrackers == null) {
-            innerTrackers = new ArrayList<>();
-        }
-        innerTrackers.add(tracker.getId());
-    }
-
-    @Override
-
-    public List<String> getInnerTrackers() {
-        if(this.innerTrackers == null) {
-            this.innerTrackers = new ArrayList<>();
-        }
-        return this.innerTrackers;
-    }
+//    @Override
+//    public void addInnerTrackers(Tracker tracker) {
+//        if(innerTrackers == null) {
+//            innerTrackers = new ArrayList<>();
+//        }
+//        innerTrackers.add(tracker.getId());
+//    }
+//
+//    @Override
+//    public List<String> getInnerTrackers() {
+//        if(this.innerTrackers == null) {
+//            this.innerTrackers = new ArrayList<>();
+//        }
+//        return this.innerTrackers;
+//    }
 }

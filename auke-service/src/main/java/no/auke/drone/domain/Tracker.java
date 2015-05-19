@@ -120,7 +120,4 @@ public interface Tracker {
 
 	boolean checkIfPassive();
 
-    void addInnerTrackers(Tracker tracker);
-
-    List<String> getInnerTrackers();
 }

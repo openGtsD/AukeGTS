@@ -66,6 +66,13 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
     }
 
     private SyndFeed buildFeed(String type) {
+    	
+    	// LHA: ok here we have diffrent type og feed
+    	// create sub metods
+    	
+    	
+    	
+    	
         Collection<Tracker> trackers = trackerService.getActiveTrackers();
         SyndFeed feed = new CustomSyndFeed();
         feed.setFeedType(propertiesPersister.getPropertyByKey("rss.type"));
