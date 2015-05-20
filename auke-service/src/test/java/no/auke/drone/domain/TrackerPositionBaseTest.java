@@ -70,7 +70,15 @@ public class TrackerPositionBaseTest {
 			public void setLatestPositions(CircularFifoBuffer latestPositions) {}
 			@Override
 			public void setTrackerUpdater(TrackerUpdater trackerUpdater) {}
+            @Override
+            final public String getImeiNumber() {
+                return null;
+            }
+            @Override
+            final public void setImeiNumber(String imeiNumber) {
+            }
 			};
+
 	}
 
 	@After

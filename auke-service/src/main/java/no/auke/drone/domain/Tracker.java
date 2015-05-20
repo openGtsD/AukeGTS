@@ -93,7 +93,11 @@ public interface Tracker {
     void calculate();
 
     Tracker move(Integer speed, Integer course);
-    
+
+    String getImeiNumber();
+
+    void setImeiNumber(String imeiNumber);
+
     String getSimPhone();
     
     void setSimPhone(String simPhone);

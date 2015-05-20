@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 
+import no.auke.drone.application.TrackerFactory;
 import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.*;
@@ -98,6 +99,23 @@ public class TrackerServiceImpl implements TrackerService {
         TrackerData.getInstance().remove((Observer) tracker);
         return tracker;
     
+    }
+
+    @Override
+    public Tracker getTracker(String id, boolean refresh) {
+        if(!refresh) {
+            return getTracker(id);
+        }
+
+        Device device = crudDeviceDao.getById(id);
+        Tracker tracker = simpleTrackerFactory.from(device);
+
+        if(tracker != null) {
+            TrackerData.getInstance().register((Observer) tracker);
+        }
+
+        return tracker;
+
     }
 
     @Override

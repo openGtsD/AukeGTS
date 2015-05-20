@@ -13,6 +13,11 @@ public class Device {
     private String accountID;
 
     private String description;
+
+    private String simPhoneNumber;
+
+    private String imeiNumber;
+
 //    private long lastUpdateTime;
 //    private long creationTime;
 
@@ -25,6 +30,8 @@ public class Device {
     public Device from(Tracker tracker) {
         deviceID = tracker.getId();
         description = tracker.getName();
+        simPhoneNumber = tracker.getSimPhone();
+        imeiNumber = tracker.getImeiNumber();
         return this;
     }
 
@@ -52,7 +59,23 @@ public class Device {
         this.description = description;
     }
 
-//    public long getLastUpdateTime() {
+    public String getSimPhoneNumber() {
+        return simPhoneNumber;
+    }
+
+    public void setSimPhoneNumber(String simPhoneNumber) {
+        this.simPhoneNumber = simPhoneNumber;
+    }
+
+    public String getImeiNumber() {
+        return imeiNumber;
+    }
+
+    public void setImeiNumber(String imeiNumber) {
+        this.imeiNumber = imeiNumber;
+    }
+
+    //    public long getLastUpdateTime() {
 //        return lastUpdateTime;
 //    }
 //

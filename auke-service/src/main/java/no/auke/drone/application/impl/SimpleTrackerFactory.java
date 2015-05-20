@@ -38,7 +38,8 @@ public class SimpleTrackerFactory implements TrackerFactory {
 
     @Override
     public Tracker from(Device device) {
-        return create(Tracker.TrackerType.REAL.toString(), device.getDeviceID(), device.getDescription());
+        if(device == null) return null;
+        return create(Tracker.TrackerType.REAL.toString(), device.getDeviceID(), device.getDescription(), 0, 0 , 0 , Tracker.TrackerType.REAL , null, false, new MapPoint(), device.getImeiNumber(), device.getSimPhoneNumber());
     }
 
     @Override
@@ -51,6 +52,7 @@ public class SimpleTrackerFactory implements TrackerFactory {
         tracker.setName(name);
         tracker.setAltitude(altitude);
         tracker.setSimPhone(simPhone);
+        tracker.setImeiNumber(imei);
         tracker.setCreateDate(new Date());
         tracker.setModifiedDate(new Date());
         tracker.setSpeed(speed);

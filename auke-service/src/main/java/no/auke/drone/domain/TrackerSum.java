@@ -110,6 +110,15 @@ public class TrackerSum extends TrackerPositionBase {
 	@Override
 	public void setSimPhone(String simPhone) {}
 
+    @Override
+    final public String getImeiNumber() {
+        return null;
+    }
+
+    @Override
+    final public void setImeiNumber(String imeiNumber) {
+    }
+
 	@Override
 	public Date getCreateDate() {
 		return null;

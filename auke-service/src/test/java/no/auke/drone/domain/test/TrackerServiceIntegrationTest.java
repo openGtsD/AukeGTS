@@ -2,10 +2,7 @@ package no.auke.drone.domain.test;
 
 import junit.framework.Assert;
 import no.auke.drone.dao.CRUDDao;
-import no.auke.drone.domain.Device;
-import no.auke.drone.domain.EventData;
-import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.TrackerLayer;
+import no.auke.drone.domain.*;
 import no.auke.drone.services.TrackerService;
 import org.junit.After;
 import org.junit.Before;
@@ -79,9 +76,18 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
 
         String newName = "this is the new name";
         tracker.setName(newName);
+        String simPhone = "11223344sim";
+        tracker.setSimPhone(simPhone);
+        String imeiNumber = "11223344imei";
+        tracker.setImeiNumber(imeiNumber);
+        MapPoint newMappoint = new MapPoint(1144,4444);
+        tracker.setCurrentPosition(newMappoint);
+
         trackerService.update(tracker);
-        tracker = trackerService.getTracker(newTrackerId);
+        tracker = trackerService.getTracker(newTrackerId,true);
         Assert.assertEquals(newName,tracker.getName());
+        Assert.assertEquals(simPhone,tracker.getSimPhone());
+        Assert.assertEquals(imeiNumber,tracker.getImeiNumber());
 
         deleteAfterUse(newTrackerId);
     }

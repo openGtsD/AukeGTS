@@ -130,10 +130,13 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         String[] fields = getFieldNames(entity,"");
         try {
             for(String field : fields) {
-                properties.put(field, BeanUtils.getProperty(entity,field));
+                if(BeanUtils.getProperty(entity,field) != null) {
+                    properties.put(field, BeanUtils.getProperty(entity,field));
+                }
             }
         } catch (Exception e) {
             logger.error(e.toString());
+
         }
 
         return properties;

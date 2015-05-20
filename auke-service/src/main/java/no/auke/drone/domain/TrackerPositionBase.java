@@ -60,7 +60,9 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
 
     public void setCurrentPosition(MapPoint currentPosition) {
         this.currentPosition = currentPosition;
-    }  
+    }
+
+
 
     @Override
     public String toString() {

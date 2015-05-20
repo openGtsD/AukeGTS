@@ -34,6 +34,8 @@ public abstract class TrackerBase extends TrackerPositionBase {
     // Thai Huynh: Some fields need update tracker
     private String name;
     private String simPhone;
+    private String imeiNumber;
+
     private Date createDate;
     private Date modifiedDate;
 
@@ -164,13 +166,23 @@ public abstract class TrackerBase extends TrackerPositionBase {
     }
 
     @Override
-    public String getSimPhone() {
+    final public String getSimPhone() {
         return simPhone;
     }
 
     @Override
-    public void setSimPhone(String simPhone) {
+    final public void setSimPhone(String simPhone) {
         this.simPhone = simPhone;
+    }
+
+    @Override
+    final public String getImeiNumber() {
+        return imeiNumber;
+    }
+
+    @Override
+    final public void setImeiNumber(String imeiNumber) {
+        this.imeiNumber = imeiNumber;
     }
 
     @Override

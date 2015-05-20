@@ -14,6 +14,7 @@ public interface TrackerService {
     Tracker registerTracker(String id, String name);
     Tracker removeTracker(String id);
     Tracker getTracker(String id);
+    Tracker getTracker(String id, boolean refresh);
     Collection<Tracker> getAll(String layerId);
     Collection<Tracker> getAll();
     Collection<Tracker> getTrackersByIds(List<String> ids);
