@@ -41,5 +41,13 @@ Ext.define('Auke.view.global.Home', {
              }]
 		});
 		me.callParent(arguments);
+	},
+	
+	setLayer : function(layer) {
+		this.layer = layer;
+	},
+	
+	getLayer : function() {
+		return this.layer;
 	}
 });

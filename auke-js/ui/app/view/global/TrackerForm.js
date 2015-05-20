@@ -46,7 +46,13 @@ Ext.define('Auke.view.global.TrackerForm', {
                         name : 'simPhone',
                         fieldLabel : 'SIM Phone',
                         hidden: true
-                    } 
+                    }, {
+                        xtype : 'datefield',
+                        name : 'createDate',
+                        fieldLabel : 'Create Date',
+                        submitFormat: 'Y-m-d',
+                        hidden: true
+                    }
                     ]
                 } ],
                 buttonAlign : 'center',

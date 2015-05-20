@@ -24,7 +24,9 @@ import no.auke.drone.domain.Tracker;
 import no.auke.drone.dto.AukeResponse;
 import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
+import no.auke.drone.services.ZoomLayerService;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,6 +46,8 @@ public class TrackerController {
     private CRUDDao<EventData> crudEventDao;
     @Autowired
     private EventService eventService;
+    @Autowired
+    private ZoomLayerService zoomLayerService;
 
     @PostConstruct
     public void init() {
@@ -126,8 +130,16 @@ public class TrackerController {
     @Path("/get-tracker/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse getTracker(@PathParam("id") String id) {
-        Tracker tracker = trackerService.getTracker(id);
+        Tracker tracker = trackerService.getTracker(id, true);
         return new AukeResponse(tracker != null, tracker);
+    }
+    
+    @GET
+    @Path("/get-tracker/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse getIncludedTrackers(@PathParam("id") String id) {
+        Collection<Tracker> trackers = zoomLayerService.getIncludedTrackers(id);
+        return new AukeResponse(!CollectionUtils.isEmpty(trackers), trackers);
     }
 
     @GET

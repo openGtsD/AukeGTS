@@ -57,33 +57,6 @@ var icons = {};
 Auke.utils.markers = [];
 Auke.utils.allmarkers = {};
 var layerId = "SIMULATED";
-function load() {
-	var myOptions = {
-		zoom : 3,
-		center : new google.maps.LatLng(50.62504, -100.10742),
-		mapTypeId : google.maps.MapTypeId.ROADMAP
-	}
-	map = new google.maps.Map(document.getElementById('map-canvas'), myOptions);
-
-	mgr = new MarkerManager(map);
-
-	google.maps.event.addListener(mgr, 'loaded', function() {
-		google.maps.event.addListener(map, 'idle', function() {
-			$("#resultZoom").text(map.getZoom());
-			var mapBound = map.getBounds();
-			var ne = mapBound.getNorthEast();
-			var sw = mapBound.getSouthWest();
-			var southWestLat = "Upper Left: " + sw.lat() + " / " + sw.lng();
-			var northEastLat = "Lower Right: " + ne.lat() + " / " + ne.lng();
-			$("#resultBoundary").html(southWestLat + " And " + northEastLat);
-			updateStatus(mgr.getMarkerCount(map.getZoom()));
-		});
-
-		var interval = setInterval(function() {
-			loadDroneIncurrentView(layerId);
-		}, 5000);
-	});
-}
 
 Auke.utils.createMarker = function(id, posn, title) {
 	var markerOptions = {
@@ -92,17 +65,14 @@ Auke.utils.createMarker = function(id, posn, title) {
 		title : title
 	};
 	var marker = new google.maps.Marker(markerOptions);
-//	Auke.utils.createInfoWindow(marker, map);
+	Auke.utils.createInfoWindow(marker, map);
 //	Auke.utils.centerZoom(marker, map);
 	return marker;
 }
 
-var infoWindow = new google.maps.InfoWindow();
 Auke.utils.createInfoWindow = function(marker, map) {
 	google.maps.event.addListener(marker, 'click', function() {
-//		infoWindow.setContent(marker.content);
-		// Send request at here
-		infoWindow.open(map, marker);
+		Auke.utils.getIncludedTracker(map, marker)
 	});
 }
 
@@ -113,6 +83,21 @@ Auke.utils.centerZoom = function(marker, map) {
 		map.fitBounds(bounds);
 		map.setZoom(16);
 	});
+}
+
+var infoWindow = new google.maps.InfoWindow();
+Auke.utils.getIncludedTracker = function(map, marker) {
+	Ext.Ajax.request({
+		url : Auke.utils.buildURL('drone/get-tracker/', true) + marker.id,
+		method: 'GET',
+		success : function(response) {
+			var res = Ext.JSON.decode(response.responseText);
+			if (res.success) {
+				infoWindow.setContent(Auke.utils.buildHTML(res[0]));
+				infoWindow.open(map, marker);
+			}
+		}
+	})
 }
 
 Auke.utils.stop = function(id) {

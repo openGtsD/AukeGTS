@@ -13,7 +13,10 @@ Ext.define('Auke.controller.TrackerAction', {
 	},  {
 		ref : 'feedGrid',
 		selector : 'feedGrid'
-	},],
+	}, {
+        ref : 'home',
+        selector : 'home'
+    }],
 	init : function() {
 		var me = this;
 		me.control({
@@ -41,23 +44,38 @@ Ext.define('Auke.controller.TrackerAction', {
 			},
 			'home gmappanel' : {
 				mapready: me.initMarkerManager,
-				idle: me.loadTrackers
-			}
+				idle: me.getTrackers
+			},
+			'home combo' : {
+	            select : me.loadTrackerFromLayerId
+	        },
 		});
+	},
+	
+	getTrackers :  function(gmappanel) {
+		this.loadTrackers(this.getHome().getLayer());
+	},
+	
+	loadTrackerFromLayerId : function(combo, records, eOpts ){
+		this.getHome().setLayer(combo.getValue());
+		this.loadTrackers(combo.getValue())
 	},
 	
 	initMarkerManager : function(gmappanel) {
 		Auke.utils.mgr = new MarkerManager(gmappanel.getMap());
+		 
 	},
 	
-	loadTrackers : function(gmappanel){
+	loadTrackers : function(layerId){
 		var me = this;
-		var map = gmappanel.getMap();
+		//var layerId = layerId !== null ? layerId : 'SIMULATED';
+		var map = Auke.utils.mgr.map_;
+//		var map = gmappanel.getMap();
 		var mapBound = map.getBounds();
 		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 		var sw = mapBound.getSouthWest();
 		Ext.Ajax.request({
-			url : Auke.utils.buildURL('drone/load-drone-in-view/', true) + 'SIMULATED/' + map.getZoom(),
+			url : Auke.utils.buildURL('drone/load-drone-in-view/', true) + layerId + "/" + map.getZoom(),
 			jsonData : JSON.stringify({
 				southWestLat : sw.lat(),
 				southWestLon : sw.lng(),
