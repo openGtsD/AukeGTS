@@ -127,6 +127,11 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
+    public TrackerLayer getTrackerLayer(String layerId) {
+        return TrackerData.getInstance().getTrackerLayer(layerId);
+    }
+
+    @Override
     public Collection<Tracker> getAll(String layerId) {
     	return TrackerData.getInstance().getTrackers(layerId);
     }

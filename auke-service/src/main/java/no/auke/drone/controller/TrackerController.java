@@ -135,10 +135,9 @@ public class TrackerController {
     }
     
     @GET
-    @Path("/get-tracker/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse getIncludedTrackers(@PathParam("id") String id) {
-        Collection<Tracker> trackers = zoomLayerService.getIncludedTrackers(id);
+    @Path("/get-included-tracker")
+    public AukeResponse getIncludedTrackers(@QueryParam("id") String id, @QueryParam("layerId")String layerId, @QueryParam("zoom")Integer zoom) {
+        Collection<String> trackers = trackerService.getTrackerLayer(layerId).getZoomLayer(zoom).getIncludedTrackers(id);
         return new AukeResponse(!CollectionUtils.isEmpty(trackers), trackers);
     }
 

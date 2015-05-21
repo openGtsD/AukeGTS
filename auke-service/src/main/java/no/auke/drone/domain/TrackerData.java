@@ -152,11 +152,9 @@ public class TrackerData implements Subject {
 	}
 
 	public void startCalculate() {
-        logger.info("starting calculating " + trackerLayers.size() + " layer(s)");
     	for(TrackerLayer trackerLayer : trackerLayers.values()) {
     		trackerLayer.startCalculate();
     	}
-        logger.info("finished calculating " + trackerLayers.size() + " layer(s)");
 
     }
 

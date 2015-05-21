@@ -1,9 +1,9 @@
 package no.auke.drone.services;
 
 
-import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.TrackerData;
-import no.auke.drone.domain.TrackerLayer;
+import no.auke.drone.dao.CRUDDao;
+import no.auke.drone.domain.*;
+import no.auke.drone.domain.test.AbstractIntegrationTest;
 import no.auke.drone.services.impl.TrackerServiceImpl;
 
 import org.junit.After;
@@ -21,23 +21,27 @@ import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ZoomLayerTest.class})
 
-public class TrackerServiceTest {
+public class TrackerServiceTest extends AbstractIntegrationTest {
 
+    @Autowired
 	TrackerService service;
+
+    @Autowired
+    CRUDDao<Device> deviceCRUDDao;
 	
 	@Before
 	public void setUp() throws Exception {
-		service = new TrackerServiceImpl();
+        deviceCRUDDao.setPersistentClass(Device.class);
+        deviceCRUDDao.deleteAll();
 	}
 
 	@After
 	public void tearDown() throws Exception {
-		service.stopService();
-		assertEquals(0,TrackerData.getInstance().getTrackers().size());
+        service.stopService();
+		assertEquals(0, TrackerData.getInstance().getTrackers().size());
 	}
 
 	@Test
@@ -48,29 +52,29 @@ public class TrackerServiceTest {
 		service.registerTracker("2", "");
 		service.registerTracker("3", "");
 
-		assertEquals(3,TrackerData.getInstance().getTrackers().size());
-		assertEquals(3,TrackerData.getInstance().getLayers().size());		
-		
-	}
+		assertEquals(3,TrackerData.getInstance().getTrackers(Tracker.TrackerType.REAL.toString()).size());
+		assertEquals(2,TrackerData.getInstance().getLayers().size());
+        service.stopService();
+    }
 	
 	@Test
 	public void test_remove() {
 
 		service.registerTracker("1", "");
-		assertEquals(1,TrackerData.getInstance().getTrackers().size());
+		assertEquals(1,TrackerData.getInstance().getTrackers(Tracker.TrackerType.REAL.toString()).size());
 
 		service.removeTracker("1");
-		assertEquals(0,TrackerData.getInstance().getTrackers().size());
-		
-	}
+		assertEquals(0,TrackerData.getInstance().getTrackers(Tracker.TrackerType.REAL.toString()).size());
+        service.stopService();
+    }
 	
 	@Test
 	public void test_gettracker() {
 
 		service.registerTracker("1", "");
 		assertNotNull(service.getTracker("1"));
-		
-	}	
+        service.stopService();
+    }
 	
 	@Test
 	public void test_start_stop() {
@@ -83,8 +87,8 @@ public class TrackerServiceTest {
 
 		service.start("1");
 		assertTrue(service.getTracker("1").isMoving());
-		
-	}	
+        service.stopService();
+    }
 
 	@Test
 	public void test_calulateAll_DEFAULT() {
@@ -102,8 +106,9 @@ public class TrackerServiceTest {
 		}	
 		
 		assertEquals(2,layer.getTrackers().size());
-			
-	}
+        service.stopService();
+
+    }
 	
 	@Test
 	public void test_loadWithinView_DEFAULT() {
@@ -124,8 +129,7 @@ public class TrackerServiceTest {
 		assertEquals(1,service.loadWithinView(new BoundingBox(-90,180,90,-180), 14, "DEFAULT").size());
 		
 		assertEquals(2,service.loadWithinView(new BoundingBox(-90,180,90,-180), 15, "DEFAULT").size());	
-		assertEquals(2,service.loadWithinView(new BoundingBox(-90,180,90,-180), 20, "DEFAULT").size());	
-
-		
-	}	
+		assertEquals(2,service.loadWithinView(new BoundingBox(-90,180,90,-180), 20, "DEFAULT").size());
+        service.stopService();
+    }
 }

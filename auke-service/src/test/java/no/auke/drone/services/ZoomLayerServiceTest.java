@@ -79,7 +79,9 @@ public class ZoomLayerServiceTest {
 		assertEquals(5,pos.get(0).getCurrentPosition().getLongitude(),0.5);
 		assertEquals(5,pos.get(0).getCurrentPosition().getLatitude(),0.5);
 
-		
+        // checking inner trackers
+        assertEquals(1,service_level1.getIncludedTrackerIds().size());
+        assertEquals(1001,service_level1.getIncludedTrackerIds().get(pos.get(0).getId()).size());
 	}	
 
 	
@@ -113,9 +115,13 @@ public class ZoomLayerServiceTest {
 		
 		assertEquals(0.085,pos.get(2).getCurrentPosition().getLongitude(),0.001);
 		assertEquals(0.085,pos.get(2).getCurrentPosition().getLatitude(),0.001);
-		
-	}	
 
-	
+        // checking inner trackers
+        assertEquals(3,service_level10.getIncludedTrackerIds().size());
+        assertEquals(352,service_level10.getIncludedTrackerIds().get(pos.get(0).getId()).size());
+        assertEquals(351,service_level10.getIncludedTrackerIds().get(pos.get(1).getId()).size());
+        assertEquals(297,service_level10.getIncludedTrackerIds().get(pos.get(2).getId()).size());
+
+	}
 
 }

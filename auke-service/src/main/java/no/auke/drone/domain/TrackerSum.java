@@ -12,17 +12,6 @@ public class TrackerSum extends TrackerPositionBase {
 
     private String name="";	
     
-    // LHA: holding all incuded trackers
-    private List<Tracker> includedTrackers = new ArrayList<Tracker>(); 
-
-	public List<Tracker> getIncludedTrackers() {
-		return includedTrackers;
-	}
-	
-	public void addInnerTrackers(Tracker tracker) {
-		includedTrackers.add(tracker);
-	}
-
 	public TrackerSum() {}
 
     // number of trackers on this positions

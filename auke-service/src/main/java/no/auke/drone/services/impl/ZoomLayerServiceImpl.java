@@ -24,6 +24,7 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
     private Collection<Tracker> positions = new ConcurrentLinkedQueue<Tracker>();
 
     private Map<Long, TrackerSum> trackerSUM = new ConcurrentHashMap<Long, TrackerSum>();
+    private Map<String, List> includedTrackerIds = new ConcurrentHashMap<>();
 
     private TrackerLayer trackerLayer;
     private int zoomFactor;
@@ -40,6 +41,14 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
     // * 10
     // Zoom Latitude = ROUND( LATITUDE / ( 180 / ( 2 ^^(ZOOMLEVEL-1) ) ) , 1) *
     // 10
+
+    public Map<String,List> getIncludedTrackerIds() {
+        if(includedTrackerIds == null) {
+            includedTrackerIds = new ConcurrentHashMap<>();
+        }
+
+        return includedTrackerIds;
+    }
 
     @Override
     public double longitudeWith() {
@@ -88,10 +97,20 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 
     }
 
+    private void updateData( Map<Long, TrackerSum> newPositions) {
+        positions.clear();
+        positions.addAll(newPositions.values());
+
+        // for getting tracker info
+        trackerSUM.clear();
+        trackerSUM.putAll(newPositions);
+    }
+
     @Override
     public void calculate() {
 
-        Map<Long, TrackerSum> new_positions = new HashMap<Long, TrackerSum>();
+        Map<Long, TrackerSum> newPositions = new HashMap<Long, TrackerSum>();
+        includedTrackerIds.clear();
 
         for (Tracker tracker : trackerLayer.getTrackers()) {
 
@@ -101,19 +120,19 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
             Long id = getIndex(lon, lat);
 
             TrackerSum point;
-            if (!new_positions.containsKey(id)) {
+            if (!newPositions.containsKey(id)) {
 
                 point = new TrackerSum();
-                point.setId(String.valueOf(id));
+                point.setId(String.valueOf(id) + "-" + String.valueOf(getZoomFactor()));
                 point.setName("Tracker within long=" + String.valueOf(lon) + " lat=" + String.valueOf(lat));
                 point.getCurrentPosition().setLatitude(tracker.getCurrentPosition().getLatitude());
                 point.getCurrentPosition().setLongitude(tracker.getCurrentPosition().getLongitude());
 
-                new_positions.put(id, point);
+                newPositions.put(id, point);
 
             } else {
 
-                point = new_positions.get(id);
+                point = newPositions.get(id);
 
             }
 
@@ -136,35 +155,17 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
             // LHA: use this to get trackers included in the point
             // See function, getIncluded(Id)
 
-            point.addInnerTrackers(tracker);
+            if(includedTrackerIds.get(point.getId()) == null) {
+                includedTrackerIds.put(point.getId(), new ArrayList<String>());
+            }
 
+            includedTrackerIds.get(point.getId()).add(tracker.getId());
         }
 
         try {
 
             block.lock();
-
-            // LHA: this will cause summarized tracker lit to grow out to big
-            //
-            //
-            //
-            // for(Tracker tracker : new_positions.values()) {
-            // Tracker persistingTracker = new TrackerSum();
-            // persistingTracker.setId(tracker.getId());
-            // persistingTracker.setName(tracker.getName());
-            // persistingTracker.setLayerId(Tracker.TrackerType.SUMMARIZED.toString());
-            // persistingTracker.getInnerTrackers().addAll(tracker.getInnerTrackers());
-            // tracker.getInnerTrackers().clear();
-            // persistingTracker.setCurrentPosition(tracker.getCurrentPosition());
-            // TrackerData.getInstance().register((Observer)persistingTracker);
-            // }
-
-            positions.clear();
-            positions.addAll(new_positions.values());
-
-            // for getting tracker info
-            trackerSUM.clear();
-            trackerSUM.putAll(new_positions);
+            updateData(newPositions);
 
         } finally {
 
@@ -218,18 +219,9 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 
     // LHA: Use this to get the list of included trackers
     @Override
-    public Collection<Tracker> getIncludedTrackers(String trackerId) {
-        try {
-
-            Long id = Long.valueOf(trackerId);
-            if (trackerSUM.containsKey(id)) {
-                return trackerSUM.get(id).getIncludedTrackers();
-            }
-
-        } catch (Exception ex) {
-        }
-        return null;
-
+    public Collection<String> getIncludedTrackers(String trackerId) {
+        List<String> includedTrackers = getIncludedTrackerIds().get(trackerId);
+        return includedTrackers;
     }
 
     @Override

@@ -123,7 +123,7 @@ public class EventServiceImpl implements EventService {
 
                 	long lastStarted = System.currentTimeMillis();
                     while(isRunning.get()) {
-                        logger.info("starting fetching data" + isRunning);
+                        if(logger.isDebugEnabled()) logger.debug("starting fetching data" + isRunning);
 
                         // querying
                         fetchEventData();
@@ -141,7 +141,7 @@ public class EventServiceImpl implements EventService {
 
                             lastStarted = System.currentTimeMillis();
                         }
-                        logger.info("finished fetching data" + isRunning);
+                        if(logger.isDebugEnabled()) logger.debug("finished fetching data" + isRunning);
                     }
 
                 }

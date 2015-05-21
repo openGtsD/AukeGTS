@@ -33,6 +33,10 @@ public class TrackerLayer  {
 
     // Layer list and layer handling
     private Map<Integer,ZoomLayerService> zoomLayers;
+    public ZoomLayerService getZoomLayer(Integer zoom) {
+        return zoomLayers.get(zoom);
+    }
+
     public Collection<ZoomLayerService> getZoomLayers() {
 		return zoomLayers.values();
 	}

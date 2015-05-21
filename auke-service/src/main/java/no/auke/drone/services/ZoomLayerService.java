@@ -2,6 +2,7 @@ package no.auke.drone.services;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.Tracker;
@@ -24,6 +25,6 @@ public interface ZoomLayerService {
 	Collection<Tracker> getPositions();
 	List<BoundingBox> getMapAreas();
 
-	Collection<Tracker> getIncludedTrackers(String Id);
-
+	Collection<String> getIncludedTrackers(String Id);
+    Map<String,List> getIncludedTrackerIds();
 }
