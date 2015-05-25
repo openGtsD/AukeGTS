@@ -94,8 +94,7 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
             description.setType("text/plain");
             description.setValue(tracker.getName());
             entry.setDescription(description);
-            entry.setAuthor(tracker.getFlyer() != null ? tracker.getFlyer().getEmail() : "auketeam@gmail.com"
-                    + "(Auke Team) ");
+            entry.setAuthor(tracker.getFlyer() != null ? tracker.getFlyer().getEmail() : propertiesPersister.getPropertyByKey("rss.defaultEmail"));
             entry.setLink(propertiesPersister.getPropertyByKey("server.domain"));
             entry.setUri(propertiesPersister.getPropertyByKey("server.domain") + "/" + UUID.randomUUID().toString());
             entries.add(entry);
