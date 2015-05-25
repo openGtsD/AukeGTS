@@ -4,7 +4,7 @@ Auke.utils.markers = [];
 Auke.utils.allmarkers = {};
 // Change url when go live
 Auke.utils.baseURL = "http://localhost:8080/";
-Auke.utils.serviceURL = "http://localhost:8888/";
+Auke.utils.serviceURL = "http:///localhost:8888/";
 
 Auke.utils.buildURL = function(url, isUseService) {
 	var domain = isUseService ? Auke.utils.serviceURL : Auke.utils.baseURL;
@@ -71,7 +71,7 @@ Auke.utils.buildContent = function(data) {
 			+ "</span></li><li>Speed: <span class='highlight'>"
 			+ data.currentPosition.speed + "</span></li>"
 			+ "<li>Name: <span class='highlight'>"
-			+ data.name + "</span></li></ul>"
+			+ data.name + "</span></li><li>Time: <span class='highlight'>" + Ext.Date.format(new Date(data.currentPosition.time), "Y-m-d"); + "</li></ul>"
 };
 
 Auke.utils.createMarker = function(id, posn, title, numtrackers, layerId, map) {
