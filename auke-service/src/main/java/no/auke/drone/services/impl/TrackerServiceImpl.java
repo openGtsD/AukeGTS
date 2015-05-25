@@ -103,15 +103,18 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Tracker getTracker(String id, boolean refresh) {
+        Tracker tracker = null;
         if(!refresh) {
-            return getTracker(id);
+            tracker = getTracker(id);
         }
 
-        Device device = crudDeviceDao.getById(id);
-        Tracker tracker = simpleTrackerFactory.from(device);
+        if(refresh || tracker == null) {
+            Device device = crudDeviceDao.getById(id);
+            tracker = simpleTrackerFactory.from(device);
 
-        if(tracker != null) {
-            TrackerData.getInstance().register((Observer) tracker);
+            if(tracker != null) {
+                TrackerData.getInstance().register((Observer) tracker);
+            }
         }
 
         return tracker;
