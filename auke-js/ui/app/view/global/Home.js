@@ -28,6 +28,7 @@ Ext.define('Auke.view.global.Home', {
                  zoomLevel: 3,
                  gmapType: 'map',
                  height: 580,
+                 cls: 'reset-box-sizing',
                  border: false,
                  x: 0,
                  y: 0,

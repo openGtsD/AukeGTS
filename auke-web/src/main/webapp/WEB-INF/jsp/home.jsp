@@ -12,7 +12,7 @@
   </head>
   <body>
 	  <script src="http://maps.googleapis.com/maps/api/js"></script>
-	
+	  <script type="text/javascript" src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/src/infobubble-compiled.js"></script>
 	  <script type="text/javascript" src="/auke-js/ui/ext-all-dev.js"></script>
 	  	<script type="text/javascript" src="/auke-js/ui/js/markermanager.js"></script>
 	  <script type="text/javascript" src="/auke-js/ui/js/GMapPanel3.js"></script>

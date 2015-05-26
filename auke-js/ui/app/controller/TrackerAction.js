@@ -42,7 +42,7 @@ Ext.define('Auke.controller.TrackerAction', {
 	        'textareafield' : {
 				afterrender : me.loadAllFeed
 			},
-			'home gmappanel' : {
+			'gmappanel' : {
 				mapready: me.initMarkerManager,
 				idle: me.getTrackers
 			},
@@ -62,15 +62,18 @@ Ext.define('Auke.controller.TrackerAction', {
 	},
 	
 	initMarkerManager : function(gmappanel) {
-		Auke.utils.mgr = new MarkerManager(gmappanel.getMap());
-		 
+		if(gmappanel) {
+			Auke.utils.mgr = new MarkerManager(gmappanel.getMap());
+		}
 	},
 	
 	loadTrackers : function(layerId){
 		var me = this;
-		//var layerId = layerId !== null ? layerId : 'SIMULATED';
 		var map = Auke.utils.mgr.map_;
-//		var map = gmappanel.getMap();
+		if(!map) {
+			return;
+		} 
+		
 		var mapBound = map.getBounds();
 		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 		var sw = mapBound.getSouthWest();
@@ -91,7 +94,7 @@ Ext.define('Auke.controller.TrackerAction', {
 				for (var i = 0; i < data.length; i++) {
 					var posn = new google.maps.LatLng(data[i].currentPosition.latitude,
 							data[i].currentPosition.longitude);
-					var marker = Auke.utils.createMarker(data[i].id, posn, data[i].name);
+					var marker = Auke.utils.createMarker(data[i].id, posn, data[i].name, data[i].numtrackers, layerId, map);
 					markers.push(marker);
 				}
 				Auke.utils.mgr.addMarkers(markers,3);

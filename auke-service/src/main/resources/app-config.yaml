@@ -17,11 +17,11 @@ http:
     
 rss:
     type: "rss_2.0"
-    title: "RSS feed by Auke Team"
-    description: "RSS feed by Auke Team"
+    title: "RSS feed by droneradar"
+    description: "RSS feed by droneradar"
     language: "en"
-    copyright: "Copyright by Auke Team"
-    
+    copyright: "Copyright by Drone Radar Team"
+    defaultEmail: "post@droneradar24.no"
 server: 
     domain: http://89.221.242.66:8080/drone
     url: http://89.221.242.66:8888/rss/
