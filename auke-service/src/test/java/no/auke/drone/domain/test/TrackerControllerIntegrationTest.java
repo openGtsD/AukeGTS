@@ -1,12 +1,18 @@
 package no.auke.drone.domain.test;
 
 import junit.framework.Assert;
+import no.auke.drone.dao.CRUDDao;
+import no.auke.drone.domain.Device;
 import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.TrackerData;
+import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.services.TrackerService;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -17,30 +23,52 @@ public class TrackerControllerIntegrationTest extends AbstractIntegrationTest {
     @Autowired
     TrackerService trackerService;
 
-    @Test
-    public void shouldGetAllTrackers() {
-        Collection<Tracker> trackers = trackerService.getAll();
-        Assert.assertSame(50,trackers.size());
+    @Autowired
+    CRUDDao<Device> deviceCRUDDao;
+
+    @Before
+    public void init() {
+        deviceCRUDDao.setPersistentClass(Device.class);
+        deviceCRUDDao.deleteAll();
+        for(TrackerLayer trackerLayer : TrackerData.getInstance().getLayers()) trackerLayer.getTrackers().clear();
+        trackerService.registerTracker("id-test-1", "new name");
+        trackerService.registerTracker("id-test-2", "new name");
+        trackerService.registerTracker("id-test-3","new name");
+        trackerService.registerTracker("id-test-4","new name");
+        trackerService.registerTracker("id-test-5","new name");
+        trackerService.registerTracker("id-test-6","new name");
+        trackerService.registerTracker("id-test-7","new name");
+
+
     }
 
     @Test
-    public void shouldRegisterTracker() {
+    public void shouldTestAllTrackers() {
         Collection<Tracker> trackers = trackerService.getAll();
-        Assert.assertSame(50,trackers.size());
+        Assert.assertEquals(7, trackers.size());
 
-        Tracker tracker = trackerService.registerTracker("id","new name");
+        Tracker tracker = trackerService.registerTracker("id-test","new name");
         Assert.assertNotNull(tracker.getCurrentPosition());
+
         trackers = trackerService.getAll();
-        Assert.assertSame(51,trackers.size());
+        Assert.assertEquals(8, trackers.size());
+
+        trackerService.removeTracker("id-test");
+
+        trackers = trackerService.getAll();
+        Assert.assertEquals(7, trackers.size());
+
+        trackers = trackerService.getLatestRegisteredTrackers("REAL");
+        Assert.assertEquals(5, trackers.size());
+        Iterator<Tracker> trackerIterator = trackers.iterator();
+        int i = 7;
+        while(trackerIterator.hasNext()) {
+            tracker = trackerIterator.next();
+            Assert.assertEquals("id-test-" + i,tracker.getId());
+            i --;
+        }
+
+        trackers = trackerService.getLongestFlightTrackers("REAL");
+        Assert.assertEquals(5, trackers.size());
     }
-
-    @Test
-    public void shouldRemoveTracker() {
-        Collection<Tracker> trackers = trackerService.getAll();
-        Assert.assertSame(50,trackers.size());
-
-        Tracker tracker = trackerService.removeTracker("id");
-
-        trackers = trackerService.getAll();
-        Assert.assertSame(50,trackers.size());    }
 }

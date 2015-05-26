@@ -27,10 +27,6 @@ public class TrackerPositionBaseTest {
 			@Override
 			public String getName() {return null;}
 			@Override
-			public boolean isUsedCamera() {return false;}
-			@Override
-			public void setUsedCamera(boolean isUsedCamera) {}
-			@Override
 			public void setTrackerType(TrackerType name) {}
 			@Override
 			public TrackerType getTrackerType() {return null;}

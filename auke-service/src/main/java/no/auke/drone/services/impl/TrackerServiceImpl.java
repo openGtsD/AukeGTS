@@ -1,9 +1,6 @@
 package no.auke.drone.services.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -13,6 +10,7 @@ import no.auke.drone.application.TrackerFactory;
 import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.*;
+import no.auke.drone.domain.Observer;
 import no.auke.drone.services.TrackerService;
 import no.auke.drone.utils.PointUtil;
 import no.auke.drone.utils.YmlPropertiesPersister;
@@ -40,6 +38,10 @@ public class TrackerServiceImpl implements TrackerService {
     private YmlPropertiesPersister propertiesPersister;
 
 	private static final Logger logger = LoggerFactory.getLogger(TrackerServiceImpl.class);
+
+    private final int LIMITED_LATEST_REGISTERED_TRACKER_NUMBER = 5;
+    private final int LIMITED_LONGEST_FLIGHT_TRACKER_NUMBER = 5;
+
 
     private static ExecutorService executor = Executors.newCachedThreadPool();
     public static ExecutorService getExecutor() {
@@ -155,6 +157,28 @@ public class TrackerServiceImpl implements TrackerService {
                     }
                 }
             }
+        }
+
+        return trackers;
+    }
+
+    @Override
+    public Collection<Tracker> getLatestRegisteredTrackers(String trackerLayer) {
+        Collection<Tracker> trackers = new LinkedList<>();
+        Object[] trackerArray = TrackerData.getInstance().getTrackerLayer(trackerLayer).getTrackers().toArray();
+        for(int i = trackerArray.length - 1; i >= 0 && trackers.size() < LIMITED_LATEST_REGISTERED_TRACKER_NUMBER; i--) {
+            trackers.add((SimpleTracker) trackerArray[i]);
+        }
+
+        return trackers;
+    }
+
+    @Override
+    public Collection<Tracker> getLongestFlightTrackers(String trackerLayer) {
+        Collection<Tracker> trackers = new LinkedList<>();
+        Iterator<Tracker> iterator = TrackerData.getInstance().getTrackerLayer(trackerLayer).getTrackers().iterator();
+        while(iterator.hasNext() && trackers.size() < LIMITED_LATEST_REGISTERED_TRACKER_NUMBER) {
+            trackers.add(iterator.next());
         }
 
         return trackers;

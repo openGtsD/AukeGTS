@@ -1,13 +1,10 @@
 package no.auke.drone.domain;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
+import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +22,7 @@ import no.auke.drone.services.impl.ZoomLayerServiceImpl;
 // TODO: LHA: Should be renamed to LayerService and moved to services name space
 
 public class TrackerLayer  {
-	
+
     private static final Logger logger = LoggerFactory.getLogger(TrackerLayer.class);
 
 	private String layerName;
@@ -44,7 +41,7 @@ public class TrackerLayer  {
 		this.zoomLayers = zoomLayers;
 	}
 
-	private Map<String,Tracker> trackers;
+	private ConcurrentMap<String,Tracker> trackers;
 
     private PositionCalculator positionCalculator;
     private boolean isRunningAutomatically;
@@ -61,7 +58,8 @@ public class TrackerLayer  {
         this.isRunningAutomatically=isRunningAutomatically;
         
         id = UUID.randomUUID().toString();
-        trackers = new ConcurrentHashMap<String,Tracker>();
+        trackers = new ConcurrentLinkedHashMap.Builder<String,Tracker>().maximumWeightedCapacity(1024 * 1024) // 1 MB
+                .build();
 
         // Adding zoom layer
         zoomLayers = new ConcurrentHashMap<Integer,ZoomLayerService>();
@@ -92,19 +90,16 @@ public class TrackerLayer  {
 
     public Collection<Tracker> getTrackers() {
         if(trackers == null) {
-            trackers = new HashMap<>();
-        }
+            trackers = new ConcurrentLinkedHashMap.Builder<String,Tracker>().maximumWeightedCapacity(1024 * 1024) // 1 MB
+                    .build();        }
         return trackers.values();
-    }
-
-    public void setTrackers(Map<String, Tracker> trackers) {
-        this.trackers = trackers;
     }
 
     public void addTracker(Tracker tracker) {
         
     	if(trackers == null) {
-            trackers = new HashMap<>();
+            trackers = new ConcurrentLinkedHashMap.Builder<String,Tracker>().maximumWeightedCapacity(1024 * 1024) // 1 MB
+                    .build();
         }
 
         trackers.put(tracker.getId(),tracker);

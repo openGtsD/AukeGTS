@@ -20,6 +20,8 @@ public interface TrackerService {
     Collection<Tracker> getAll(String layerId);
     Collection<Tracker> getAll();
     Collection<Tracker> getTrackersByIds(List<String> ids);
+    Collection<Tracker> getLatestRegisteredTrackers(String trackerLayer);
+    Collection<Tracker> getLongestFlightTrackers(String trackerLayer);
     Tracker move(String id, Integer speed, Integer course);
     Tracker stop(String id);
     Tracker start(String id);
