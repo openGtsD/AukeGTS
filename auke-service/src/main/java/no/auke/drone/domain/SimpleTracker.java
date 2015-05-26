@@ -116,12 +116,12 @@ public class SimpleTracker extends TrackerBase {
             // fly
             double dx = speed * Math.sin(course);
             double dy = speed * Math.cos(course);
-            double deltaLongitude = dx / (111320 * Math.sin(getAltitude()));
+            double deltaLongitude = dx / (111320 * Math.sin(this.getCurrentPosition().getAltitude()));
             double deltaLatitude = dy / 110540;
             double finalLongitude = getCurrentPosition().getLongitude() + deltaLongitude;
             double finalLatitude = getCurrentPosition().getLatitude() + deltaLatitude;
             
-            MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude, this.getAltitude(), course, speed);
+            MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude, this.getCurrentPosition().getAltitude(), course, speed);
             
             setCurrentPosition(positionUnit);
             getLatestPositions().add(positionUnit);
@@ -146,23 +146,8 @@ public class SimpleTracker extends TrackerBase {
 		return 1;
 	}
 
-
-
 	@Override
 	public void incrementTrackers() {
 	}
-
-	// Suppot View Data on UI
-	public double getLon() {
-	    return getCurrentPosition().getLongitude();
-	}
-	
-	public double getLat() {
-        return getCurrentPosition().getLatitude();
-    }
-	
-	public double getAlt() {
-        return getCurrentPosition().getAltitude();
-    }
 
 }

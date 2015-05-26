@@ -52,22 +52,6 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
     			}
     			
     		}
-    		
-//    		List<EventData> eventDatas = eventService.getEventDatas();
-//            
-//    		if(CollectionUtils.isNotEmpty(eventDatas)) {
-//            
-//    			for(EventData eventData : eventDatas) {
-//                
-//    				if(eventData.getDeviceID().equalsIgnoreCase(tracker.getId())) {
-//                        
-//    					tracker.getLatestPositions().add(new MapPoint(eventData));
-//                    
-//    				}
-//                
-//    			}
-//    			
-//            }
         }
     }
 }

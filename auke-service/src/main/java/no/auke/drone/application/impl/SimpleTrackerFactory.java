@@ -33,32 +33,29 @@ public class SimpleTrackerFactory implements TrackerFactory {
 
     @Override
     public Tracker create(String trackerLayer, String id, String name, MapPoint location) {
-    	return create(trackerLayer, id, name, 0, 0, 0, null, null, false, location, "" , "");
+    	return create(trackerLayer, id, name, Tracker.TrackerType.fromValue(trackerLayer),null, location, "", "");
     }
 
     @Override
     public Tracker from(Device device) {
         if(device == null) return null;
-        return create(Tracker.TrackerType.REAL.toString(), device.getDeviceID(), device.getDescription(), 0, 0 , 0 , Tracker.TrackerType.REAL , null, false, new MapPoint(), device.getImeiNumber(), device.getSimPhoneNumber());
+        return create(Tracker.TrackerType.REAL.toString(), device.getDeviceID(), device.getDescription(), Tracker.TrackerType.REAL ,null,  new MapPoint(), device.getImeiNumber(), device.getSimPhoneNumber());
     }
 
     @Override
-    public Tracker create(String trackerLayer, String id, String name, double altitude, double speed, long time, Tracker.TrackerType droneType,
-                          Person flyer, boolean hasCamera, MapPoint location, String imei, String simPhone) {
+    public Tracker create(String trackerLayer, String id, String name, Tracker.TrackerType droneType,
+                          Person flyer, MapPoint location, String imei, String simPhone) {
     	Tracker tracker = new SimpleTracker();
         tracker.setTrackerUpdater(trackerUpdater);
         tracker.setId(id);
         tracker.setLayerId(trackerLayer);
         tracker.setName(name);
-        tracker.setAltitude(altitude);
         tracker.setSimPhone(simPhone);
         tracker.setImeiNumber(imei);
         tracker.setCreateDate(new Date());
         tracker.setModifiedDate(new Date());
-        tracker.setSpeed(speed);
         tracker.setTrackerType(droneType);
         tracker.setFlyer(flyer);
-        tracker.setUsedCamera(hasCamera);
         tracker.setCurrentPosition(location);
         tracker.getPositions().add(tracker.getCurrentPosition());
         return tracker;

@@ -46,22 +46,6 @@ public interface Tracker {
 
     String getName();
 
-    long getTime();
-
-    void setTime(long time);
-
-    double getSpeed();
-
-    void setSpeed(double speed);
-
-    double getAltitude();
-
-    void setAltitude(double sltitude);
-
-    boolean isUsedCamera();
-
-    void setUsedCamera(boolean isUsedCamera);
-
     void setTrackerType(TrackerType name);
 
     TrackerType getTrackerType();

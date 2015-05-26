@@ -48,14 +48,6 @@ public class TrackerSum extends TrackerPositionBase {
 	}
 
 	@Override
-	public boolean isUsedCamera() {
-		return false;
-	}
-
-	@Override
-	public void setUsedCamera(boolean isUsedCamera) {}
-
-	@Override
 	public void setTrackerType(TrackerType name) {}
 
 	@Override

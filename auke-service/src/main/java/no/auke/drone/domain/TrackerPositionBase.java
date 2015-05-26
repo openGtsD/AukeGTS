@@ -62,45 +62,11 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
         this.currentPosition = currentPosition;
     }
 
-
-
     @Override
     public String toString() {
 
         return "tracker id: " + id + ", latitude " + currentPosition.getLatitude() + ", longitude"
                 + currentPosition.getLongitude();
-    }
-
-    @Override
-    final public long getTime() {
-        return time;
-    }
-
-    @Override
-    final public void setTime(long time) {
-        this.time = time;
-
-    }
-
-    @Override
-    final public double getSpeed() {
-        return speed;
-    }
-
-    @Override
-    final public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    @Override
-    final public double getAltitude() {
-        return altitude;
-    }
-
-    @Override
-    final public void setAltitude(double altitude) {
-        this.altitude = altitude;
-
     }
 
     @Override
@@ -196,21 +162,4 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
         }
     	return false;
     }
-
-
-//    @Override
-//    public void addInnerTrackers(Tracker tracker) {
-//        if(innerTrackers == null) {
-//            innerTrackers = new ArrayList<>();
-//        }
-//        innerTrackers.add(tracker.getId());
-//    }
-//
-//    @Override
-//    public List<String> getInnerTrackers() {
-//        if(this.innerTrackers == null) {
-//            this.innerTrackers = new ArrayList<>();
-//        }
-//        return this.innerTrackers;
-//    }
 }

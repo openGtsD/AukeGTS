@@ -44,7 +44,7 @@ public class TrackerData implements Subject {
 	}    
 
     private TrackerData() {
-    	trackerLayers = new ConcurrentHashMap<String,TrackerLayer>();
+    	trackerLayers = new ConcurrentHashMap<>();
     	trackerLayers.put("REAL",new TrackerLayer("REAL"));
         trackerLayers.put("SIMULATED",new TrackerLayer("SIMULATED",true)); // for testing only
     }
@@ -88,7 +88,6 @@ public class TrackerData implements Subject {
     private void update(Tracker oldTracker, Tracker newTracker) {
         
     	oldTracker.setName(newTracker.getName());
-        oldTracker.setUsedCamera(newTracker.isUsedCamera());
         oldTracker.setTrackerType(newTracker.getTrackerType());
         oldTracker.setFlyer(newTracker.getFlyer());
         oldTracker.setSimPhone(newTracker.getSimPhone());

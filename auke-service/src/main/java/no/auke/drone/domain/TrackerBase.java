@@ -2,6 +2,7 @@ package no.auke.drone.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import no.auke.drone.application.TrackerUpdater;
@@ -60,7 +61,7 @@ public abstract class TrackerBase extends TrackerPositionBase {
     @Override
     final public List<MapPoint> getPositions() {
     	if(positions==null) {
-    		positions = new ArrayList<MapPoint>();
+    		positions = new LinkedList<>();
     	}
         return positions;
     }
@@ -141,18 +142,6 @@ public abstract class TrackerBase extends TrackerPositionBase {
     @Override
     final public void setTrackerType(TrackerType type) {
         this.droneType = type;
-    }
-    
-    
-    // TODO: Lha move this infor to a associated children class
-    @Override
-    public boolean isUsedCamera() {
-        return isUsedCamera;
-    }
-
-    @Override
-    public void setUsedCamera(boolean isUsedCamera) {
-        this.isUsedCamera = isUsedCamera;
     }
 
     @Override
