@@ -70,17 +70,19 @@ Auke.utils.buildContent = function(data) {
 			+ data.currentPosition.altitude
 			+ "</span></li><li>Speed: <span class='highlight'>"
 			+ data.currentPosition.speed + "</span></li>"
-			+ "<li>Name: <span class='highlight'>"
-			+ data.name + "</span></li><li>Time: <span class='highlight'>" + new Date(data.currentPosition.time*1000) + "</li></ul>"
+			+ "<li>Name: <span class='highlight'>" + data.name
+			+ "</span></li><li>Time: <span class='highlight'>"
+			+ new Date(data.currentPosition.time * 1000) + "</li></ul>"
 };
 
 Auke.utils.createMarker = function(id, posn, title, numtrackers, layerId, map) {
-	var ico = map.getZoom() >= 11 ? Auke.utils.baseURL + "auke-js/ui/images/flight.gif" : "";
+	var ico = map.getZoom() >= 11 ? Auke.utils.baseURL
+			+ "auke-js/ui/images/flight.gif" : "";
 	var markerOptions = {
 		id : id,
 		position : posn,
 		title : title + " Number Tracker: " + numtrackers,
-		icon: ico
+		icon : ico
 	};
 	var marker = new google.maps.Marker(markerOptions);
 	Auke.utils.createInfoWindow(marker, map, layerId);
@@ -88,14 +90,38 @@ Auke.utils.createMarker = function(id, posn, title, numtrackers, layerId, map) {
 	return marker;
 }
 
+Auke.utils.makeNewInfoBuddle = function() {
+	var info = new InfoBubble({
+		shadowStyle : 1,
+		padding : 10,
+		borderRadius : 5,
+		minWidth : 200,
+		borderWidth : 1,
+//		disableAutoPan : true,
+		hideCloseButton : false
+	});
+	return info;
+}
+
+
+infoBubble = Auke.utils.makeNewInfoBuddle();
 Auke.utils.createInfoWindow = function(marker, map, layerId) {
 	google.maps.event.addListener(marker, 'click', function() {
+		Auke.utils.reMakeInfoBubble();
 		if (map.getZoom() >= 11) {
 			Auke.utils.getTracker(marker, map);
 		} else {
 			Auke.utils.getIncludedTracker(map, marker, layerId);
 		}
 	});
+}
+
+Auke.utils.reMakeInfoBubble = function(){
+	if (infoBubble) {
+		infoBubble.close();
+		delete infoBubble;
+		infoBubble = Auke.utils.makeNewInfoBuddle();
+	}
 }
 
 Auke.utils.centerZoom = function(marker, map) {
@@ -123,20 +149,6 @@ Auke.utils.getIncludedTracker = function(map, marker, layerId) {
 	})
 }
 
-Auke.utils.buildInfoBubble = function() {
-	var infoBubble = new InfoBubble({
-		shadowStyle : 1,
-		padding : 10,
-		borderRadius : 5,
-		minWidth : 200,
-		borderWidth : 1,
-		disableAutoPan : true,
-		hideCloseButton : false
-	});
-
-	return infoBubble;
-}
-
 Auke.utils.getTracker = function(marker, map) {
 	Ext.Ajax.request({
 		url : Auke.utils.buildURL('drone/get-tracker/', true) + marker.id,
@@ -145,16 +157,15 @@ Auke.utils.getTracker = function(marker, map) {
 			var res = Ext.JSON.decode(response.responseText);
 			if (res.success) {
 				var content = Auke.utils.buildHTML(res.data, false)
-				var posn = new google.maps.LatLng(res.data[0].currentPosition.latitude,
-						res.data[0].currentPosition.longitude);
-				var infoBubble = Auke.utils.buildInfoBubble();
-				infoBubble.close();
-				infoBubble.setPosition(posn);
+//				var posn = new google.maps.LatLng(
+//						res.data[0].currentPosition.latitude,
+//						res.data[0].currentPosition.longitude);
 				if (!infoBubble.isOpen()) {
+//					infoBubble.setPosition(posn);
 					infoBubble.open(map, marker);
 					infoBubble.addTab("Tracker Information", content)
 					infoBubble.addTab("Flyer Information", "Comming soon...")
-				 }
+				}
 			}
 		}
 	})
@@ -176,12 +187,4 @@ Auke.utils.changeMarkerPosition = function(data) {
 			data.currentPosition.longitude);
 	var marker = Auke.utils.allmarkers[data.id];
 	marker.setPosition(newPosition);
-}
-
-function autoCenter(markers) {
-	var bounds = new google.maps.LatLngBounds();
-	$.each(markers, function(index, marker) {
-		bounds.extend(marker.position);
-	});
-	map.fitBounds(bounds);
 }

@@ -85,7 +85,7 @@ Ext.define('Auke.controller.TrackerAction', {
 		if(!map) {
 			return;
 		} 
-		
+//		Auke.utils.reMakeInfoBubble();
 		var mapBound = map.getBounds();
 		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 		var sw = mapBound.getSouthWest();
