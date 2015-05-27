@@ -110,7 +110,7 @@ public abstract class TrackerBase extends TrackerPositionBase {
                 block.lock();
                 logger.info("Save tracker " + getId());
                 
-                LocationFunction.writeLocationHistoryByDroneId(this.getId(), getPositions());
+//                LocationFunction.writeLocationHistoryByDroneId(this.getId(), getPositions());
 
                 // clear when save
                 getPositions().clear();
