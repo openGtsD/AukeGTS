@@ -71,14 +71,16 @@ Auke.utils.buildContent = function(data) {
 			+ "</span></li><li>Speed: <span class='highlight'>"
 			+ data.currentPosition.speed + "</span></li>"
 			+ "<li>Name: <span class='highlight'>"
-			+ data.name + "</span></li><li>Time: <span class='highlight'>" + Ext.Date.format(new Date(data.currentPosition.time), "Y-m-d"); + "</li></ul>"
+			+ data.name + "</span></li><li>Time: <span class='highlight'>" + new Date(data.currentPosition.time*1000) + "</li></ul>"
 };
 
 Auke.utils.createMarker = function(id, posn, title, numtrackers, layerId, map) {
+	var ico = map.getZoom() >= 11 ? Auke.utils.baseURL + "auke-js/ui/images/flight.gif" : "";
 	var markerOptions = {
 		id : id,
 		position : posn,
-		title : title + " Number Tracker: " + numtrackers
+		title : title + " Number Tracker: " + numtrackers,
+		icon: ico
 	};
 	var marker = new google.maps.Marker(markerOptions);
 	Auke.utils.createInfoWindow(marker, map, layerId);
@@ -87,7 +89,6 @@ Auke.utils.createMarker = function(id, posn, title, numtrackers, layerId, map) {
 }
 
 Auke.utils.createInfoWindow = function(marker, map, layerId) {
-	map.getZoom();
 	google.maps.event.addListener(marker, 'click', function() {
 		if (map.getZoom() >= 11) {
 			Auke.utils.getTracker(marker, map);

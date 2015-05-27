@@ -53,7 +53,18 @@ Ext.define('Auke.controller.TrackerAction', {
 	},
 	
 	getTrackers :  function(gmappanel) {
-		this.loadTrackers(this.getHome().getLayer());
+		var me = this;
+		var zoomLevel = gmappanel.getMap().getZoom();
+		var layerId = me.getHome().getLayer();
+		me.loadTrackers(layerId);
+		var interval = setInterval(function() {
+			zoomLevel = gmappanel.getMap().getZoom();
+			if(zoomLevel < 11) {
+				clearInterval(interval);
+				return;
+			} 
+			me.loadTrackers(layerId);
+		}, 10000);
 	},
 	
 	loadTrackerFromLayerId : function(combo, records, eOpts ){
@@ -64,6 +75,7 @@ Ext.define('Auke.controller.TrackerAction', {
 	initMarkerManager : function(gmappanel) {
 		if(gmappanel) {
 			Auke.utils.mgr = new MarkerManager(gmappanel.getMap());
+			
 		}
 	},
 	
