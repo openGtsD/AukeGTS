@@ -59,7 +59,7 @@ Ext.define('Auke.controller.TrackerAction', {
 		me.loadTrackers(layerId);
 		var interval = setInterval(function() {
 			zoomLevel = gmappanel.getMap().getZoom();
-			if(zoomLevel < 11) {
+			if( (zoomLevel < 11 && layerId == 'REAL') || (zoomLevel < 11 && layerId == 'SIMULATED')) {
 				clearInterval(interval);
 				return;
 			} 
@@ -68,6 +68,7 @@ Ext.define('Auke.controller.TrackerAction', {
 	},
 	
 	loadTrackerFromLayerId : function(combo, records, eOpts ){
+		Auke.utils.reMakeInfoBubble();
 		this.getHome().setLayer(combo.getValue());
 		this.loadTrackers(combo.getValue())
 	},
@@ -85,7 +86,9 @@ Ext.define('Auke.controller.TrackerAction', {
 		if(!map) {
 			return;
 		} 
-//		Auke.utils.reMakeInfoBubble();
+		if(map.getZoom() < 11) {
+			Auke.utils.reMakeInfoBubble();
+		}
 		var mapBound = map.getBounds();
 		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
 		var sw = mapBound.getSouthWest();
@@ -111,7 +114,9 @@ Ext.define('Auke.controller.TrackerAction', {
 				}
 				Auke.utils.mgr.addMarkers(markers,3);
 				Auke.utils.mgr.refresh();
+				
 				Ext.fly("zoomId").update(map.getZoom())
+				Ext.fly("type").update(map.getZoom() >= 11 ? "drone" : "position");
 				Ext.fly("trackerNumber").update(Auke.utils.mgr.getMarkerCount(map.getZoom()));
 			}
 		});

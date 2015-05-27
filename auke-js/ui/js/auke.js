@@ -70,7 +70,8 @@ Auke.utils.buildContent = function(data) {
 			+ data.currentPosition.altitude
 			+ "</span></li><li>Speed: <span class='highlight'>"
 			+ data.currentPosition.speed + "</span></li>"
-			+ "<li>Name: <span class='highlight'>" + data.name
+			+ "<li>Moving: <span class='highlight'>" + data.moving
+			+ "</span></li> <li>Name: <span class='highlight'>" + data.name
 			+ "</span></li><li>Time: <span class='highlight'>"
 			+ new Date(data.currentPosition.time * 1000) + "</li></ul>"
 };
@@ -97,12 +98,11 @@ Auke.utils.makeNewInfoBuddle = function() {
 		borderRadius : 5,
 		minWidth : 200,
 		borderWidth : 1,
-//		disableAutoPan : true,
+		disableAutoPan : true,
 		hideCloseButton : false
 	});
 	return info;
 }
-
 
 infoBubble = Auke.utils.makeNewInfoBuddle();
 Auke.utils.createInfoWindow = function(marker, map, layerId) {
@@ -116,7 +116,7 @@ Auke.utils.createInfoWindow = function(marker, map, layerId) {
 	});
 }
 
-Auke.utils.reMakeInfoBubble = function(){
+Auke.utils.reMakeInfoBubble = function() {
 	if (infoBubble) {
 		infoBubble.close();
 		delete infoBubble;
@@ -157,15 +157,11 @@ Auke.utils.getTracker = function(marker, map) {
 			var res = Ext.JSON.decode(response.responseText);
 			if (res.success) {
 				var content = Auke.utils.buildHTML(res.data, false)
-//				var posn = new google.maps.LatLng(
-//						res.data[0].currentPosition.latitude,
-//						res.data[0].currentPosition.longitude);
-				if (!infoBubble.isOpen()) {
-//					infoBubble.setPosition(posn);
-					infoBubble.open(map, marker);
-					infoBubble.addTab("Tracker Information", content)
-					infoBubble.addTab("Flyer Information", "Comming soon...")
-				}
+				// if (!infoBubble.isOpen()) {
+				infoBubble.open(map, marker);
+				infoBubble.addTab("Tracker Information", content)
+				infoBubble.addTab("Flyer Information", "Comming soon...")
+				// }
 			}
 		}
 	})

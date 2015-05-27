@@ -3,7 +3,7 @@ Ext.define('Auke.view.global.Home', {
 	alias : 'widget.home',
 	border: 0,
 	layer: 'SIMULATED',
-	title : 'Zoom Factory <span id="zoomId" style="color: red"></span>  - Number drone in current view is <span id="trackerNumber" style="color: red"></span>',
+	title : 'Zoom Factory <span id="zoomId" style="color: red"></span>  - Number <span id="type"></span> in current view is <span id="trackerNumber" style="color: red"></span>',
 	initComponent : function() {
 		var me = this;
 		Ext.applyIf(me, {

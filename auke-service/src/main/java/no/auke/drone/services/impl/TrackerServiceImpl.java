@@ -166,9 +166,13 @@ public class TrackerServiceImpl implements TrackerService {
     public Collection<Tracker> getLatestRegisteredTrackers(String trackerLayer) {
         Collection<Tracker> trackers = new LinkedList<>();
         Object[] trackerArray = TrackerData.getInstance().getTrackerLayer(trackerLayer).getTrackers().toArray();
+        
+        // THAI - better we shuold  make query base on create date field into openGTS ?? its root cause impact to performance
         for(int i = trackerArray.length - 1; i >= 0 && trackers.size() < LIMITED_LATEST_REGISTERED_TRACKER_NUMBER; i--) {
             trackers.add((SimpleTracker) trackerArray[i]);
         }
+        
+        
 
         return trackers;
     }
@@ -177,6 +181,8 @@ public class TrackerServiceImpl implements TrackerService {
     public Collection<Tracker> getLongestFlightTrackers(String trackerLayer) {
         Collection<Tracker> trackers = new LinkedList<>();
         Iterator<Tracker> iterator = TrackerData.getInstance().getTrackerLayer(trackerLayer).getTrackers().iterator();
+
+        // THAI - better we shuold  make query base on time field into openGTS ??. its root cause impact to performance
         while(iterator.hasNext() && trackers.size() < LIMITED_LATEST_REGISTERED_TRACKER_NUMBER) {
             trackers.add(iterator.next());
         }
