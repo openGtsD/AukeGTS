@@ -319,6 +319,7 @@ markers: [{
               google.maps.event.addListener(this.getMap(), 'dragend', Ext.Function.bind(this.dragEnd, this));
               // THAI add support for call from controller
               google.maps.event.addListener(this.getMap(), 'idle', Ext.Function.bind(this.onIdle, this));
+              google.maps.event.addListener(this.getMap(), 'zoom_changed', Ext.Function.bind(this.onZoomChanged, this));
               
               if (typeof this.setCenter === 'object') {
                   if (typeof this.setCenter.geoCodeAddr === 'string'){
@@ -374,6 +375,12 @@ markers: [{
         this.fireEvent('idle', this, this.getMap());
         return this;
     },
+    
+    onZoomChanged : function(){
+        this.fireEvent('zoom_changed', this, this.getMap());
+        return this;
+    },
+    
     // private
     addMapListeners : function () {
       	if (this.maplisteners){

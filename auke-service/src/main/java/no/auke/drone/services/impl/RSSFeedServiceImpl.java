@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
@@ -42,8 +43,8 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
     private YmlPropertiesPersister propertiesPersister;
 
     @Override
-    public StreamingOutput makeRss(String type) {
-        SyndFeed feed = buildFeed(type);
+    public StreamingOutput makeRss(String type, String layer) {
+        SyndFeed feed = buildFeed(type, layer);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         try {
             SyndFeedOutput output = new SyndFeedOutput();
@@ -65,15 +66,11 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
         return stream;
     }
 
-    private SyndFeed buildFeed(String type) {
-    	
-    	// LHA: ok here we have diffrent type og feed
-    	// create sub metods
-    	
-    	
-    	
-    	
-        Collection<Tracker> trackers = trackerService.getActiveTrackers();
+    private SyndFeed buildFeed(String type, String layer) {
+    	// LHA: ok here we have diffrent type og feed create sub metods
+        // THAI: Maked sub methods base on tpye
+        Collection<Tracker> trackers = getTrackersByType(type, layer);
+        
         SyndFeed feed = new CustomSyndFeed();
         feed.setFeedType(propertiesPersister.getPropertyByKey("rss.type"));
         feed.setTitle(propertiesPersister.getPropertyByKey("rss.title"));
@@ -101,5 +98,15 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
         }
         feed.setEntries(entries);
         return feed;
+    }
+
+    private Collection<Tracker> getTrackersByType(String type, String layer) {
+        Collection<Tracker> trackers = Collections.emptyList();
+        if (type.equalsIgnoreCase(propertiesPersister.getPropertyByKey("tracker.registered"))) {
+            trackers = trackerService.getLatestRegisteredTrackers(layer);
+        } else if (type.equalsIgnoreCase(propertiesPersister.getPropertyByKey("tracker.longest"))) {
+            trackers = trackerService.getLongestFlightTrackers(layer);
+        }
+        return trackers;
     }
 }

@@ -2,6 +2,7 @@ Ext.ns('Auke.utils');
 Auke.utils.mgr = "";
 Auke.utils.markers = [];
 Auke.utils.allmarkers = {};
+Auke.utils.isSending = false;
 // Change url when go live
 Auke.utils.baseURL = "http://localhost:8080/";
 Auke.utils.serviceURL = "http:///localhost:8888/";

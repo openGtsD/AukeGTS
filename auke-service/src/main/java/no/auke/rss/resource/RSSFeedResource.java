@@ -22,9 +22,9 @@ public class RSSFeedResource {
     private RSSFeedServices feedServices;
 
     @GET
-    @Path("/{type}")
-    public Response getRSS(@PathParam("type") String type) {
-        StreamingOutput stream = feedServices.makeRss(type);
+    @Path("/{layerId}/{type}")
+    public Response getRSS(@PathParam("type") String type, @PathParam("layerId") String layer) {
+        StreamingOutput stream = feedServices.makeRss(type, layer);
         return Response.ok(stream).build();
     }
 

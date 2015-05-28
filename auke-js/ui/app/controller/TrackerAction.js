@@ -44,7 +44,8 @@ Ext.define('Auke.controller.TrackerAction', {
 			},
 			'gmappanel' : {
 				mapready: me.initMarkerManager,
-				idle: me.getTrackers
+				idle: me.getTrackers,
+				zoom_changed: me.startThread
 			},
 			'home combo' : {
 	            select : me.loadTrackerFromLayerId
@@ -52,19 +53,26 @@ Ext.define('Auke.controller.TrackerAction', {
 		});
 	},
 	
-	getTrackers :  function(gmappanel) {
+	startThread: function(gmappanel) {
 		var me = this;
-		var zoomLevel = gmappanel.getMap().getZoom();
-		var layerId = me.getHome().getLayer();
-		me.loadTrackers(layerId);
+		var layer = me.getHome().getLayer();
 		var interval = setInterval(function() {
-			zoomLevel = gmappanel.getMap().getZoom();
-			if( (zoomLevel < 11 && layerId == 'REAL') || (zoomLevel < 11 && layerId == 'SIMULATED')) {
-				clearInterval(interval);
-				return;
-			} 
-			me.loadTrackers(layerId);
+			var zoomLevel = gmappanel.getMap().getZoom();
+			if(me.getHome()) {
+				layer = me.getHome().getLayer();
+				me.loadTrackers(layer);
+				if(zoomLevel < 11) {
+					clearInterval(interval);
+					interval = null;
+				}
+			}
 		}, 10000);
+	},
+	
+	getTrackers :  function(gmappanel) {
+		if(this.getHome()) {
+			this.loadTrackers(this.getHome().getLayer());
+		}
 	},
 	
 	loadTrackerFromLayerId : function(combo, records, eOpts ){
@@ -82,44 +90,48 @@ Ext.define('Auke.controller.TrackerAction', {
 	
 	loadTrackers : function(layerId){
 		var me = this;
-		var map = Auke.utils.mgr.map_;
-		if(!map) {
-			return;
-		} 
-		if(map.getZoom() < 11) {
-			Auke.utils.reMakeInfoBubble();
-		}
-		var mapBound = map.getBounds();
-		var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
-		var sw = mapBound.getSouthWest();
-		Ext.Ajax.request({
-			url : Auke.utils.buildURL('drone/load-drone-in-view/', true) + layerId + "/" + map.getZoom(),
-			jsonData : JSON.stringify({
-				southWestLat : sw.lat(),
-				southWestLon : sw.lng(),
-				northEastLat : ne.lat(),
-				northEastLon : ne.lng()
-			}),
-			method : 'POST',
-			success : function(response) {
-				var res = Ext.JSON.decode(response.responseText);
-				var data = res.data;
-				Auke.utils.mgr.clearMarkers();
-				var markers = [];
-				for (var i = 0; i < data.length; i++) {
-					var posn = new google.maps.LatLng(data[i].currentPosition.latitude,
-							data[i].currentPosition.longitude);
-					var marker = Auke.utils.createMarker(data[i].id, posn, data[i].name, data[i].numtrackers, layerId, map);
-					markers.push(marker);
-				}
-				Auke.utils.mgr.addMarkers(markers,3);
-				Auke.utils.mgr.refresh();
-				
-				Ext.fly("zoomId").update(map.getZoom())
-				Ext.fly("type").update(map.getZoom() >= 11 ? "drone" : "position");
-				Ext.fly("trackerNumber").update(Auke.utils.mgr.getMarkerCount(map.getZoom()));
+		if(!Auke.utils.isSending) {
+			Auke.utils.isSending = true;
+			var map = Auke.utils.mgr.map_;
+			if(!map) {
+				return;
+			} 
+			if(map.getZoom() < 11) {
+				Auke.utils.reMakeInfoBubble();
 			}
-		});
+			var mapBound = map.getBounds();
+			var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
+			var sw = mapBound.getSouthWest();
+			Ext.Ajax.request({
+				url : Auke.utils.buildURL('drone/load-drone-in-view/', true) + layerId + "/" + map.getZoom(),
+				jsonData : JSON.stringify({
+					southWestLat : sw.lat(),
+					southWestLon : sw.lng(),
+					northEastLat : ne.lat(),
+					northEastLon : ne.lng()
+				}),
+				method : 'POST',
+				success : function(response) {
+					var res = Ext.JSON.decode(response.responseText);
+					var data = res.data;
+					Auke.utils.mgr.clearMarkers();
+					var markers = [];
+					for (var i = 0; i < data.length; i++) {
+						var posn = new google.maps.LatLng(data[i].currentPosition.latitude,
+								data[i].currentPosition.longitude);
+						var marker = Auke.utils.createMarker(data[i].id, posn, data[i].name, data[i].numtrackers, layerId, map);
+						markers.push(marker);
+					}
+					Auke.utils.mgr.addMarkers(markers,3);
+					Auke.utils.mgr.refresh();
+					
+					Ext.fly("zoomId").update(map.getZoom())
+					Ext.fly("type").update(map.getZoom() >= 11 ? "drone" : "position");
+					Ext.fly("trackerNumber").update(Auke.utils.mgr.getMarkerCount(map.getZoom()));
+					Auke.utils.isSending = false;
+				}
+			});
+		}
 	},
 	
 	allowEnterOnForm : function(form) {
@@ -153,7 +165,7 @@ Ext.define('Auke.controller.TrackerAction', {
 	
 	loadAllFeed : function(text) {
 		Ext.Ajax.request({
-			url : Auke.utils.buildURL('rss/gettrackerlist/', true), 
+			url : Auke.utils.buildURL('rss/SIMULATED/registered', true), 
 			method : 'GET',
 			success : function(response, opts) {
 				var res = response.responseText

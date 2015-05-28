@@ -6,7 +6,7 @@ Ext.define("Auke.store.Feeds", {
         headers : {
             'Content-Type' : 'application/json; charset=utf-8'
         },
-        url : Auke.utils.buildURL('rss/gettrackerlist', true),
+        url : Auke.utils.buildURL('rss/SIMULATED/registered ', true),
         reader : {
             type : 'json',
             root : 'data',
