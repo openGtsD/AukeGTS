@@ -88,7 +88,7 @@ public class TrackerDataTest {
 		TrackerData.getInstance().register((Observer) new SimpleTrackerFactory().create("drone1", "my tracker"));
 		
 		assertNotNull(layer);
-		assertEquals(1,layer.getTrackers().size());
+		assertEquals(1,layer.getActiveTrackers().size());
 		
 		assertEquals(1,layer.loadWithinView(new BoundingBox(-1,-1,1,1), 0).size());
 		assertEquals(1,layer.loadWithinView(new BoundingBox(-90,-180,90,180), 0).size());

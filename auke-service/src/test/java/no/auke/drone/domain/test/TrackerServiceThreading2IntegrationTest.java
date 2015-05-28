@@ -8,6 +8,7 @@ import no.auke.drone.domain.Tracker;
 import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,6 +39,7 @@ public class TrackerServiceThreading2IntegrationTest extends AbstractIntegration
         eventDataCRUDDao.setPersistentClass(EventData.class);
     }
 
+    @Ignore // should uncomment when performing testing
     @Test
     public void shouldPollingEventData() throws Exception{
         long time = System.currentTimeMillis();

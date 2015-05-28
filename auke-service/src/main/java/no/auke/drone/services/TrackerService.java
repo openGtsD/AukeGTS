@@ -13,10 +13,13 @@ import no.auke.drone.domain.TrackerLayer;
 public interface TrackerService {
 	
     Tracker registerTracker(String id, String name);
-    Tracker removeTracker(String id);
+    Collection<Tracker> removeAll(String layerId);
+    Collection<Tracker> removeAll();
+    Tracker remove(String trackerId);
     Tracker getTracker(String id);
     Tracker getTracker(String id, boolean refresh);
     TrackerLayer getTrackerLayer(String trackerLayer);
+    Collection<TrackerLayer> getTrackerLayers();
     Collection<Tracker> getAll(String layerId);
     Collection<Tracker> getAll();
     Collection<Tracker> getTrackersByIds(List<String> ids);
@@ -31,7 +34,9 @@ public interface TrackerService {
     void stopService();
 	void calculateAll();
     
-	// THAI - Need make RSS feed
 	Collection<Tracker> getActiveTrackers();
-    
+    Collection<Tracker> getActiveTrackers(String layerId);
+
+    Collection<Tracker> getPassiveTrackers();
+    Collection<Tracker> getPassiveTrackers(String layerId);
 }

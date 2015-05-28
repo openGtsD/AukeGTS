@@ -122,7 +122,7 @@ public class TrackerController {
     @Path("/remove/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse remove(@PathParam("id") String id) {
-        Tracker tracker = trackerService.removeTracker(id);
+        Tracker tracker = trackerService.remove(id);
         return new AukeResponse(tracker != null, tracker);
     }
     
@@ -172,7 +172,7 @@ public class TrackerController {
     @Path("/deletetest")
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse delete(@QueryParam("id")String id) {
-        Tracker newTracker = trackerService.removeTracker(id);
+        Tracker newTracker = trackerService.remove(id);
         AukeResponse response = new AukeResponse(newTracker != null, newTracker);
         return response;
     }

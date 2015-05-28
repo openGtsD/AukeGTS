@@ -7,13 +7,13 @@ import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerData;
 import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.services.TrackerService;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Created by huyduong on 4/13/2015.
@@ -30,7 +30,7 @@ public class TrackerControllerIntegrationTest extends AbstractIntegrationTest {
     public void init() {
         deviceCRUDDao.setPersistentClass(Device.class);
         deviceCRUDDao.deleteAll();
-        for(TrackerLayer trackerLayer : TrackerData.getInstance().getLayers()) trackerLayer.getTrackers().clear();
+        for(TrackerLayer trackerLayer : TrackerData.getInstance().getLayers()) trackerLayer.getActiveTrackers().clear();
         trackerService.registerTracker("id-test-1", "new name");
         trackerService.registerTracker("id-test-2", "new name");
         trackerService.registerTracker("id-test-3","new name");
@@ -42,20 +42,25 @@ public class TrackerControllerIntegrationTest extends AbstractIntegrationTest {
 
     }
 
+    @After
+    public void tearDown() {
+        trackerService.removeAll();
+    }
+
     @Test
     public void shouldTestAllTrackers() {
-        Collection<Tracker> trackers = trackerService.getAll();
+        Collection<Tracker> trackers = trackerService.getAll(Tracker.TrackerType.REAL.toString());
         Assert.assertEquals(7, trackers.size());
 
         Tracker tracker = trackerService.registerTracker("id-test","new name");
         Assert.assertNotNull(tracker.getCurrentPosition());
 
-        trackers = trackerService.getAll();
+        trackers = trackerService.getAll(Tracker.TrackerType.REAL.toString());
         Assert.assertEquals(8, trackers.size());
 
-        trackerService.removeTracker("id-test");
+        trackerService.remove("id-test");
 
-        trackers = trackerService.getAll();
+        trackers = trackerService.getAll(Tracker.TrackerType.REAL.toString());
         Assert.assertEquals(7, trackers.size());
 
         trackers = trackerService.getLatestRegisteredTrackers("REAL");

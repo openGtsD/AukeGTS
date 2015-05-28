@@ -1,27 +1,23 @@
 package no.auke.drone.services;
 
 
+import junit.framework.Assert;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.*;
 import no.auke.drone.domain.test.AbstractIntegrationTest;
-import no.auke.drone.services.impl.TrackerServiceImpl;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.mockito.Matchers.*;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.spy;
 
-import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Collection;
 
 
 public class TrackerServiceTest extends AbstractIntegrationTest {
@@ -40,9 +36,10 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 
 	@After
 	public void tearDown() throws Exception {
-        service.stopService();
-		assertEquals(0, TrackerData.getInstance().getTrackers().size());
-	}
+        service.removeAll();
+        Collection<Tracker> trackers = service.getAll();
+        Assert.assertEquals(0,trackers.size());
+    }
 
 	@Test
 	public void test_register() {
@@ -52,20 +49,27 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 		service.registerTracker("2", "");
 		service.registerTracker("3", "");
 
-		assertEquals(3,TrackerData.getInstance().getTrackers(Tracker.TrackerType.REAL.toString()).size());
-		assertEquals(2,TrackerData.getInstance().getLayers().size());
-        service.stopService();
+		assertEquals(3,service.getAll(Tracker.TrackerType.REAL.toString()).size());
+        assertEquals(3,service.getActiveTrackers(Tracker.TrackerType.REAL.toString()).size());
+        assertEquals(0,service.getPassiveTrackers(Tracker.TrackerType.REAL.toString()).size());
+		assertEquals(2, service.getTrackerLayers().size());
     }
 	
 	@Test
 	public void test_remove() {
 
 		service.registerTracker("1", "");
-		assertEquals(1,TrackerData.getInstance().getTrackers(Tracker.TrackerType.REAL.toString()).size());
+        assertEquals(1,service.getAll(Tracker.TrackerType.REAL.toString()).size());
 
-		service.removeTracker("1");
-		assertEquals(0,TrackerData.getInstance().getTrackers(Tracker.TrackerType.REAL.toString()).size());
-        service.stopService();
+        assertEquals(1,service.getActiveTrackers(Tracker.TrackerType.REAL.toString()).size());
+        assertEquals(0,service.getPassiveTrackers(Tracker.TrackerType.REAL.toString()).size());
+
+		service.remove("1");
+        assertEquals(0,service.getAll(Tracker.TrackerType.REAL.toString()).size());
+
+        assertEquals(0,service.getActiveTrackers(Tracker.TrackerType.REAL.toString()).size());
+        assertEquals(0,service.getPassiveTrackers(Tracker.TrackerType.REAL.toString()).size());
+
     }
 	
 	@Test
@@ -73,7 +77,6 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 
 		service.registerTracker("1", "");
 		assertNotNull(service.getTracker("1"));
-        service.stopService();
     }
 	
 	@Test
@@ -87,7 +90,6 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 
 		service.start("1");
 		assertTrue(service.getTracker("1").isMoving());
-        service.stopService();
     }
 
 	@Test
@@ -98,38 +100,35 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 		
 		service.calculateAll();
 		
-		TrackerLayer layer = TrackerData.getInstance().getTrackerLayer("DEFAULT");
+		TrackerLayer layer = TrackerData.getInstance().getTrackerLayer(Tracker.TrackerType.REAL.toString());
 		assertNotNull(layer);
 		
 		for(ZoomLayerService zlayer:layer.getZoomLayers()) {
 			assertEquals(1,zlayer.getPositions().size());
 		}	
 		
-		assertEquals(2,layer.getTrackers().size());
-        service.stopService();
+		assertEquals(2, layer.getActiveTrackers().size());
 
     }
 	
 	@Test
 	public void test_loadWithinView_DEFAULT() {
+        service.registerTracker("1", "");
 
-		
-		service.registerTracker("1", "");
-		service.registerTracker("2", "");
+        service.registerTracker("2", "");
 
-		assertEquals(0,service.loadWithinView(new BoundingBox(-90,180,90,-180), 1, "DEFAULT").size());
-		assertEquals(2,service.loadWithinView(new BoundingBox(-90,180,90,-180), 20, "DEFAULT").size());
+		assertEquals(1,service.loadWithinView(new BoundingBox(-90,-180,90,180), 1, Tracker.TrackerType.REAL.toString()).size());
+		assertEquals(2,service.loadWithinView(new BoundingBox(-90,-180,90,180), 20, Tracker.TrackerType.REAL.toString()).size());
 
 		service.calculateAll();
 
-		assertEquals(1,service.loadWithinView(new BoundingBox(-90,180,90,-180), 1, "DEFAULT").size());
-		assertEquals(1,service.loadWithinView(new BoundingBox(-90,180,90,-180), 3, "DEFAULT").size());
-		assertEquals(1,service.loadWithinView(new BoundingBox(-90,180,90,-180), 5, "DEFAULT").size());
-		assertEquals(1,service.loadWithinView(new BoundingBox(-90,180,90,-180), 10, "DEFAULT").size());
-		assertEquals(1,service.loadWithinView(new BoundingBox(-90,180,90,-180), 14, "DEFAULT").size());
+		assertEquals(1,service.loadWithinView(new BoundingBox(-90,-180,90,180), 1, Tracker.TrackerType.REAL.toString()).size());
+		assertEquals(1,service.loadWithinView(new BoundingBox(-90,-180,90,180), 3, Tracker.TrackerType.REAL.toString()).size());
+		assertEquals(1,service.loadWithinView(new BoundingBox(-90,-180,90,180), 5, Tracker.TrackerType.REAL.toString()).size());
+		assertEquals(1,service.loadWithinView(new BoundingBox(-90,-180,90,180), 10, Tracker.TrackerType.REAL.toString()).size());
+		assertEquals(2,service.loadWithinView(new BoundingBox(-90,-180,90,180), 14, Tracker.TrackerType.REAL.toString()).size());
 		
-		assertEquals(2,service.loadWithinView(new BoundingBox(-90,180,90,-180), 15, "DEFAULT").size());	
-		assertEquals(2,service.loadWithinView(new BoundingBox(-90,180,90,-180), 20, "DEFAULT").size());
-        service.stopService();
+		assertEquals(2,service.loadWithinView(new BoundingBox(-90,-180,90,180), 15, Tracker.TrackerType.REAL.toString()).size());
+		assertEquals(2, service.loadWithinView(new BoundingBox(-90, -180, 90, 180), 20, Tracker.TrackerType.REAL.toString()).size());
     }
 }

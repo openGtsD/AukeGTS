@@ -1,5 +1,6 @@
 package no.auke.drone.services.impl;
 
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -48,7 +49,7 @@ public class PositionCalculatorImpl implements PositionCalculator {
                         
                     	if(logger.isDebugEnabled()) 
                     		logger.debug("run calc");
-                        for(Tracker tracker : trackerLayer.getTrackers()) {
+                        for(Tracker tracker : trackerLayer.getActiveTrackers()) {
                             
                         	if(isRunning.get()) {
                                 if(logger.isDebugEnabled()){

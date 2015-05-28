@@ -41,7 +41,7 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
     }
 
     private void deleteAfterUse(String id) {
-        trackerService.removeTracker(id);
+        trackerService.remove(id);
         Tracker tracker = trackerService.getTracker(id);
         Assert.assertNull(tracker);
     }
@@ -61,7 +61,7 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
         trackerService.registerTracker(newTrackerId, "this is a new name");
         Tracker tracker = trackerService.getTracker(newTrackerId);
         Assert.assertEquals(tracker.getLayerId(), Tracker.TrackerType.REAL.toString());
-        trackerService.removeTracker(newTrackerId);
+        trackerService.remove(newTrackerId);
         tracker = trackerService.getTracker(newTrackerId);
         Assert.assertNull(tracker);
     }

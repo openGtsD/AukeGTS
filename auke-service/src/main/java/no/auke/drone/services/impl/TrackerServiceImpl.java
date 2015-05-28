@@ -6,7 +6,6 @@ import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 
-import no.auke.drone.application.TrackerFactory;
 import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.*;
@@ -91,9 +90,23 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public Tracker removeTracker(String id) {
+    public Collection<Tracker> removeAll(String layerId) {
+        Collection<Tracker> trackers = getAll(layerId);
+        for(Tracker tracker : trackers) {
+            remove(tracker.getId());
+        }
+        return trackers;
+    }
+
+    @Override
+    public Collection<Tracker> removeAll() {
+        return removeAll(null);
+    }
+
+    @Override
+    public Tracker remove(String trackerId) {
         
-    	Tracker tracker = TrackerData.getInstance().getTracker(id);
+    	Tracker tracker = TrackerData.getInstance().getTracker(trackerId);
     	if(tracker == null) {
     	   return null;
     	}
@@ -137,6 +150,11 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
+    public Collection<TrackerLayer> getTrackerLayers() {
+        return TrackerData.getInstance().getLayers();
+    }
+
+    @Override
     public Collection<Tracker> getAll(String layerId) {
     	return TrackerData.getInstance().getTrackers(layerId);
     }
@@ -165,7 +183,7 @@ public class TrackerServiceImpl implements TrackerService {
     @Override
     public Collection<Tracker> getLatestRegisteredTrackers(String trackerLayer) {
         Collection<Tracker> trackers = new LinkedList<>();
-        Object[] trackerArray = TrackerData.getInstance().getTrackerLayer(trackerLayer).getTrackers().toArray();
+        Object[] trackerArray = TrackerData.getInstance().getTrackerLayer(trackerLayer).getActiveTrackers().toArray();
         
         // THAI - better we shuold  make query base on create date field into openGTS ?? its root cause impact to performance
         for(int i = trackerArray.length - 1; i >= 0 && trackers.size() < LIMITED_LATEST_REGISTERED_TRACKER_NUMBER; i--) {
@@ -180,10 +198,10 @@ public class TrackerServiceImpl implements TrackerService {
     @Override
     public Collection<Tracker> getLongestFlightTrackers(String trackerLayer) {
         Collection<Tracker> trackers = new LinkedList<>();
-        Iterator<Tracker> iterator = TrackerData.getInstance().getTrackerLayer(trackerLayer).getTrackers().iterator();
+        Iterator<Tracker> iterator = TrackerData.getInstance().getTrackerLayer(trackerLayer).getActiveTrackers().iterator();
 
         // THAI - better we shuold  make query base on time field into openGTS ??. its root cause impact to performance
-        while(iterator.hasNext() && trackers.size() < LIMITED_LATEST_REGISTERED_TRACKER_NUMBER) {
+        while(iterator.hasNext() && trackers.size() < LIMITED_LONGEST_FLIGHT_TRACKER_NUMBER) {
             trackers.add(iterator.next());
         }
 
@@ -327,7 +345,23 @@ public class TrackerServiceImpl implements TrackerService {
 	}
 
     @Override
-    public List<Tracker> getActiveTrackers() {
-        return new ArrayList<>(TrackerData.getInstance().getActiveTrackers()).subList(0, propertiesPersister.getNumberByKey("track.maxActive"));
+    public Collection<Tracker> getActiveTrackers() {
+        return getActiveTrackers(null);
+//        return new ArrayList<>(TrackerData.getInstance().getActiveTrackers()).subList(0, propertiesPersister.getNumberByKey("track.maxActive"));
+    }
+
+    @Override
+    public Collection<Tracker> getActiveTrackers(String layerId) {
+        return new ArrayList<>(TrackerData.getInstance().getActiveTrackers(layerId));
+    }
+
+    @Override
+    public Collection<Tracker> getPassiveTrackers() {
+        return getPassiveTrackers(null);
+    }
+
+    @Override
+    public Collection<Tracker> getPassiveTrackers(String layerId) {
+        return new ArrayList<>(TrackerData.getInstance().getPassiveTrackers(layerId));
     }
 }

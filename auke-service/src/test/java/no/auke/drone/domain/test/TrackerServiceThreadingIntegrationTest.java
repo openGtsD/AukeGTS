@@ -6,6 +6,7 @@ import no.auke.drone.domain.Device;
 import no.auke.drone.domain.EventData;
 import no.auke.drone.services.TrackerService;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,6 +41,7 @@ public class TrackerServiceThreadingIntegrationTest extends AbstractIntegrationT
         eventDataCRUDDao.deleteAll();
     }
 
+    @Ignore // should uncomment when performing testing
     @Test
     public void shouldCreateNewEventData() throws Exception{
         trackerService.registerTracker(device1Id, "");

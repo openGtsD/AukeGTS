@@ -1,18 +1,15 @@
 package no.auke.drone.domain;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
-import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import no.auke.drone.services.PositionCalculator;
 import no.auke.drone.services.ZoomLayerService;
 import no.auke.drone.services.impl.PositionCalculatorImpl;
 import no.auke.drone.services.impl.TrackerServiceImpl;
 import no.auke.drone.services.impl.ZoomLayerServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by huyduong on 4/10/2015.
@@ -41,7 +38,8 @@ public class TrackerLayer  {
 		this.zoomLayers = zoomLayers;
 	}
 
-	private ConcurrentMap<String,Tracker> trackers;
+	private Map<String,Tracker> activeTrackers;
+    private Map<String,Tracker> passiveTrackers;
 
     private PositionCalculator positionCalculator;
     private boolean isRunningAutomatically;
@@ -58,8 +56,8 @@ public class TrackerLayer  {
         this.isRunningAutomatically=isRunningAutomatically;
         
         id = UUID.randomUUID().toString();
-        trackers = new ConcurrentLinkedHashMap.Builder<String,Tracker>().maximumWeightedCapacity(1024 * 1024) // 1 MB
-                .build();
+        activeTrackers = Collections.synchronizedMap(new LinkedHashMap<String, Tracker>());
+        passiveTrackers = Collections.synchronizedMap(new LinkedHashMap<String, Tracker>());
 
         // Adding zoom layer
         zoomLayers = new ConcurrentHashMap<Integer,ZoomLayerService>();
@@ -88,90 +86,114 @@ public class TrackerLayer  {
         this.layerName = layerName;
     }
 
-    public Collection<Tracker> getTrackers() {
-        if(trackers == null) {
-            trackers = new ConcurrentLinkedHashMap.Builder<String,Tracker>().maximumWeightedCapacity(1024 * 1024) // 1 MB
-                    .build();        }
-        return trackers.values();
-    }
-
-    public void addTracker(Tracker tracker) {
-        
-    	if(trackers == null) {
-            trackers = new ConcurrentLinkedHashMap.Builder<String,Tracker>().maximumWeightedCapacity(1024 * 1024) // 1 MB
-                    .build();
+    public synchronized Map<String,Tracker> getActiveTrackersMap() {
+        if(activeTrackers == null) {
+            activeTrackers = Collections.synchronizedMap(new LinkedHashMap<String, Tracker>());
         }
 
-        trackers.put(tracker.getId(),tracker);
+        return activeTrackers;
+    }
+
+    public Map<String,Tracker> getPassiveTrackersMap() {
+        if(passiveTrackers == null) {
+            passiveTrackers = Collections.synchronizedMap(new LinkedHashMap<String, Tracker>());
+        }
+
+        return passiveTrackers;
+    }
+
+    public Collection<Tracker> getTrackers() {
+        Collection<Tracker> trackers = new ArrayList<>();
+        trackers.addAll(getActiveTrackers());
+        trackers.addAll(getPassiveTrackers());
+
+        return trackers;
+    }
+
+    public synchronized Collection<Tracker> getActiveTrackers() {
+        return new ArrayList<>(getActiveTrackersMap().values());
+    }
+
+    public synchronized Collection<Tracker> getPassiveTrackers() {
+        return new ArrayList<>(getPassiveTrackersMap().values());
+    }
+
+    public synchronized void addTracker(Tracker tracker) {
+        getActiveTrackersMap().put(tracker.getId(), tracker);
+        getPassiveTrackersMap().remove(tracker.getId());
         if(isRunningAutomatically) {
         	positionCalculator.startCalculate();      	
         }
         
     }
 
-    public void removeTracker(Tracker tracker) {
-    	trackers.remove(tracker.getId());
-        if (trackers.size() == 0) {
+    public synchronized void removeTracker(Tracker tracker) {
+
+        getActiveTrackersMap().remove(tracker.getId());
+        getPassiveTrackersMap().remove(tracker.getId());
+
+        if (getActiveTrackersMap().size() == 0) {
+            positionCalculator.stopCalculate();
+        }
+    }
+
+    public synchronized void disableTracker(Tracker tracker) {
+        Tracker persistedTracker = getActiveTrackersMap().get(tracker.getId());
+        if(persistedTracker != null) {
+            getActiveTrackersMap().remove(tracker.getId());
+            getPassiveTrackersMap().put(persistedTracker.getId(),persistedTracker);
+        }
+        if (getActiveTrackersMap().size() == 0) {
             positionCalculator.stopCalculate();
         }
     }
 
     public Collection<Tracker> loadWithinView(BoundingBox boundary, int zoom) {
-
-        
         try {
-        	
             if(zoomLayers.containsKey(zoom)) { 
-            //for testing purpose, temporary removing this from current version
-            //if(false) {
-                // LHA: if summarized exists, got trackerSUM from there
-            	return zoomLayers.get(zoom).loadWithinView(boundary, zoom);
-            	
+             	return zoomLayers.get(zoom).loadWithinView(boundary, zoom);
             } else {
-
             	List<Tracker> result = new ArrayList<Tracker>();
-            	
                 // LHA: got tracker from there
-                for (Tracker positionUnit : trackers.values()) {
+                for (Tracker positionUnit : getActiveTrackers()) {
 
                     if (positionUnit.withinView(boundary.getSouthWestLat(), boundary.getSouthWestLon(),
                             boundary.getNorthEastLat(), boundary.getNorthEastLon())) {
-
                         result.add(positionUnit);
                     }
                 }
                 
                 return result;
-            	
             }
         	
-        	
         } catch (Exception ex ) {
-        	
         	logger.warn("loadWithinView: error ",ex);
-
         }
         
         return new ArrayList<Tracker>();
     }
 
 	public boolean exists(String id) {
-		return trackers.containsKey(id);
+		return getActiveTrackersMap().containsKey(id) || getPassiveTrackersMap().containsKey(id);
 	}
 
-	public Tracker getTracker(String layerId) {
-		return trackers.get(layerId);
+	public Tracker getTracker(String trackerId) {
+		Tracker tracker = getActiveTrackersMap().get(trackerId);
+        if(tracker == null) {
+            tracker = getPassiveTrackersMap().get(trackerId);
+        }
+        return tracker;
 	}
 
 	public void startCalculate() {
 		isRunningAutomatically=true;
-		if(trackers.size()>0) {
+		if(getActiveTrackersMap().size()>0) {
 	    	positionCalculator.startCalculate();
 		}
 	}
 
 	public Collection<Tracker> getPositions() {
-		return trackers.values();
+		return activeTrackers.values();
 	}
 	
 	//
@@ -187,7 +209,7 @@ public class TrackerLayer  {
 	// ref. from open GTS 
 	// 
 	public void calulateTrackerFeed() {
-		for(Tracker tracker : trackers.values()) {
+		for(Tracker tracker : getActiveTrackers()) {
             tracker.calculate();
         }
 	}

@@ -66,11 +66,21 @@ public class TrackerData implements Subject {
     }
 
     public Collection<Tracker> getActiveTrackers() {
-    	
-    	// LHA: we need distinct between active and passive trackers
-    	return getTrackers(null);
+    	return getActiveTrackers(null);
     }
-    
+
+    public Collection<Tracker> getActiveTrackers(String layerId) {
+        return getTrackerLayer(layerId).getActiveTrackers();
+    }
+
+    public Collection<Tracker> getPassiveTrackers() {
+        return getPassiveTrackers(null);
+    }
+
+    public Collection<Tracker> getPassiveTrackers(String layerId) {
+        return getTrackerLayer(layerId).getPassiveTrackers();
+    }
+
     public Collection<Tracker> getTrackers(String layerId) {
     	List<Tracker> result = new ArrayList<>();
 
@@ -110,11 +120,11 @@ public class TrackerData implements Subject {
         return tracker;
     }
 
-    public Tracker getTracker(String id) {
+    public Tracker getTracker(String trackerId) {
     	
     	for(TrackerLayer trackerLayer : trackerLayers.values()) {
-    		if(trackerLayer.exists(id)) {
-    			return trackerLayer.getTracker(id);
+    		if(trackerLayer.exists(trackerId)) {
+    			return trackerLayer.getTracker(trackerId);
     		}
     	}
     	return null;

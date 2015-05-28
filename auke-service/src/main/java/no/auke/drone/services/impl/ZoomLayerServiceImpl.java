@@ -112,7 +112,7 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
         Map<Long, TrackerSum> newPositions = new HashMap<Long, TrackerSum>();
         includedTrackerIds.clear();
 
-        for (Tracker tracker : trackerLayer.getTrackers()) {
+        for (Tracker tracker : trackerLayer.getActiveTrackers()) {
 
             double lon = zoomLongitude(tracker.getCurrentPosition().getLongitude());
             double lat = zoomLatitude(tracker.getCurrentPosition().getLatitude());
