@@ -12,6 +12,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.StreamingOutput;
 
 import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.rss.CustomSyndEntryImpl;
 import no.auke.drone.domain.rss.CustomSyndFeed;
 import no.auke.drone.services.RSSFeedServices;
 import no.auke.drone.services.TrackerService;
@@ -72,7 +73,7 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
         
         List<SyndEntry> entries = new ArrayList<SyndEntry>();
         for (Tracker tracker : trackers) {
-            SyndEntryImpl entry = new SyndEntryImpl();
+            SyndEntryImpl entry = new CustomSyndEntryImpl();
             String domain = propertiesPersister.getPropertyByKey("server.domain");
             RSSUtil.setItemsInfo(tracker, entry, domain);
             entries.add(entry);

@@ -44,6 +44,7 @@ public class RSSUtil {
         entry.setAuthor(tracker.getFlyer() != null ? tracker.getFlyer().getEmail() : "flyer@gmail.com");
         entry.setLink(domain);
         entry.setUri(domain + "/" + UUID.randomUUID().toString());
+        entry.setPublishedDate(tracker.getCreateDate());
     }
 
     public static void setChannelInfo(SyndFeed feed, YmlPropertiesPersister propertiesPersister) {
