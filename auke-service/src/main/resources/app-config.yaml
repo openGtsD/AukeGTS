@@ -6,10 +6,10 @@ jdbc:
     drone:
         driver: com.mysql.jdbc.Driver
         url: "jdbc:mysql://localhost:3306/gts"
-        username: gts2
-        password: opengts
-        #username: root
-        #password: root
+        #username: gts2
+        #password: opengts
+        username: root
+        password: root
 
 http:
     port: 8888
@@ -21,7 +21,8 @@ rss:
     description: "RSS feed by droneradar"
     language: "en"
     copyright: "Copyright by Drone Radar Team"
-    defaultEmail: "post@droneradar24.no"
+    rel: "self"
+    appOrXml: "application/rss+xml"
 server: 
     domain: http://89.221.242.66:8080/drone
     url: http://89.221.242.66:8888/rss/

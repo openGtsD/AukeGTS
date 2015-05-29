@@ -1,4 +1,4 @@
-package no.auke.drone.domain;
+package no.auke.drone.domain.rss;
 
 import java.util.Date;
 
@@ -40,5 +40,4 @@ public class CustomSyndFeed extends SyndFeedImpl {
     public void setCopyright(String copyright) {
         this.copyright = copyright;
     }
-    
 }
