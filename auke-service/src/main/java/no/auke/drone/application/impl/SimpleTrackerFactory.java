@@ -48,6 +48,7 @@ public class SimpleTrackerFactory implements TrackerFactory {
     	Tracker tracker = new SimpleTracker();
         tracker.setTrackerUpdater(trackerUpdater);
         tracker.setId(id);
+        tracker.setActive(true);
         tracker.setLayerId(trackerLayer);
         tracker.setName(name);
         tracker.setSimPhone(simPhone);

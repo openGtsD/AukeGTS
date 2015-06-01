@@ -36,14 +36,9 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
 
     @After
     public void tearDown() {
-        /*deviceCRUDDao.deleteAll();
-        eventDataCRUDDao.deleteAll();*/
-    }
-
-    private void deleteAfterUse(String id) {
-        trackerService.remove(id);
-        Tracker tracker = trackerService.getTracker(id);
-        Assert.assertNull(tracker);
+        trackerService.removeAll();
+        deviceCRUDDao.deleteAll();
+        eventDataCRUDDao.deleteAll();
     }
 
     @Test
@@ -52,7 +47,12 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
         trackerService.registerTracker(newTrackerId, "this is a new name");
         Tracker tracker = trackerService.getTracker(newTrackerId);
         Assert.assertEquals(tracker.getLayerId(), Tracker.TrackerType.REAL.toString());
-        deleteAfterUse(newTrackerId);
+
+        List<Device> devices = deviceCRUDDao.getAll();
+        Assert.assertEquals(1,devices.size());
+
+        tracker = trackerService.getTracker(newTrackerId);
+        Assert.assertEquals(true, tracker.isActive());
     }
 
     @Test
@@ -89,7 +89,6 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
         Assert.assertEquals(simPhone,tracker.getSimPhone());
         Assert.assertEquals(imeiNumber,tracker.getImeiNumber());
 
-        deleteAfterUse(newTrackerId);
     }
 
     // should have an independent EventData service, but now using CrudDaoImpl for creating new entry
@@ -123,5 +122,4 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
         eventDataList = eventDataCRUDDao.getByProperties(properties);
         Assert.assertEquals(0,eventDataList.size());
     }
-
 }

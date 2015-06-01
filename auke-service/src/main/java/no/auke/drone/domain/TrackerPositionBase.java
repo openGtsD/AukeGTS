@@ -153,6 +153,6 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
 
     @Override
     public boolean isActive() {
-        return !active;
+        return active;
     }
 }
