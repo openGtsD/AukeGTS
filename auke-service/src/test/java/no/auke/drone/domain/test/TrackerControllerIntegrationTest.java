@@ -7,6 +7,7 @@ import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerData;
 import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.services.TrackerService;
+import no.auke.drone.utils.YmlPropertiesPersister;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +26,9 @@ public class TrackerControllerIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     CRUDDao<Device> deviceCRUDDao;
+
+    @Autowired
+    private YmlPropertiesPersister propertiesPersister;
 
     @Before
     public void init() {
@@ -64,7 +68,7 @@ public class TrackerControllerIntegrationTest extends AbstractIntegrationTest {
         Assert.assertEquals(7, trackers.size());
 
         trackers = trackerService.getLatestRegisteredTrackers("REAL");
-        Assert.assertEquals(5, trackers.size());
+        Assert.assertEquals(propertiesPersister.getNumberByKey("tracker.maxSize"), trackers.size());
         Iterator<Tracker> trackerIterator = trackers.iterator();
         int i = 7;
         while(trackerIterator.hasNext()) {
@@ -74,6 +78,6 @@ public class TrackerControllerIntegrationTest extends AbstractIntegrationTest {
         }
 
         trackers = trackerService.getLongestFlightTrackers("REAL");
-        Assert.assertEquals(5, trackers.size());
+        Assert.assertEquals(propertiesPersister.getNumberByKey("tracker.maxSize"), trackers.size());
     }
 }

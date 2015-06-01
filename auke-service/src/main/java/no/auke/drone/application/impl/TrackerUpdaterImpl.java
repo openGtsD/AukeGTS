@@ -8,6 +8,7 @@ import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerData;
 import no.auke.drone.services.EventService;
 
+import no.auke.drone.services.TrackerService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
     @Autowired
     private EventService eventService;
 
+    @Autowired
+    private TrackerService trackerService;
+
     @Override
     public void update(Tracker tracker) {
         
@@ -33,23 +37,12 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
 
     	// } else if(tracker.getLayerId().equalsIgnoreCase(Tracker.TrackerType.REAL.toString())) {
     	} else {
-            
     		// ALL other layers got position updated
     		
     		// LHA: Better use a map collection
     		Map<String,EventData> eventDatas = eventService.getEventDatas();
     		if(eventDatas.containsKey(tracker.getId())) {
     			tracker.setCurrentPosition(new MapPoint(eventDatas.get(tracker.getId())));
-    			
-    		} else {
-    			
-    			// remove from active list after some time
-    			if(tracker.checkIfPassive()) {
-    				
-    				TrackerData.getInstance().remove((Observer) tracker);
-    				
-    				
-    			}
     			
     		}
         }

@@ -70,6 +70,11 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
+    public Tracker registerTracker(Tracker tracker) {
+        return TrackerData.getInstance().register((Observer) tracker);
+    }
+
+    @Override
     public Tracker registerTracker(String id, String name) {
         if(StringUtils.isEmpty(id)) {
             return null;
@@ -332,7 +337,12 @@ public class TrackerServiceImpl implements TrackerService {
     
     }
 
-	@Override
+    @Override
+    public void updateActiveTracker(Tracker tracker) {
+        TrackerData.getInstance().getTrackerLayer(tracker.getLayerId()).updateActiveTracker(tracker);
+    }
+
+    @Override
 	public void stopService() {
 		
 		getExecutor().shutdownNow();

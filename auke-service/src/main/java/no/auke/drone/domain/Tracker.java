@@ -106,6 +106,8 @@ public interface Tracker {
 
     void setTrackerUpdater(TrackerUpdater trackerUpdater);
 
-	boolean checkIfPassive();
+	boolean isActive();
+
+    void setActive(boolean active);
 
 }

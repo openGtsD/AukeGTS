@@ -131,11 +131,11 @@ public class TrackerData implements Subject {
     
     }
 
-    @Override
-    public void register(Observer tracker) {
+    public Tracker register(Observer tracker) {
     	if(tracker.getLayerId()!=null) {
     		getTrackerLayer(tracker.getLayerId()).addTracker((Tracker) tracker);
     	}
+        return (Tracker) tracker;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package no.auke.drone.domain;
 
-import java.util.Date;
-
 /**
  * Created by huyduong on 4/19/2015.
  */
@@ -17,6 +15,8 @@ public class Device {
     private String simPhoneNumber;
 
     private String imeiNumber;
+
+    private Boolean isActive;
 
 //    private long lastUpdateTime;
 //    private long creationTime;
@@ -75,19 +75,11 @@ public class Device {
         this.imeiNumber = imeiNumber;
     }
 
-    //    public long getLastUpdateTime() {
-//        return lastUpdateTime;
-//    }
-//
-//    public void setLastUpdateTime(long lastUpdateTime) {
-//        this.lastUpdateTime = lastUpdateTime;
-//    }
-//
-//    public long getCreationTime() {
-//        return creationTime;
-//    }
-//
-//    public void setCreationTime(long creationTime) {
-//        this.creationTime = creationTime;
-//    }
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
 }

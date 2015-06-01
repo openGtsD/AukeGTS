@@ -7,6 +7,7 @@ import no.auke.drone.domain.*;
 import no.auke.drone.services.EventService;
 
 import no.auke.drone.services.TrackerService;
+import org.apache.commons.lang.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,39 +79,23 @@ public class EventServiceImpl implements EventService {
         for(EventData event:eventFetched) {
         	eventDatas.put(event.getDeviceID(), event);
         }
-        
-        
     }
     
-	private void addMissingTrackers() {
-		
-		// LHA: check registrated trackers, and add the ones missing
-		// HUY: now I'm implementing it
-        Set<String> activeTrackers = new HashSet<>();
-        Set<String> persistedTrackers = new HashSet<>(eventDatas.keySet());
-        for(Tracker tracker : trackerService.getAll()) {
-            activeTrackers.add(tracker.getId());
-        }
+	private void updateTrackers() {
+		List<Device> devices = deviceCrudDao.getAll();
+        for(Device device : devices) {
+            Tracker tracker = trackerService.getTracker(device.getDeviceID());
+            if(tracker == null) {
+                tracker = simpleTrackerFactory.from(device);
+                trackerService.registerTracker(tracker);
+            }
 
-        persistedTrackers.retainAll(activeTrackers);
-
-        for(String trackerId : persistedTrackers) {
-            Device device = deviceCrudDao.getById(trackerId);
-            if(device != null) {
-                TrackerData.getInstance().register((no.auke.drone.domain.Observer) simpleTrackerFactory.from(device));
+            if(tracker.isActive() != device.getIsActive()) {
+                tracker.setActive(BooleanUtils.isTrue(device.getIsActive()));
+                trackerService.updateActiveTracker(tracker);
             }
         }
-
 	}
-
-    private void updateTrackers() {
-        for(EventData eventData : getEventDatas().values()) {
-            Tracker tracker = trackerService.getTracker(eventData.getDeviceID());
-            if(tracker != null) {
-                tracker.setCurrentPosition(new MapPoint(eventData));
-            }
-        }
-    }
 
     @Override
     public void fetchEvents() {
@@ -128,7 +113,7 @@ public class EventServiceImpl implements EventService {
                         // querying
                         fetchEventData();
 
-                        addMissingTrackers();
+                        updateTrackers();
 
 //                        updateTrackers();
 

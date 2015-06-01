@@ -14,14 +14,10 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
 
     private static final Logger logger = LoggerFactory.getLogger(TrackerPositionBase.class);
 
-    private List<String> innerTrackers;
+    private boolean active = true;
 
     protected AtomicBoolean ismoving = new AtomicBoolean(true); // default value
     
-    private long time;
-    private double altitude;
-    private double speed;
-
     private MapPoint currentPosition = new MapPoint();
 
     protected ReentrantLock block = new ReentrantLock();
@@ -149,17 +145,14 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
     @Override
     public void setNumtrackers(int numtrackers) {
     }
-    
+
     @Override
-    public boolean checkIfPassive() {
-    
-    	// LHA: check if tracker dont have position measure for a
-    	// period if time = is passive
-        long timeout = 1 * 60 * 1000; // HUY: if it exceeds 1 minutes
-        long deltaTime = System.currentTimeMillis()/1000 - currentPosition.getTime();
-        if(deltaTime > timeout) {
-            return true;
-        }
-    	return false;
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    @Override
+    public boolean isActive() {
+        return !active;
     }
 }

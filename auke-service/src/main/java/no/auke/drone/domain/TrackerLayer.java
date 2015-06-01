@@ -137,14 +137,29 @@ public class TrackerLayer  {
         }
     }
 
-    public synchronized void disableTracker(Tracker tracker) {
-        Tracker persistedTracker = getActiveTrackersMap().get(tracker.getId());
-        if(persistedTracker != null) {
-            getActiveTrackersMap().remove(tracker.getId());
-            getPassiveTrackersMap().put(persistedTracker.getId(),persistedTracker);
+    public synchronized void updateActiveTracker(Tracker tracker) {
+        if(tracker.isActive()) {
+            if(!getActiveTrackersMap().containsKey(tracker.getId())) {
+                getActiveTrackersMap().put(tracker.getId(),tracker);
+            }
+
+            if(getPassiveTrackersMap().containsKey(tracker.getId())) {
+                getPassiveTrackersMap().remove(tracker.getId());
+            }
+        } else if(!tracker.isActive()) {
+            if(getActiveTrackersMap().containsKey(tracker.getId())) {
+                getActiveTrackersMap().remove(tracker.getId());
+            }
+
+            if(!getPassiveTrackersMap().containsKey(tracker.getId())) {
+                getPassiveTrackersMap().put(tracker.getId(),tracker);
+            }
         }
+
         if (getActiveTrackersMap().size() == 0) {
             positionCalculator.stopCalculate();
+        } else {
+            positionCalculator.startCalculate();
         }
     }
 

@@ -13,6 +13,7 @@ import no.auke.drone.domain.TrackerLayer;
 public interface TrackerService {
 	
     Tracker registerTracker(String id, String name);
+    Tracker registerTracker(Tracker tracker);
     Collection<Tracker> removeAll(String layerId);
     Collection<Tracker> removeAll();
     Tracker remove(String trackerId);
@@ -29,6 +30,7 @@ public interface TrackerService {
     Tracker stop(String id);
     Tracker start(String id);
     Tracker update(Tracker tracker);
+    void updateActiveTracker(Tracker tracker);
     Collection<Tracker> loadWithinView(BoundingBox boundary, int zoom, String layerId);
     
     void stopService();
