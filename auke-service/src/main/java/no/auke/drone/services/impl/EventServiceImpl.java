@@ -82,7 +82,9 @@ public class EventServiceImpl implements EventService {
     }
     
 	private void updateTrackers() {
-		List<Device> devices = deviceCrudDao.getAll();
+        if(logger.isDebugEnabled()) logger.debug("starting updating tracker data from device");
+
+        List<Device> devices = deviceCrudDao.getAll();
         for(Device device : devices) {
             Tracker tracker = trackerService.getTracker(device.getDeviceID());
             if(tracker == null) {

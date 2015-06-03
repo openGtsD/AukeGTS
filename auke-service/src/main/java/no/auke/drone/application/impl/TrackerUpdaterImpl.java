@@ -3,17 +3,14 @@ package no.auke.drone.application.impl;
 import no.auke.drone.application.TrackerUpdater;
 import no.auke.drone.domain.EventData;
 import no.auke.drone.domain.MapPoint;
-import no.auke.drone.domain.Observer;
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.TrackerData;
 import no.auke.drone.services.EventService;
-
 import no.auke.drone.services.TrackerService;
-import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +18,7 @@ import java.util.Map;
  */
 @Service
 public class TrackerUpdaterImpl implements TrackerUpdater {
+    private static final Logger logger = LoggerFactory.getLogger(TrackerUpdater.class);
 
     @Autowired
     private EventService eventService;
@@ -30,8 +28,9 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
 
     @Override
     public void update(Tracker tracker) {
-        
-    	if(tracker.getLayerId().equalsIgnoreCase(Tracker.TrackerType.SIMULATED.toString())) {
+        if(logger.isDebugEnabled()) logger.debug("starting updating tracker " + tracker.getId());
+
+        if(tracker.getLayerId().equalsIgnoreCase(Tracker.TrackerType.SIMULATED.toString())) {
         
         	tracker.move(null, null);// fly randomly
 

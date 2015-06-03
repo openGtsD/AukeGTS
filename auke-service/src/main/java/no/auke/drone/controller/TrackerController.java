@@ -1,35 +1,25 @@
 package no.auke.drone.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
-
-import javax.annotation.PostConstruct;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
 import no.auke.drone.dao.CRUDDao;
-import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.Device;
-import no.auke.drone.domain.EventData;
-import no.auke.drone.domain.SimpleTracker;
-import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.*;
 import no.auke.drone.dto.AukeResponse;
 import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
 import no.auke.drone.services.ZoomLayerService;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by huyduong on 3/24/2015.
@@ -48,6 +38,8 @@ public class TrackerController {
     private EventService eventService;
     @Autowired
     private ZoomLayerService zoomLayerService;
+
+    private static final Logger logger = LoggerFactory.getLogger(TrackerController.class);
 
     @PostConstruct
     public void init() {
@@ -80,6 +72,7 @@ public class TrackerController {
     @Path("/load-drone-in-view/{layerId}/{zoom}")
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse loadDroneWithinView(BoundingBox boundary, @PathParam("layerId") String layerId, @PathParam("zoom") int zoom) {
+        logger.info("loading drones within view : " + layerId + " " + zoom);
         Collection<Tracker> data = trackerService.loadWithinView(boundary, zoom, layerId);
         AukeResponse response = new AukeResponse(data != null, data);
         return response;
