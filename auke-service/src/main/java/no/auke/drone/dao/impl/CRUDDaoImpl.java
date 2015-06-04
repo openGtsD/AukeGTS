@@ -20,6 +20,7 @@ import java.util.*;
 /**
  * Created by huyduong on 4/19/2015.
  */
+
 public class CRUDDaoImpl<T> implements CRUDDao<T> {
     private static final Logger logger = LoggerFactory.getLogger(CRUDDaoImpl.class);
 
