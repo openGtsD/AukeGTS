@@ -2,18 +2,18 @@ Ext.define('Auke.view.Viewport', {
 	extend : 'Ext.container.Viewport',
 	id : 'viewport',
 	alias : 'widget.aukeViewport',
-	layout : {
-		 pack : 'center',
-         type : 'hbox'
+	layout: {
+	    type: 'vbox',
+	    align : 'center',
+	    pack  : 'start',
 	},
-
 	initComponent : function() {
 		var me = this;
 		Ext.applyIf(me, {
 			items : [ {
 				xtype : 'container',
 				itemId : 'parentContainer',
-				width: 990,
+				width: 980,
 				items : [ {
 					xtype : 'container',
 					itemId : 'pageHeader',
@@ -32,13 +32,13 @@ Ext.define('Auke.view.Viewport', {
 							overCls : 'btnOver',
 							cls : 'headerBtn',
 							view : 'global.Register'
-						},  {
+						}, {
 							xtype : 'button',
 							text : 'Update Trackers',
 							overCls : 'btnOver',
 							cls : 'headerBtn',
 							view : 'global.Update'
-						},  {
+						}, {
 							xtype : 'button',
 							text : 'Delete Trackers',
 							overCls : 'btnOver',
@@ -51,9 +51,6 @@ Ext.define('Auke.view.Viewport', {
 							cls : 'headerBtn',
 							view : 'global.RssFeed'
 						}, {
-							xtype : 'tbspacer',
-							flex : 1
-						}, {
 							xtype : 'button',
 							text : 'View All Trackers',
 							overCls : 'btnOver',
@@ -65,50 +62,38 @@ Ext.define('Auke.view.Viewport', {
 							overCls : 'btnOver',
 							cls : 'headerBtn',
 							view : 'global.Login',
-							action: 'loginBtn',
-							hidden: true // TODO remove when apply authen 
+							action : 'loginBtn',
+							hidden : true
+						// TODO remove when apply authen
 						}, {
-			                xtype: 'splitbutton',
-			                text: 'Administrator',
-			                hidden: true,
-			                overCls: 'btnOver',
-			                cls: 'headerBtn',
-			                menu: {
-			                    xtype: 'menu',
-			                    items: [
-			                        {
-			                            text: 'Manage Tracker',
-			                            id: 'mgTracker',
-			                            view: 'admin.ManageTracker'
-			                        },
-			                        '-',
-			                        {
-			                            text: 'Manage Layer',
-			                            id: 'mgLayer',
-			                            view: 'admin.ManageLayer'
-			                        },
-			                        '-',
-			                        {
-			                            text: 'Log Out',
-			                            id: 'logout'
-			                        }
-			                    ]
-			                }
-			            },]
+							xtype : 'splitbutton',
+							text : 'Administrator',
+							hidden : true,
+							overCls : 'btnOver',
+							cls : 'headerBtn',
+							menu : {
+								xtype : 'menu',
+								items : [ {
+									text : 'Manage Tracker',
+									id : 'mgTracker',
+									view : 'admin.ManageTracker'
+								}, '-', {
+									text : 'Manage Layer',
+									id : 'mgLayer',
+									view : 'admin.ManageLayer'
+								}, '-', {
+									text : 'Log Out',
+									id : 'logout'
+								} ]
+							}
+						}, ]
 					} ]
 				}, {
 					region : 'center',
-					layout : {
-						type : 'vbox',
-						align : 'stretch'
-					},
-
+					
 					items : [ {
 						xtype : 'container',
-						id : 'viewContainer',
-						layout : {
-							type : 'fit'
-						}
+						id : 'viewContainer'
 					} ]
 				} ]
 			} ]

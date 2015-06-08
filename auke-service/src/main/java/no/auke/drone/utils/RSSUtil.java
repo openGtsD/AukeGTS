@@ -30,9 +30,10 @@ public class RSSUtil {
 
     public static void setItemsInfo(Tracker tracker, SyndEntryImpl entry, String domain) {
         SyndEnclosureImpl enclosures = new SyndEnclosureImpl();
-        enclosures.setLength(20);//THAI - just dummy data
-        enclosures.setType("img/jpg");
-        enclosures.setUrl(domain);
+        
+        enclosures.setLength(20);
+        enclosures.setType("img/gif");
+        enclosures.setUrl(domain + "/auke-js/ui/images/flight.gif");
         entry.setEnclosures(Arrays.asList(enclosures));
 
         entry.setTitle(tracker.getName());

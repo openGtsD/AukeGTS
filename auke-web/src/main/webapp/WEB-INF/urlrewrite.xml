@@ -7,11 +7,11 @@
 
     <rule>
         <from>/auke-js/ui/(.+)</from>
-        <to type="proxy">http://localhost:8080/auke-js/ui/$1</to>
+        <to type="proxy">http://localhost:8888/auke-js/ui/$1</to>
     </rule>
 	<rule>
 		<from>/service/(.+)</from>
-		<to type="proxy">http://localhost:8888/$1</to>
+		<to type="proxy">http://localhost:8080/$1</to>
 	</rule>
 
 </urlrewrite>

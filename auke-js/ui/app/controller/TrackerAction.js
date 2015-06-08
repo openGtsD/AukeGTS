@@ -43,6 +43,7 @@ Ext.define('Auke.controller.TrackerAction', {
 				afterrender : me.loadAllFeed
 			},
 			'gmappanel' : {
+				beforerender: me.setSize,
 				mapready: me.initMarkerManager,
 				idle: me.getTrackers,
 				zoom_changed: me.startThread
@@ -51,6 +52,10 @@ Ext.define('Auke.controller.TrackerAction', {
 	            select : me.loadTrackerFromLayerId
 	        },
 		});
+	},
+	
+	setSize : function(gmappanel) {
+		gmappanel.height = Ext.getBody().getViewSize().height;
 	},
 	
 	startThread: function(gmappanel) {
@@ -70,9 +75,8 @@ Ext.define('Auke.controller.TrackerAction', {
 	},
 	
 	getTrackers :  function(gmappanel) {
-		if(this.getHome()) {
-			this.loadTrackers(this.getHome().getLayer());
-		}
+		var layerId = this.getHome() ? this.getHome().getLayer() : 'SIMULATED';
+		this.loadTrackers(layerId);
 	},
 	
 	loadTrackerFromLayerId : function(combo, records, eOpts ){
@@ -84,14 +88,11 @@ Ext.define('Auke.controller.TrackerAction', {
 	initMarkerManager : function(gmappanel) {
 		if(gmappanel) {
 			Auke.utils.mgr = new MarkerManager(gmappanel.getMap());
-			
 		}
 	},
 	
 	loadTrackers : function(layerId){
 		var me = this;
-		if(!Auke.utils.isSending) {
-			Auke.utils.isSending = true;
 			var map = Auke.utils.mgr.map_;
 			if(!map) {
 				return;
@@ -128,10 +129,8 @@ Ext.define('Auke.controller.TrackerAction', {
 					Ext.fly("zoomId").update(map.getZoom())
 					Ext.fly("type").update(map.getZoom() >= 11 ? "drone" : "position");
 					Ext.fly("trackerNumber").update(Auke.utils.mgr.getMarkerCount(map.getZoom()));
-					Auke.utils.isSending = false;
 				}
 			});
-		}
 	},
 	
 	allowEnterOnForm : function(form) {

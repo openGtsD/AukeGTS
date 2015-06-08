@@ -2,10 +2,9 @@ Ext.ns('Auke.utils');
 Auke.utils.mgr = "";
 Auke.utils.markers = [];
 Auke.utils.allmarkers = {};
-Auke.utils.isSending = false;
 // Change url when go live
-Auke.utils.baseURL = "http://localhost:8080/";
-Auke.utils.serviceURL = "http:///localhost:8888/";
+Auke.utils.baseURL = "http://localhost:8888/";
+Auke.utils.serviceURL = "http://localhost:8080/";
 
 Auke.utils.buildURL = function(url, isUseService) {
 	var domain = isUseService ? Auke.utils.serviceURL : Auke.utils.baseURL;
@@ -29,6 +28,9 @@ Auke.utils.loadViewFromHash = function(hashString) {
 		viewContainer.removeAll(true);
 		viewContainer.add(view);
 	}
+	var bound = Ext.getBody().getSize();
+	viewContainer.setHeight(bound.height);
+	viewContainer.doLayout();
 };
 
 Auke.utils.loadView = function(viewName, viewParams) {
