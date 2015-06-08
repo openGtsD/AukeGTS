@@ -110,4 +110,7 @@ public interface Tracker {
 
     void setActive(boolean active);
 
+    void setParticipant(Participant participant);
+
+    Participant getParticipant();
 }

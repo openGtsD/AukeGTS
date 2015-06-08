@@ -41,7 +41,7 @@ public class RSSUtil {
         description.setValue(tracker.getName());
 
         entry.setDescription(description);
-        entry.setAuthor(tracker.getFlyer() != null ? tracker.getFlyer().getEmail() : "flyer@gmail.com");
+        entry.setAuthor(tracker.getFlyer() != null ? tracker.getParticipant().getEmail() : "flyer@gmail.com");
         entry.setLink(domain);
         entry.setUri(domain + "/" + UUID.randomUUID().toString());
         entry.setPublishedDate(tracker.getCreateDate());

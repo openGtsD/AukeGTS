@@ -1,35 +1,20 @@
 package no.auke.drone.domain;
 
-import java.io.Serializable;
+/**
+ * Created by huyduong on 6/5/2015.
+ */
+public interface User {
+    String getFirstName();
 
-public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
-    
-    private String username;
-    private String password;
+    String getLastName();
 
-    public User() {
+    String getFullName();
 
-    }
+    String getEmail();
 
-    public String getUsername() {
-        return username;
-    }
+    Avatar getAvatar();
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    Location getLocation();
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isAdmin() {
-        return username.equals("admin") && password.equals("admin");
-    }
-
+    boolean isAdmin();
 }

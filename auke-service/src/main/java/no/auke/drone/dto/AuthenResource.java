@@ -6,7 +6,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import no.auke.drone.domain.User;
+import no.auke.drone.domain.Account;
 
 import org.springframework.stereotype.Component;
 
@@ -21,9 +21,9 @@ public class AuthenResource {
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse login(User user) {
+    public AukeResponse login(Account account) {
         //TODO move to service for authen
-        AukeResponse response = new AukeResponse(user != null && user.isAdmin(), user);
+        AukeResponse response = new AukeResponse(account != null && account.isAdmin(), account);
         return response;
     }
 

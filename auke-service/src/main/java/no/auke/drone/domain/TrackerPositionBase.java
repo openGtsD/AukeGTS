@@ -22,6 +22,16 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
 
     protected ReentrantLock block = new ReentrantLock();
 
+    private Participant participant;
+
+    public Participant getParticipant() {
+        return participant;
+    }
+
+    public void setParticipant(Participant participant) {
+        this.participant = participant;
+    }
+
     // Thai Huynh: Some fields need update tracker
     private String id;
     private String layerId;
