@@ -95,7 +95,7 @@ public abstract class TrackerPositionBase implements Tracker, Observer {
     	
         else {
         	
-        	// timeline
+        	// time line
         	return currentPosition.getLongitude() >= southWestLon || currentPosition.getLongitude() <= northEastLon; 
         	
         }    	

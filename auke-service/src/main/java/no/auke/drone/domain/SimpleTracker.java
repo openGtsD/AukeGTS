@@ -104,14 +104,28 @@ public class SimpleTracker extends TrackerBase {
                 logger.debug(this.toString() + "started moving");
             }
 
+            // LHA:
+            // maybe go slower
+            
             Random ran = new Random();
             if(speed == null) {
-                speed = 25 * (ran.nextInt(1) + 10);
+            	speed = 5;
             }
-
+            //
+            speed = speed + (ran.nextInt(1) - 1);
+            if(speed<0){
+            	speed = -speed;
+            }
+            
             if(course == null) {
-                course = ran.nextInt(1) + 360;
+                course = 360;
             }
+            // 
+            course = course + (ran.nextInt(1) - 1);
+            if(course<0) {
+            	course=-course;
+            }
+            	
 
             // fly
             double dx = speed * Math.sin(course);
