@@ -152,6 +152,26 @@ public class TrackerController {
     }
 
     @GET
+    @Path("/createlayer")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse createTrackerLayer(@QueryParam("name")String name) {
+        String layerName = trackerService.getTrackerLayer(name).getLayerName();
+        return new AukeResponse(layerName != null, layerName);
+    }
+
+    @GET
+    @Path("/layers")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse getTrackerLayers() {
+        Collection<TrackerLayer> layers = trackerService.getTrackerLayers();
+        List<String> result = new ArrayList<>();
+        for(TrackerLayer trackerLayer : layers) {
+            result.add(trackerLayer.getLayerName());
+        }
+        return new AukeResponse(result != null, result);
+    }
+
+    @GET
     @Path("/updatetest")
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse update(@QueryParam("id")String id) {
