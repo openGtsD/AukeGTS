@@ -74,7 +74,7 @@ public class RSSFeedServiceImpl implements RSSFeedServices {
         List<SyndEntry> entries = new ArrayList<SyndEntry>();
         for (Tracker tracker : trackers) {
             SyndEntryImpl entry = new CustomSyndEntryImpl();
-            String domain = propertiesPersister.getPropertyByKey("server.domain");
+            String domain = propertiesPersister.getPropertyByKey("server.domain") + "#global.Home:" + tracker.getId() + ":" + layer;
             RSSUtil.setItemsInfo(tracker, entry, domain);
             entries.add(entry);
         }

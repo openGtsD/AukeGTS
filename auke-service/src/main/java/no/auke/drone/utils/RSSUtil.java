@@ -2,7 +2,6 @@ package no.auke.drone.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.UUID;
@@ -11,7 +10,6 @@ import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.rss.CustomModuleImpl;
 
 import com.sun.syndication.feed.synd.SyndContentImpl;
-import com.sun.syndication.feed.synd.SyndEnclosureImpl;
 import com.sun.syndication.feed.synd.SyndEntryImpl;
 import com.sun.syndication.feed.synd.SyndFeed;
 
@@ -29,20 +27,20 @@ public class RSSUtil {
     }
 
     public static void setItemsInfo(Tracker tracker, SyndEntryImpl entry, String domain) {
-        SyndEnclosureImpl enclosures = new SyndEnclosureImpl();
-        
-        enclosures.setLength(20);
-        enclosures.setType("img/gif");
-        enclosures.setUrl(domain + "/auke-js/ui/images/flight.gif");
-        entry.setEnclosures(Arrays.asList(enclosures));
+//        SyndEnclosureImpl enclosures = new SyndEnclosureImpl();
+//        
+//        enclosures.setLength(20);
+//        enclosures.setType("img/gif");
+//        enclosures.setUrl(domain + "/auke-js/ui/images/flight.gif");
+//        entry.setEnclosures(Arrays.asList(enclosures));
 
         entry.setTitle(tracker.getName());
         SyndContentImpl description = new SyndContentImpl();
         description.setType("text/plain");
-        description.setValue(tracker.getName());
+        description.setValue(tracker.getName() + tracker.getId());
 
         entry.setDescription(description);
-        entry.setAuthor(tracker.getFlyer() != null ? tracker.getFlyer().getEmail() : "flyer@gmail.com");
+        entry.setAuthor(tracker.getFlyer() != null ? tracker.getFlyer().getEmail() : "admin");
         entry.setLink(domain);
         entry.setUri(domain + "/" + UUID.randomUUID().toString());
         entry.setPublishedDate(tracker.getCreateDate());

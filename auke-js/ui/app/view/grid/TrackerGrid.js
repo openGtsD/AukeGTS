@@ -7,7 +7,8 @@ Ext.define('Auke.view.grid.TrackerGrid', {
 			columns : [ {
 				dataIndex : 'id',
 				text : 'Tracker ID',
-				flex : 1
+				flex : 1,
+				renderer : Auke.utils.makeLink
 			}, {
 				dataIndex : 'name',
 				text : "Name",
@@ -28,13 +29,17 @@ Ext.define('Auke.view.grid.TrackerGrid', {
 				dataIndex : 'alt',
 				text : "Altitude",
 				flex : 1
-			},
-			
-//			{
-//				dataIndex : 'active',
-//				text : "Active",
-//				flex : 1
-//			}, 
+			},	
+			{
+				dataIndex : 'moving',
+				text : "Moving",
+				flex : 1
+			}, 
+			{
+				dataIndex : 'active',
+				text : "Active",
+				flex : 1
+			}, 
 			{
 				dataIndex : 'createDate',
 				text : "Create Date",

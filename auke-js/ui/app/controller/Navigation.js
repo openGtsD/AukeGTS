@@ -75,6 +75,7 @@ Ext.define('Auke.controller.Navigation', {
 	},
 	
 	correctSize : function(my, width, height, oldWidth, oldHeight, eOpts ) {
+		
 	},
 
 	allowEnterOnForm : function(form) {

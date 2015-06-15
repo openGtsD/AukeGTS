@@ -257,7 +257,7 @@ public class TrackerServiceImpl implements TrackerService {
             for (int k = 1; k <= 50; k++) {
                 MapPoint rd = PointUtil.generateRandomMapPoint(stig);
                 Tracker tracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "Stig" + "-"
-                        + "Stig", Tracker.TrackerType.SIMULATED, null, rd, "0123222" + 1, "123123123" + 1);
+                        + "Stig" + k, Tracker.TrackerType.SIMULATED, null, rd, "0123222" + 1, "123123123" + 1);
                 result.add(tracker);
             }
 
@@ -270,7 +270,7 @@ public class TrackerServiceImpl implements TrackerService {
             for (int l = 1; l <= 50; l++) {
                 MapPoint rd = PointUtil.generateRandomMapPoint(lhf);
                 Tracker tracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "LHF" + "-"
-                        + "Stig", Tracker.TrackerType.SIMULATED, null, rd, "0123222" + 1, "123123123" + 1);
+                        + "Stig" + l, Tracker.TrackerType.SIMULATED, null, rd, "0123222" + 1, "123123123" + 1);
                 result.add(tracker);
             }
 

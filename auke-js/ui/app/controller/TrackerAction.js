@@ -25,7 +25,7 @@ Ext.define('Auke.controller.TrackerAction', {
 			},
 			'trackerGrid' : {
 				afterrender : me.loadAll,
-				cellclick : me.editOrDelete
+				cellclick : me.viewDetailTracker
 			},
 			'trackerForm form button[action=clearBtn], loginForm form button[action=clearBtn]' : {
 				click : me.clear
@@ -42,7 +42,7 @@ Ext.define('Auke.controller.TrackerAction', {
 	        'textareafield' : {
 				afterrender : me.loadAllFeed
 			},
-			'gmappanel' : {
+			'home gmappanel' : {
 				beforerender: me.setSize,
 				mapready: me.initMarkerManager,
 				idle: me.getTrackers,
@@ -50,33 +50,75 @@ Ext.define('Auke.controller.TrackerAction', {
 			},
 			'home combo' : {
 	            select : me.loadTrackerFromLayerId
-	        },
+	        }
 		});
 	},
 	
-	setSize : function(gmappanel) {
+	setSize : function(gmappanel) { 
 		gmappanel.height = Ext.getBody().getViewSize().height;
 	},
 	
 	startThread: function(gmappanel) {
 		var me = this;
-		var layer = me.getHome().getLayer();
+		var home = gmappanel.up();
 		var interval = setInterval(function() {
-			var zoomLevel = gmappanel.getMap().getZoom();
+			var map = gmappanel.getMap();
+			var zoomLevel = map.getZoom();
 			if(me.getHome()) {
 				layer = me.getHome().getLayer();
-				me.loadTrackers(layer);
-				if(zoomLevel < 11) {
+				me.getHome().down('combo').setValue(layer);
+				if(zoomLevel >= 11) {
+					me.loadTrackers(layer);
+				} else {
 					clearInterval(interval);
 					interval = null;
 				}
 			}
 		}, 10000);
 	},
-	
-	getTrackers :  function(gmappanel) {
-		var layerId = this.getHome() ? this.getHome().getLayer() : 'SIMULATED';
-		this.loadTrackers(layerId);
+	getTrackers :  function(gmappanel) { 
+		var home = gmappanel.up();
+		var layerId = home ? home.getLayer() : 'SIMULATED';
+		var params = home.params;
+		var trackerId = params[0];
+		var map = gmappanel.getMap();
+		if(!Auke.utils.isEmpty(trackerId)) {
+			  layerId = params[1];
+			  home.down('combo').setValue(layerId);
+			  home.setLayer(layerId);
+			  var markers = [];
+			  Ext.Ajax.request({
+					url : Auke.utils.buildURL('drone/get-tracker/', true) + trackerId,
+					method : 'POST',
+					success : function(response) {
+						var res = Ext.JSON.decode(response.responseText);
+						if (res.success) {
+							var posn = new google.maps.LatLng(res.data[0].currentPosition.latitude,
+									res.data[0].currentPosition.longitude);
+							var ico =  Auke.utils.baseURL + "auke-js/ui/images/flight.gif";
+							var marker = Auke.utils.createMarker(res.data[0].id, posn, res.data[0].name, res.data[0].numtrackers, layerId, map, ico);
+							markers.push(marker);
+							Auke.utils.mgr.addMarkers(markers,3);
+							Auke.utils.mgr.refresh();
+							
+							home.params = "";
+							Ext.fly("zoomId").update(map.getZoom())
+							Ext.fly("type").update(map.getZoom() >= 11 ? "drone" : "position");
+							Ext.fly("trackerNumber").update(Auke.utils.mgr.getMarkerCount(map.getZoom()));
+							
+							var bounds = new google.maps.LatLngBounds();
+							bounds.extend(marker.position);
+							map.fitBounds(bounds);
+							map.setZoom(11);
+							
+							Auke.utils.getTracker(marker, map);
+						}
+					}
+				})
+			  
+		 } else {
+			 this.loadTrackers(layerId);
+		 }
 	},
 	
 	loadTrackerFromLayerId : function(combo, records, eOpts ){
@@ -87,6 +129,7 @@ Ext.define('Auke.controller.TrackerAction', {
 	
 	initMarkerManager : function(gmappanel) {
 		if(gmappanel) {
+			Auke.utils.gmappanel = gmappanel;
 			Auke.utils.mgr = new MarkerManager(gmappanel.getMap());
 		}
 	},
@@ -208,6 +251,17 @@ Ext.define('Auke.controller.TrackerAction', {
 				me.getTrackerForm().loadRecord(iRecord);
 			}
 		}
+	},
+	
+	viewDetailTracker : function(iView, iCellEl, iColIdx, iRecord, iRowEl, iRowIdx,
+			iEvent) {
+		var me = this;
+		var fieldName = iView.getGridColumns()[iColIdx].dataIndex;
+	    var linkClicked = (iEvent.target.tagName.toUpperCase() == 'SPAN');
+	    if (linkClicked && fieldName == "id") {
+	    	var layerId = me.getTrackerGrid().up().down('combo').getValue();
+	    	Auke.utils.loadView('global.Home', [iRecord.get("id"), layerId]);
+	    }
 	},
 	
 	clear : function(button) {

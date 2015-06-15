@@ -1,10 +1,11 @@
 Ext.ns('Auke.utils');
 Auke.utils.mgr = "";
+Auke.utils.gmappanel = "";
 Auke.utils.markers = [];
 Auke.utils.allmarkers = {};
 // Change url when go live
-Auke.utils.baseURL = "http://localhost:8888/";
-Auke.utils.serviceURL = "http://localhost:8080/";
+Auke.utils.baseURL = "http://89.221.242.66:8888/";
+Auke.utils.serviceURL = "http://89.221.242.66:8080/";
 
 Auke.utils.buildURL = function(url, isUseService) {
 	var domain = isUseService ? Auke.utils.serviceURL : Auke.utils.baseURL;
@@ -79,9 +80,9 @@ Auke.utils.buildContent = function(data) {
 			+ new Date(data.currentPosition.time * 1000) + "</li></ul>"
 };
 
-Auke.utils.createMarker = function(id, posn, title, numtrackers, layerId, map) {
-	var ico = map.getZoom() >= 11 ? Auke.utils.baseURL
-			+ "auke-js/ui/images/flight.gif" : "";
+Auke.utils.createMarker = function(id, posn, title, numtrackers, layerId, map, icon) {
+	var ico = icon == null ? (map.getZoom() >= 11 ? Auke.utils.baseURL
+			+ "auke-js/ui/images/flight.gif" : "") : icon;
 	var markerOptions = {
 		id : id,
 		position : posn,
@@ -159,12 +160,11 @@ Auke.utils.getTracker = function(marker, map) {
 		success : function(response) {
 			var res = Ext.JSON.decode(response.responseText);
 			if (res.success) {
-				var content = Auke.utils.buildHTML(res.data, false)
-				// if (!infoBubble.isOpen()) {
-				infoBubble.open(map, marker);
-				infoBubble.addTab("Tracker Information", content)
-				infoBubble.addTab("Flyer Information", "Comming soon...")
-				// }
+				var content = Auke.utils.buildHTML(res.data, false);
+				Auke.utils.reMakeInfoBubble();
+					infoBubble.open(map, marker);
+					infoBubble.addTab("Tracker Information", content)
+					infoBubble.addTab("Flyer Information", "Comming soon...")
 			}
 		}
 	})
@@ -181,9 +181,31 @@ Auke.utils.start = function(id) {
 	})
 }
 
+Auke.utils.makeLink = function (value) {
+    return Auke.utils.isEmpty(value) ? "" : '<span class="my-link">' + Ext.util.Format.htmlEncode(value) + '</span>';
+};
+
+Auke.utils.isEmpty = function (value) {
+    return (value == null || value == "" || value.toString().trim() == "" || value == 'undefined' || value.length == 0)
+};
+
 Auke.utils.changeMarkerPosition = function(data) {
 	var newPosition = new google.maps.LatLng(data.currentPosition.latitude,
 			data.currentPosition.longitude);
 	var marker = Auke.utils.allmarkers[data.id];
 	marker.setPosition(newPosition);
 }
+
+google.maps.event.addDomListener(window, "resize", function() {
+	if(!Auke.utils.isEmpty(Auke.utils.mgr)) {
+		//$('#map_canvas').css("height",$(window).height());
+	     //$('#map_canvas').css("width",$(window).width());
+		var gmappanel = Auke.utils.gmappanel;
+		gmappanel.height = Ext.getBody().getViewSize().height;
+		gmappanel.width = Ext.getBody().getViewSize().width;
+		var map = Auke.utils.mgr.map_;
+	    var center = map.getCenter();
+	    google.maps.event.trigger(map, "resize");
+	    map.setCenter(center); 
+	}
+});
