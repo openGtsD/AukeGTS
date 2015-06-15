@@ -29,8 +29,6 @@ Auke.utils.loadViewFromHash = function(hashString) {
 		viewContainer.removeAll(true);
 		viewContainer.add(view);
 	}
-	var bound = Ext.getBody().getSize();
-	viewContainer.setHeight(bound.height);
 	viewContainer.doLayout();
 };
 
