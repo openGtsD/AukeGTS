@@ -12,7 +12,9 @@ public interface CRUDDao<T> {
     T update(T entity);
     void delete(T entity);
     void deleteAll();
+    void deleteAllByProperties(Properties properties);
     List<T> getAll();
+    List<T> getTop(int top);
     List get(String query);
     T getById(String id);
     void setPersistentClass(Class<T> persistentClass);

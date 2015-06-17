@@ -95,6 +95,12 @@ public class QueryBuilder {
         return buildSelect(STAR,entity);
     }
 
+    public QueryBuilder buildLimit(int top) {
+        sb.append(" LIMIT ");
+        sb.append(top + " ");
+        return this;
+    }
+
     public QueryBuilder buildWhere() {
         sb.append(" WHERE ");
         return this;

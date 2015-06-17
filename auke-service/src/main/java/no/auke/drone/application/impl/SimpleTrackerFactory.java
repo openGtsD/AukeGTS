@@ -23,12 +23,12 @@ public class SimpleTrackerFactory implements TrackerFactory {
 
     @Override
     public Tracker create(String id, String name) {
-        return create("REAL",id, name, new MapPoint(0,0,0,0,0));
+        return create("REAL",id, name, new MapPoint(id, 0,0,0,0,0));
     }
     
     @Override
     public Tracker create(String trackerLayer, String id, String name) {
-        return create(trackerLayer,id, name, new MapPoint(0,0,0,0,0));
+        return create(trackerLayer,id, name, new MapPoint(id, 0,0,0,0,0));
     }
 
     @Override

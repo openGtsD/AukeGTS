@@ -1,10 +1,11 @@
 package no.auke.drone.domain;
 
-import java.io.Serializable;
+import java.util.UUID;
 
-public class MapPoint implements Serializable {
+public class MapPoint {
+    @ID
+    private String id;
 
-    private static final long serialVersionUID = 1026799887818657928L;
     private long time;
 
     private double latitude;
@@ -18,7 +19,8 @@ public class MapPoint implements Serializable {
     
     // possibly speed
     private double speed;
-    
+
+    private String trackerId;
 
 
 	public double getLatitude() {
@@ -35,9 +37,16 @@ public class MapPoint implements Serializable {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
-    }    
+    }
 
-    
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public double getAltitude() {
 		return altitude;
 	}
@@ -72,10 +81,17 @@ public class MapPoint implements Serializable {
 
     public MapPoint() {
         Long timestamp = System.currentTimeMillis()/1000;
-        this.time = timestamp.intValue();    }
+        this.id = UUID.randomUUID().toString();
+        this.time = timestamp.intValue();
+    }
 
     public MapPoint(double lat, double lon, double alt, Integer speed, double course) {
+        this("",lat,lon,alt,speed,course);
+    }
+
+    public MapPoint(String trackerId, double lat, double lon, double alt, Integer speed, double course) {
         this();
+        this.trackerId = trackerId;
     	this.latitude = lat;
         this.longitude = lon;
         this.altitude = alt;
@@ -84,12 +100,20 @@ public class MapPoint implements Serializable {
     }
 
     public MapPoint(double lat, double lon) {
-        this(lat,lon,0,0,0);
+        this("",lat,lon,0,0,0);
         
     }
-     
+
+    public String getTrackerId() {
+        return trackerId;
+    }
+
+    public void setTrackerId(String trackerId) {
+        this.trackerId = trackerId;
+    }
+
     public MapPoint (EventData eventData) {
-        this(eventData.getLatitude(), eventData.getLongitude(), eventData.getAltitude(), 0, eventData.getHeading());
+        this(eventData.getDeviceID(), eventData.getLatitude(), eventData.getLongitude(), eventData.getAltitude(), 0, eventData.getHeading());
         this.time = eventData.getTimestamp();
 
         // HUY: This is the format of time in OpenGTS DateTime dt = new DateTime(time); // GMT

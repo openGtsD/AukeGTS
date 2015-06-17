@@ -195,8 +195,27 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     }
 
     @Override
+    public void deleteAllByProperties(Properties properties) {
+        Class<T> entityClass = getPersistentClass();
+        String sql = new QueryBuilder().buildDelete(entityClass.getSimpleName()).buildWhere().buildEqualClause(properties).build();
+        getJdbcTemplate().update(sql);
+    }
+
+    @Override
     public List getAll() {
         String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName())
+                .build();
+
+        List<T> entities  = getJdbcTemplate().query(query,
+                new BeanPropertyRowMapper<T>(persistentClass));
+
+        return entities;
+    }
+
+    @Override
+    public List<T> getTop(int top) {
+        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName())
+                .buildLimit(top)
                 .build();
 
         List<T> entities  = getJdbcTemplate().query(query,

@@ -6,6 +6,7 @@ import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
+import no.auke.drone.services.TripService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
     @Autowired
     private TrackerService trackerService;
 
+    @Autowired
+    private TripService tripService;
+
     @Override
     public void update(Tracker tracker) {
         if(logger.isDebugEnabled()) logger.debug("starting updating tracker " + tracker.getId());
@@ -33,6 +37,8 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
         if(tracker.getLayerId().equalsIgnoreCase(Tracker.TrackerType.SIMULATED.toString())) {
         
         	tracker.move(null, null);// fly randomly
+            // update to mappoint table
+
 
     	// } else if(tracker.getLayerId().equalsIgnoreCase(Tracker.TrackerType.REAL.toString())) {
     	} else {
@@ -44,6 +50,12 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
     			tracker.setCurrentPosition(new MapPoint(eventDatas.get(tracker.getId())));
     			
     		}
+        }
+        MapPoint currentPosition = tracker.getCurrentPosition();
+        currentPosition.setTrackerId(tracker.getId());
+        if(tripService.getTripById(currentPosition.getId()) == null) {
+            tripService.saveTrip(currentPosition);
+
         }
     }
 }

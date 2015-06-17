@@ -134,3 +134,16 @@ CREATE TABLE `eventdata` (
   `creationTime` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`accountID`,`deviceID`,`timestamp`,`statusCode`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `mappoint` (
+  `id` varchar(100) NOT NULL,
+  `trackerId` varchar(32) NOT NULL,
+  `time` int(10) unsigned NOT NULL,
+  `latitude` double DEFAULT NULL,
+  `longitude` double DEFAULT NULL,
+  `altitude` double DEFAULT NULL,
+  `speed` double DEFAULT NULL,
+  `course` double DEFAULT NULL,
+  `creationTime` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -135,7 +135,7 @@ public class SimpleTracker extends TrackerBase {
             double finalLongitude = getCurrentPosition().getLongitude() + deltaLongitude;
             double finalLatitude = getCurrentPosition().getLatitude() + deltaLatitude;
             
-            MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude, this.getCurrentPosition().getLatitude(), course, speed);
+            MapPoint positionUnit = new MapPoint(this.getId(), finalLatitude, finalLongitude, this.getCurrentPosition().getLatitude(), course, speed);
             
             setCurrentPosition(positionUnit);
             getLatestPositions().add(positionUnit);

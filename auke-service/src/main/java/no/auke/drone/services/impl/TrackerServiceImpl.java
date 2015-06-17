@@ -31,6 +31,9 @@ public class TrackerServiceImpl implements TrackerService {
     private CRUDDao<Device> crudDeviceDao;
 
     @Autowired
+    private CRUDDao<MapPoint> mapPointCRUDDao;
+
+    @Autowired
     private SimpleTrackerFactory simpleTrackerFactory;
     
     @Autowired
@@ -46,6 +49,8 @@ public class TrackerServiceImpl implements TrackerService {
     @PostConstruct
     public void initTrackerService() {
         crudDeviceDao.setPersistentClass(Device.class);
+        mapPointCRUDDao.setPersistentClass(MapPoint.class);
+
     	logger.info("initializing SIMULATED tracker services");
         
     	List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
@@ -61,6 +66,8 @@ public class TrackerServiceImpl implements TrackerService {
                 TrackerData.getInstance().register((Observer) simpleTrackerFactory.from(device) );
             }
         }
+
+        mapPointCRUDDao.deleteAll();
 
         TrackerData.getInstance().startCalculate();
     }
