@@ -51,8 +51,39 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
         List<Device> devices = deviceCRUDDao.getAll();
         Assert.assertEquals(1,devices.size());
 
+        Device device = devices.get(0);
+        Assert.assertEquals(0.0,device.getLastValidHeading());
+
+        Assert.assertEquals(0.0,device.getLastValidLatitude());
+
+        Assert.assertEquals(0.0,device.getLastValidLongitude());
+
         tracker = trackerService.getTracker(newTrackerId);
         Assert.assertEquals(true, tracker.isActive());
+    }
+
+    @Test
+    public void shouldLoadNewDrone() {
+        Device device = new Device();
+        device.setAccountID("demo");
+        device.setDeviceID("1");
+        device.setDescription("this is a description");
+        device.setLastValidHeading(22);
+        device.setLastValidLatitude(55);
+        device.setLastValidLongitude(66);
+
+        deviceCRUDDao.create(device);
+
+        trackerService.initTrackerService();
+
+        Tracker tracker = trackerService.getTracker("1");
+        Assert.assertEquals("1",tracker.getId());
+        Assert.assertEquals("this is a description",tracker.getName());
+
+        MapPoint mapPoint = tracker.getCurrentPosition();
+        Assert.assertEquals(55.0,mapPoint.getLatitude());
+        Assert.assertEquals(66.0,mapPoint.getLongitude());
+
     }
 
     @Test

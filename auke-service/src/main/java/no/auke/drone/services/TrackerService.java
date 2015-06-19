@@ -11,7 +11,7 @@ import no.auke.drone.domain.TrackerLayer;
  * Created by huyduong on 3/25/2015.
  */
 public interface TrackerService {
-	
+    void initTrackerService();
     Tracker registerTracker(String id, String name);
     Tracker registerTracker(Tracker tracker);
     Collection<Tracker> removeAll(String layerId);

@@ -39,7 +39,7 @@ public class SimpleTrackerFactory implements TrackerFactory {
     @Override
     public Tracker from(Device device) {
         if(device == null) return null;
-        return create(Tracker.TrackerType.REAL.toString(), device.getDeviceID(), device.getDescription(), Tracker.TrackerType.REAL ,null,  new MapPoint(), device.getImeiNumber(), device.getSimPhoneNumber());
+        return create(Tracker.TrackerType.REAL.toString(), device.getDeviceID(), device.getDescription(), Tracker.TrackerType.REAL ,null,  new MapPoint(device.getLastValidLatitude(),device.getLastValidLongitude()), device.getImeiNumber(), device.getSimPhoneNumber());
     }
 
     @Override

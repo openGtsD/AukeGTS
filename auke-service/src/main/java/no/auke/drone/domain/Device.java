@@ -18,6 +18,12 @@ public class Device {
 
     private Boolean isActive;
 
+    private double lastValidLatitude;
+
+    private double lastValidLongitude;
+
+    private double lastValidHeading;
+
 //    private long lastUpdateTime;
 //    private long creationTime;
 
@@ -81,5 +87,29 @@ public class Device {
 
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public double getLastValidLatitude() {
+        return lastValidLatitude;
+    }
+
+    public void setLastValidLatitude(double lastValidLatitude) {
+        this.lastValidLatitude = lastValidLatitude;
+    }
+
+    public double getLastValidLongitude() {
+        return lastValidLongitude;
+    }
+
+    public void setLastValidLongitude(double lastValidLongitude) {
+        this.lastValidLongitude = lastValidLongitude;
+    }
+
+    public double getLastValidHeading() {
+        return lastValidHeading;
+    }
+
+    public void setLastValidHeading(double lastValidHeading) {
+        this.lastValidHeading = lastValidHeading;
     }
 }
