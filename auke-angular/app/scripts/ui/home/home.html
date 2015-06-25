@@ -1,0 +1,22 @@
+
+
+<div>Select Layer
+    <select ng-options="size as size.name for size in sizes"
+            ng-model="item" ng-change="update()"></select>
+    Zoom Factory <span id="zoomId" style="color: red"></span>  - Number <span id="type"></span> in current view is <span id="trackerNumber" style="color: red"></span>
+</div>
+
+<ui-gmap-google-map center="map.center"
+                    zoom="map.zoom"
+                    events="map.events"
+                    options="map.options" bounds="map.bounds">
+
+    <ui-gmap-markers models="markers" coords="'self'" icon="'icon'" click="onMarkerClicked" doCluster="true">
+
+        <!--<ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" ng-cloak>-->
+                <!--<div>-->
+                    <!--<p ng-non-bindable>Position Information - Number tracker is {{ numbertracker  }}</p>-->
+                <!--</div>-->
+        <!--</ui-gmap-windows>-->
+    </ui-gmap-markers>
+</ui-gmap-google-map>

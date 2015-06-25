@@ -1,10 +1,17 @@
 /* app css stylesheet */
 .wrapper {
   border: solid dimgrey 1px; padding-right: 0px !important; padding-left: 0px !important;
+
 }
 
 .angular-google-map-container {
-  height: 600px;
+  position: absolute;
+  top: 57px;
+  left: 1px;
+  right: 1px;
+  bottom: 1px;
+  border: solid 1px #654;
 }
+
 
 

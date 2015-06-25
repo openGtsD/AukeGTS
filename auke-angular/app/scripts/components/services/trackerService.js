@@ -6,5 +6,14 @@ angular.module('aukeGTS').factory('trackerService', function($http) {
       var url = serviceURL + 'drone/load-drone-in-view/' + layerId + '/' + zoom;
       return $http.post(url, json);
     }
+
+    trackerAPI.getTracker = function(marker, map) {
+        var url = serviceURL + 'drone/get-tracker/' + marker.key;
+        return $http.post(url);
+    }
+
     return trackerAPI;
-  });
+});
+
+
+

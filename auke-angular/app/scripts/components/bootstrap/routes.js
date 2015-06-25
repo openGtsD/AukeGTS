@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('aukeGTS').config(function ($stateProvider, $urlRouterProvider, HomeCtrl) {
+angular.module('aukeGTS').config(function ($stateProvider, $urlRouterProvider, HomeCtrl, SampleCtrl) {
   $urlRouterProvider.otherwise('/home');
   $stateProvider
     .state('home', {
@@ -20,5 +20,11 @@ angular.module('aukeGTS').config(function ($stateProvider, $urlRouterProvider, H
      .state('delete', {
         url: '/delete',
         templateUrl: 'app/scripts/ui/tracker/delete.html'
+     })
+     .state('sample', {
+        url: '/sample',
+        templateUrl: 'app/scripts/ui/sample/sample.html',
+        controller: SampleCtrl.name,
+        solve: SampleCtrl.resolve
      })
 });
