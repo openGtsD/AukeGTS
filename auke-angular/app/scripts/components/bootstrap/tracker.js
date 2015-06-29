@@ -1,19 +1,15 @@
 'use strict';
 
-angular.module('aukeGTS').config(function ($stateProvider, $urlRouterProvider, HomeCtrl, TrackerCtrl) {
-    $urlRouterProvider.otherwise('/home');
+angular.module('aukeGTS').config(function ($stateProvider, $urlRouterProvider, TrackerCtrl) {
+
+    $urlRouterProvider.otherwise('/register');
     $stateProvider
-        .state('home', {
-            url: '/home',
-            templateUrl: 'app/scripts/ui/home/home.html',
-            controller: HomeCtrl.name,
-            resolve: HomeCtrl.resolve
-        })
         .state('update', {
             url: '/update',
             templateUrl: 'app/scripts/ui/tracker/update.html',
             controller: TrackerCtrl.name,
             resolve: TrackerCtrl.resolve
+
         })
         .state('register', {
             url: '/register',
@@ -27,4 +23,5 @@ angular.module('aukeGTS').config(function ($stateProvider, $urlRouterProvider, H
             controller: TrackerCtrl.name,
             resolve: TrackerCtrl.resolve
         })
+
 });

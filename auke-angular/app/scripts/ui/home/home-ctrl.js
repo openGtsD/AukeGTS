@@ -17,9 +17,9 @@ angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', 'trackerService', 'u
         }
     ];
     $scope.item = $scope.sizes[0];
-    var layer = $scope.item.value;
+    $scope.layer = $scope.item.value;
     $scope.update = function() {
-        layer = $scope.item.value;
+        $scope.layer = $scope.item.value;
         $scope.reMakeInfoBubble();
         $scope.loadDroneWithinView($scope.myMap);
     }
@@ -43,8 +43,10 @@ angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', 'trackerService', 'u
                         dragend: function (maps, eventName, args) {
                         },
                         zoom_changed: function (maps, eventName, args) {
+                            var zoom = maps.getZoom();
                             $scope.myInterval = $interval(function(){
-                                if(maps.getZoom() >= 11) {
+                                zoom = maps.getZoom();
+                                if(zoom >= 11) {
                                     $scope.loadDroneWithinView(maps);
                                 } else {
                                     clearInterval($scope.myInterval);
@@ -64,7 +66,7 @@ angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', 'trackerService', 'u
             var mapBound = map.getBounds();
             var zoom = map.getZoom();
             //if(zoom < 11) {
-                $scope.reMakeInfoBubble();
+            //    $scope.reMakeInfoBubble();
             //}
             var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
             var sw = mapBound.getSouthWest();
@@ -75,7 +77,7 @@ angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', 'trackerService', 'u
                 northEastLon : ne.lng()
             };
 
-            trackerService.loadDroneWithinView(dataObject, layer, zoom).success(function (response) {
+            trackerService.loadDroneWithinView(dataObject, $scope.layer, zoom).success(function (response) {
                 var markers = [];
                 if (response.data.length > 0) {
 

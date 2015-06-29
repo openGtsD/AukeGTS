@@ -8,8 +8,27 @@ angular.module('aukeGTS').factory('trackerService', function($http) {
     }
 
     trackerAPI.getTracker = function(marker, map) {
-        var url = serviceURL + 'drone/get-tracker/' + marker.key;
+        return trackerAPI.loadTracker(marker.key);
+    }
+
+    trackerAPI.create = function(id) {
+        var url = serviceURL + 'drone/register/' + id;
         return $http.post(url);
+    }
+
+    trackerAPI.delete = function(id) {
+        var url = serviceURL + 'drone/remove/' + id;
+        return $http.post(url);
+    }
+
+    trackerAPI.load = function(id) {
+        var url = serviceURL + 'drone/get-tracker/' + id;
+        return $http.post(url);
+    }
+
+    trackerAPI.update = function(tracker) {
+        var url = serviceURL + 'drone/update/';
+        return $http.post(url, tracker);
     }
 
     return trackerAPI;
