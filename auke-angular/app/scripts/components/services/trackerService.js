@@ -1,5 +1,5 @@
 angular.module('aukeGTS').factory('trackerService', function($http) {
-    var serviceURL = 'http://localhost:8080/';
+    var serviceURL = 'http://89.221.242.66:8080/';
     var trackerAPI = {};
 
     trackerAPI.loadDroneWithinView = function(json, layerId, zoom) {
@@ -8,7 +8,7 @@ angular.module('aukeGTS').factory('trackerService', function($http) {
     }
 
     trackerAPI.getTracker = function(marker, map) {
-        return trackerAPI.loadTracker(marker.key);
+        return trackerAPI.load(marker.key);
     }
 
     trackerAPI.create = function(id) {
