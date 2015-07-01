@@ -1,9 +1,9 @@
-angular.module('aukeGTS').factory('trackerService', function($http) {
-    var serviceURL = 'http://89.221.242.66:8080/';
+angular.module('aukeGTS').factory('trackerService', function($http, aukeUtil) {
+    var serviceURL = aukeUtil.serviceURL;
     var trackerAPI = {};
 
     trackerAPI.loadDroneWithinView = function(json, layerId, zoom) {
-      var url = serviceURL + 'drone/load-drone-in-view/' + layerId + '/' + zoom;
+      var url = serviceURL + '/drone/load-drone-in-view/' + layerId + '/' + zoom;
       return $http.post(url, json);
     }
 
@@ -12,22 +12,22 @@ angular.module('aukeGTS').factory('trackerService', function($http) {
     }
 
     trackerAPI.create = function(id) {
-        var url = serviceURL + 'drone/register/' + id;
+        var url = serviceURL + '/drone/register/' + id;
         return $http.post(url);
     }
 
     trackerAPI.delete = function(id) {
-        var url = serviceURL + 'drone/remove/' + id;
+        var url = serviceURL + '/drone/remove/' + id;
         return $http.post(url);
     }
 
     trackerAPI.load = function(id) {
-        var url = serviceURL + 'drone/get-tracker/' + id;
+        var url = serviceURL + '/drone/get-tracker/' + id;
         return $http.post(url);
     }
 
     trackerAPI.update = function(tracker) {
-        var url = serviceURL + 'drone/update/';
+        var url = serviceURL + '/drone/update/';
         return $http.post(url, tracker);
     }
 
