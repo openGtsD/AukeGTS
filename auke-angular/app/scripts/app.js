@@ -19,7 +19,8 @@ angular.module('aukeGTS', [
             // Allow same origin resource loads.
             'self',
             // Allow loading from our assets domain.  Notice the difference between * and **.
-            domain + '/app/scripts/components/directives**'
+            domain + '/app/scripts/components/directives/**',
+            domain + '/app/scripts/ui/tracker/*.html'
         ]);
 
         //// The blacklist overrides the whitelist so the open redirect here is blocked.
