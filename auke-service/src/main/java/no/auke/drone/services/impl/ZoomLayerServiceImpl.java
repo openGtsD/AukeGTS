@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerLayer;
-import no.auke.drone.domain.TrackerSum;
+import no.auke.drone.domain.TrackerSumImpl;
 import no.auke.drone.services.ZoomLayerService;
 
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
     private ReentrantLock block = new ReentrantLock();
     private Collection<Tracker> positions = new ConcurrentLinkedQueue<Tracker>();
 
-    private Map<Long, TrackerSum> trackerSUM = new ConcurrentHashMap<Long, TrackerSum>();
+    private Map<Long, TrackerSumImpl> trackerSUM = new ConcurrentHashMap<Long, TrackerSumImpl>();
     private Map<String, List> includedTrackerIds = new ConcurrentHashMap<>();
 
     private TrackerLayer trackerLayer;
@@ -97,7 +97,7 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 
     }
 
-    private void updateData( Map<Long, TrackerSum> newPositions) {
+    private void updateData( Map<Long, TrackerSumImpl> newPositions) {
         positions.clear();
         positions.addAll(newPositions.values());
 
@@ -109,7 +109,7 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
     @Override
     public void calculate() {
 
-        Map<Long, TrackerSum> newPositions = new HashMap<Long, TrackerSum>();
+        Map<Long, TrackerSumImpl> newPositions = new HashMap<Long, TrackerSumImpl>();
         includedTrackerIds.clear();
 
         for (Tracker tracker : trackerLayer.getActiveTrackers()) {
@@ -119,10 +119,10 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 
             Long id = getIndex(lon, lat);
 
-            TrackerSum point;
+            TrackerSumImpl point;
             if (!newPositions.containsKey(id)) {
 
-                point = new TrackerSum();
+                point = new TrackerSumImpl();
                 point.setId(String.valueOf(id) + "-" + String.valueOf(getZoomFactor()));
                 point.setName("Tracker within long=" + String.valueOf(lon) + " lat=" + String.valueOf(lat));
                 point.getCurrentPosition().setLatitude(tracker.getCurrentPosition().getLatitude());
