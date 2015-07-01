@@ -40,7 +40,7 @@ public class RSSUtil {
         description.setValue(tracker.getName() + tracker.getId());
 
         entry.setDescription(description);
-        entry.setAuthor(tracker.getFlyer() != null ? tracker.getFlyer().getEmail() : "admin");
+        entry.setAuthor(tracker.getOwner() != null ? tracker.getOwner().getEmail() : "admin");
         entry.setLink(domain);
         entry.setUri(domain + "/" + UUID.randomUUID().toString());
         entry.setPublishedDate(tracker.getCreateDate());

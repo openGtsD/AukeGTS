@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * Created by huyduong on 3/24/2015.
  */
 
-public class SimpleTracker extends AbstractTrackerPositionBase {
+public class SimpleTracker extends AbstractTrackerBase {
     
 	private static final Logger logger = LoggerFactory.getLogger(SimpleTracker.class);
 

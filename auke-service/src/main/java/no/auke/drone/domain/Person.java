@@ -2,7 +2,7 @@ package no.auke.drone.domain;
 
 import java.io.Serializable;
 
-public class Person implements Serializable {
+public class Person extends User implements Serializable{
 
     private static final long serialVersionUID = 1L;
     

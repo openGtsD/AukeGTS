@@ -53,6 +53,11 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
     private Date createDate;
     private Date modifiedDate;
 
+    private Date lastUsed;
+
+    private String imageUrl;
+
+    private boolean storedTrips = true; // default value
 
     public AbstractTrackerBase() {
         latestPositions = new CircularFifoBuffer(5); // HUY: temporary set the latest positions at 5, will update it with parameter
@@ -61,6 +66,26 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
     public AbstractTrackerBase(String id) {
         this();
         this.id = id;
+    }
+
+    @Override
+    public Date getLastUsed() {
+        return lastUsed;
+    }
+
+    @Override
+    public void setLastUsed(Date date) {
+        lastUsed = date;
+    }
+
+    @Override
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    @Override
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override
@@ -112,6 +137,34 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
     @Override
     final public void setLatestPositions(CircularFifoBuffer latestPositions) {
         this.latestPositions = latestPositions;
+    }
+
+    @Override
+    public boolean isStoredTrips() {
+        return storedTrips;
+    }
+
+    @Override
+    public void setStoredTrips(boolean storedTrips) {
+        this.storedTrips = storedTrips;
+    }
+
+    // TODO implement later
+    @Override
+    public String getTrackerUsage() {
+        return null;
+    }
+
+    // TODO implement later
+    @Override
+    public List<String> getAdditionalLayers() {
+        return null;
+    }
+
+    // TODO implement later
+    @Override
+    public void addLayer(TrackerLayer trackerLayer) {
+
     }
 
     public void update() {
@@ -167,12 +220,12 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
     }
 
     @Override
-    public void setFlyer(Person person) {
+    public void setOwner(Person person) {
         this.flyer = person;
     }
 
     @Override
-    public Person getFlyer() {
+    public Person getOwner() {
         return flyer;
     }
 
