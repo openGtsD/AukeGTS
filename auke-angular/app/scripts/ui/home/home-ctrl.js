@@ -5,7 +5,7 @@ angular.module('aukeGTS').constant('HomeCtrl', {
   resolve: {}
 });
 
-angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', 'trackerService', 'uiGmapGoogleMapApi', '$timeout', '$interval', 'uiGmapIsReady', function ($scope, trackerService, uiGmapGoogleMapApi, $timeout, $interval, uiGmapIsReady) {
+angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', '$stateParams', 'trackerService', 'uiGmapGoogleMapApi', '$timeout', '$interval', 'uiGmapIsReady', 'aukeUtil', function ($scope,  $stateParams, trackerService, uiGmapGoogleMapApi, $timeout, $interval, uiGmapIsReady, aukeUtil) {
     $scope.sizes = [
         {
             name: 'REAL',
@@ -16,7 +16,13 @@ angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', 'trackerService', 'u
             value: 'SIMULATED'
         }
     ];
-    $scope.item = $scope.sizes[0];
+    var layerParam = $stateParams.layer;
+    if(layerParam == null || layerParam == '') {
+        $scope.item =  $scope.sizes[0];
+    } else {
+        $scope.item = (layerParam !== '' && $scope.sizes[0].value == layerParam) ? $scope.sizes[0] : $scope.sizes[1];
+    }
+
     $scope.layer = $scope.item.value;
     $scope.update = function() {
         $scope.layer = $scope.item.value;
@@ -47,6 +53,7 @@ angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', 'trackerService', 'u
                             $scope.myInterval = $interval(function(){
                                 zoom = maps.getZoom();
                                 if(zoom >= 11) {
+                                    //$scope.layer = $scope.item.value;
                                     $scope.loadDroneWithinView(maps);
                                 } else {
                                     clearInterval($scope.myInterval);
@@ -65,40 +72,61 @@ angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', 'trackerService', 'u
         $scope.loadDroneWithinView = function(map) {
             var mapBound = map.getBounds();
             var zoom = map.getZoom();
-            //if(zoom < 11) {
-            //    $scope.reMakeInfoBubble();
-            //}
-            var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
-            var sw = mapBound.getSouthWest();
-            var dataObject = {
-                southWestLat : sw.lat(),
-                southWestLon : sw.lng(),
-                northEastLat : ne.lat(),
-                northEastLon : ne.lng()
-            };
-
-            trackerService.loadDroneWithinView(dataObject, $scope.layer, zoom).success(function (response) {
+            if($stateParams.id != null && $stateParams.id != '') {
                 var markers = [];
-                if (response.data.length > 0) {
-
-                    var data = response.data;
-                    for (var i = 0; i < data.length; i++) {
-                        var marker = $scope.createMarker(data[i]);
+                trackerService.load($stateParams.id).success(function (response) {
+                    if (response.data && response.data.length > 0) {
+                        var marker = $scope.createMarker(response.data[0]);
                         markers.push(marker);
+                        $scope.markers = markers;
+
+                        var posn = new google.maps.LatLng(response.data[0].currentPosition.latitude,
+                            response.data[0].currentPosition.longitude);
+                        var bounds = new google.maps.LatLngBounds();
+                        bounds.extend(posn);
+                        map.fitBounds(bounds);
                     }
-                }
-                $scope.markers = markers;
+                });
+
+                $stateParams.id = '';
+
                 $('#zoomId').text(zoom);
                 $("#type").text(zoom >= 11 ? "drone" : "position");
                 $("#trackerNumber").text($scope.markers.length);
-            });
+            } else {
+                //if(zoom < 11) {
+                //    $scope.reMakeInfoBubble();
+                //}
+                var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
+                var sw = mapBound.getSouthWest();
+                var dataObject = {
+                    southWestLat: sw.lat(),
+                    southWestLon: sw.lng(),
+                    northEastLat: ne.lat(),
+                    northEastLon: ne.lng()
+                };
 
+                trackerService.loadDroneWithinView(dataObject, $scope.layer, zoom).success(function (response) {
+                    var markers = [];
+                    if (response.data.length > 0) {
+                        var data = response.data;
+                        for (var i = 0; i < data.length; i++) {
+                            var marker = $scope.createMarker(data[i]);
+                            markers.push(marker);
+                        }
+                    }
+                    $scope.markers = markers;
+                    $('#zoomId').text(zoom);
+                    $("#type").text(zoom >= 11 ? "drone" : "position");
+                    $("#trackerNumber").text($scope.markers.length);
+                });
+            }
         };
 
         $scope.createMarker = function (tracker) {
             var marker = {
                  id: tracker.id,
-                 icon: $scope.myMap.getZoom() >= 11 ? 'app/images/flight.gif' : '',
+                 icon: $scope.myMap.getZoom() >= 11 ? aukeUtil.baseURL + '/app/images/flight.gif' : '',
                  latitude: tracker.currentPosition.latitude,
                  longitude: tracker.currentPosition.longitude,
                  showWindow: false,
@@ -132,25 +160,6 @@ angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', 'trackerService', 'u
 
             return marker;
         };
-
-
-     //var onMarkerClicked = function (marker) {
-    //       $scope.reMakeInfoBubble();
-    //       //$timeout(function () {
-    //           if ($scope.myMap.getZoom() >= 11) {
-    //               marker.closeClick = function () {
-    //                   marker.showWindow = false;
-    //                   $scope.$evalAsync();
-    //               };
-    //
-    //               $scope.getTracker(marker, $scope.myMap);
-    //           } else {
-    //               marker.showWindow = true;
-    //               $scope.$apply();
-    //           }
-    //       //});
-    //};
-    //$scope.onMarkerClicked = onMarkerClicked;
 
     $scope.getTracker = function(marker, map) {
         trackerService.getTracker(marker, map).success(function (response) {
@@ -211,4 +220,5 @@ angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', 'trackerService', 'u
         //google.maps.event.trigger($scope.myMap, "resize");
         //$scope.myMap.setCenter(center);
     });
+
 }]);

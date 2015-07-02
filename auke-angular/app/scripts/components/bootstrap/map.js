@@ -10,4 +10,10 @@ angular.module('aukeGTS').config(function ($stateProvider, $urlRouterProvider, H
             controller: HomeCtrl.name,
             resolve: HomeCtrl.resolve
         })
+        .state('viewTracker', {
+            url: '/home:{id}:{layer}',
+            templateUrl: domain + '/app/scripts/ui/home/home.html',
+            controller: HomeCtrl.name,
+            resolve: HomeCtrl.resolve
+        })
 });
