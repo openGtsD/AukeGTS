@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('aukeGTS').config(function ($stateProvider, $urlRouterProvider,  HomeCtrl, TrackerCtrl) {
-    var domain = "http://89.221.242.156:8080";
-    //var domain = "http://localhost:8888";
+    //var domain = "http://89.221.242.156:8080";
+    var domain = "http://localhost:8888";
     $urlRouterProvider.otherwise('/home');
     $stateProvider
         .state('home', {

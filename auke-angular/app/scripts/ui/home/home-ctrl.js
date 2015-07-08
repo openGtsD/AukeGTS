@@ -22,8 +22,9 @@ angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', '$stateParams', 'tra
     } else {
         $scope.item = (layerParam !== '' && $scope.sizes[0].value == layerParam) ? $scope.sizes[0] : $scope.sizes[1];
     }
-
     $scope.layer = $scope.item.value;
+
+
     $scope.update = function() {
         $scope.layer = $scope.item.value;
         $scope.reMakeInfoBubble();
@@ -142,7 +143,7 @@ angular.module('aukeGTS').controller('HomeCtrl',[ '$scope', '$stateParams', 'tra
                         var bounds = new google.maps.LatLngBounds();
                         bounds.extend(posn);
                         $scope.myMap.fitBounds(bounds);
-                        $scope.myMap.setZoom(11);
+                        //$scope.myMap.setZoom(11);
                     },
                     click : function(marker) {
                         if($scope.myMap.getZoom() < 11) {
