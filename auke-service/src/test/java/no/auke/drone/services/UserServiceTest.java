@@ -98,4 +98,84 @@ public class UserServiceTest extends AbstractIntegrationTest {
         persistedUser = userService.getUserById(user.getId());
         Assert.assertNull(persistedUser);
     }
+
+    @Test
+    public void testCreatePerson() {
+        Person person = new Person();
+        person.setId(UUID.randomUUID().toString());
+
+        person.setEmail("test@test.com");
+        person.setIM("skype:12345");
+        person.setPhone("550-55-550");
+
+        Person persistedPerson = userService.createPerson(person);
+        Assert.assertEquals(person.getId(), persistedPerson.getId());
+
+        Assert.assertEquals(person.getEmail(),persistedPerson.getEmail());
+        Assert.assertEquals(person.getIM(),persistedPerson.getIM());
+        Assert.assertEquals(person.getPhone(),persistedPerson.getPhone());
+
+    }
+
+    @Test
+    public void testUpdatePerson() {
+        Person person = new Person();
+        person.setId(UUID.randomUUID().toString());
+
+        person.setEmail("test@test.com");
+        person.setIM("skype:12345");
+        person.setPhone("550-55-550");
+
+        Person persistedPerson = userService.createPerson(person);
+        Assert.assertEquals(person.getId(), persistedPerson.getId());
+
+        Assert.assertEquals(person.getEmail(),persistedPerson.getEmail());
+        Assert.assertEquals(person.getIM(),persistedPerson.getIM());
+        Assert.assertEquals(person.getPhone(),persistedPerson.getPhone());
+
+        person.setIM("facebook:2256");
+        persistedPerson = userService.updatePerson(person);
+        Assert.assertEquals(person.getIM(),persistedPerson.getIM());
+
+    }
+
+    @Test
+    public void testGetPerson() {
+        Person person = new Person();
+        person.setId(UUID.randomUUID().toString());
+
+        person.setEmail("test@test.com");
+        person.setIM("skype:12345");
+        person.setPhone("550-55-550");
+
+        userService.createPerson(person);
+        Person persistedPerson = userService.getPersonById(person.getId());
+        Assert.assertEquals(person.getId(), persistedPerson.getId());
+
+        Assert.assertEquals(person.getEmail(),persistedPerson.getEmail());
+        Assert.assertEquals(person.getIM(),persistedPerson.getIM());
+        Assert.assertEquals(person.getPhone(),persistedPerson.getPhone());
+    }
+
+    @Test
+    public void testDeletePerson() {
+        Person person = new Person();
+        person.setId(UUID.randomUUID().toString());
+
+        person.setEmail("test@test.com");
+        person.setIM("skype:12345");
+        person.setPhone("550-55-550");
+
+        userService.createPerson(person);
+        Person persistedPerson = userService.getPersonById(person.getId());
+        Assert.assertEquals(person.getId(), persistedPerson.getId());
+
+        Assert.assertEquals(person.getEmail(),persistedPerson.getEmail());
+        Assert.assertEquals(person.getIM(),persistedPerson.getIM());
+        Assert.assertEquals(person.getPhone(),persistedPerson.getPhone());
+
+        userService.deletePerson(person.getId());
+        persistedPerson = userService.getPersonById(person.getId());
+        Assert.assertNull(persistedPerson);
+    }
 }

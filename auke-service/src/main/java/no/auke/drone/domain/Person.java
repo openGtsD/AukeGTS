@@ -10,6 +10,14 @@ public class Person extends User{
         
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getPhone() {
         return phone;
     }
