@@ -1,11 +1,11 @@
 'use strict';
 //Prods
-//var domain = "http://89.221.242.66:8888";
-//var service = "http://89.221.242.66:8080";
+var domain = "http://89.221.242.66:8888";
+var service = "http://89.221.242.66:8080";
 
 //Devs
-var domain = "http://89.221.242.156:8888";
-var service = "http://89.221.242.156:8080";
+//var domain = "http://89.221.242.156:8888";
+//var service = "http://89.221.242.156:8080";
 
 //var domain = "http://localhost:8888";
 //var service = "http://localhost:8080";
