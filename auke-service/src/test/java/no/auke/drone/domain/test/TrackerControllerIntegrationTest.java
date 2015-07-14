@@ -68,7 +68,7 @@ public class TrackerControllerIntegrationTest extends AbstractIntegrationTest {
         Assert.assertEquals(7, trackers.size());
 
         trackers = trackerService.getLatestRegisteredTrackers("REAL");
-        Assert.assertEquals(propertiesPersister.getNumberByKey("tracker.maxSize"), trackers.size());
+        Assert.assertEquals(7, trackers.size());
         Iterator<Tracker> trackerIterator = trackers.iterator();
         int i = 7;
         while(trackerIterator.hasNext()) {
@@ -78,6 +78,6 @@ public class TrackerControllerIntegrationTest extends AbstractIntegrationTest {
         }
 
         trackers = trackerService.getLongestFlightTrackers("REAL");
-        Assert.assertEquals(propertiesPersister.getNumberByKey("tracker.maxSize"), trackers.size());
+        Assert.assertEquals(7, trackers.size());
     }
 }

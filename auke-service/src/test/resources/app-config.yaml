@@ -23,5 +23,7 @@ server:
     #domain: http://89.221.242.66:8080/drone
     #url: http://89.221.242.66:8888/rss/
 
-track:
-    maxActive: 10
+tracker:
+    maxSize: 10
+    registered: registered
+    longest: longest
