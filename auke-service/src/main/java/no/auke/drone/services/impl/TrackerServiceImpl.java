@@ -71,23 +71,28 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Tracker registerTracker(Tracker tracker) {
-        return TrackerData.getInstance().register((Observer) tracker);
+        // return TrackerData.getInstance().register((Observer) tracker);
+        Tracker result = tracker;
+
+        if(tracker == null || StringUtils.isEmpty(tracker.getId())) {
+            return null;
+        }
+
+        Tracker persistedTracker = getTracker(tracker.getId());
+        if(persistedTracker == null) {
+            persistedTracker = simpleTrackerFactory.create(tracker);
+            TrackerData.getInstance().register((Observer) persistedTracker );
+            crudDeviceDao.create(new Device().from(persistedTracker));
+            result = persistedTracker;
+        }
+
+        // else do no things. that's mean tracker exists in system
+        return result;
     }
 
     @Override
     public Tracker registerTracker(String id, String name) {
-        if(StringUtils.isEmpty(id)) {
-            return null;
-        }
-        
-        Tracker tracker = getTracker(id);
-        if(tracker == null) {
-            tracker = simpleTrackerFactory.create(id, name);
-            TrackerData.getInstance().register((Observer) tracker);
-            crudDeviceDao.create(new Device().from(tracker));
-        }
-        // else do no things. that's mean tracker exists in system
-        return tracker;
+        return registerTracker(new SimpleTrackerFactory().create(id,name));
     }
 
     @Override

@@ -122,4 +122,8 @@ public interface Tracker {
     List<String> getAdditionalLayers();
 
     void addLayer(TrackerLayer trackerLayer);
+
+    void setTrackerPrefix(String trackerPrefix);
+
+    String getTrackerPrefix();
 }

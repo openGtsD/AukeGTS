@@ -59,6 +59,16 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     private boolean storedTrips = true; // default value
 
+    private String trackerPrefix;
+
+    public String getTrackerPrefix() {
+        return trackerPrefix;
+    }
+
+    public void setTrackerPrefix(String trackerPrefix) {
+        this.trackerPrefix = trackerPrefix;
+    }
+
     public AbstractTrackerBase() {
         latestPositions = new CircularFifoBuffer(5); // HUY: temporary set the latest positions at 5, will update it with parameter
     }

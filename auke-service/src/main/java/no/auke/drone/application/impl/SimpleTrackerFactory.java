@@ -6,6 +6,7 @@ import no.auke.drone.application.TrackerUpdater;
 import no.auke.drone.application.TrackerFactory;
 import no.auke.drone.domain.*;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,15 @@ public class SimpleTrackerFactory implements TrackerFactory {
 
     @Autowired
     private TrackerUpdater trackerUpdater;
+
+    @Override
+    public Tracker create(Tracker tracker) {
+        if(tracker == null) {
+            return null;
+        }
+        tracker.setTrackerUpdater(trackerUpdater);
+        return tracker;
+    }
 
     @Override
     public Tracker create(String id, String name) {

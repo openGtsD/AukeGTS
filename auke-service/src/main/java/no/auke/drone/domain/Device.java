@@ -1,5 +1,7 @@
 package no.auke.drone.domain;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Created by huyduong on 4/19/2015.
  */
@@ -13,6 +15,8 @@ public class Device {
     private String description;
 
     private String simPhoneNumber;
+
+    private String uniqueID;
 
     private String imeiNumber;
 
@@ -32,6 +36,8 @@ public class Device {
         description = tracker.getName();
         simPhoneNumber = tracker.getSimPhone();
         imeiNumber = tracker.getImeiNumber();
+        uniqueID = StringUtils.trimToEmpty(tracker.getTrackerPrefix()) + "-" + StringUtils.trimToEmpty(tracker.getImeiNumber());
+
         return this;
     }
 
@@ -73,6 +79,14 @@ public class Device {
 
     public void setImeiNumber(String imeiNumber) {
         this.imeiNumber = imeiNumber;
+    }
+
+    public String getUniqueID() {
+        return uniqueID;
+    }
+
+    public void setUniqueID(String uniqueID) {
+        this.uniqueID = uniqueID;
     }
 
     public Boolean getIsActive() {

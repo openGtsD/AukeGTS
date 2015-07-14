@@ -9,6 +9,7 @@ import no.auke.drone.domain.Person;
  * Created by huyduong on 3/25/2015.
  */
 public interface TrackerFactory {
+    Tracker create(Tracker tracker);
 	Tracker create(String id, String name);
     Tracker create(String trackerLayer, String id, String name);
     Tracker create(String trackerLayer, String id, String name, MapPoint location);
