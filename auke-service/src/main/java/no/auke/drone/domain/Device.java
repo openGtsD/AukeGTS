@@ -36,7 +36,8 @@ public class Device {
         description = tracker.getName();
         simPhoneNumber = tracker.getSimPhone();
         imeiNumber = tracker.getImeiNumber();
-        uniqueID = StringUtils.trimToEmpty(tracker.getTrackerPrefix()) + "-" + StringUtils.trimToEmpty(tracker.getImeiNumber());
+        String trackerPrefix = StringUtils.isEmpty(tracker.getTrackerPrefix()) ? "TK" : StringUtils.trimToEmpty(tracker.getTrackerPrefix());
+        uniqueID = trackerPrefix + "-" + StringUtils.trimToEmpty(tracker.getImeiNumber());
 
         return this;
     }

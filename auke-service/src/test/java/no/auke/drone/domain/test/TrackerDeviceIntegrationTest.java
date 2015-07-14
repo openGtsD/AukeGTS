@@ -24,8 +24,8 @@ public class TrackerDeviceIntegrationTest extends AbstractIntegrationTest  {
     @Before
     public void init() {
         deviceCRUDDao.setPersistentClass(Device.class);
-
         deviceCRUDDao.deleteAll();
+        trackerService.removeAll();
     }
 
     @Test
@@ -49,6 +49,29 @@ public class TrackerDeviceIntegrationTest extends AbstractIntegrationTest  {
         Assert.assertEquals(device.getDescription(),anotherDevice.getDescription());
         Assert.assertEquals(device.getImeiNumber(),anotherDevice.getImeiNumber());
         Assert.assertEquals(device.getUniqueID(),anotherDevice.getUniqueID());
+        Assert.assertEquals(device.getUniqueID(), tracker.getTrackerPrefix() + "-" + tracker.getImeiNumber());
+    }
 
+    @Test
+    public void shouldRegisterTrackerNoPrefix() {
+        Tracker tracker = new SimpleTracker();
+        tracker.setId("tracker1");
+        tracker.setImeiNumber("12345");
+        tracker.setName("this is the name");
+        tracker.setSimPhone("1123344");
+
+        trackerService.registerTracker(tracker);
+
+        Device device = deviceCRUDDao.getById(tracker.getId());
+
+        Device anotherDevice = new Device().from(tracker);
+
+        Assert.assertEquals(device.getDeviceID(),anotherDevice.getDeviceID());
+        Assert.assertEquals(device.getAccountID(),anotherDevice.getAccountID());
+
+        Assert.assertEquals(device.getDescription(),anotherDevice.getDescription());
+        Assert.assertEquals(device.getImeiNumber(),anotherDevice.getImeiNumber());
+        Assert.assertEquals(device.getUniqueID(),anotherDevice.getUniqueID());
+        Assert.assertEquals(device.getUniqueID(), "TK" + "-" + tracker.getImeiNumber());
     }
 }
