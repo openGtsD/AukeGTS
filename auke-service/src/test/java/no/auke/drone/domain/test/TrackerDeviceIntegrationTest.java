@@ -49,7 +49,8 @@ public class TrackerDeviceIntegrationTest extends AbstractIntegrationTest  {
         Assert.assertEquals(device.getDescription(),anotherDevice.getDescription());
         Assert.assertEquals(device.getImeiNumber(),anotherDevice.getImeiNumber());
         Assert.assertEquals(device.getUniqueID(),anotherDevice.getUniqueID());
-        Assert.assertEquals(device.getUniqueID(), tracker.getTrackerPrefix() + "-" + tracker.getImeiNumber());
+        Assert.assertEquals(device.getUniqueID(), tracker.getTrackerPrefix() + "_" + tracker.getImeiNumber());
+        Assert.assertEquals(Integer.valueOf(1),device.getIsActive());
     }
 
     @Test
@@ -72,6 +73,6 @@ public class TrackerDeviceIntegrationTest extends AbstractIntegrationTest  {
         Assert.assertEquals(device.getDescription(),anotherDevice.getDescription());
         Assert.assertEquals(device.getImeiNumber(),anotherDevice.getImeiNumber());
         Assert.assertEquals(device.getUniqueID(),anotherDevice.getUniqueID());
-        Assert.assertEquals(device.getUniqueID(), "TK" + "-" + tracker.getImeiNumber());
+        Assert.assertEquals(device.getUniqueID(), "tk" + "_" + tracker.getImeiNumber());
     }
 }

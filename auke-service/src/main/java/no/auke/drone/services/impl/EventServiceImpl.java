@@ -92,8 +92,8 @@ public class EventServiceImpl implements EventService {
                 trackerService.registerTracker(tracker);
             }
 
-            if(device.getIsActive() != null && tracker.isActive() != device.getIsActive()) {
-                tracker.setActive(BooleanUtils.isTrue(device.getIsActive()));
+            if(device.getIsActive() != null && tracker.isActive() != (device.getIsActive() != 0)) {
+                tracker.setActive(device.getIsActive() != null && device.getIsActive() == 1);
                 trackerService.updateActiveTracker(tracker);
             }
         }
