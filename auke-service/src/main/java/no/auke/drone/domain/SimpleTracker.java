@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 public class SimpleTracker extends TrackerBase {
     
 	private static final Logger logger = LoggerFactory.getLogger(SimpleTracker.class);
+	private String trackerPrefix = "tk";
 
 	AtomicLong stopFlightTime = new AtomicLong(System.currentTimeMillis());  
 	AtomicLong startFlightTime = new AtomicLong(System.currentTimeMillis());  
@@ -163,5 +164,15 @@ public class SimpleTracker extends TrackerBase {
 	@Override
 	public void incrementTrackers() {
 	}
+
+    @Override
+    public String getTrackerPrefix() {
+        return trackerPrefix;
+    }
+
+    @Override
+    public void setTrackerPrefix(String prefix) {
+        this.trackerPrefix = prefix;
+    }
 
 }

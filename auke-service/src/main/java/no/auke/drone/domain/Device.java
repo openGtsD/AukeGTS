@@ -1,5 +1,8 @@
 package no.auke.drone.domain;
 
+import org.apache.commons.lang.BooleanUtils;
+import org.apache.commons.lang.StringUtils;
+
 /**
  * Created by huyduong on 4/19/2015.
  */
@@ -16,7 +19,9 @@ public class Device {
 
     private String imeiNumber;
 
-    private Boolean isActive;
+    private Integer isActive;
+    
+    private String uniqueID;
 
 //    private long lastUpdateTime;
 //    private long creationTime;
@@ -32,6 +37,8 @@ public class Device {
         description = tracker.getName();
         simPhoneNumber = tracker.getSimPhone();
         imeiNumber = tracker.getImeiNumber();
+        uniqueID = StringUtils.trimToEmpty(tracker.getTrackerPrefix()) + "_" + StringUtils.trimToEmpty(tracker.getId());
+        isActive = BooleanUtils.isTrue(tracker.isActive()) ? 1 : 0;
         return this;
     }
 
@@ -75,11 +82,19 @@ public class Device {
         this.imeiNumber = imeiNumber;
     }
 
-    public Boolean getIsActive() {
+    public Integer getIsActive() {
         return isActive;
     }
 
-    public void setIsActive(Boolean isActive) {
+    public void setIsActive(Integer isActive) {
         this.isActive = isActive;
+    }
+
+    public String getUniqueID() {
+        return uniqueID;
+    }
+
+    public void setUniqueID(String uniqueID) {
+        this.uniqueID = uniqueID;
     }
 }

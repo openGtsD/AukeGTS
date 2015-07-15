@@ -73,6 +73,15 @@ public class TrackerPositionBaseTest {
             @Override
             final public void setImeiNumber(String imeiNumber) {
             }
+            @Override
+            public String getTrackerPrefix() {
+                return null;
+            }
+            @Override
+            public void setTrackerPrefix(String prefix) {
+                // TODO Auto-generated method stub
+                
+            }
 			};
 
 	}

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import no.auke.drone.application.TrackerUpdater;
+
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 
 /**
@@ -109,5 +110,9 @@ public interface Tracker {
 	boolean isActive();
 
     void setActive(boolean active);
+
+    String getTrackerPrefix();
+    
+    void setTrackerPrefix(String prefix);
 
 }

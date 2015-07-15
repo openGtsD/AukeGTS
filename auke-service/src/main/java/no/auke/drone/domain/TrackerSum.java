@@ -129,6 +129,18 @@ public class TrackerSum extends TrackerPositionBase {
 
     }
 
+    @Override
+    public String getTrackerPrefix() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setTrackerPrefix(String prefix) {
+        // TODO Auto-generated method stub
+        
+    }
+
 
 
 

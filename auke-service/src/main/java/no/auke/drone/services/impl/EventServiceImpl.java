@@ -48,8 +48,7 @@ public class EventServiceImpl implements EventService {
         fetchEvents();
     }
 
-
-    private Map<String,EventData> eventDatas = new ConcurrentHashMap<String,EventData>();
+    private Map<String, EventData> eventDatas = new ConcurrentHashMap<String, EventData>();
 
     public static long CALC_FREQUENCY = 5000; // time in milliseconds
 
@@ -57,69 +56,69 @@ public class EventServiceImpl implements EventService {
     private static ExecutorService executor = Executors.newCachedThreadPool();
 
     @Override
-    public Map<String,EventData> getEventDatas() {
-        if(eventDatas == null) {
+    public Map<String, EventData> getEventDatas() {
+        if (eventDatas == null) {
             eventDatas = new HashMap<>();
         }
-    	return eventDatas;
+        return eventDatas;
     }
 
-    @Override    
+    @Override
     public void fetchEventData() {
-        QueryBuilder timeBuilder = new QueryBuilder().buildSelect("max(timestamp) - 5000",EventData.class.getSimpleName());
+        QueryBuilder timeBuilder = new QueryBuilder().buildSelect("max(timestamp) - 5000",
+                EventData.class.getSimpleName());
 
-        QueryBuilder queryBuilder = new QueryBuilder().buildSelect(EventData.class.getSimpleName())
-                .buildWhere()
-                .buildParam("timestamp")
-                .buildMoreThan()
-                .buildInnerQuery(timeBuilder.build());
+        QueryBuilder queryBuilder = new QueryBuilder().buildSelect(EventData.class.getSimpleName()).buildWhere()
+                .buildParam("timestamp").buildMoreThan().buildInnerQuery(timeBuilder.build());
         List<EventData> eventFetched = eventCrudDao.get(queryBuilder.build());
-        
+
         eventDatas.clear();
-        for(EventData event:eventFetched) {
-        	eventDatas.put(event.getDeviceID(), event);
+        for (EventData event : eventFetched) {
+            eventDatas.put(event.getDeviceID(), event);
         }
     }
-    
-	private void updateTrackers() {
-        if(logger.isDebugEnabled()) logger.debug("starting updating tracker data from device");
+
+    private void updateTrackers() {
+        if (logger.isDebugEnabled())
+            logger.debug("starting updating tracker data from device");
 
         List<Device> devices = deviceCrudDao.getAll();
-        for(Device device : devices) {
+        for (Device device : devices) {
             Tracker tracker = trackerService.getTracker(device.getDeviceID());
-            if(tracker == null) {
+            if (tracker == null) {
                 tracker = simpleTrackerFactory.from(device);
                 trackerService.registerTracker(tracker);
             }
 
-            if(device.getIsActive() != null && tracker.isActive() != device.getIsActive()) {
-                tracker.setActive(BooleanUtils.isTrue(device.getIsActive()));
+            if (device.getIsActive() != null && tracker.isActive() != (device.getIsActive() != 0)) {
+                tracker.setActive(device.getIsActive() != null && device.getIsActive() == 1);
                 trackerService.updateActiveTracker(tracker);
             }
         }
-	}
+    }
 
     @Override
     public void fetchEvents() {
 
-        if(!isRunning.getAndSet(true)) {
+        if (!isRunning.getAndSet(true)) {
             executor.execute(new Runnable() {
-            	
+
                 @Override
                 public void run() {
 
-                	long lastStarted = System.currentTimeMillis();
-                    while(isRunning.get()) {
-                        if(logger.isDebugEnabled()) logger.debug("starting fetching data" + isRunning);
+                    long lastStarted = System.currentTimeMillis();
+                    while (isRunning.get()) {
+                        if (logger.isDebugEnabled())
+                            logger.debug("starting fetching data" + isRunning);
 
                         // querying
                         fetchEventData();
 
                         updateTrackers();
 
-//                        updateTrackers();
+                        // updateTrackers();
 
-                        if(isRunning.get() && (System.currentTimeMillis() - lastStarted) < CALC_FREQUENCY ) {
+                        if (isRunning.get() && (System.currentTimeMillis() - lastStarted) < CALC_FREQUENCY) {
                             // sleep for rest time to CALC_FREQUENCY
                             try {
                                 Thread.sleep(CALC_FREQUENCY - (System.currentTimeMillis() - lastStarted));
@@ -128,13 +127,11 @@ public class EventServiceImpl implements EventService {
 
                             lastStarted = System.currentTimeMillis();
                         }
-                        if(logger.isDebugEnabled()) logger.debug("finished fetching data" + isRunning);
+                        if (logger.isDebugEnabled())
+                            logger.debug("finished fetching data" + isRunning);
                     }
 
                 }
-
-
-
 
             });
         }
