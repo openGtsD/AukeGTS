@@ -1,12 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style>
-      #map-canvas {
-        width: 100%;
-        height: 900px;
-      }
-    </style>
     <link rel="stylesheet" type="text/css" href="/auke-js/resources/css/ext-standard.css" />
     <link rel="stylesheet" type="text/css" href="/auke-js/resources/css/auke.css" />
   </head>

@@ -1,5 +1,6 @@
 package no.auke.drone.domain;
 
+import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -50,9 +51,9 @@ public interface Tracker {
 
     TrackerType getTrackerType();
 
-    void setFlyer(Person person);
+    void setOwner(Person owner);
 
-    Person getFlyer();
+    Person getOwner();
 
     void update();
 
@@ -92,15 +93,13 @@ public interface Tracker {
     
     Date getModifiedDate();
     
-    void setModifiedDate(Date data);
+    void setModifiedDate(Date date);
 
-	int getNumtrackers();
+    Date getLastUsed();
 
-	void setNumtrackers(int numtrackers);
+    void setLastUsed(Date date);
 
-	void incrementTrackers();
-
-	CircularFifoBuffer getLatestPositions();
+    CircularFifoBuffer getLatestPositions();
 
 	void setLatestPositions(CircularFifoBuffer latestPositions);
 
@@ -110,7 +109,21 @@ public interface Tracker {
 
     void setActive(boolean active);
 
-    void setParticipant(Participant participant);
+    String getImageUrl();
 
-    Participant getParticipant();
+    void setImageUrl(String imageUrl);
+
+    boolean isStoredTrips();
+
+    void setStoredTrips(boolean storedTrips);
+
+    String getTrackerUsage();
+
+    List<String> getAdditionalLayers();
+
+    void addLayer(TrackerLayer trackerLayer);
+
+    void setTrackerPrefix(String trackerPrefix);
+
+    String getTrackerPrefix();
 }

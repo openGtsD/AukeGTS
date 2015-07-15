@@ -3,7 +3,7 @@ Ext.define('Auke.view.admin.ManageTracker', {
 	alias : 'widget.manageTracker',
 	title : 'Manage Tracker',
 	border : 0,
-
+	autoScroll: true,
 	initComponent : function() {
 		var me = this;
 		Ext.apply(me, {
@@ -24,8 +24,7 @@ Ext.define('Auke.view.admin.ManageTracker', {
 			}, {
 				xtype : 'trackerGrid',
 				border : 0,
-				store : 'Trackers',
-				height: 580
+				store : 'Trackers'
 			} ]
 		});
 

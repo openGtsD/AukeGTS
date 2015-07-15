@@ -66,8 +66,16 @@ Ext.define('Auke.controller.Navigation', {
 
 			'loginForm form' : {
 				afterrender : this.allowEnterOnForm
+			},
+			
+			'viewport' : {
+				resize : this.correctSize
 			}
 		});
+	},
+	
+	correctSize : function(my, width, height, oldWidth, oldHeight, eOpts ) {
+		
 	},
 
 	allowEnterOnForm : function(form) {

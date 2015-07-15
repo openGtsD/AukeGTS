@@ -12,7 +12,7 @@ jdbc:
         password: root
 
 http:
-    port: 8888
+    port: 8080
     adminPort: 9091
     
 rss:
@@ -24,10 +24,10 @@ rss:
     rel: "self"
     appOrXml: "application/rss+xml"
 server: 
-    domain: http://89.221.242.66:8080/drone
-    url: http://89.221.242.66:8888/rss/
-    #domain: http://localhost:8080/drone
-    #url: http://localhost:8888/rss/
+    domain: http://89.221.242.66:8888/drone
+    url: http://89.221.242.66:8080/rss/
+    #domain: http://localhost:8081/drone
+    #url: http://localhost:8080/rss/
 
 tracker:
     maxSize: 10

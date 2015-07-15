@@ -10,15 +10,15 @@ import org.slf4j.LoggerFactory;
  * Created by huyduong on 3/24/2015.
  */
 
-public class SimpleTracker extends TrackerBase {
+public class SimpleTracker extends AbstractTrackerBase {
     
 	private static final Logger logger = LoggerFactory.getLogger(SimpleTracker.class);
 
-	AtomicLong stopFlightTime = new AtomicLong(System.currentTimeMillis());  
-	AtomicLong startFlightTime = new AtomicLong(System.currentTimeMillis());  
-	
+	AtomicLong stopFlightTime = new AtomicLong(System.currentTimeMillis());
+	AtomicLong startFlightTime = new AtomicLong(System.currentTimeMillis());
+
 	Random rnd = new Random(System.nanoTime());
-	
+
     public SimpleTracker() {
     	super();
     }
@@ -46,122 +46,4 @@ public class SimpleTracker extends TrackerBase {
     		startFlightTime.set(System.currentTimeMillis() + (30 + rnd.nextInt(60 * 5)*1000));
     	}
     }
-
-    private void calculateSimulatedTrackers() {
-        if(isMoving()) {
-
-            if((stopFlightTime.get() - System.currentTimeMillis())<0) {
-
-                // stop flight
-                logger.debug(this.toString() + "stop calculate");
-                setMoving(false);
-
-            } else {
-
-                logger.trace(this.toString() + "started calculating");
-                trackerUpdater.update(this);
-                logger.debug(this.toString() + "finished calculating");
-
-            }
-
-
-        } else {
-
-            if((startFlightTime.get() - System.currentTimeMillis())<0) {
-
-                // stop flight
-                logger.debug(this.toString() + "start calculate");
-                setMoving(true);
-
-            } else {
-
-                logger.debug(this.toString() + "is not flying!!!");
-
-            }
-
-        }
-    }
-    
-	@Override
-    public void calculate() {
-        if(TrackerType.REAL.toString().equalsIgnoreCase(this.getLayerId())) {
-            logger.trace(this.toString() + "started calculating");
-            trackerUpdater.update(this);
-            logger.debug(this.toString() + "finished calculating");
-        } else {
-            calculateSimulatedTrackers();
-        }
-    }    
-
-    @Override
-    public Tracker move(Integer speed, Integer course) {
-
-    	try {
-
-    		block.lock();
-
-            if(logger.isDebugEnabled()) {
-                logger.debug(this.toString() + "started moving");
-            }
-
-            // LHA:
-            // maybe go slower
-            
-            Random ran = new Random();
-            if(speed == null) {
-            	speed = 5;
-            }
-            //
-            speed = speed + (ran.nextInt(1) - 1);
-            if(speed<0){
-            	speed = -speed;
-            }
-            
-            if(course == null) {
-                course = 360;
-            }
-            // 
-            course = course + (ran.nextInt(1) - 1);
-            if(course<0) {
-            	course=-course;
-            }
-            	
-
-            // fly
-            double dx = speed * Math.sin(course);
-            double dy = speed * Math.cos(course);
-            double deltaLongitude = dx / (111320 * Math.sin(this.getCurrentPosition().getLatitude()));
-            double deltaLatitude = dy / 110540;
-            double finalLongitude = getCurrentPosition().getLongitude() + deltaLongitude;
-            double finalLatitude = getCurrentPosition().getLatitude() + deltaLatitude;
-            
-            MapPoint positionUnit = new MapPoint(this.getId(), finalLatitude, finalLongitude, this.getCurrentPosition().getLatitude(), course, speed);
-            
-            setCurrentPosition(positionUnit);
-            getLatestPositions().add(positionUnit);
-
-            if(logger
-                    .isDebugEnabled())
-                     logger.debug(this.toString() + "finished moving");
-            
-            return this;
-    		
-    	} finally {
-    		
-    		block.unlock();
-    	}
-
-    	
-        
-    }
-
-	@Override
-	public int getNumtrackers() {
-		return 1;
-	}
-
-	@Override
-	public void incrementTrackers() {
-	}
-
 }

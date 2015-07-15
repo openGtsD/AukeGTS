@@ -1,20 +1,44 @@
 package no.auke.drone.domain;
 
-/**
- * Created by huyduong on 6/5/2015.
- */
-public interface User {
-    String getFirstName();
+public class User {
+    @ID
+    private String id;
 
-    String getLastName();
+    @ID
+    private String username;
 
-    String getFullName();
+    private String password;
 
-    String getEmail();
+    public User() {
 
-    Avatar getAvatar();
+    }
 
-    Location getLocation();
+    public String getId() {
+        return id;
+    }
 
-    boolean isAdmin();
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isAdmin() {
+        return username.equals("admin") && password.equals("admin");
+    }
+
 }

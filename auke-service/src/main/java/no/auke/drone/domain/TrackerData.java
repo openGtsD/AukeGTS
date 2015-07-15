@@ -99,7 +99,7 @@ public class TrackerData implements Subject {
         
     	oldTracker.setName(newTracker.getName());
         oldTracker.setTrackerType(newTracker.getTrackerType());
-        oldTracker.setFlyer(newTracker.getFlyer());
+        oldTracker.setOwner(newTracker.getOwner());
         oldTracker.setSimPhone(newTracker.getSimPhone());
         oldTracker.setModifiedDate(new Date());
     

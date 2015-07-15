@@ -8,12 +8,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.MapPoint;
-import no.auke.drone.domain.SimpleTracker;
-import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.*;
 import no.auke.drone.domain.Tracker.TrackerType;
-import no.auke.drone.domain.TrackerData;
 import no.auke.drone.services.PositionCalculator;
 import no.auke.drone.services.impl.PositionCalculatorImpl;
 import no.auke.drone.services.impl.ZoomLayerServiceImpl;
@@ -127,7 +123,8 @@ public class ZoomLayerTest {
 			
 			int num = 0;
 			for(Tracker tracker:serv.getPositions()) {
-				num +=tracker.getNumtrackers();
+                TrackerSumImpl trackerSum = (TrackerSumImpl) tracker;
+				num +=trackerSum.getNumtrackers();
 			}
 			
 			System.out.println("test_calculate_100: zoom " + serv.getZoomFactor() + " num pos " + serv.getPositions().size() + " num tracker " + num);

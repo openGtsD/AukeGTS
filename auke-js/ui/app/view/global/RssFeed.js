@@ -2,9 +2,6 @@ Ext.define('Auke.view.global.RssFeed', {
 	extend : 'Ext.panel.Panel',
 	alias : 'widget.rssFeed',
 	title : 'RSS Feeds',
-	layoutConfig : {
-		align : 'stretch'
-	},
 	border : 0,
 	initComponent : function() {
 		var me = this;

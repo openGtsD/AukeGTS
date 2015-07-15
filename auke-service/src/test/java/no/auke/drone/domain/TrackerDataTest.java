@@ -98,8 +98,6 @@ public class TrackerDataTest {
 
 		assertEquals(0,layer.loadWithinView(new BoundingBox(0,0,0,0), 0).size());
 		assertEquals(1,layer.loadWithinView(new BoundingBox(0,0,100,100), 0).size());
-
-	
 	}	
 
 }

@@ -27,7 +27,6 @@ Ext.define('Auke.view.global.Home', {
                  xtype: 'gmappanel',
                  zoomLevel: 3,
                  gmapType: 'map',
-                 height: 580,
                  cls: 'reset-box-sizing',
                  border: false,
                  x: 0,
@@ -35,8 +34,8 @@ Ext.define('Auke.view.global.Home', {
                  mapConfOpts: ['enableScrollWheelZoom','enableDoubleClickZoom','enableDragging'],
                  mapControls: ['GSmallMapControl','GMapTypeControl'],
                  setCenter: {
-                     lat: 0,
-                     lng: 0
+                     lat: 59.913869,
+                     lng: 10.752245
                     
                  }
              }]
