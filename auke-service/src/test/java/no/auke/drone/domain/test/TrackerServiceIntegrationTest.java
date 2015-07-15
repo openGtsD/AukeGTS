@@ -68,9 +68,9 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
         device.setAccountID("demo");
         device.setDeviceID("1");
         device.setDescription("this is a description");
-        device.setLastValidHeading(22);
-        device.setLastValidLatitude(55);
-        device.setLastValidLongitude(66);
+        device.setLastValidHeading(22.0);
+        device.setLastValidLatitude(55.0);
+        device.setLastValidLongitude(66.0);
 
         deviceCRUDDao.create(device);
 

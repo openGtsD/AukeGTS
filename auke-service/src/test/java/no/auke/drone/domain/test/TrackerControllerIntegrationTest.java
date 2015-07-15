@@ -34,6 +34,7 @@ public class TrackerControllerIntegrationTest extends AbstractIntegrationTest {
     public void init() {
         deviceCRUDDao.setPersistentClass(Device.class);
         deviceCRUDDao.deleteAll();
+        trackerService.removeAll();
         for(TrackerLayer trackerLayer : TrackerData.getInstance().getLayers()) trackerLayer.getActiveTrackers().clear();
         trackerService.registerTracker("id-test-1", "new name");
         trackerService.registerTracker("id-test-2", "new name");

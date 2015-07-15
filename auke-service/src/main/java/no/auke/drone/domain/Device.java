@@ -23,11 +23,11 @@ public class Device {
 
     private Integer isActive;
 
-    private double lastValidLatitude;
+    private Double lastValidLatitude;
 
-    private double lastValidLongitude;
+    private Double lastValidLongitude;
 
-    private double lastValidHeading;
+    private Double lastValidHeading;
 
 //    private long lastUpdateTime;
 //    private long creationTime;
@@ -105,27 +105,30 @@ public class Device {
         this.isActive = isActive;
     }
 
-    public double getLastValidLatitude() {
+    public Double getLastValidLatitude() {
+        if(lastValidLatitude == null) return 0.0;
         return lastValidLatitude;
     }
 
-    public void setLastValidLatitude(double lastValidLatitude) {
+    public void setLastValidLatitude(Double lastValidLatitude) {
         this.lastValidLatitude = lastValidLatitude;
     }
 
-    public double getLastValidLongitude() {
+    public Double getLastValidLongitude() {
+        if(lastValidLongitude == null) return 0.0;
         return lastValidLongitude;
     }
 
-    public void setLastValidLongitude(double lastValidLongitude) {
+    public void setLastValidLongitude(Double lastValidLongitude) {
         this.lastValidLongitude = lastValidLongitude;
     }
 
-    public double getLastValidHeading() {
+    public Double getLastValidHeading() {
+        if(lastValidHeading == null) return 0.0;
         return lastValidHeading;
     }
 
-    public void setLastValidHeading(double lastValidHeading) {
+    public void setLastValidHeading(Double lastValidHeading) {
         this.lastValidHeading = lastValidHeading;
     }
 }
