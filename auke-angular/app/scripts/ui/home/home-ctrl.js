@@ -178,7 +178,7 @@ angular.module('aukeGTS').controller('HomeCtrl', ['$scope', '$stateParams', 'tra
         });
     };
 
-    $scope.buildContent = function (data, type) {console.log(data)
+    $scope.buildContent = function (data, type) {
         if (type === "info") {
             return "<ul>" + "<li>Id: <span class='highlight'>" + data.id
                 + "</span></li><li>GPS: <span class='highlight'>"

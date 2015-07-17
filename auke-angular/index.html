@@ -10,28 +10,17 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Latest compiled and minified CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <!-- Optional theme -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-  <!-- Latest compiled and minified JavaScript -->
-
-
   <!-- build:css({.tmp,app}) styles/app.css -->
-  <link rel="stylesheet" href="styles/app.css">
-  <script src="bower_components/modernizr/modernizr.js"></script>
+  <link rel="stylesheet" href="app/styles/app.css">
+
 </head>
 <body>
-<div class="container">
   <div auke-btn></div>
   <div ui-view></div>
-</div>
 
   <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
-
-  <div>Auke GTS: v<span app-version></span></div>
 
   <!-- In production use:
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.scripts"></script>
@@ -43,11 +32,20 @@
   <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
   <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
   <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/lodash/lodash.min.js"></script>
   <script src="bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
-  <!--Inject scripts -->
-  <script src="scripts/app.js"></script>
-  <script src="scripts/ui/home/home-ctrl.js"></script>
-  <script src="scripts/bootstrap/routes.js"></script>
+
+  <script src="http://maps.googleapis.com/maps/api/js"></script>
+  <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/src/infobubble-compiled.js"></script>
+
+  <!--Inject .tmp scripts -->
+  <script src=".tmp/scripts/app.js"></script>
+  <script src=".tmp/scripts/ui/home/home-ctrl.js"></script>
+  <script src=".tmp/scripts/ui/tracker/tracker-ctrl.js"></script>
+  <script src=".tmp/scripts/components/services/trackerService.js"></script>
+  <script src=".tmp/scripts/components/directives/aukeBtn.js"></script>
+  <script src=".tmp/scripts/components/directives/registrationForm.js"></script>
+  <script src=".tmp/scripts/bootstrap/routes.js"></script>
 
 </body>
 </html>
