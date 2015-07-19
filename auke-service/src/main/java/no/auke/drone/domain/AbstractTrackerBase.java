@@ -468,8 +468,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
             setCurrentPosition(positionUnit);
             getLatestPositions().add(positionUnit);
 
-            if(logger
-                    .isDebugEnabled())
+            if(logger.isDebugEnabled())
                 logger.debug(this.toString() + "finished moving");
 
             return this;

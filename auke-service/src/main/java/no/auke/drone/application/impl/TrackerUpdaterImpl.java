@@ -51,8 +51,16 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
     			
     		}
         }
+        
+        // LHA: a trip is not one position, its a series of positions
+        // 
+        
         MapPoint currentPosition = tracker.getCurrentPosition();
         currentPosition.setTrackerId(tracker.getId());
+        
+        // LHA: by doing DB lookup for each time update is very resource consuming
+        // we agreed this was to be in memmory
+        
         if(tripService.getTripById(currentPosition.getId()) == null) {
             tripService.saveTrip(currentPosition);
 
