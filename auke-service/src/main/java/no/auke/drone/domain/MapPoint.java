@@ -3,7 +3,8 @@ package no.auke.drone.domain;
 import java.util.UUID;
 
 public class MapPoint {
-    @ID
+    
+	@ID
     private String id;
 
     private long time;
@@ -80,6 +81,11 @@ public class MapPoint {
     }
 
     public MapPoint() {
+    	
+    	// 
+    	// TODO: LHA: this is possibly wrong. If you divide a time on 1000, you get another time
+    	// 
+    	
         Long timestamp = System.currentTimeMillis()/1000;
         this.id = UUID.randomUUID().toString();
         this.time = timestamp.intValue();

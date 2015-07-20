@@ -1,6 +1,6 @@
 package no.auke.drone.domain;
 
-public class Person extends User{
+public class Person extends User {
     @ID
     private String id;
     

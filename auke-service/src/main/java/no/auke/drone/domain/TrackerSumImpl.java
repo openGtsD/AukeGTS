@@ -1,6 +1,6 @@
 package no.auke.drone.domain;
 
-public class TrackerSumImpl extends AbstractTrackerBase implements  TrackerSum {
+public class TrackerSumImpl extends AbstractTrackerBase implements TrackerSum {
 	public TrackerSumImpl() {}
 
     // number of trackers on this positions
