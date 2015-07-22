@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="aukeGTS" class="no-scripts lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="aukeGTS" class="no-scripts lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="aukeGTS" class="no-scripts lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="aukeGTS" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Auke GTS</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- build:css({.tmp,app}) styles/app.css -->
+  <link rel="stylesheet" href="app/styles/app.css">
+</head>
+<body>
+  <div auke-btn></div>
+  <div ui-view></div>
+
+  <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
+
+  <!-- In production use:
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.scripts"></script>
+  -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/jquery-ui/jquery-ui.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+  <script src="bower_components/lodash/lodash.min.js"></script>
+  <script src="bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
+
+  <script src="http://maps.googleapis.com/maps/api/js"></script>
+  <script src="http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobubble/src/infobubble-compiled.js"></script>
+
+  <!--Inject .tmp scripts -->
+  <script src=".tmp/scripts/app.js"></script>
+  <script src=".tmp/scripts/ui/home/home-ctrl.js"></script>
+  <script src=".tmp/scripts/ui/tracker/tracker-ctrl.js"></script>
+  <script src=".tmp/scripts/components/services/trackerService.js"></script>
+  <script src=".tmp/scripts/components/directives/aukeBtn.js"></script>
+  <script src=".tmp/scripts/components/directives/registrationForm.js"></script>
+  <script src=".tmp/scripts/bootstrap/routes.js"></script>
+
+</body>
+</html>

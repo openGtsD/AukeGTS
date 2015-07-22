@@ -1,10 +1,6 @@
 {
-  "name": "angular-seed",
-  "description": "A starter project for AngularJS",
-  "version": "0.0.0",
-  "homepage": "https://github.com/angular/angular-seed",
-  "license": "MIT",
-  "private": true,
+  "name": "aukeGTS",
+  "version": "0.0.1",
   "dependencies": {
     "modernizr": "2.8.x",
     "angular": "1.2.x",
@@ -32,6 +28,16 @@
     "ng-grid": "2.0.12",
     "angular-selectize2": "0.6.0",
     "angular-ui-router": "~0.2.13",
-    "angular-google-maps" : "~2.1.5"
-  }
+    "angular-google-maps" : "~2.1.5",
+    "bootstrap": "3.3.5",
+    "moment": ">=2.8.0 <2.11.0"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }
+

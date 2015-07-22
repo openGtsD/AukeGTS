@@ -2,13 +2,13 @@
 
 angular.module('aukeGTS').config(function ($stateProvider, $urlRouterProvider,  HomeCtrl, TrackerCtrl) {
     //Devs
-    var domain = "http://89.221.242.156:8080";
+    //var domain = "http://89.221.242.156:8080";
 
-    //var domain = "http://localhost:8080";
-    $urlRouterProvider.otherwise('/home');
+    var domain = "http://localhost:8888";
+    $urlRouterProvider.otherwise('/');
     $stateProvider
         .state('home', {
-            url: '/home',
+            url: '/',
             templateUrl: domain + '/app/scripts/ui/home/home.html',
             controller: HomeCtrl.name,
             resolve: HomeCtrl.resolve
