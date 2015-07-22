@@ -30,6 +30,9 @@ bower install
 rm -f ./app/*.min.js
 
 # Issues: Need install and check uglifyjs. Install by  sudo npm install -g uglify-js
+chmod a+x ./*.sh
+dos2unix ./*.sh
+
 ./combile.sh f
 ./combile.sh m
 ./combile.sh b
@@ -38,10 +41,13 @@ rm -f ./app/*.min.js
 
 # Start service
 cd /opt/demo
-./start.sh
 
 # Start tomcat
-../tomcat/bin/startup.sh
+./tomcat7/bin/startup.sh
+
+nohup ./start.sh &
+
+
 
 after="$(date +%s)"
 elapsed_seconds="$(expr $after - $before)"
