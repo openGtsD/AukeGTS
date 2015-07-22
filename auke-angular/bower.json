@@ -17,7 +17,7 @@
     "angular-ui-select2": "~0.0.5",
     "select2-bootstrap-css": "~1.4.1",
     "angular-bootstrap": "~0.11.0",
-    "lodash": "~2.4.1",
+    "lodash": "3.10.0",
     "bootbox": "~4.3.0",
     "angular-multi-select": "~2.0.1",
     "angular-translate": "~2.5.2",

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-## Assuming at /opt/demo/AukeGTS
+# Assume at here /opt/demo
 echo "Starting install and restart server"
 before="$(date +%s)"
 
@@ -8,8 +8,9 @@ before="$(date +%s)"
 pkill java
 sleep 10s
 
-rm -fr /opt/demo/*.jar /opt/demo/nohup.out
+rm -fr ./opt/demo/*.jar ./opt/demo/nohup.out
 
+cd AukeGTS
 git pull
 
 # Build jar file
@@ -22,13 +23,13 @@ cp -f ./target/auke-service.jar /opt/demo/
 cd ../auke-angular
 npm install
 
-# Issues: got answer when install. Need check the first
+# Issues: got answer when install. Need check the first. Fixed
 bower install
 
 # Remove old minified and build again
 rm -f ./app/*.min.js
 
-# Issues: Need install and check uglifyjs
+# Issues: Need install and check uglifyjs. Install by  sudo npm install -g uglify-js
 ./combile.sh f
 ./combile.sh m
 ./combile.sh b
@@ -36,11 +37,11 @@ rm -f ./app/*.min.js
 ./combile-third-party.sh
 
 # Start service
-cd ../../
+cd /opt/demo
 ./start.sh
 
 # Start tomcat
-../tocmat/bin/startup.sh
+../tomcat/bin/startup.sh
 
 after="$(date +%s)"
 elapsed_seconds="$(expr $after - $before)"
