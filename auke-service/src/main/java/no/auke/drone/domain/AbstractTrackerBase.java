@@ -126,6 +126,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     @Override
     final public void setCurrentPosition(MapPoint currentPosition) {
+        this.currentPosition = currentPosition;
         // set history
         getPositions().add(currentPosition);
     }
