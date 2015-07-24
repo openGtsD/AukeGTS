@@ -11,7 +11,7 @@ sleep 10s
 rm -fr ./opt/demo/*.jar ./opt/demo/nohup.out
 
 cd AukeGTS
-git pull
+git pull origin Devs
 
 # Build jar file
 cd ./auke-service
