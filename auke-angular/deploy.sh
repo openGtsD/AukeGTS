@@ -5,7 +5,7 @@ echo "Starting install and restart server"
 before="$(date +%s)"
 
 # Stop all services
-pkill java
+sudo pkill java
 sleep 10s
 
 rm -fr ./opt/demo/*.jar ./opt/demo/nohup.out

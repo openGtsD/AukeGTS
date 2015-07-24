@@ -1,6 +1,6 @@
 CREATE DATABASE `gts_test` /*!40100 DEFAULT CHARACTER SET utf8 */;
 
-CREATE TABLE `device` (
+CREATE TABLE `Device` (
   `accountID` varchar(32) NOT NULL,
   `deviceID` varchar(32) NOT NULL,
   `groupID` varchar(32) DEFAULT NULL,
@@ -108,7 +108,7 @@ CREATE TABLE `device` (
   KEY `altIndex` (`uniqueID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `eventdata` (
+CREATE TABLE `EventData` (
   `accountID` varchar(32) NOT NULL,
   `deviceID` varchar(32) NOT NULL,
   `timestamp` int(10) unsigned NOT NULL,
@@ -135,7 +135,7 @@ CREATE TABLE `eventdata` (
   PRIMARY KEY (`accountID`,`deviceID`,`timestamp`,`statusCode`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `mappoint` (
+CREATE TABLE `MapPoint` (
   `id` varchar(100) NOT NULL,
   `trackerId` varchar(32) NOT NULL,
   `time` int(10) unsigned NOT NULL,
@@ -148,7 +148,7 @@ CREATE TABLE `mappoint` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `user` (
+CREATE TABLE `User` (
   `id` varchar(100) NOT NULL,
   `username` varchar(100) NOT NULL,
   `password` varchar(100) NOT NULL,

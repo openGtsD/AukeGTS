@@ -136,7 +136,7 @@ angular.module('aukeGTS').controller('HomeCtrl', ['$scope', '$stateParams', 'tra
             latitude: tracker.currentPosition.latitude,
             longitude: tracker.currentPosition.longitude,
             showWindow: false,
-            numbertracker: tracker.numtrackers,
+            //numbertracker: tracker.numtrackers,
             title: tracker.name,
             options: {
                 labelContent: tracker.name
@@ -166,7 +166,7 @@ angular.module('aukeGTS').controller('HomeCtrl', ['$scope', '$stateParams', 'tra
     };
 
     $scope.createIcon = function(tracker) {
-        return tracker.numtrackers == 1 ?  aukeUtil.baseURL + '/app/images/flight.gif' :  aukeUtil.baseURL + '/app/images/no-images';
+        return aukeUtil.baseURL + '/app/images/flight.gif';
     };
 
     $scope.getTracker = function (marker, map) {
