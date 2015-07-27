@@ -41,7 +41,9 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
 
 
     	// } else if(tracker.getLayerId().equalsIgnoreCase(Tracker.TrackerType.REAL.toString())) {
-    	} else {
+    	
+        } else {
+    		
     		// ALL other layers got position updated
     		
     		// LHA: Better use a map collection
@@ -50,6 +52,11 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
     			tracker.setCurrentPosition(new MapPoint(eventDatas.get(tracker.getId())));
     			
     		}
+    		
+    		tripService.detectMoving(tracker);
+    		
+    		
+    		
         }
         
         // LHA: a trip is not one position, its a series of positions

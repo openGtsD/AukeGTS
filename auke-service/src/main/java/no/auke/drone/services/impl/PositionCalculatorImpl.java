@@ -49,7 +49,8 @@ public class PositionCalculatorImpl implements PositionCalculator {
                         
                     	if(logger.isDebugEnabled()) 
                     		logger.debug("run calc");
-                        for(Tracker tracker : trackerLayer.getActiveTrackers()) {
+                        
+                    	for(Tracker tracker : trackerLayer.getActiveTrackers()) {
                             
                         	if(isRunning.get()) {
                                 if(logger.isDebugEnabled()){

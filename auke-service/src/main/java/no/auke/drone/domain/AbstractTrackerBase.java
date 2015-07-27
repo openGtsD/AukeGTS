@@ -444,13 +444,18 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     @Override
     public void calculate() {
-        if(TrackerType.REAL.toString().equalsIgnoreCase(this.getLayerId())) {
-            logger.trace(this.toString() + "started calculating");
+        
+    	if(TrackerType.REAL.toString().equalsIgnoreCase(this.getLayerId())) {
+        
+        	logger.trace(this.toString() + "started calculating");
             trackerUpdater.update(this);
             logger.debug(this.toString() + "finished calculating");
+        
         } else {
-            calculateSimulatedTrackers();
+        
+        	calculateSimulatedTrackers();
         }
+    	
     }
 
     @Override

@@ -2,6 +2,7 @@ package no.auke.drone.services.impl;
 
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.AbstractTrackerBase;
+import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.trips.Trip;
 import no.auke.drone.domain.trips.TripInfo;
 import no.auke.drone.services.TripService;
@@ -67,4 +68,32 @@ public class TripServiceImpl implements TripService {
         properties.put("trackerId",trackerId);
         tripCRUDDao.deleteAllByProperties(properties);
     }
+
+	@Override
+	public void detectMoving(Tracker tracker) {
+		
+		// LHA: 
+		
+		// here we figure if tracker is moving or not by analysing
+		// the positions 
+		// for ex. if long time since last position (for ex. a minute) 
+		// tracker is regarded stopped
+		// Or if same position for some time 
+		// or speed = 0 for some time
+		
+		// this logic we need to discuss
+		
+		if (false) {
+			
+			// this will also trigger a save on last trip 
+			tracker.setMoving(false);
+			
+		}
+		
+		
+		
+		
+		
+		
+	}
 }
