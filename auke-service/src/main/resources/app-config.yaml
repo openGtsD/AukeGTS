@@ -6,13 +6,13 @@ jdbc:
     drone:
         driver: com.mysql.jdbc.Driver
         url: "jdbc:mysql://localhost:3306/gts"
-        #username: gts2
-        #password: opengts
-        username: root
-        password: root
+        username: gts2
+        password: opengts
+        #username: root
+        #password: root
 
 http:
-    port: 8080
+    port: 8888
     adminPort: 9091
     
 rss:
@@ -24,8 +24,8 @@ rss:
     rel: "self"
     appOrXml: "application/rss+xml"
 server: 
-    domain: http://89.221.242.66:8888/drone
-    url: http://89.221.242.66:8080/rss/
+    domain: http://89.221.242.156:8080/
+    url: http://89.221.242.156:8080/rss/
     #domain: http://localhost:8081/drone
     #url: http://localhost:8080/rss/
 

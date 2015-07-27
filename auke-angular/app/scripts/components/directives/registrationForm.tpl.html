@@ -1,7 +1,6 @@
 <div class="row">
     <div class="col-sm-offset-4 col-xs-12 col-sm-4">
         <p class="alert alert-success" ng-show="success">{{msg}}</p>
-
     </div>
 </div>
 <div class="row">
@@ -9,26 +8,120 @@
         <form class="form-horizontal">
             <div class="form-group">
                 <label for="trackerId" class="col-xs-12 col-sm-4 control-label">Tracker ID(IMEI/ESN Number)</label>
+
                 <div class="col-xs-12 col-sm-4">
-                    <input class="form-control" id="trackerId" ng-model="formModel.id" placeholder="Tracker ID(IMEI/ESN Number)" ng-disabled="isDisabled">
+                    <input class="form-control" id="trackerId" ng-model="formModel.id"
+                           placeholder="Tracker ID(IMEI/ESN Number)" ng-disabled="isDisabled">
                 </div>
             </div>
+
+            <div class="form-group" ng-hide="mode == 'delete'">
+                <label for="agentType" class="col-xs-12 col-sm-4 control-label">Agent Type</label>
+                <div class="col-xs-12 col-sm-4">
+                    <select id="agentType" ng-options="type as type.name for type in agentTypes"
+                            ng-model="agentType" ng-change="updateChange()"></select>
+                    <label  class="control-label">&nbsp;</label>
+                </div>
+            </div>
+
             <div class="form-group" ng-hide="!isUpdate">
                 <label for="name" class="col-xs-12 col-sm-4 control-label">Name</label>
+
                 <div class="col-xs-12 col-sm-4">
-                    <input class="form-control" id="name" ng-model="formModel.name" placeholder="Name">
+                    <input class="form-control" id="name" ng-model="formModel.name" placeholder="Name of tracker">
                 </div>
             </div>
             <div class="form-group" ng-hide="!isUpdate">
-                <label for="simPhone" class="col-xs-12 col-sm-4 control-label">SIM Phone</label>
+                <label for="picture" class="col-xs-12 col-sm-4 control-label">Picture</label>
+
                 <div class="col-xs-12 col-sm-4">
-                    <input class="form-control" id="simPhone" ng-model="formModel.simPhone" placeholder="SIM Phone">
+                    <input type='file' id="picture" ng-model-instant onchange="angular.element(this).scope().imageUpload(this)" />
+                    <div ng-repeat="step in stepsModel">
+                        <img class="thumb" ng-src="{{step}}" />
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="form-group" ng-hide="!isUpdate">
+                <label for="owner" class="col-xs-12 col-sm-4 control-label">Owner</label>
+
+                <div class="col-xs-12 col-sm-4">
+                    <input class="form-control" id="owner" ng-model="formModel.owner"
+                           placeholder="Name of tracker owner">
+                </div>
+            </div>
+            <div class="form-group" ng-hide="!isUpdate">
+                <label for="contactInfo" class="col-xs-12 col-sm-4 control-label">Contact Info</label>
+
+                <div class="col-xs-12 col-sm-4">
+                    <input class="form-control" id="contactInfo" ng-model="formModel.contactInfo"
+                           placeholder="Add phone number, address, mails address etc">
+                </div>
+            </div>
+            <div class="form-group" ng-hide="!isUpdate">
+                <label for="description" class="col-xs-12 col-sm-4 control-label">Description</label>
+
+                <div class="col-xs-12 col-sm-4">
+                    <input class="form-control" id="description" ng-model="formModel.description"
+                           placeholder="Some description of use">
+                </div>
+            </div>
+
+            <div class="form-group" ng-hide="!isUpdate">
+                <label for="createDate" class="col-xs-12 col-sm-4 control-label">Created Date</label>
+
+                <div class="col-xs-12 col-sm-4">
+                    <input type="date" id="createDate" name="formModel.createDate" ng-model="formModel.createDate"
+                        placeholder="MM-dd-yyyy" required  />
+
+                </div>
+            </div>
+
+            <div class="form-group" ng-hide="!isUpdate">
+                <label for="lastUsed" class="col-xs-12 col-sm-4 control-label">Last Used</label>
+
+                <div class="col-xs-12 col-sm-4">
+                    <input type="date" id="lastUsed" name="formModel.modifiedDate" ng-model="formModel.modifiedDate"
+                           placeholder="yyyy-MM-dd" required />
+                </div>
+            </div>
+
+
+            <div class="form-group" ng-hide="!isUpdate">
+                <label for="layer" class="col-xs-12 col-sm-4 control-label">Layer</label>
+
+                <div class="col-xs-12 col-sm-4">
+                    <select id="layer" ng-options="size as size.name for size in sizes"
+                            ng-model="item" ng-change="updateChangeLayer()"></select>
+                    <label for="storeTrip" class=" control-label">Store Trip</label> <input id="storeTrip" type="checkbox" ng-model="formModel.storeTrip">
+                </div>
+            </div>
+
+            <div class="form-group" ng-hide="!isUpdate">
+                <label for="trackerUsage" class="col-xs-12 col-sm-4 control-label">Tracker Usage</label>
+
+                <div class="col-xs-12 col-sm-4">
+                    <input class="form-control" id="trackerUsage" ng-model="formModel.trackerUsage"
+                           placeholder="Tracker Usage">
+                </div>
+            </div>
+
+            <div class="form-group" ng-hide="!isUpdate">
+                <label for="additionalLayers" class="col-xs-12 col-sm-4 control-label">Additional Layers</label>
+
+                <div class="col-xs-12 col-sm-4">
+                    <input class="form-control" id="additionalLayers" ng-model="formModel.additionalLayers"
+                           placeholder="e.g: AUKELAYER,THAILAYER,HUYLAYER,FASTDRONELAYER">
+
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-4">
                     <p class="alert alert-danger" ng-show="error" ng-bind="error"></p>
-                    <button type="submit" class="btn btn-primary" ng-click="update(mode)" ng-disabled="proccessing">{{mode | uppercase}}</button>
+                    <button type="submit" class="btn btn-primary" ng-click="update(mode)" ng-disabled="proccessing">
+                        {{mode | uppercase}}
+                    </button>
                 </div>
             </div>
         </form>
