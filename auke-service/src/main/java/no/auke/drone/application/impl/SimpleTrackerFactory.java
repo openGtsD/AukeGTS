@@ -28,6 +28,8 @@ public class SimpleTrackerFactory implements TrackerFactory {
             return null;
         }
         tracker.setTrackerUpdater(trackerUpdater);
+        tracker.setCreateDate(new Date());
+        tracker.setModifiedDate(new Date());
         return tracker;
     }
 

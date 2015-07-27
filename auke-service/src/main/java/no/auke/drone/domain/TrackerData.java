@@ -102,7 +102,6 @@ public class TrackerData implements Subject {
         oldTracker.setOwner(newTracker.getOwner());
         oldTracker.setSimPhone(newTracker.getSimPhone());
         oldTracker.setModifiedDate(new Date());
-    
     }
 
     public Tracker update(Tracker newTracker) {
