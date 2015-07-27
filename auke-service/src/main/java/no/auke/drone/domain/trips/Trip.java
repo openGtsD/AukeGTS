@@ -5,12 +5,20 @@ import java.util.List;
 import java.util.UUID;
 
 import no.auke.drone.domain.MapPoint;
+import no.auke.drone.domain.Tracker;
 import no.auke.drone.utils.ByteUtil;
 
 public class Trip {
 	
 	private UUID tripId;
 	private String trackerId;	
+	
+
+	Tracker tracker;
+
+	public Tracker getTracker() {
+		return tracker;
+	}	
 	
 	public String getTripId() {
 		return tripId.toString();
@@ -117,6 +125,17 @@ public class Trip {
 	// internal storage of trip points
 	private List<MapPoint> route = new ArrayList<MapPoint>();
 	
+	public Trip(Tracker tracker) {
+		this.trackerId=tracker.getId();
+		this.tracker=tracker;
+		tripId=UUID.randomUUID();
+	}
+	
+	public Trip(String trackerId, String tripid) {
+		this.trackerId=trackerId;
+		this.tripId=UUID.fromString(tripid);
+	}	
+	
 	
 	public List<MapPoint> getRoute() {
 		return route;
@@ -129,20 +148,11 @@ public class Trip {
 		}
 	}
 
-	public Trip(String trackerId) {
-		this.trackerId=trackerId;
-		tripId=UUID.randomUUID();
-	}
-	
-	public Trip(String trackerId, String tripid) {
-		this.trackerId=trackerId;
-		this.tripId=UUID.fromString(tripid);
-	}	
-	
-	public void storePoint(MapPoint point) {
-		route.add(point);
-	}
 
+	
+
+	// LHA: This pack route postions into a byte array for storing into database in one field
+	
 	public byte[] getRouteAsBytes() {
 		
 		if(route!=null && route.size()>0) {
@@ -160,6 +170,9 @@ public class Trip {
 		}
 	}
 	
+	
+	// LHA: this pack out the byte array of positions and store them in the route array
+	
 	public void setRouteAsBytes(byte[] data) {
 		route.clear();
 		List<byte[]> poslist = ByteUtil.splitDynamicBytes(data);
@@ -167,6 +180,7 @@ public class Trip {
 			route.add(new MapPoint(pos));
 		}
 	}
+
 	
 
 }

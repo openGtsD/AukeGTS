@@ -35,7 +35,7 @@ public class TripServiceImpl implements TripService {
     @Override
     public void saveTrip(AbstractTrackerBase tracker) {
     	
-    	Trip trip = new Trip(tracker.getId());
+    	Trip trip = new Trip(tracker);
     	trip.setRoute(tracker.getPositions());
     	tripCRUDDao.create(new TripInfo(trip));
     }

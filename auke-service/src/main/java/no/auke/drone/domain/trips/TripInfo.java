@@ -1,5 +1,7 @@
 package no.auke.drone.domain.trips;
 
+import no.auke.drone.domain.Tracker.TrackerType;
+
 // this is the storage class for trip
 // and used for updates from UI
 // later...
@@ -8,10 +10,46 @@ package no.auke.drone.domain.trips;
 
 public class TripInfo extends Trip {
 	
+	private String trackerName;
+    void setTrackerName(String trackerName) {
+    	this.trackerName=trackerName;
+    }
+    String getTrackerName() {
+    	return trackerName;
+    }
+
+	private String OwnerName;	
+    public String getOwnerName() {
+		return OwnerName;
+	}
+	public void setOwnerName(String ownerName) {
+		OwnerName = ownerName;
+	}
+
+	private String contactInfo;
+    void setContactInfo(String contactInfo) {
+    	this.contactInfo=contactInfo;
+    }
+
+    String getContactInfo() {
+    	return contactInfo;
+    }
+
+    TrackerType trackerType;
+    void setTrackerType(TrackerType trackerType) {
+    	
+    	this.trackerType=trackerType;
+    }
+    TrackerType getTrackerType() {
+    	return trackerType;
+    }
+	
 	// we add more attributes to trip later
 	// but the trip
 	
-	private String name;
+	
+	
+	private String tripName;
 	
 	// where did the trip tok place
 	private String country;
@@ -29,10 +67,29 @@ public class TripInfo extends Trip {
 	
 	private byte[] byteRoute;
 	
+	public byte[] getByteRoute() {
+		return byteRoute;
+	}
+	public void setByteRoute(byte[] byteRoute) {
+		this.byteRoute = byteRoute;
+	}
+	
+	// LHA: must be studied closer how to mock information in and out
+	// but trip should store som tracker information so the trip migh be distributed 
+	// to other systems without the tracker object
+	
+	
+	
 	public TripInfo(Trip trip){
 		
-		super(trip.getTripId());
+		super(trip.getTracker());
+		
+		
 		this.setTrackerId(trip.getTrackerId());
+		this.setTrackerName(trip.getTracker().getName());
+		//this.setOwnerName(trip.getTracker().getOwnerName());
+		this.setContactInfo(trip.getTracker().getContactInfo());
+		
 		byteRoute=trip.getRouteAsBytes();
 		
 	}
