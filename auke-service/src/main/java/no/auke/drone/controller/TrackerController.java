@@ -110,7 +110,16 @@ public class TrackerController {
         AukeResponse response = new AukeResponse(newTracker != null, newTracker);
         return response;
     }
-    
+
+    @POST
+    @Path("/registertk")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse registerTracker(SimpleTracker tracker) {
+        Tracker newTracker = trackerService.registerTracker(tracker);
+        AukeResponse response = new AukeResponse(newTracker != null, newTracker);
+        return response;
+    }
+
     @POST
     @Path("/remove/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
