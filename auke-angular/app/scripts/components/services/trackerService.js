@@ -11,10 +11,10 @@ angular.module('aukeGTS').factory('trackerService', function($http, aukeUtil) {
         return trackerAPI.load(marker.key);
     }
 
-    //trackerAPI.create = function(id) {
-    //    var url = serviceURL + '/drone/register/' + id;
-    //    return $http.post(url);
-    //}
+    trackerAPI.create = function(tracker) {
+        var url = serviceURL + '/drone/registertk/';
+        return $http.post(url, tracker);
+    }
 
     trackerAPI.delete = function(id) {
         var url = serviceURL + '/drone/remove/' + id;
@@ -27,7 +27,7 @@ angular.module('aukeGTS').factory('trackerService', function($http, aukeUtil) {
     }
 
     trackerAPI.update = function(tracker) {
-        var url = serviceURL + '/drone/update/';
+        var url = serviceURL + '/drone/update';
         return $http.post(url, tracker);
     }
 

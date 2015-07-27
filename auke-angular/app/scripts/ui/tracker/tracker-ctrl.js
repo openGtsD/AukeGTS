@@ -43,16 +43,16 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
         id: '',
         trackerPrefix: '',
         name: '',
-        picture: '',
-        owner: '',
+        //picture: '',
+        //owner: '',
         contactInfo: '',
         description: '',
         createDate: '',
         modifiedDate: '',
         layerId: '',
         storeTrip: true,
-        trackerUsage: '',
-        additionalLayers: ''
+        //trackerUsage: '',
+        //additionalLayers: ''
     };
 
     $scope.formModel.trackerPrefix = $scope.agentType.value;
@@ -83,7 +83,7 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
     }
 
 
-    $scope.update = function (mode) {
+    $scope.updateTracker = function (mode) {
         $scope.error = "";
         $scope.proccessing = true;
 
@@ -93,11 +93,11 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
             $scope.proccessing = false;
             return;
         }
-         if (mode === "register" || mode == "update") {
-            trackerService.update($scope.formModel).success(function (response) {
+         if (mode === "register") {
+            trackerService.create($scope.formModel).success(function (response) {
                 $scope.success = response.success;
                 if (response.success) {
-                    $scope.msg = 'Your tracker has been updated successfully.';
+                    $scope.msg = 'Your tracker has been create successfully.';
                 } else {
                     $scope.error = 'Please check make sure your services is running.';
                 }
@@ -135,18 +135,21 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
                 }
                 $scope.proccessing = false;
             });
-        }
-        // else if (mode == "update") {
-        //    trackerService.update($scope.formModel).success(function (response) {
-        //        $scope.success = response.success;
-        //        if (response.success) {
-        //            $scope.msg = 'Your tracker has update successfully';
-        //        } else {
-        //            $scope.error = 'Tracker not exists, please try again!';
-        //        }
-        //        $scope.proccessing = false;
-        //    });
-        //}
+        } else if (mode == "update") {
+             $scope.formModel.createDate = "";
+             $scope.formModel.modifiedDate = "";
+             trackerService.update($scope.formModel).success(function (response) {
+                 $scope.success = response.success;
+                 if (response.success) {
+                     $scope.msg = 'Your tracker has update successfully';
+                     $scope.formModel.createDate = dateFilter(response.data[0].createDate, 'yyyy-MM-dd');
+                     $scope.formModel.modifiedDate = dateFilter(response.data[0].modifiedDate, 'yyyy-MM-dd');
+                 } else {
+                     $scope.error = 'Tracker not exists, please try again!';
+                 }
+                 $scope.proccessing = false;
+             });
+         }
     };
 
     $scope.initDefaultValue = function () {

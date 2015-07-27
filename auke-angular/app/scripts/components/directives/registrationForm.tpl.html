@@ -31,26 +31,26 @@
                     <input class="form-control" id="name" ng-model="formModel.name" placeholder="Name of tracker">
                 </div>
             </div>
-            <div class="form-group" ng-hide="!isUpdate">
-                <label for="picture" class="col-xs-12 col-sm-4 control-label">Picture</label>
+            <!--<div class="form-group" ng-hide="!isUpdate">-->
+                <!--<label for="picture" class="col-xs-12 col-sm-4 control-label">Picture</label>-->
 
-                <div class="col-xs-12 col-sm-4">
-                    <input type='file' id="picture" ng-model-instant onchange="angular.element(this).scope().imageUpload(this)" />
-                    <div ng-repeat="step in stepsModel">
-                        <img class="thumb" ng-src="{{step}}" />
-                    </div>
-                </div>
+                <!--<div class="col-xs-12 col-sm-4">-->
+                    <!--<input type='file' id="picture" ng-model-instant onchange="angular.element(this).scope().imageUpload(this)" />-->
+                    <!--<div ng-repeat="step in stepsModel">-->
+                        <!--<img class="thumb" ng-src="{{step}}" />-->
+                    <!--</div>-->
+                <!--</div>-->
 
 
-            </div>
-            <div class="form-group" ng-hide="!isUpdate">
-                <label for="owner" class="col-xs-12 col-sm-4 control-label">Owner</label>
+            <!--</div>-->
+            <!--<div class="form-group" ng-hide="!isUpdate">-->
+                <!--<label for="owner" class="col-xs-12 col-sm-4 control-label">Owner</label>-->
 
-                <div class="col-xs-12 col-sm-4">
-                    <input class="form-control" id="owner" ng-model="formModel.owner"
-                           placeholder="Name of tracker owner">
-                </div>
-            </div>
+                <!--<div class="col-xs-12 col-sm-4">-->
+                    <!--<input class="form-control" id="owner" ng-model="formModel.owner"-->
+                           <!--placeholder="Name of tracker owner">-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="form-group" ng-hide="!isUpdate">
                 <label for="contactInfo" class="col-xs-12 col-sm-4 control-label">Contact Info</label>
 
@@ -98,28 +98,28 @@
                 </div>
             </div>
 
-            <div class="form-group" ng-hide="!isUpdate">
-                <label for="trackerUsage" class="col-xs-12 col-sm-4 control-label">Tracker Usage</label>
+            <!--<div class="form-group" ng-hide="!isUpdate">-->
+                <!--<label for="trackerUsage" class="col-xs-12 col-sm-4 control-label">Tracker Usage</label>-->
 
-                <div class="col-xs-12 col-sm-4">
-                    <input class="form-control" id="trackerUsage" ng-model="formModel.trackerUsage"
-                           placeholder="Tracker Usage">
-                </div>
-            </div>
+                <!--<div class="col-xs-12 col-sm-4">-->
+                    <!--<input class="form-control" id="trackerUsage" ng-model="formModel.trackerUsage"-->
+                           <!--placeholder="Tracker Usage">-->
+                <!--</div>-->
+            <!--</div>-->
 
-            <div class="form-group" ng-hide="!isUpdate">
-                <label for="additionalLayers" class="col-xs-12 col-sm-4 control-label">Additional Layers</label>
+            <!--<div class="form-group" ng-hide="!isUpdate">-->
+                <!--<label for="additionalLayers" class="col-xs-12 col-sm-4 control-label">Additional Layers</label>-->
 
-                <div class="col-xs-12 col-sm-4">
-                    <input class="form-control" id="additionalLayers" ng-model="formModel.additionalLayers"
-                           placeholder="e.g: AUKELAYER,THAILAYER,HUYLAYER,FASTDRONELAYER">
+                <!--<div class="col-xs-12 col-sm-4">-->
+                    <!--<input class="form-control" id="additionalLayers" ng-model="formModel.additionalLayers"-->
+                           <!--placeholder="e.g: AUKELAYER,THAILAYER,HUYLAYER,FASTDRONELAYER">-->
 
-                </div>
-            </div>
+                <!--</div>-->
+            <!--</div>-->
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-4">
                     <p class="alert alert-danger" ng-show="error" ng-bind="error"></p>
-                    <button type="submit" class="btn btn-primary" ng-click="update(mode)" ng-disabled="proccessing">
+                    <button type="submit" class="btn btn-primary" ng-click="updateTracker(mode)" ng-disabled="proccessing">
                         {{mode | uppercase}}
                     </button>
                 </div>
