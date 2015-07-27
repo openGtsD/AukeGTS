@@ -72,8 +72,8 @@
                 <label for="createDate" class="col-xs-12 col-sm-4 control-label">Created Date</label>
 
                 <div class="col-xs-12 col-sm-4">
-                    <input type="date" id="createDate" name="formModel.createDate" ng-model="formModel.createDate"
-                        placeholder="MM-dd-yyyy" required  />
+                    <input  type="date" id="createDate" name="formModel.createDate" ng-model="formModel.createDate"
+                        placeholder="MM-dd-yyyy" ng-disabled="true"  />
 
                 </div>
             </div>
@@ -83,7 +83,7 @@
 
                 <div class="col-xs-12 col-sm-4">
                     <input type="date" id="lastUsed" name="formModel.modifiedDate" ng-model="formModel.modifiedDate"
-                           placeholder="yyyy-MM-dd" required />
+                           placeholder="yyyy-MM-dd" ng-disabled="true" />
                 </div>
             </div>
 

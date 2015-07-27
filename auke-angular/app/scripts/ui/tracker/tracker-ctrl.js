@@ -55,6 +55,8 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
         additionalLayers: ''
     };
 
+    $scope.formModel.trackerPrefix = $scope.agentType.value;
+
     $scope.updateChange = function () {
         $scope.formModel.trackerPrefix = $scope.agentType.value;
     }
@@ -91,12 +93,11 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
             $scope.proccessing = false;
             return;
         }
-
-        if (mode === "register") {
-            trackerService.create($scope.formModel.id).success(function (response) {
+         if (mode === "register" || mode == "update") {
+            trackerService.update($scope.formModel).success(function (response) {
                 $scope.success = response.success;
                 if (response.success) {
-                    $scope.msg = 'Your tracker has been created successfully.';
+                    $scope.msg = 'Your tracker has been updated successfully.';
                 } else {
                     $scope.error = 'Please check make sure your services is running.';
                 }
@@ -134,17 +135,18 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
                 }
                 $scope.proccessing = false;
             });
-        } else if (mode == "update") {
-            trackerService.update($scope.formModel).success(function (response) {
-                $scope.success = response.success;
-                if (response.success) {
-                    $scope.msg = 'Your tracker has update successfully';
-                } else {
-                    $scope.error = 'Tracker not exists, please try again!';
-                }
-                $scope.proccessing = false;
-            });
         }
+        // else if (mode == "update") {
+        //    trackerService.update($scope.formModel).success(function (response) {
+        //        $scope.success = response.success;
+        //        if (response.success) {
+        //            $scope.msg = 'Your tracker has update successfully';
+        //        } else {
+        //            $scope.error = 'Tracker not exists, please try again!';
+        //        }
+        //        $scope.proccessing = false;
+        //    });
+        //}
     };
 
     $scope.initDefaultValue = function () {

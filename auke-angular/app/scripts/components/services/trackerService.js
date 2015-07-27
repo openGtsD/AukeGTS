@@ -11,10 +11,10 @@ angular.module('aukeGTS').factory('trackerService', function($http, aukeUtil) {
         return trackerAPI.load(marker.key);
     }
 
-    trackerAPI.create = function(id) {
-        var url = serviceURL + '/drone/register/' + id;
-        return $http.post(url);
-    }
+    //trackerAPI.create = function(id) {
+    //    var url = serviceURL + '/drone/register/' + id;
+    //    return $http.post(url);
+    //}
 
     trackerAPI.delete = function(id) {
         var url = serviceURL + '/drone/remove/' + id;
