@@ -1,11 +1,13 @@
 package no.auke.drone.domain.test;
 
 import junit.framework.Assert;
+import no.auke.drone.application.TrackerFactory;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.*;
 import no.auke.drone.services.TrackerService;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +26,9 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
 
     @Autowired
     CRUDDao<EventData> eventDataCRUDDao;
+
+    @Autowired
+    TrackerFactory trackerFactory;
 
     @Before
     public void init() {
@@ -60,6 +65,51 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
 
         tracker = trackerService.getTracker(newTrackerId);
         Assert.assertEquals(true, tracker.isActive());
+    }
+
+    @Test
+    public void shouldRegisterNewTracker() {
+        String newTrackerId = "newId";
+        Tracker tracker = new SimpleTracker();
+        tracker.setLayerId("REAL");
+        tracker.setId(newTrackerId);
+        tracker.setName("this is a new name");
+        tracker.setImeiNumber("11223344");
+        tracker.setActive(true);
+        tracker.setSimPhone("33445566");
+        tracker.setStoredTrips(true);
+
+        trackerService.registerTracker(tracker);
+
+        Tracker persistedTracker = trackerService.getTracker(newTrackerId);
+        Assert.assertEquals(persistedTracker.getLayerId(), Tracker.TrackerType.REAL.toString());
+        Assert.assertNotNull(persistedTracker.getCreateDate());
+        Assert.assertNotNull(persistedTracker.getModifiedDate());
+
+        List<Device> devices = deviceCRUDDao.getAll();
+        Assert.assertEquals(1,devices.size());
+
+        Device device = devices.get(0);
+        Assert.assertEquals(0.0,device.getLastValidHeading());
+
+        Assert.assertEquals(0.0,device.getLastValidLatitude());
+
+        Assert.assertEquals(0.0,device.getLastValidLongitude());
+
+        persistedTracker = trackerService.getTracker(newTrackerId);
+        Assert.assertEquals(true, persistedTracker.isActive());
+
+        // comparing tracker and persisted tracker
+        Assert.assertEquals(tracker.getId(),persistedTracker.getId());
+        Assert.assertEquals(tracker.getImeiNumber(),persistedTracker.getImeiNumber());
+
+        Assert.assertEquals(tracker.getLayerId(),persistedTracker.getLayerId());
+
+        Assert.assertEquals(tracker.getName(),persistedTracker.getName());
+
+        Assert.assertEquals(tracker.getSimPhone(),persistedTracker.getSimPhone());
+        Assert.assertEquals(tracker.getTrackerPrefix(),persistedTracker.getTrackerPrefix());
+
     }
 
     @Test
