@@ -44,7 +44,7 @@ public class Device {
         simPhoneNumber = tracker.getSimPhone();
         imeiNumber = tracker.getImeiNumber();
         String trackerPrefix = StringUtils.isEmpty(tracker.getTrackerPrefix()) ? "tk" : StringUtils.trimToEmpty(tracker.getTrackerPrefix());
-        uniqueID = trackerPrefix + "_" + StringUtils.trimToEmpty(tracker.getImeiNumber());
+        uniqueID = trackerPrefix + "_" + StringUtils.trimToEmpty(tracker.getId());
         isActive = BooleanUtils.isTrue(tracker.isActive()) ? 1 : 0;
         return this;
     }
