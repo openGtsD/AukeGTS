@@ -98,6 +98,12 @@ public class TrackerData implements Subject {
     private void update(Tracker oldTracker, Tracker newTracker) {
         
     	oldTracker.setName(newTracker.getName());
+        oldTracker.setDescription(newTracker.getDescription());
+        oldTracker.setContactInfo(newTracker.getContactInfo());
+        oldTracker.setStoredTrips(newTracker.isStoredTrips());
+        oldTracker.setTrackerPrefix(newTracker.getTrackerPrefix());
+        oldTracker.setImeiNumber(newTracker.getImeiNumber());
+
         oldTracker.setTrackerType(newTracker.getTrackerType());
         oldTracker.setOwner(newTracker.getOwner());
         oldTracker.setSimPhone(newTracker.getSimPhone());
