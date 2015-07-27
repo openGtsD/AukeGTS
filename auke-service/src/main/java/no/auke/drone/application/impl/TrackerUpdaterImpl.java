@@ -61,9 +61,10 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
         // LHA: by doing DB lookup for each time update is very resource consuming
         // we agreed this was to be in memmory
         
-        if(tripService.getTripById(currentPosition.getId()) == null) {
-            tripService.saveTrip(currentPosition);
+        // removed.
+        // if(tripService.getTripById(currentPosition.getId()) == null) {
+        //    tripService.saveTrip(currentPosition);
+        // }
 
-        }
     }
 }

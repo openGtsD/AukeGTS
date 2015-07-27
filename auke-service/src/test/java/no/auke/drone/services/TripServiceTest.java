@@ -32,17 +32,20 @@ public class TripServiceTest extends AbstractIntegrationTest {
     @Test
     public void testCreateTrip() {
         MapPoint mapPoint = PointUtil.generateRandomMapPoint(new MapPoint());
-        tripService.saveTrip(mapPoint);
+        // tripService.saveTrip(mapPoint);
 
         List<MapPoint> mapPoints = mapPointCRUDDao.getAll();
         Assert.assertEquals(1,mapPoints.size());
+        
+        Assert.fail();
+        
     }
 
     @Test
     public void testDeleteTrip() {
         MapPoint mapPoint = PointUtil.generateRandomMapPoint(new MapPoint());
         mapPoint.setId("1234");
-        tripService.saveTrip(mapPoint);
+        // tripService.saveTrip(mapPoint);
 
         List<MapPoint> mapPoints = mapPointCRUDDao.getAll();
         Assert.assertEquals(1,mapPoints.size());
@@ -51,6 +54,9 @@ public class TripServiceTest extends AbstractIntegrationTest {
 
         mapPoints = mapPointCRUDDao.getAll();
         Assert.assertEquals(0,mapPoints.size());
+        
+        Assert.fail();
+        
     }
 
     @Test
@@ -58,7 +64,7 @@ public class TripServiceTest extends AbstractIntegrationTest {
         for(int i = 0; i < 10; i++) {
             MapPoint mapPoint = PointUtil.generateRandomMapPoint(new MapPoint());
             mapPoint.setId(UUID.randomUUID().toString());
-            tripService.saveTrip(mapPoint);
+            // tripService.saveTrip(mapPoint);
 
         }
 
@@ -67,6 +73,9 @@ public class TripServiceTest extends AbstractIntegrationTest {
 
         mapPoints = tripService.getLatestTrips();
         Assert.assertEquals(5,mapPoints.size());
+        
+        Assert.fail();
+        
     }
 
     @Test
@@ -75,12 +84,13 @@ public class TripServiceTest extends AbstractIntegrationTest {
             MapPoint mapPoint = PointUtil.generateRandomMapPoint(new MapPoint());
             mapPoint.setId(UUID.randomUUID().toString());
             mapPoint.setTrackerId(String.valueOf(i));
-            tripService.saveTrip(mapPoint);
+            
+            // tripService.saveTrip(mapPoint);
 
             MapPoint mapPoint2 = PointUtil.generateRandomMapPoint(new MapPoint());
             mapPoint2.setId(UUID.randomUUID().toString());
             mapPoint2.setTrackerId(String.valueOf(i));
-            tripService.saveTrip(mapPoint2);
+            // tripService.saveTrip(mapPoint2);
         }
 
         List<MapPoint> mapPoints = mapPointCRUDDao.getAll();
@@ -90,6 +100,9 @@ public class TripServiceTest extends AbstractIntegrationTest {
             mapPoints = tripService.getTripsByTrackerId(String.valueOf(i));
             Assert.assertEquals(2,mapPoints.size());
         }
+        
+        Assert.fail();
+        
     }
 
     @Test
@@ -98,12 +111,15 @@ public class TripServiceTest extends AbstractIntegrationTest {
             MapPoint mapPoint = PointUtil.generateRandomMapPoint(new MapPoint());
             mapPoint.setId(UUID.randomUUID().toString());
             mapPoint.setTrackerId(String.valueOf(i));
-            tripService.saveTrip(mapPoint);
+            // tripService.saveTrip(mapPoint);
 
             MapPoint mapPoint2 = PointUtil.generateRandomMapPoint(new MapPoint());
             mapPoint2.setId(UUID.randomUUID().toString());
             mapPoint2.setTrackerId(String.valueOf(i));
-            tripService.saveTrip(mapPoint2);
+            // tripService.saveTrip(mapPoint2);
+            
+            Assert.fail();
+            
         }
 
         List<MapPoint> mapPoints = mapPointCRUDDao.getAll();

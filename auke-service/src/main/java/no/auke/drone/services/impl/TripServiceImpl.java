@@ -2,13 +2,16 @@ package no.auke.drone.services.impl;
 
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.dao.QueryBuilder;
+import no.auke.drone.domain.AbstractTrackerBase;
 import no.auke.drone.domain.MapPoint;
 import no.auke.drone.services.TripService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.management.Query;
+
 import java.util.List;
 import java.util.Properties;
 
@@ -27,8 +30,12 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public MapPoint saveTrip(MapPoint mapPoint) {
-        return mapPointCRUDDao.create(mapPoint);
+    public void saveTrip(AbstractTrackerBase tracker) {
+    	
+    	// Implement here 
+    	
+    	
+        // return mapPointCRUDDao.create(mapPoint);
     }
 
     @Override
