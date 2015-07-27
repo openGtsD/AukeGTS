@@ -50,7 +50,7 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
         createDate: '',
         modifiedDate: '',
         layerId: '',
-        storeTrip: true,
+        storedTrips: true,
         //trackerUsage: '',
         //additionalLayers: ''
     };
