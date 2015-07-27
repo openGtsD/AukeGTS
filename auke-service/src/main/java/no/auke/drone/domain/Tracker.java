@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import no.auke.drone.application.TrackerUpdater;
+import no.auke.drone.services.TripService;
+
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 
 /**
@@ -134,4 +136,5 @@ public interface Tracker {
     void setTrackerPrefix(String trackerPrefix);
 
     String getTrackerPrefix();
+
 }

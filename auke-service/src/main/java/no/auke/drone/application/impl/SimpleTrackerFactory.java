@@ -57,6 +57,7 @@ public class SimpleTrackerFactory implements TrackerFactory {
     @Override
     public Tracker create(String trackerLayer, String id, String name, Tracker.TrackerType droneType,
                           Person flyer, MapPoint location, String imei, String simPhone) {
+    	
     	Tracker tracker = new SimpleTracker();
         tracker.setTrackerUpdater(trackerUpdater);
         tracker.setId(id);

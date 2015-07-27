@@ -1,7 +1,7 @@
 package no.auke.drone.services;
 
 import no.auke.drone.domain.AbstractTrackerBase;
-import no.auke.drone.domain.MapPoint;
+import no.auke.drone.domain.trips.TripInfo;
 
 import java.util.List;
 
@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface TripService {
     void saveTrip(AbstractTrackerBase tracker);
-    List<MapPoint> getLatestTrips();
-    void deleteTrip(MapPoint mapPoint);
-    List<MapPoint> getTripsByTrackerId(String trackerId);
+    List<TripInfo> getLatestTrips();
+    void deleteTrip(TripInfo trip);
+    List<TripInfo> getTripsByTrackerId(String trackerId);
     void deleteTripsByTrackerId(String trackerId);
-    MapPoint getTripById(String tripId);
+    TripInfo getTripById(String tripId);
 }

@@ -1,16 +1,15 @@
 package no.auke.drone.services.impl;
 
 import no.auke.drone.dao.CRUDDao;
-import no.auke.drone.dao.QueryBuilder;
 import no.auke.drone.domain.AbstractTrackerBase;
-import no.auke.drone.domain.MapPoint;
+import no.auke.drone.domain.trips.Trip;
+import no.auke.drone.domain.trips.TripInfo;
 import no.auke.drone.services.TripService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import javax.management.Query;
 
 import java.util.List;
 import java.util.Properties;
@@ -21,49 +20,51 @@ import java.util.Properties;
 @Service
 public class TripServiceImpl implements TripService {
     private final int NUMB_LATEST_TRIP = 5;
+    
     @Autowired
-    private CRUDDao<MapPoint> mapPointCRUDDao;
+    private CRUDDao<TripInfo> tripCRUDDao;
 
     @PostConstruct
     public void init() {
-        mapPointCRUDDao.setPersistentClass(MapPoint.class);
+    
+    	tripCRUDDao.setPersistentClass(TripInfo.class);
+    
     }
 
     @Override
     public void saveTrip(AbstractTrackerBase tracker) {
     	
-    	// Implement here 
-    	
-    	
-        // return mapPointCRUDDao.create(mapPoint);
+    	Trip trip = new Trip(tracker.getId());
+    	trip.setRoute(tracker.getPositions());
+    	tripCRUDDao.create(new TripInfo(trip));
     }
 
     @Override
-    public MapPoint getTripById(String tripId) {
-        return mapPointCRUDDao.getById(tripId);
+    public TripInfo getTripById(String tripId) {
+        return tripCRUDDao.getById(tripId);
     }
 
     @Override
-    public List<MapPoint> getLatestTrips() {
-        return mapPointCRUDDao.getTop(NUMB_LATEST_TRIP);
+    public List<TripInfo> getLatestTrips() {
+        return tripCRUDDao.getTop(NUMB_LATEST_TRIP);
     }
 
     @Override
-    public void deleteTrip(MapPoint mapPoint) {
-        mapPointCRUDDao.delete(mapPoint);
+    public void deleteTrip(TripInfo trip) {
+    	tripCRUDDao.delete(trip);
     }
 
     @Override
-    public List<MapPoint> getTripsByTrackerId(String trackerId) {
+    public List<TripInfo> getTripsByTrackerId(String trackerId) {
         Properties properties = new Properties();
         properties.put("trackerId",trackerId);
-        return mapPointCRUDDao.getByProperties(properties);
+        return tripCRUDDao.getByProperties(properties);
     }
 
     @Override
     public void deleteTripsByTrackerId(String trackerId) {
         Properties properties = new Properties();
         properties.put("trackerId",trackerId);
-        mapPointCRUDDao.deleteAllByProperties(properties);
+        tripCRUDDao.deleteAllByProperties(properties);
     }
 }

@@ -1,5 +1,7 @@
 package no.auke.drone.domain;
 
+import no.auke.drone.services.TripService;
+
 public class TrackerSumImpl extends AbstractTrackerBase implements  TrackerSum {
 	public TrackerSumImpl() {}
 
@@ -20,4 +22,6 @@ public class TrackerSumImpl extends AbstractTrackerBase implements  TrackerSum {
 	public void incrementTrackers() {
 		this.numtrackers++;
 	}
+
+
 }

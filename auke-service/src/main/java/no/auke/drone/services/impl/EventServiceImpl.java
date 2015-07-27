@@ -5,8 +5,9 @@ import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.dao.QueryBuilder;
 import no.auke.drone.domain.*;
 import no.auke.drone.services.EventService;
-
 import no.auke.drone.services.TrackerService;
+import no.auke.drone.services.TripService;
+
 import org.apache.commons.lang.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,10 @@ public class EventServiceImpl implements EventService {
 
     @Autowired
     private SimpleTrackerFactory simpleTrackerFactory;
+    
+    @Autowired
+    private TripService tripService;
+    
 
     @PostConstruct
     public void init() {
@@ -82,18 +87,35 @@ public class EventServiceImpl implements EventService {
     }
     
 	private void updateTrackers() {
-        if(logger.isDebugEnabled()) logger.debug("starting updating tracker data from device");
+        
+		if(logger.isDebugEnabled()) logger.debug("starting updating tracker data from device");
 
+         
+         
+        
+		// LHA: comment: this should not get from device (read from DB) should pick uåp trackers from memmorylist)
+        // sync with device table should be done somewhere als, not each time we calcluate / update posistions 
+		
         List<Device> devices = deviceCrudDao.getAll();
+        
+        
         for(Device device : devices) {
-            Tracker tracker = trackerService.getTracker(device.getDeviceID());
-            if(tracker == null) {
+            
+        	
+        	
+        	Tracker tracker = trackerService.getTracker(device.getDeviceID());
+            
+        	if(tracker == null) {
                 tracker = simpleTrackerFactory.from(device);
                 trackerService.registerTracker(tracker);
             }
 
             if(device.getIsActive() != null && tracker.isActive() != (device.getIsActive() != 0)) {
-                tracker.setActive(device.getIsActive() != null && device.getIsActive() == 1);
+            	
+                // LHA: same as moving or not
+            	
+            	tracker.setActive(device.getIsActive() != null && device.getIsActive() == 1);
+            	
                 trackerService.updateActiveTracker(tracker);
             }
         }
@@ -116,8 +138,6 @@ public class EventServiceImpl implements EventService {
                         fetchEventData();
 
                         updateTrackers();
-
-//                        updateTrackers();
 
                         if(isRunning.get() && (System.currentTimeMillis() - lastStarted) < CALC_FREQUENCY ) {
                             // sleep for rest time to CALC_FREQUENCY

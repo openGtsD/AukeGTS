@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 import no.auke.drone.application.TrackerUpdater;
+
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -222,8 +222,9 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
                 block.lock();
                 logger.info("Save tracker " + getId());
 
-//                LocationFunction.writeLocationHistoryByDroneId(this.getId(), getPositions());
-
+                
+                trackerUpdater.getTripService().saveTrip(this);
+                
                 // clear when save
                 getPositions().clear();
 
@@ -311,8 +312,6 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
         this.trackerUpdater = trackerUpdater;
     }
 
-
-
     @Override
     final public String getLayerId() {
         return layerId;
@@ -393,7 +392,12 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     @Override
     public void setActive(boolean active) {
+    	
         this.active = active;
+    
+        // if set passive, trip will be saved
+        setMoving(active);
+
     }
 
     @Override
@@ -403,7 +407,8 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
 
     private void calculateSimulatedTrackers() {
-        if(isMoving()) {
+        
+    	if(isMoving()) {
 
             if((stopFlightTime.get() - System.currentTimeMillis())<0) {
 
@@ -504,6 +509,10 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
             block.unlock();
         }
+        
+        
 
     }
+    
+  
 }

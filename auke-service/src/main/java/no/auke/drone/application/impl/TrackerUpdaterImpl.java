@@ -67,4 +67,10 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
         // }
 
     }
+
+	@Override
+	public TripService getTripService() {
+		return tripService;
+		
+	}
 }
