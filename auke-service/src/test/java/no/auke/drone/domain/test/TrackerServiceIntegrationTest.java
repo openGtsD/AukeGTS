@@ -74,10 +74,13 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
         tracker.setLayerId("REAL");
         tracker.setId(newTrackerId);
         tracker.setName("this is a new name");
+        tracker.setDescription("this is a description");
+        tracker.setContactInfo("this is an info");
         tracker.setImeiNumber("11223344");
         tracker.setActive(true);
         tracker.setSimPhone("33445566");
         tracker.setStoredTrips(true);
+        tracker.setTrackerPrefix("ttt");
 
         trackerService.registerTracker(tracker);
 
@@ -106,6 +109,8 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
         Assert.assertEquals(tracker.getLayerId(),persistedTracker.getLayerId());
 
         Assert.assertEquals(tracker.getName(),persistedTracker.getName());
+        Assert.assertEquals(tracker.getDescription(),persistedTracker.getDescription());
+        Assert.assertEquals(tracker.getContactInfo(),persistedTracker.getContactInfo());
 
         Assert.assertEquals(tracker.getSimPhone(),persistedTracker.getSimPhone());
         Assert.assertEquals(tracker.getTrackerPrefix(),persistedTracker.getTrackerPrefix());

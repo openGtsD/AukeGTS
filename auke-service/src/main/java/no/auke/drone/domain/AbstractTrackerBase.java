@@ -45,8 +45,12 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     private Person flyer;
 
-    // Thai Huynh: Some fields need update tracker
     private String name;
+
+    private String description;
+
+    private String contactInfo;
+
     private String simPhone;
     private String imeiNumber;
 
@@ -108,12 +112,34 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
         this.id = id;
     }
 
+    @Override
     final public String getName() {
         return name;
     }
 
+    @Override
     final public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    final public String getDescription() {
+        return description;
+    }
+
+    @Override
+    final public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    final public String getContactInfo() {
+        return contactInfo;
+    }
+
+    @Override
+    final public void setContactInfo(String contactInfo) {
+        this.contactInfo = contactInfo;
     }
 
     @Override

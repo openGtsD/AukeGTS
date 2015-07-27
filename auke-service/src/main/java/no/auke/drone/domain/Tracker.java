@@ -47,6 +47,14 @@ public interface Tracker {
 
     String getName();
 
+    void setDescription(String description);
+
+    String getDescription();
+
+    void setContactInfo(String contactInfo);
+
+    String getContactInfo();
+
     void setTrackerType(TrackerType name);
 
     TrackerType getTrackerType();
