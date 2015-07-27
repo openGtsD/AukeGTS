@@ -50,7 +50,7 @@ public class TripServiceTest extends AbstractIntegrationTest {
         List<MapPoint> mapPoints = mapPointCRUDDao.getAll();
         Assert.assertEquals(1,mapPoints.size());
 
-        tripService.deleteTrip(mapPoint);
+        //tripService.deleteTrip(mapPoint);
 
         mapPoints = mapPointCRUDDao.getAll();
         Assert.assertEquals(0,mapPoints.size());
@@ -71,7 +71,7 @@ public class TripServiceTest extends AbstractIntegrationTest {
         List<MapPoint> mapPoints = mapPointCRUDDao.getAll();
         Assert.assertEquals(10,mapPoints.size());
 
-        mapPoints = tripService.getLatestTrips();
+        //mapPoints = tripService.getLatestTrips();
         Assert.assertEquals(5,mapPoints.size());
         
         Assert.fail();
@@ -97,7 +97,7 @@ public class TripServiceTest extends AbstractIntegrationTest {
         Assert.assertEquals(20,mapPoints.size());
 
         for(int i = 0; i < 10; i++) {
-            mapPoints = tripService.getTripsByTrackerId(String.valueOf(i));
+            //mapPoints = tripService.getTripsByTrackerId(String.valueOf(i));
             Assert.assertEquals(2,mapPoints.size());
         }
         
@@ -127,7 +127,7 @@ public class TripServiceTest extends AbstractIntegrationTest {
 
         for(int i = 0; i < 10; i++) {
             tripService.deleteTripsByTrackerId(String.valueOf(i));
-            mapPoints = tripService.getTripsByTrackerId(String.valueOf(i));
+            //mapPoints = tripService.getTripsByTrackerId(String.valueOf(i));
             Assert.assertEquals(0,mapPoints.size());
         }
     }
