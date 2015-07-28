@@ -90,7 +90,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
                 parameters[i] = BeanUtils.getProperty(entity,fields[i].getName());
             }
         } catch (Exception e) {
-            logger.error(e.getCause().toString());
+            logger.error(e.toString());
         }
 
         return parameters;

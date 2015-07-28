@@ -77,7 +77,7 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public Tracker registerTracker(Tracker tracker) {
+    public Tracker registerTracker(Tracker tracker, boolean persist) {
         // return TrackerData.getInstance().register((Observer) tracker);
         Tracker result = tracker;
 
@@ -89,12 +89,19 @@ public class TrackerServiceImpl implements TrackerService {
         if(persistedTracker == null) {
             persistedTracker = simpleTrackerFactory.create(tracker);
             TrackerData.getInstance().register((Observer) persistedTracker );
-            crudDeviceDao.create(new Device().from(persistedTracker));
+            if(persist) {
+                crudDeviceDao.create(new Device().from(persistedTracker));
+            }
             result = persistedTracker;
         }
 
         // else do no things. that's mean tracker exists in system
         return result;
+    }
+
+    @Override
+    public Tracker registerTracker(Tracker tracker) {
+        return registerTracker(tracker,true);
     }
 
     @Override
