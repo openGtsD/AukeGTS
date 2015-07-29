@@ -223,7 +223,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
                 logger.info("Save tracker " + getId());
 
                 
-                trackerUpdater.getTripService().saveTrip(this);
+                // TODO should turn it back once the trip service finishes trackerUpdater.getTripService().saveTrip(this);
                 
                 // clear when save
                 getPositions().clear();
