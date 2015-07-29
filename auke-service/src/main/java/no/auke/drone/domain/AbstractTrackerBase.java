@@ -43,6 +43,8 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
     private List<MapPoint> positions;
     private CircularFifoBuffer latestPositions;
 
+    private String owner;
+
     private Person flyer;
 
     private String name;
@@ -258,13 +260,13 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
     }
 
     @Override
-    public void setOwner(Person person) {
-        this.flyer = person;
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     @Override
-    public Person getOwner() {
-        return flyer;
+    public String getOwner() {
+        return owner;
     }
 
     @Override

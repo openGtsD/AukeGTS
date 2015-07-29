@@ -61,9 +61,9 @@ public interface Tracker {
 
     TrackerType getTrackerType();
 
-    void setOwner(Person owner);
+    void setOwner(String owner);
 
-    Person getOwner();
+    String getOwner();
 
     void update();
 

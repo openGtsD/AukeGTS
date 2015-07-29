@@ -69,7 +69,6 @@ public class SimpleTrackerFactory implements TrackerFactory {
         tracker.setCreateDate(new Date());
         tracker.setModifiedDate(new Date());
         tracker.setTrackerType(droneType);
-        tracker.setOwner(flyer);
         tracker.setCurrentPosition(location);
         tracker.getPositions().add(tracker.getCurrentPosition());
         return tracker;
