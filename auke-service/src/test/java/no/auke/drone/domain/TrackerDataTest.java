@@ -6,6 +6,7 @@ import no.auke.drone.domain.Tracker.TrackerType;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -18,6 +19,8 @@ import static org.powermock.api.mockito.PowerMockito.when;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({TrackerData.class})
 
+@Ignore
+@Deprecated
 public class TrackerDataTest {
 	
 	SimpleTracker tracker1;

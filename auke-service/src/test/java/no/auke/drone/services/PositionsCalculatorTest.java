@@ -11,6 +11,7 @@ import no.auke.drone.services.impl.PositionCalculatorImpl;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.mockito.Matchers.*;
@@ -25,9 +26,10 @@ import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PositionCalculator.class})
-
+@Ignore
 public class PositionsCalculatorTest {
 	
     private static ExecutorService executor = Executors.newCachedThreadPool();

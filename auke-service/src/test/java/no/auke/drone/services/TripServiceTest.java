@@ -7,6 +7,7 @@ import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.test.AbstractIntegrationTest;
 import no.auke.drone.utils.PointUtil;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 /**
  * Created by huyduong on 6/16/2015.
  */
+@Ignore
 public class TripServiceTest extends AbstractIntegrationTest {
     @Autowired
     private TripService tripService;

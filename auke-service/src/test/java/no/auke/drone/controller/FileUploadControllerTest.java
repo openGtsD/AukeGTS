@@ -2,6 +2,7 @@ package no.auke.drone.controller;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.Application;
@@ -9,6 +10,7 @@ import javax.ws.rs.core.Application;
 /**
  * Created by huyduong on 6/10/2015.
  */
+@Ignore
 public class FileUploadControllerTest extends JerseyTest {
     @Override
     protected Application configure() {

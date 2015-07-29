@@ -2,15 +2,14 @@ package no.auke.drone.domain;
 
 import no.auke.drone.application.impl.SimpleTrackerFactory;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 
 /**
  * Created by huyduong on 3/29/2015.
  */
 
+@Ignore
+@Deprecated
 public class TrackerData2Test {
     
 	private TrackerData trackerData;
