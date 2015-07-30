@@ -6,6 +6,7 @@ import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.*;
 import no.auke.drone.domain.test.AbstractIntegrationTest;
 
+import no.auke.drone.entity.TrackerDB;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,11 +28,19 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 
     @Autowired
     CRUDDao<Device> deviceCRUDDao;
+
+    @Autowired
+    CRUDDao<TrackerDB> trackerDBCRUDDao;
 	
 	@Before
 	public void setUp() throws Exception {
         deviceCRUDDao.setPersistentClass(Device.class);
         deviceCRUDDao.deleteAll();
+
+        trackerDBCRUDDao.setPersistentClass(TrackerDB.class);
+        trackerDBCRUDDao.deleteAll();
+
+        service.removeAll();
 	}
 
 	@After

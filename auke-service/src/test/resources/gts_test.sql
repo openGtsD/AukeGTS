@@ -164,3 +164,18 @@ CREATE TABLE `person` (
 
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `TrackerDB` (
+  `id` varchar(100) NOT NULL,
+  `name` varchar(100) ,
+  `description` varchar(100) ,
+  `owner` varchar(100) ,
+  `contactInfo` varchar(100) ,
+  `layer` varchar(100) ,
+  `createDate` int(10) unsigned DEFAULT NULL,
+  `modifiedDate` int(10) unsigned DEFAULT NULL,
+  `lastUsed` int(10) unsigned DEFAULT NULL,
+  `active` tinyint(4) DEFAULT NULL,
+  `storedTrips` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

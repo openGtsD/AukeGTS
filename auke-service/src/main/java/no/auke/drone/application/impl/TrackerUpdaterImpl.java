@@ -63,8 +63,10 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
         // 
         
         MapPoint currentPosition = tracker.getCurrentPosition();
-        currentPosition.setTrackerId(tracker.getId());
-        
+        if(currentPosition != null) {
+            currentPosition.setTrackerId(tracker.getId());
+        }
+
         // LHA: by doing DB lookup for each time update is very resource consuming
         // we agreed this was to be in memmory
         

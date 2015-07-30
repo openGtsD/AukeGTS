@@ -6,6 +6,7 @@ import no.auke.drone.application.TrackerUpdater;
 import no.auke.drone.application.TrackerFactory;
 import no.auke.drone.domain.*;
 
+import no.auke.drone.entity.TrackerDB;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,30 +46,42 @@ public class SimpleTrackerFactory implements TrackerFactory {
 
     @Override
     public Tracker create(String trackerLayer, String id, String name, MapPoint location) {
-    	return create(trackerLayer, id, name, Tracker.TrackerType.fromValue(trackerLayer),null, location, "", "");
+    	return create(trackerLayer, id, name, name, Tracker.TrackerType.fromValue(trackerLayer),null, location, "", "");
     }
 
     @Override
     public Tracker from(Device device) {
         if(device == null) return null;
-        return create(Tracker.TrackerType.REAL.toString(), device.getDeviceID(), device.getDescription(), Tracker.TrackerType.REAL ,null,  new MapPoint(device.getLastValidLatitude(),device.getLastValidLongitude()), device.getImeiNumber(), device.getSimPhoneNumber());
+        return create(Tracker.TrackerType.REAL.toString(), device.getDeviceID(), device.getDescription(), device.getDescription(), Tracker.TrackerType.REAL ,null,  new MapPoint(device.getLastValidLatitude(),device.getLastValidLongitude()), device.getImeiNumber(), device.getSimPhoneNumber());
     }
 
     @Override
-    public Tracker create(String trackerLayer, String id, String name, Tracker.TrackerType droneType,
-                          Person flyer, MapPoint location, String imei, String simPhone) {
-    	
+    public Tracker from(TrackerDB trackerDB) {
+        if(trackerDB == null) return null;
+        return create(trackerDB.getLayer(),trackerDB.getId(),trackerDB.getName(), trackerDB.getDescription(), null, trackerDB.getOwner(), null, null, null);
+    }
+
+    @Override
+    public Tracker create(String trackerLayer, String id, String name, String description, Tracker.TrackerType droneType,
+                          String owner, MapPoint location, String imei, String simPhone) {
+        // sanitize input
+        if(location == null) {
+            location = new MapPoint();
+        }
+
     	Tracker tracker = new SimpleTracker();
         tracker.setTrackerUpdater(trackerUpdater);
         tracker.setId(id);
         tracker.setActive(true);
         tracker.setLayerId(trackerLayer);
         tracker.setName(name);
+        tracker.setOwner(owner);
         tracker.setSimPhone(simPhone);
         tracker.setImeiNumber(imei);
         tracker.setCreateDate(new Date());
         tracker.setModifiedDate(new Date());
         tracker.setTrackerType(droneType);
+
         tracker.setCurrentPosition(location);
         tracker.getPositions().add(tracker.getCurrentPosition());
         return tracker;

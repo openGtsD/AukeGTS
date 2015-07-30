@@ -6,6 +6,7 @@ import no.auke.drone.domain.Device;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerData;
 import no.auke.drone.domain.TrackerLayer;
+import no.auke.drone.entity.TrackerDB;
 import no.auke.drone.services.TrackerService;
 import no.auke.drone.utils.YmlPropertiesPersister;
 import org.junit.After;
@@ -28,12 +29,17 @@ public class TrackerControllerIntegrationTest extends AbstractIntegrationTest {
     CRUDDao<Device> deviceCRUDDao;
 
     @Autowired
+    CRUDDao<TrackerDB> trackerDBCRUDDao;
+
+    @Autowired
     private YmlPropertiesPersister propertiesPersister;
 
     @Before
     public void init() {
         deviceCRUDDao.setPersistentClass(Device.class);
         deviceCRUDDao.deleteAll();
+        trackerDBCRUDDao.setPersistentClass(TrackerDB.class);
+        trackerDBCRUDDao.deleteAll();
         trackerService.removeAll();
         for(TrackerLayer trackerLayer : TrackerData.getInstance().getLayers()) trackerLayer.getActiveTrackers().clear();
         trackerService.registerTracker("id-test-1", "new name");

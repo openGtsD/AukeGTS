@@ -244,8 +244,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     @Override
     public String toString() {
-
-        return "{id: " + getId() + ", name:" + name + " layer:" + getLayerId() + " ,position: " + getCurrentPosition().toString() + " }";
+        return "{id: " + id + ", name:" + name + " layer:" + layerId +  " }";
     }
 
 

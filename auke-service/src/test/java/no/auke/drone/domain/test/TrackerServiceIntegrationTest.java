@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import no.auke.drone.application.TrackerFactory;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.*;
+import no.auke.drone.entity.TrackerDB;
 import no.auke.drone.services.TrackerService;
 import org.junit.After;
 import org.junit.Before;
@@ -25,6 +26,9 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
     CRUDDao<Device> deviceCRUDDao;
 
     @Autowired
+    CRUDDao<TrackerDB> trackerDBCRUDDao;
+
+    @Autowired
     CRUDDao<EventData> eventDataCRUDDao;
 
     @Autowired
@@ -34,8 +38,10 @@ public class TrackerServiceIntegrationTest extends AbstractIntegrationTest {
     public void init() {
         deviceCRUDDao.setPersistentClass(Device.class);
         eventDataCRUDDao.setPersistentClass(EventData.class);
+        trackerDBCRUDDao.setPersistentClass(TrackerDB.class);
 
         deviceCRUDDao.deleteAll();
+        trackerDBCRUDDao.deleteAll();
         eventDataCRUDDao.deleteAll();
     }
 

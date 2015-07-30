@@ -10,6 +10,7 @@ import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.*;
 import no.auke.drone.domain.Observer;
+import no.auke.drone.entity.TrackerDB;
 import no.auke.drone.services.TrackerService;
 import no.auke.drone.utils.PointUtil;
 import no.auke.drone.utils.YmlPropertiesPersister;
@@ -31,6 +32,9 @@ public class TrackerServiceImpl implements TrackerService {
     private CRUDDao<Device> crudDeviceDao;
 
     @Autowired
+    private CRUDDao<TrackerDB> trackerDBCRUDDao;
+
+    @Autowired
     private CRUDDao<MapPoint> mapPointCRUDDao;
 
     @Autowired
@@ -49,6 +53,7 @@ public class TrackerServiceImpl implements TrackerService {
     @PostConstruct
     public void initTrackerService() {
         crudDeviceDao.setPersistentClass(Device.class);
+        trackerDBCRUDDao.setPersistentClass(TrackerDB.class);
         mapPointCRUDDao.setPersistentClass(MapPoint.class);
 
     	logger.info("initializing SIMULATED tracker services");
@@ -64,6 +69,15 @@ public class TrackerServiceImpl implements TrackerService {
         if(CollectionUtils.isNotEmpty(devices)) {
             for(Device device : devices) {
                 TrackerData.getInstance().register((Observer) simpleTrackerFactory.from(device) );
+            }
+        }
+
+        List<TrackerDB> trackerDBs = trackerDBCRUDDao.getAll();
+        if(CollectionUtils.isNotEmpty(trackerDBs)) {
+            for(TrackerDB trackerDB : trackerDBs) {
+                if(getTracker(trackerDB.getId()) == null) {
+                    TrackerData.getInstance().register((Observer) simpleTrackerFactory.from(trackerDB) );
+                }
             }
         }
 
@@ -91,6 +105,7 @@ public class TrackerServiceImpl implements TrackerService {
             TrackerData.getInstance().register((Observer) persistedTracker );
             if(persist) {
                 crudDeviceDao.create(new Device().from(persistedTracker));
+                trackerDBCRUDDao.create(new TrackerDB().from(persistedTracker));
             }
             result = persistedTracker;
         }
@@ -261,7 +276,7 @@ public class TrackerServiceImpl implements TrackerService {
                 
             		MapPoint rd = PointUtil.generateRandomMapPoint(point);
                     Tracker tracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + i + "-"
-                            + j, Tracker.TrackerType.SIMULATED, null,  rd, "0123222" + i, "123123123" + j);
+                            + j, "", Tracker.TrackerType.SIMULATED, null,  rd, "0123222" + i, "123123123" + j);
                     result.add(tracker);
                 }
             }
@@ -269,27 +284,27 @@ public class TrackerServiceImpl implements TrackerService {
             //create 2 trackers for Stig and LHF
             MapPoint stig = new MapPoint(59.744076, 10.204455,0,0,0); // Stig
             Tracker stigTracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "Stig" + "-"
-                    + "Stig", Tracker.TrackerType.SIMULATED, null, stig, "0123222" + 1, "123123123" + 1);
+                    + "Stig", "", Tracker.TrackerType.SIMULATED, null, stig, "0123222" + 1, "123123123" + 1);
             result.add(stigTracker);
             
             // THAI - add more data for test
             for (int k = 1; k <= 50; k++) {
                 MapPoint rd = PointUtil.generateRandomMapPoint(stig);
                 Tracker tracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "Stig" + "-"
-                        + "Stig" + k, Tracker.TrackerType.SIMULATED, null, rd, "0123222" + 1, "123123123" + 1);
+                        + "Stig" + k, "", Tracker.TrackerType.SIMULATED, null, rd, "0123222" + 1, "123123123" + 1);
                 result.add(tracker);
             }
 
             MapPoint lhf = new MapPoint(59.722268, 10.213038,0,0,0);
             Tracker lhfTracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "LHF" + "-"
-                    + "LHF", Tracker.TrackerType.SIMULATED, null, lhf, "0123222" + 1, "123123123" + 1);
+                    + "LHF", "", Tracker.TrackerType.SIMULATED, null, lhf, "0123222" + 1, "123123123" + 1);
             result.add(lhfTracker);
             
             // THAI - add more data for test
             for (int l = 1; l <= 50; l++) {
                 MapPoint rd = PointUtil.generateRandomMapPoint(lhf);
                 Tracker tracker = simpleTrackerFactory.create("SIMULATED",UUID.randomUUID().toString(), "Tracker" + "LHF" + "-"
-                        + "Stig" + l, Tracker.TrackerType.SIMULATED, null, rd, "0123222" + 1, "123123123" + 1);
+                        + "Stig" + l, "", Tracker.TrackerType.SIMULATED, null, rd, "0123222" + 1, "123123123" + 1);
                 result.add(tracker);
             }
 

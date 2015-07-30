@@ -88,6 +88,13 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
             parameters = new Object[fields.length];
             for(int i = 0; i < fields.length; i++) {
                 parameters[i] = BeanUtils.getProperty(entity,fields[i].getName());
+                if(fields[i].getType().equals(boolean.class)) {
+                    if(parameters[i].equals(Boolean.TRUE.toString())) {
+                        parameters[i] = "1";
+                    } else {
+                        parameters[i] = "0";
+                    }
+                }
             }
         } catch (Exception e) {
             logger.error(e.toString());
