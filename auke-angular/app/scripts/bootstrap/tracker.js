@@ -5,7 +5,7 @@ angular.module('aukeGTS').config(function ($stateProvider, $urlRouterProvider, T
     //Devs
     var domain = "http://89.221.242.156:8080";
 
-    //var domain = "http://localhost:8080";
+    //var domain = "http://localhost:8081";
     $urlRouterProvider.otherwise('/register');
     $stateProvider
         .state('update', {

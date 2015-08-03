@@ -1,6 +1,6 @@
 <div>Select Layer
-    <select ng-options="size as size.name for size in map.layers"
-            ng-model="map.layer" ng-change="update(map)"></select>
+    <select ng-options="size as size.name for size in layers"
+            ng-model="layer" ng-change="update()"></select>
     Zoom Factory <span id="zoomId" style="color: red"></span>  - Number <span id="type"></span> in current view is <span id="trackerNumber" style="color: red"></span>
 </div>
 

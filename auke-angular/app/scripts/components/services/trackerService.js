@@ -5,8 +5,6 @@ angular.module('aukeGTS').factory('trackerService', function ($http, aukeUtil, $
     var trackerAPI = {};
 
     //API
-
-
     trackerAPI.loadDroneWithinView = function (json, layerId, zoom) {
         var url = serviceURL + '/drone/load-drone-in-view/' + layerId + '/' + zoom;
         return $http.post(url, json);
@@ -15,31 +13,45 @@ angular.module('aukeGTS').factory('trackerService', function ($http, aukeUtil, $
         var url = serviceURL + '/drone/registertk/';
         return $http.post(url, tracker);
     }
-
     trackerAPI.delete = function (id) {
         var url = serviceURL + '/drone/remove/' + id;
         return $http.post(url);
     }
-
     trackerAPI.load = function (id) {
         var url = serviceURL + '/drone/get-tracker/' + id;
         return $http.post(url);
     }
-
     trackerAPI.update = function (tracker) {
         var url = serviceURL + '/drone/update';
         return $http.post(url, tracker);
     }
-
-    trackerAPI.setLayer = function(layer) {console.log(layer);
-        trackerAPI.layer = typeof(layer) != undefined ? trackerAPI.layers[0] : layer;
-        console.log(trackerAPI.layer)
+    trackerAPI.setLayer = function (layer) {
+        trackerAPI.layer = layer;
     }
-
-    trackerAPI.setUUID = function(uuid) {
+    trackerAPI.getLayer = function () {
+        return trackerAPI.layer;
+    }
+    trackerAPI.setUUID = function (uuid) {
         trackerAPI.uuid = uuid;
     }
 
+    trackerAPI.getMarkers = function () {
+        return trackerAPI.markers;
+    }
+
+    trackerAPI.getLayers = function () {
+        //TODO: we will call API for get all layers in systems at here
+        return [
+            {
+                name: 'SIMULATED',
+                value: 'SIMULATED'
+            },
+            {
+                name: 'REAL',
+                value: 'REAL'
+            }
+        ];
+    }
     trackerAPI.loadDroneWithinCurrentView = function () {
         var map = trackerAPI.map;
         var mapBound = map.getBounds();
@@ -108,7 +120,6 @@ angular.module('aukeGTS').factory('trackerService', function ($http, aukeUtil, $
             latitude: tracker.currentPosition.latitude,
             longitude: tracker.currentPosition.longitude,
             showWindow: false,
-            //numbertracker: tracker.numtrackers,
             title: tracker.name
         }
 
@@ -174,33 +185,20 @@ angular.module('aukeGTS').factory('trackerService', function ($http, aukeUtil, $
         }
     };
 
-    trackerAPI.getMarkers = function () {
-        return trackerAPI.markers;
-    }
 
-    //init
+
+    //init properties
     trackerAPI.uuid = '';
     trackerAPI.markers = [];
     trackerAPI.window = {
         marker: {},
         show: false,
         closeClick: function () {
-            alert('window click');
             this.show = false;
         },
         options: {} // define when map is ready
     };
-    trackerAPI.layers = [
-        {
-            name: 'SIMULATED',
-            value: 'SIMULATED'
-        },
-        {
-            name: 'REAL',
-            value: 'REAL'
-        }
-    ];
-
+    trackerAPI.layer = '';
     trackerAPI.map = '';
 
     trackerAPI.infoBubble = trackerAPI.makeNewInfoBuddle();
@@ -235,8 +233,6 @@ angular.module('aukeGTS').factory('trackerService', function ($http, aukeUtil, $
                 },
                 options: {},
                 control: {},
-                layer: trackerAPI.layer,
-                layers: trackerAPI.layers,
                 events: { // event map
                     tilesloaded: function (maps, eventName, args) {
                         trackerAPI.map = maps;
@@ -248,13 +244,14 @@ angular.module('aukeGTS').factory('trackerService', function ($http, aukeUtil, $
                         trackerAPI.map = maps;
                         trackerAPI.reMakeInfoBubble();
                         var zoom = maps.getZoom();
-                        trackerAPI.myInterval = $interval(function () {
+                        var stop = $interval(function () {
                             zoom = maps.getZoom();
                             if (zoom >= 11) {
                                 trackerAPI.loadDroneWithinCurrentView();
                             } else {
-                                clearInterval(trackerAPI.myInterval);
-                                trackerAPI.myInterval = null;
+                                $interval.cancel(stop);
+                                stop = undefined;
+                                console.log(stop);
                             }
                         }, 10000);
                     },

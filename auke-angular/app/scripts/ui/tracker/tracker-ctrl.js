@@ -94,7 +94,7 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
             return;
         }
          if (mode === "register") {
-            trackerService.create($scope.formModel).success(function (response) {
+            trackerService.trackerAPI.create($scope.formModel).success(function (response) {
                 $scope.success = response.success;
                 if (response.success) {
                     $scope.msg = 'Your tracker has been create successfully.';
@@ -104,7 +104,7 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
                 $scope.proccessing = false;
             });
         } else if (mode === "delete") {
-            trackerService.delete($scope.formModel.id).success(function (response) {
+            trackerService.trackerAPI.delete($scope.formModel.id).success(function (response) {
                 $scope.success = response.success;
                 if (response.success) {
                     $scope.msg = 'Your tracker has delete successfully';
@@ -115,7 +115,7 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
 
             });
         } else if (mode == "load") {
-            trackerService.load($scope.formModel.id).success(function (response) {
+            trackerService.trackerAPI.load($scope.formModel.id).success(function (response) {
                 $scope.success = false;
                 if (response.success) {
                     $scope.isDisabled = true;
@@ -138,7 +138,7 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'trackerService',
         } else if (mode == "update") {
              $scope.formModel.createDate = "";
              $scope.formModel.modifiedDate = "";
-             trackerService.update($scope.formModel).success(function (response) {
+             trackerService.trackerAPI.update($scope.formModel).success(function (response) {
                  $scope.success = response.success;
                  if (response.success) {
                      $scope.msg = 'Your tracker has update successfully';

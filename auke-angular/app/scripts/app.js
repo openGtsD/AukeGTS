@@ -1,10 +1,10 @@
 'use strict';
 //
-//var domain = "http://89.221.242.156:8080";
-//var service = "http://89.221.242.156:8888";
+var domain = "http://89.221.242.156:8080";
+var service = "http://89.221.242.156:8888";
 
-var domain = "http://localhost:8081";
-var service = "http://localhost:8888";
+//var domain = "http://localhost:8081";
+//var service = "http://localhost:8888";
 
 angular.module('aukeGTS', [
     'ngResource',
