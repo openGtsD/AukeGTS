@@ -367,6 +367,7 @@ public class TrackerServiceImpl implements TrackerService {
     @Override
     public Tracker update(Tracker tracker) {
         crudDeviceDao.update(new Device().from(tracker));
+        trackerDBCRUDDao.update(new TrackerDB().from(tracker));
     	return TrackerData.getInstance().update(tracker);
     
     }

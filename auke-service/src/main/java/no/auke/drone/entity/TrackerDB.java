@@ -1,5 +1,6 @@
 package no.auke.drone.entity;
 
+import no.auke.drone.domain.ID;
 import no.auke.drone.domain.Tracker;
 
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.Date;
  */
 public class TrackerDB {
 
+    @ID
     private String id;
 
     private String name;

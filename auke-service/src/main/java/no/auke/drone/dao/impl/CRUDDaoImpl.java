@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 /**
@@ -81,6 +82,18 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         return str;
     }
 
+    private Type getFieldType(T entity, String field) {
+        Type result = null;
+        try {
+            Field refField = entity.getClass().getDeclaredField(field);
+            result = refField.getType();
+        } catch (Exception e) {
+
+        }
+        return result;
+    }
+
+
     private Object[] prepareParameter(T entity) {
         Object[] parameters = null;
         try {
@@ -139,7 +152,15 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         try {
             for(String field : fields) {
                 if(BeanUtils.getProperty(entity,field) != null) {
-                    properties.put(field, BeanUtils.getProperty(entity,field));
+                    if(getFieldType(entity,field) != null && getFieldType(entity,field).equals(boolean.class)) {
+                        if(BeanUtils.getProperty(entity,field).equals(Boolean.TRUE.toString())) {
+                            properties.put(field, "1");
+                        } else {
+                            properties.put(field, "0");
+                        }
+                    } else {
+                        properties.put(field, BeanUtils.getProperty(entity,field));
+                    }
                 }
             }
         } catch (Exception e) {
