@@ -92,8 +92,8 @@
                 <label for="layer" class="col-xs-12 col-sm-4 control-label">Layer</label>
 
                 <div class="col-xs-12 col-sm-4">
-                    <select id="layer" ng-options="size as size.name for size in sizes"
-                            ng-model="item" ng-change="updateChangeLayer()"></select>
+                    <select id="layer" ng-options="size as size.name for size in layers"
+                            ng-model="layer" ng-change="updateChangeLayer()"></select>
                     <label for="storeTrip" class=" control-label">Store Trip</label> <input id="storeTrip" type="checkbox" ng-model="formModel.storedTrips">
                 </div>
             </div>
