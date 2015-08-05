@@ -95,6 +95,15 @@ public class TrackerData implements Subject {
         return result;
     }
 
+    private void updateLayerReference(Tracker oldTracker, Tracker newTracker) {
+        if(!StringUtils.trimToEmpty(oldTracker.getLayerId()).equals(StringUtils.trimToEmpty(newTracker.getLayerId()))) {
+            getTrackerLayer(oldTracker.getLayerId()).removeTracker(oldTracker);
+            getTrackerLayer(newTracker.getLayerId()).addTracker(oldTracker);
+            oldTracker.setLayerId(newTracker.getLayerId());
+        }
+    }
+
+
     private void update(Tracker oldTracker, Tracker newTracker) {
         
     	oldTracker.setName(newTracker.getName());
@@ -108,6 +117,8 @@ public class TrackerData implements Subject {
         oldTracker.setOwner(newTracker.getOwner());
         oldTracker.setSimPhone(newTracker.getSimPhone());
         oldTracker.setModifiedDate(new Date());
+
+        updateLayerReference(oldTracker,newTracker);
     }
 
     public Tracker update(Tracker newTracker) {
