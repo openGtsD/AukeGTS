@@ -3,7 +3,6 @@
 
 angular.module('aukeGTS').controller('HomeCtrl', ['$scope', '$stateParams', '$timeout', '$interval', 'MapService', function ($scope, $stateParams, $timeout, $interval, MapService) {
     var service = MapService.mapAPI;
-
     $scope.markers = [];
     $scope.layers = service.getLayers();
 
@@ -24,7 +23,7 @@ angular.module('aukeGTS').controller('HomeCtrl', ['$scope', '$stateParams', '$ti
     }
 
     $scope.map = MapService.map;
-    $scope.showMarkers(2000);
+    $scope.showMarkers(1000);
 
     var promise = undefined;
     $scope.stop = function() {
@@ -58,4 +57,5 @@ angular.module('aukeGTS').controller('HomeCtrl', ['$scope', '$stateParams', '$ti
     $scope.$on('$destroy', function() {
         $scope.stop();
     });
+
 }]);

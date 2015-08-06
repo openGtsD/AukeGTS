@@ -44,6 +44,16 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
             }
         ];
     }
+
+    mapAPI.getShowTrip = function() {
+        return  mapAPI.showTrip;
+    }
+
+    mapAPI.setShowTrip = function(value) {
+        mapAPI.showTrip = value;
+    }
+
+
     mapAPI.loadDroneWithinCurrentView = function () {
         var map = mapAPI.map;
         var mapBound = map.getBounds();
@@ -116,6 +126,7 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
             altitude: tracker.currentPosition.altitude,
             time: new Date(tracker.currentPosition.time * 1000),
             speed: tracker.currentPosition.speed
+
         }
 
         return marker;
@@ -141,12 +152,15 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
         marker: {},
         show: false,
         closeClick: function () {
+            mapAPI.setShowTrip(false);
             this.show = false;
         },
         options: {} // define when map is ready
     };
     mapAPI.layer = '';
     mapAPI.map = '';
+    mapAPI.showTrip = false;
+
 
     mapAPI.init = function () {
         return {
@@ -187,12 +201,12 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
                     zoom_changed: function (maps, eventName, args) {
                         mapAPI.map = maps;
                         mapAPI.window.show = false;
+                        mapAPI.setShowTrip(false);
                         mapAPI.loadDroneWithinCurrentView();
 
                     },
                     idle: function (maps, eventName, args) {
                         mapAPI.map = maps;
-
                         mapAPI.loadDroneWithinCurrentView();
                     }
                 },
