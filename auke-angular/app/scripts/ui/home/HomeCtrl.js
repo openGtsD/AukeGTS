@@ -24,7 +24,7 @@ angular.module('aukeGTS').controller('HomeCtrl', ['$scope', '$stateParams', '$ti
     }
 
     $scope.map = MapService.map;
-    $scope.showMarkers(1000);
+    $scope.showMarkers(2000);
 
     var promise = undefined;
     $scope.stop = function() {
