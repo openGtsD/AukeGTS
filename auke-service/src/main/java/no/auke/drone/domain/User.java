@@ -1,12 +1,17 @@
 package no.auke.drone.domain;
 
+import no.auke.drone.annotation.Column;
+
 public class User {
     @ID
+    @Column
     private String id;
 
     @ID
+    @Column
     private String username;
 
+    @Column
     private String password;
 
     public User() {

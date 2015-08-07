@@ -1,25 +1,40 @@
 package no.auke.drone.domain;
 
+import no.auke.drone.annotation.Column;
+
 /**
  * Created by huyduong on 4/20/2015.
  */
 public class EventData {
     @ID
+    @Column
     private String accountID;
 
     @ID
+    @Column
     private String deviceID;
 
     @ID
+    @Column
     private Integer statusCode;
 
     @ID
+    @Column
     private Integer timestamp;
 
+    @Column
     private double latitude;
+
+    @Column
     private double longitude;
+
+    @Column
     private double altitude;
+
+    @Column
     private double heading;
+
+    @Column
     private Long creationTime;
 
     public EventData() {

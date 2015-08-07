@@ -4,13 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import no.auke.drone.annotation.Column;
+import no.auke.drone.domain.ID;
 import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.utils.ByteUtil;
 
 public class Trip {
-	
-	private UUID tripId;
+    @ID
+	@Column
+	private UUID id;
+
+    @Column
 	private String trackerId;	
 	
 
@@ -20,12 +25,12 @@ public class Trip {
 		return tracker;
 	}	
 	
-	public String getTripId() {
-		return tripId.toString();
+	public String getId() {
+		return id.toString();
 	}
 
-	public void setTripId(String tripId) {
-		this.tripId = UUID.fromString(tripId);
+	public void setId(String id) {
+		this.id = UUID.fromString(id);
 	}
 
 	public String getTrackerId() {
@@ -35,6 +40,8 @@ public class Trip {
 	public void setTrackerId(String trackerId) {
 		this.trackerId = trackerId;
 	}
+
+    public Trip(){};
 
 	public long getStartTime() {
 		
@@ -128,12 +135,12 @@ public class Trip {
 	public Trip(Tracker tracker) {
 		this.trackerId=tracker.getId();
 		this.tracker=tracker;
-		tripId=UUID.randomUUID();
+		id =UUID.randomUUID();
 	}
 	
 	public Trip(String trackerId, String tripid) {
 		this.trackerId=trackerId;
-		this.tripId=UUID.fromString(tripid);
+		this.id =UUID.fromString(tripid);
 	}	
 	
 	

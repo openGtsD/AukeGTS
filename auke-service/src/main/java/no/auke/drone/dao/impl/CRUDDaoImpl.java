@@ -1,5 +1,6 @@
 package no.auke.drone.dao.impl;
 
+import no.auke.drone.annotation.Column;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.dao.QueryBuilder;
 import no.auke.drone.domain.ID;
@@ -62,9 +63,11 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         return persistentClass;
     }
 
+
+
     private List<String> getIdFields() {
         List<String> ids = new ArrayList<>();
-        Field[] fields = getPersistentClass().getDeclaredFields();
+        Field[] fields = ReflectionUtils.getAllColumnFields(getPersistentClass());
         for(Field field : fields) {
             if(field.isAnnotationPresent(ID.class)) {
                 ids.add(field.getName());
@@ -74,7 +77,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     }
 
     private String[] getFieldNames(T entity, String prefix) {
-        Field[] fields = entity.getClass().getDeclaredFields();
+        Field[] fields = ReflectionUtils.getAllColumnFields(entity.getClass());
         String[] str = new String[fields.length];
         for(int i = 0; i < fields.length; i++) {
             str[i] = prefix + fields[i].getName();
@@ -97,17 +100,17 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     private Object[] prepareParameter(T entity) {
         Object[] parameters = null;
         try {
-            Field[] fields = entity.getClass().getDeclaredFields();
+            Field[] fields = ReflectionUtils.getAllColumnFields(entity.getClass());
             parameters = new Object[fields.length];
             for(int i = 0; i < fields.length; i++) {
-                parameters[i] = BeanUtils.getProperty(entity,fields[i].getName());
-                if(fields[i].getType().equals(boolean.class)) {
-                    if(parameters[i].equals(Boolean.TRUE.toString())) {
-                        parameters[i] = "1";
-                    } else {
-                        parameters[i] = "0";
+                    parameters[i] = BeanUtils.getProperty(entity,fields[i].getName());
+                    if(fields[i].getType().equals(boolean.class)) {
+                        if(parameters[i].equals(Boolean.TRUE.toString())) {
+                            parameters[i] = "1";
+                        } else {
+                            parameters[i] = "0";
+                        }
                     }
-                }
             }
         } catch (Exception e) {
             logger.error(e.toString());

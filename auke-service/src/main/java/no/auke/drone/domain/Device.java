@@ -1,5 +1,6 @@
 package no.auke.drone.domain;
 
+import no.auke.drone.annotation.Column;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -10,23 +11,34 @@ import org.apache.commons.lang.StringUtils;
 
 public class Device {
     @ID
+    @Column
     private String deviceID;
+
+    @Column
     private String accountID;
 
+    @Column
     private String description;
 
+    @Column
     private String simPhoneNumber;
 
+    @Column
     private String uniqueID;
 
+    @Column
     private String imeiNumber;
 
+    @Column
     private Integer isActive;
 
+    @Column
     private Double lastValidLatitude;
 
+    @Column
     private Double lastValidLongitude;
 
+    @Column
     private Double lastValidHeading;
 
 //    private long lastUpdateTime;

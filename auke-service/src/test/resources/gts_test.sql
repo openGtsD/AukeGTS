@@ -158,6 +158,8 @@ CREATE TABLE `User` (
 
 CREATE TABLE `person` (
   `id` varchar(100) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(100) NOT NULL,
   `phone` varchar(100) ,
   `email` varchar(100) ,
   `IM` varchar(100) ,
@@ -177,5 +179,21 @@ CREATE TABLE `TrackerDB` (
   `lastUsed` int(10) unsigned DEFAULT NULL,
   `active` tinyint(4) DEFAULT NULL,
   `storedTrips` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `TripInfo` (
+  `id` varchar(100) NOT NULL,
+  `trackerId` varchar(100) NOT NULL,
+  `trackerName` varchar(100) ,
+  `owner` varchar(100) ,
+  `contactInfo` varchar(100) ,
+  `trackerType` varchar(100) ,
+  `tripName` varchar(100) ,
+  `country` varchar(100) ,
+  `city` varchar(100) ,
+  `description` varchar(100) ,
+  `isPublic` tinyint(4) DEFAULT NULL,
+  `byteRoute` BLOB,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

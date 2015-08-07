@@ -103,6 +103,8 @@ public class UserServiceTest extends AbstractIntegrationTest {
     public void testCreatePerson() {
         Person person = new Person();
         person.setId(UUID.randomUUID().toString());
+        person.setUsername("person");
+        person.setPassword("password");
 
         person.setEmail("test@test.com");
         person.setIM("skype:12345");
@@ -121,6 +123,8 @@ public class UserServiceTest extends AbstractIntegrationTest {
     public void testUpdatePerson() {
         Person person = new Person();
         person.setId(UUID.randomUUID().toString());
+        person.setUsername("person");
+        person.setPassword("password");
 
         person.setEmail("test@test.com");
         person.setIM("skype:12345");
@@ -143,6 +147,8 @@ public class UserServiceTest extends AbstractIntegrationTest {
     public void testGetPerson() {
         Person person = new Person();
         person.setId(UUID.randomUUID().toString());
+        person.setUsername("person");
+        person.setPassword("password");
 
         person.setEmail("test@test.com");
         person.setIM("skype:12345");
@@ -161,7 +167,8 @@ public class UserServiceTest extends AbstractIntegrationTest {
     public void testDeletePerson() {
         Person person = new Person();
         person.setId(UUID.randomUUID().toString());
-
+        person.setUsername("person");
+        person.setPassword("password");
         person.setEmail("test@test.com");
         person.setIM("skype:12345");
         person.setPhone("550-55-550");

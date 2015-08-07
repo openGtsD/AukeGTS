@@ -1,5 +1,6 @@
 package no.auke.drone.entity;
 
+import no.auke.drone.annotation.Column;
 import no.auke.drone.domain.ID;
 import no.auke.drone.domain.Tracker;
 
@@ -11,26 +12,37 @@ import java.util.Date;
 public class TrackerDB {
 
     @ID
+    @Column
     private String id;
 
+    @Column
     private String name;
 
+    @Column
     private String description;
 
+    @Column
     private String contactInfo;
 
+    @Column
     private String owner;
 
+    @Column
     private String layer;
 
+    @Column
     private Long createDate;
 
+    @Column
     private Long modifiedDate;
 
+    @Column
     private Long lastUsed;
 
+    @Column
     private boolean storedTrips = true; // default value
 
+    @Column
     private boolean active = true; // default value
 
     public String getId() {

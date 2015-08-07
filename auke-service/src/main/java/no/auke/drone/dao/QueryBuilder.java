@@ -1,5 +1,6 @@
 package no.auke.drone.dao;
 
+import no.auke.drone.dao.impl.ReflectionUtils;
 import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Field;
@@ -28,7 +29,7 @@ public class QueryBuilder {
     }
 
     private String[] getFieldNames(Object entity, String prefix) {
-        Field[] fields = entity.getClass().getDeclaredFields();
+        Field[] fields = ReflectionUtils.getAllColumnFields(entity.getClass());
         String[] str = new String[fields.length];
         for(int i = 0; i < fields.length; i++) {
             str[i] = prefix + fields[i].getName();
@@ -73,7 +74,7 @@ public class QueryBuilder {
         sb.append("INSERT INTO ");
         sb.append(entity.getClass().getSimpleName());
         sb.append(" (");
-        Field[] fields = entity.getClass().getDeclaredFields();
+        Field[] fields = ReflectionUtils.getAllColumnFields(entity.getClass());
         sb.append(StringUtils.join(getFieldNames(entity,""),","));
         sb.append(") ");
         sb.append("VALUES (");

@@ -10,7 +10,7 @@ import java.util.List;
  * Created by huyduong on 6/14/2015.
  */
 public interface TripService {
-    void saveTrip(AbstractTrackerBase tracker);
+    void saveTrip(Tracker tracker);
     List<TripInfo> getLatestTrips();
     void deleteTrip(TripInfo trip);
     List<TripInfo> getTripsByTrackerId(String trackerId);

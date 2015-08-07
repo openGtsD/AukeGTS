@@ -1,136 +1,123 @@
 package no.auke.drone.services;
 
 import junit.framework.Assert;
+import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
-import no.auke.drone.dao.impl.CRUDDaoImpl;
 import no.auke.drone.domain.MapPoint;
+import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.test.AbstractIntegrationTest;
+import no.auke.drone.domain.trips.TripInfo;
 import no.auke.drone.utils.PointUtil;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by huyduong on 6/16/2015.
  */
-@Ignore
 public class TripServiceTest extends AbstractIntegrationTest {
     @Autowired
     private TripService tripService;
 
     @Autowired
-    private CRUDDao<MapPoint> mapPointCRUDDao;
+    private CRUDDao<TripInfo> tripInfoCRUDDao;
+
+    @Autowired
+    private SimpleTrackerFactory simpleTrackerFactory;
+
+    private final String TRACKER_ID = "trackerID";
+    private final String TRACKER_NAME = "trackerName";
+
 
     @Before
     public void init() {
-        mapPointCRUDDao.setPersistentClass(MapPoint.class);
-        mapPointCRUDDao.deleteAll();
+        tripInfoCRUDDao.setPersistentClass(TripInfo.class);
+        tripInfoCRUDDao.deleteAll();
+    }
+
+    @After
+    public void tearDown() {
+        tripInfoCRUDDao.deleteAll();
     }
 
     @Test
     public void testCreateTrip() {
-        MapPoint mapPoint = PointUtil.generateRandomMapPoint(new MapPoint());
-        // tripService.saveTrip(mapPoint);
+        Tracker tracker = simpleTrackerFactory.create(TRACKER_ID,TRACKER_NAME);
+        tracker.setActive(true);
 
-        List<MapPoint> mapPoints = mapPointCRUDDao.getAll();
-        Assert.assertEquals(1,mapPoints.size());
-        
-        Assert.fail();
-        
+        MapPoint mapPoint1 = PointUtil.generateRandomMapPoint(new MapPoint());
+        MapPoint mapPoint2 = PointUtil.generateRandomMapPoint(new MapPoint());
+
+        tracker.getPositions().add(mapPoint1);
+        tracker.getPositions().add(mapPoint2);
+
+        tripService.saveTrip(tracker);
+
+        List<TripInfo> tripInfos = tripInfoCRUDDao.getAll();
+        Assert.assertEquals(1,tripInfos.size());
     }
 
     @Test
     public void testDeleteTrip() {
-        MapPoint mapPoint = PointUtil.generateRandomMapPoint(new MapPoint());
-        mapPoint.setId("1234");
-        // tripService.saveTrip(mapPoint);
+        Tracker tracker = simpleTrackerFactory.create(TRACKER_ID,TRACKER_NAME);
+        tracker.setActive(true);
 
-        List<MapPoint> mapPoints = mapPointCRUDDao.getAll();
-        Assert.assertEquals(1,mapPoints.size());
+        MapPoint mapPoint1 = PointUtil.generateRandomMapPoint(new MapPoint());
+        MapPoint mapPoint2 = PointUtil.generateRandomMapPoint(new MapPoint());
 
-        //tripService.deleteTrip(mapPoint);
+        tracker.getPositions().add(mapPoint1);
+        tracker.getPositions().add(mapPoint2);
 
-        mapPoints = mapPointCRUDDao.getAll();
-        Assert.assertEquals(0,mapPoints.size());
-        
-        Assert.fail();
-        
+        tripService.saveTrip(tracker);
+
+        List<TripInfo> tripInfos = tripInfoCRUDDao.getAll();
+        Assert.assertEquals(1,tripInfos.size());
+
+        tripService.deleteTrip(tripInfos.get(0));
+
+        tripInfos = tripInfoCRUDDao.getAll();
+        Assert.assertEquals(0,tripInfos.size());
+    }
+
+    @Test
+    public void testDeleteTripByTrackerId() {
+        Tracker tracker = simpleTrackerFactory.create(TRACKER_ID,TRACKER_NAME);
+        tracker.setActive(true);
+
+        MapPoint mapPoint1 = PointUtil.generateRandomMapPoint(new MapPoint());
+        MapPoint mapPoint2 = PointUtil.generateRandomMapPoint(new MapPoint());
+
+        tracker.getPositions().add(mapPoint1);
+        tracker.getPositions().add(mapPoint2);
+
+        tripService.saveTrip(tracker);
+
+        List<TripInfo> tripInfos = tripInfoCRUDDao.getAll();
+        Assert.assertEquals(1,tripInfos.size());
+
+        tripService.deleteTripsByTrackerId(TRACKER_ID);
+
+        tripInfos = tripInfoCRUDDao.getAll();
+        Assert.assertEquals(0,tripInfos.size());
     }
 
     @Test
     public void testGetLatestTrips() {
-        for(int i = 0; i < 10; i++) {
-            MapPoint mapPoint = PointUtil.generateRandomMapPoint(new MapPoint());
-            mapPoint.setId(UUID.randomUUID().toString());
-            // tripService.saveTrip(mapPoint);
 
-        }
-
-        List<MapPoint> mapPoints = mapPointCRUDDao.getAll();
-        Assert.assertEquals(10,mapPoints.size());
-
-        //mapPoints = tripService.getLatestTrips();
-        Assert.assertEquals(5,mapPoints.size());
-        
-        Assert.fail();
         
     }
 
     @Test
     public void testGetTripsByTrackerId() {
-        for(int i = 0; i < 10; i++) {
-            MapPoint mapPoint = PointUtil.generateRandomMapPoint(new MapPoint());
-            mapPoint.setId(UUID.randomUUID().toString());
-            mapPoint.setTrackerId(String.valueOf(i));
-            
-            // tripService.saveTrip(mapPoint);
 
-            MapPoint mapPoint2 = PointUtil.generateRandomMapPoint(new MapPoint());
-            mapPoint2.setId(UUID.randomUUID().toString());
-            mapPoint2.setTrackerId(String.valueOf(i));
-            // tripService.saveTrip(mapPoint2);
-        }
-
-        List<MapPoint> mapPoints = mapPointCRUDDao.getAll();
-        Assert.assertEquals(20,mapPoints.size());
-
-        for(int i = 0; i < 10; i++) {
-            //mapPoints = tripService.getTripsByTrackerId(String.valueOf(i));
-            Assert.assertEquals(2,mapPoints.size());
-        }
-        
-        Assert.fail();
         
     }
 
     @Test
     public void testDeleteTripsByTrackerId() {
-        for(int i = 0; i < 10; i++) {
-            MapPoint mapPoint = PointUtil.generateRandomMapPoint(new MapPoint());
-            mapPoint.setId(UUID.randomUUID().toString());
-            mapPoint.setTrackerId(String.valueOf(i));
-            // tripService.saveTrip(mapPoint);
 
-            MapPoint mapPoint2 = PointUtil.generateRandomMapPoint(new MapPoint());
-            mapPoint2.setId(UUID.randomUUID().toString());
-            mapPoint2.setTrackerId(String.valueOf(i));
-            // tripService.saveTrip(mapPoint2);
-            
-            Assert.fail();
-            
-        }
-
-        List<MapPoint> mapPoints = mapPointCRUDDao.getAll();
-        Assert.assertEquals(20,mapPoints.size());
-
-        for(int i = 0; i < 10; i++) {
-            tripService.deleteTripsByTrackerId(String.valueOf(i));
-            //mapPoints = tripService.getTripsByTrackerId(String.valueOf(i));
-            Assert.assertEquals(0,mapPoints.size());
-        }
     }
 }

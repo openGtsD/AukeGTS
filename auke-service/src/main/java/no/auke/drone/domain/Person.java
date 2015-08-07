@@ -1,21 +1,13 @@
 package no.auke.drone.domain;
 
+import no.auke.drone.annotation.Column;
+
 public class Person extends User{
-    @ID
-    private String id;
-    
+    @Column
     private String phone, email, IM;
     
     public Person(){
         
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getPhone() {
