@@ -1,0 +1,28 @@
+<div class="itin-window" ng-controller="TripController">
+    <div ng-hide="isShowTrip">
+        <strong>Tracker Information</strong><button ng-click="showTrips(true, parameter)" class="btn btn-primary">Show Trips</button>
+        <hr>
+        <div layout="row">
+            <ul>
+                <li>Name: <span class='highlight'> {{ parameter.name }}</span></li>
+                <li>GPS: <span class='highlight'> {{ parameter.latitude + " / " + parameter.longitude }}</span></li>
+                <li>Altitude: <span class='highlight'> {{ parameter.altitude }}</span></li>
+                <li>Moving: <span class='highlight'> {{ parameter.moving }}</span></li>
+                <li>Speed: <span class='highlight'> {{ parameter.speed }}</span></li>
+                <li>Time: <span class='highlight'> {{ parameter.time }}</span></li>
+            </ul>
+
+        </div>
+    </div>
+    <div ng-hide="!isShowTrip" class="gmap-popup">
+        <strong>Trips Information</strong><button ng-click="showTrips(false, parameter)" class="btn btn-primary">Back</button>
+        <hr>
+        <ui-gmap-google-map center="map2.center"
+                            zoom="map2.zoom"
+                            events="map2.events"
+                            options="map2.options" bounds="map2.bounds">
+        </ui-gmap-google-map>
+    </div>
+
+
+</div>

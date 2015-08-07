@@ -34,7 +34,7 @@ gulp.task('default', ['build'], function() {
     },
     logConnections: true,
     browser: 'default',
-    port: 8888
+    port: 8081
   });
   gulp.watch(['*.html', 'assets/**/*.css', 'app/**/*.js', 'app/**/*.css', 'app/**/*.html'], ['build-watch']);
 });

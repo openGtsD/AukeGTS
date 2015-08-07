@@ -56,7 +56,6 @@ angular.module('aukeGTS').controller('TrackerCtrl', ['$scope', 'TrackerService',
         });
     }
 
-
     $scope.updateTracker = function (mode) {
         $scope.error = "";
         $scope.proccessing = true;

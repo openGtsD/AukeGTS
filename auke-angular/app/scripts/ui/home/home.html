@@ -1,17 +1,19 @@
 <div>Select Layer
     <select ng-options="size as size.name for size in layers"
             ng-model="layer" ng-change="update()"></select>
-    Zoom Factory <span id="zoomId" style="color: red"></span>  - Number <span id="type"></span> in current view is <span id="trackerNumber" style="color: red"></span>
+    Zoom Factory <span id="zoomId" style="color: red"></span> - Number <span id="type"></span> in current view is <span
+            id="trackerNumber" style="color: red"></span>
 </div>
 
 <ui-gmap-google-map center="map.center"
                     zoom="map.zoom"
                     events="map.events"
                     options="map.options" bounds="map.bounds">
-    <!--<ui-gmap-window show="map.window.show" coords="map.window.model" options="map.window.options" closeclick="map.window.closeClick()">-->
-        <!--<div ng-non-bindable="">test</div>-->
-    <!--</ui-gmap-window>-->
+    <ui-gmap-window show="map.window.show" templateUrl="map.templateUrl" templateParameter="map.templateParameter(map.window.model)" coords="map.window.model"
+                    options="map.window.options" closeclick="map.window.closeClick()">
+    </ui-gmap-window>
 
-    <ui-gmap-markers models="markers" coords="'self'" icon="'icon'" doCluster="true" events="map.markersEvents" options="'options'">
+    <ui-gmap-markers models="markers" coords="'self'" icon="'icon'" doCluster="true" events="map.markersEvents"
+                     options="'options'">
     </ui-gmap-markers>
 </ui-gmap-google-map>

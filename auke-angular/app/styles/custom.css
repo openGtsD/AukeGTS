@@ -16,6 +16,11 @@
     border: solid 1px #654;
 }
 
+.gmap-popup {
+    height: 300px !important;
+    width: 300px !important;
+}
+
 .css-form input.ng-invalid.ng-touched {
     background-color: red;
 }
