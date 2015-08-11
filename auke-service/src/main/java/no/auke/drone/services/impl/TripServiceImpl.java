@@ -1,7 +1,11 @@
 package no.auke.drone.services.impl;
 
+import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.PostConstruct;
+
 import no.auke.drone.dao.CRUDDao;
-import no.auke.drone.domain.AbstractTrackerBase;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.trips.Trip;
 import no.auke.drone.domain.trips.TripInfo;
@@ -9,11 +13,6 @@ import no.auke.drone.services.TripService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-
-import java.util.List;
-import java.util.Properties;
 
 /**
  * Created by huyduong on 6/14/2015.

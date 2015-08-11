@@ -23,8 +23,8 @@ public class SimpleTracker extends AbstractTrackerBase {
     	super();
     }
 
-    public SimpleTracker(String id) {
-    	super(id);
+    public SimpleTracker(String id, String name) {
+    	super(id, name);
     }
     
     // LHA:

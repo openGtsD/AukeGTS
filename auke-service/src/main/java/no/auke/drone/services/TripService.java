@@ -1,10 +1,9 @@
 package no.auke.drone.services;
 
-import no.auke.drone.domain.AbstractTrackerBase;
+import java.util.List;
+
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.trips.TripInfo;
-
-import java.util.List;
 
 /**
  * Created by huyduong on 6/14/2015.

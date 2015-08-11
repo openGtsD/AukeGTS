@@ -1,11 +1,9 @@
 package no.auke.drone.domain;
 
-import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
 import no.auke.drone.application.TrackerUpdater;
-import no.auke.drone.services.TripService;
 
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 

@@ -1,24 +1,28 @@
 package no.auke.drone.services;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Collection;
+
 import junit.framework.Assert;
 import no.auke.drone.dao.CRUDDao;
-import no.auke.drone.domain.*;
+import no.auke.drone.domain.BoundingBox;
+import no.auke.drone.domain.Device;
+import no.auke.drone.domain.SimpleTracker;
+import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.TrackerData;
+import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.domain.test.AbstractIntegrationTest;
-
 import no.auke.drone.entity.TrackerDB;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-import static org.powermock.api.mockito.PowerMockito.when;
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.spy;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Collection;
 
 
 public class TrackerServiceTest extends AbstractIntegrationTest {
@@ -31,9 +35,13 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 
     @Autowired
     CRUDDao<TrackerDB> trackerDBCRUDDao;
+    
+    private Tracker simpleTracker, simpleTracker2;
 	
 	@Before
 	public void setUp() throws Exception {
+	    simpleTracker =  new SimpleTracker("1", "");
+	    simpleTracker2 =  new SimpleTracker("2", "");
         deviceCRUDDao.setPersistentClass(Device.class);
         deviceCRUDDao.deleteAll();
 
@@ -53,10 +61,8 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 	@Test
 	public void test_register() {
 
-		service.registerTracker("1", "");
-		service.registerTracker("1", "");
-		service.registerTracker("2", "");
-		service.registerTracker("3", "");
+		service.registerTracker(simpleTracker);
+		service.registerTracker(simpleTracker2);
 
 		assertEquals(3,service.getAll(Tracker.TrackerType.REAL.toString()).size());
         assertEquals(3,service.getActiveTrackers(Tracker.TrackerType.REAL.toString()).size());
@@ -67,7 +73,7 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 	@Test
 	public void test_remove() {
 
-		service.registerTracker("1", "");
+		service.registerTracker(simpleTracker);
         assertEquals(1,service.getAll(Tracker.TrackerType.REAL.toString()).size());
 
         assertEquals(1,service.getActiveTrackers(Tracker.TrackerType.REAL.toString()).size());
@@ -84,14 +90,14 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 	@Test
 	public void test_gettracker() {
 
-		service.registerTracker("1", "");
+		service.registerTracker(simpleTracker);
 		assertNotNull(service.getTracker("1"));
     }
 	
 	@Test
 	public void test_start_stop() {
 
-		service.registerTracker("1", "");
+		service.registerTracker(simpleTracker);
 		assertTrue(service.getTracker("1").isMoving());
 		
 		service.stop("1");
@@ -104,8 +110,8 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 	@Test
 	public void test_calulateAll_DEFAULT() {
 
-		service.registerTracker("1", "");
-		service.registerTracker("2", "");
+		service.registerTracker(simpleTracker);
+		service.registerTracker(simpleTracker2);
 		
 		service.calculateAll();
 		
@@ -122,9 +128,9 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 	
 	@Test
 	public void test_loadWithinView_DEFAULT() {
-        service.registerTracker("1", "");
+        service.registerTracker(simpleTracker);
 
-        service.registerTracker("2", "");
+        service.registerTracker(simpleTracker2);
 
 		assertEquals(1,service.loadWithinView(new BoundingBox(-90,-180,90,180), 1, Tracker.TrackerType.REAL.toString()).size());
 		assertEquals(2,service.loadWithinView(new BoundingBox(-90,-180,90,180), 20, Tracker.TrackerType.REAL.toString()).size());

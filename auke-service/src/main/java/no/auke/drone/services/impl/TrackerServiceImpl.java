@@ -118,14 +118,6 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public Tracker registerTracker(String id, String name) {
-        Tracker tracker = new SimpleTracker();
-        tracker.setId(id);
-        tracker.setName(name);
-        return registerTracker(new SimpleTrackerFactory().create(tracker));
-    }
-
-    @Override
     public Collection<Tracker> removeAll(String layerId) {
         Collection<Tracker> trackers = getAll(layerId);
         for (Tracker tracker : trackers) {

@@ -6,10 +6,10 @@ jdbc:
     drone:
         driver: com.mysql.jdbc.Driver
         url: "jdbc:mysql://localhost:3306/gts"
-        username: gts2
-        password: opengts
-        #username: root
-        #password: root
+        #username: gts2
+        #password: opengts
+        username: root
+        password: root
 
 http:
     port: 8888

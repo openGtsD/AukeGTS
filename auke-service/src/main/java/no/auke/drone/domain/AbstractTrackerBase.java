@@ -32,8 +32,8 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     protected ReentrantLock block = new ReentrantLock();
 
-    // Thai Huynh: Some fields need update tracker
     private String id;
+    
     private String layerId;
 
     protected TrackerUpdater trackerUpdater;
@@ -44,8 +44,6 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
     private CircularFifoBuffer latestPositions;
 
     private String owner;
-
-    private Person flyer;
 
     private String name;
 
@@ -79,9 +77,10 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
         latestPositions = new CircularFifoBuffer(5); // HUY: temporary set the latest positions at 5, will update it with parameter
     }
 
-    public AbstractTrackerBase(String id) {
+    public AbstractTrackerBase(String id, String name) {
         this();
         this.id = id;
+        this.name = name;
     }
 
     @Override

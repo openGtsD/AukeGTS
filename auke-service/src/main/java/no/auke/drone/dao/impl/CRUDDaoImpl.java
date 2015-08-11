@@ -1,23 +1,26 @@
 package no.auke.drone.dao.impl;
 
-import no.auke.drone.annotation.Column;
+import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
+
+import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.dao.QueryBuilder;
 import no.auke.drone.domain.ID;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import javax.annotation.PostConstruct;
-
-import javax.sql.DataSource;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.*;
 
 /**
  * Created by huyduong on 4/19/2015.
