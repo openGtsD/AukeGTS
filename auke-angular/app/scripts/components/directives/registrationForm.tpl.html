@@ -15,7 +15,7 @@
                 </div>
             </div>
 
-            <div class="form-group" ng-hide="mode == 'delete'">
+            <div class="form-group" ng-hide="mode == 'delete' || mode == 'update' || mode == 'load'">
                 <label for="agentType" class="col-xs-12 col-sm-4 control-label">Agent Type</label>
                 <div class="col-xs-12 col-sm-4">
                     <select id="agentType" ng-options="type as type.name for type in agentTypes"

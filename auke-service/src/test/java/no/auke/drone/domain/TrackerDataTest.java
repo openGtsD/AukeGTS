@@ -88,7 +88,7 @@ public class TrackerDataTest {
 		TrackerLayer layer = TrackerData.getInstance().getTrackerLayer("DEFAULT");
 		layer.setRunningAutomatically(false);
 		
-		TrackerData.getInstance().register((Observer) new SimpleTrackerFactory().create("drone1", "my tracker"));
+//		TrackerData.getInstance().register((Observer) new SimpleTrackerFactory().create("drone1", "my tracker"));
 		
 		assertNotNull(layer);
 		assertEquals(1,layer.getActiveTrackers().size());

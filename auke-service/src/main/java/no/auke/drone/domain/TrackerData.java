@@ -124,7 +124,7 @@ public class TrackerData implements Subject {
     public Tracker update(Tracker newTracker) {
     	Tracker tracker = getTracker(newTracker.getId());
     	if(tracker == null) {
-    	    tracker = new SimpleTrackerFactory().create(newTracker.getId(), newTracker.getName());
+    	    tracker = new SimpleTrackerFactory().create(newTracker);
             TrackerData.getInstance().register((Observer) tracker);
     	}
     	

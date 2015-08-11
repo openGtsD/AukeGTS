@@ -31,43 +31,10 @@ public class TrackerController {
     @Autowired
     private TrackerService trackerService;
     @Autowired
-    private CRUDDao<Device> crudDeviceDao;
-    @Autowired
-    private CRUDDao<EventData> crudEventDao;
-    @Autowired
     private EventService eventService;
-    @Autowired
-    private ZoomLayerService zoomLayerService;
 
     private static final Logger logger = LoggerFactory.getLogger(TrackerController.class);
 
-    @PostConstruct
-    public void init() {
-        crudEventDao.setPersistentClass(EventData.class);
-        crudDeviceDao.setPersistentClass(Device.class);
-    }
-
-    @GET
-    @Path("/get-all/{type:.*}")
-    public AukeResponse getAll(@PathParam("type") String trackerType) {
-        Collection<Tracker> trackers = trackerService.getAll(trackerType);
-        return new AukeResponse(trackers != null, trackers);
-    }
-
-    @GET
-    @Path("/start/{id}")
-    public AukeResponse start(@PathParam("id") String id) {
-        Tracker tracker = trackerService.start(id);
-        return new AukeResponse(tracker != null, tracker);
-    }
-
-    @GET
-    @Path("/stop/{id}")
-    public AukeResponse stop(@PathParam("id") String id) {
-        Tracker tracker = trackerService.stop(id);
-        return new AukeResponse(tracker != null, tracker);
-    }
-    
     @POST
     @Path("/load-drone-in-view/{layerId}/{zoom}")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -84,6 +51,7 @@ public class TrackerController {
     // Event service only hold current event for all trackers active
     // To get history, it should be stored on the tracker
     
+    // THAI: just only debugs real tracker send position correct ?
     @GET
     @Path("/get-event")
     public AukeResponse getEvent(@QueryParam("accountID")String accountID, @QueryParam("deviceID")String deviceID) {
@@ -103,16 +71,7 @@ public class TrackerController {
     }
     
     @POST
-    @Path("/register/{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse register(@PathParam("id")String id) {
-        Tracker newTracker = trackerService.registerTracker(id, "");
-        AukeResponse response = new AukeResponse(newTracker != null, newTracker);
-        return response;
-    }
-
-    @POST
-    @Path("/registertk")
+    @Path("/register")
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse registerTracker(SimpleTracker tracker) {
         Tracker newTracker = trackerService.registerTracker(tracker);
@@ -121,7 +80,7 @@ public class TrackerController {
     }
 
     @POST
-    @Path("/remove/{id}")
+    @Path("/delete/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse remove(@PathParam("id") String id) {
         Tracker tracker = trackerService.remove(id);
@@ -134,21 +93,6 @@ public class TrackerController {
     public AukeResponse getTracker(@PathParam("id") String id) {
         Tracker tracker = trackerService.getTracker(id);
         return new AukeResponse(tracker != null, tracker);
-    }
-    
-    @GET
-    @Path("/get-included-tracker/{id}/{layerId}/{zoom}")
-    public AukeResponse getIncludedTrackers(@PathParam("id") String id, @PathParam("layerId")String layerId, @PathParam("zoom")Integer zoom) {
-        Collection<String> trackers = trackerService.getTrackerLayer(layerId).getZoomLayer(zoom).getIncludedTrackers(id);
-        return new AukeResponse(!CollectionUtils.isEmpty(trackers), trackers);
-    }
-
-    @GET
-    @Path("/get-trackers/{ids}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse getTrackersByIds(@PathParam("ids") List<String> ids) {
-        Collection<Tracker> trackers = trackerService.getTrackersByIds(ids);
-        return new AukeResponse(trackers != null, trackers);
     }
     
     @POST
@@ -168,34 +112,4 @@ public class TrackerController {
         return new AukeResponse(layerName != null, layerName);
     }
 
-    @GET
-    @Path("/layers")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse getTrackerLayers() {
-        Collection<TrackerLayer> layers = trackerService.getTrackerLayers();
-        List<String> result = new ArrayList<>();
-        for(TrackerLayer trackerLayer : layers) {
-            result.add(trackerLayer.getLayerName());
-        }
-        return new AukeResponse(result != null, result);
-    }
-
-    @GET
-    @Path("/updatetest")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse update(@QueryParam("id")String id) {
-        Tracker tracker = trackerService.getTracker(id);
-        Tracker newTracker = trackerService.update(tracker);
-        AukeResponse response = new AukeResponse(newTracker != null, newTracker);
-        return response;
-    }
-
-    @GET
-    @Path("/deletetest")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public AukeResponse delete(@QueryParam("id")String id) {
-        Tracker newTracker = trackerService.remove(id);
-        AukeResponse response = new AukeResponse(newTracker != null, newTracker);
-        return response;
-    }
 }

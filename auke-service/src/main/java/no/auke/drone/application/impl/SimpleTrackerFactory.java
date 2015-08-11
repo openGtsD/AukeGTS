@@ -2,12 +2,14 @@ package no.auke.drone.application.impl;
 
 import java.util.Date;
 
-import no.auke.drone.application.TrackerUpdater;
 import no.auke.drone.application.TrackerFactory;
-import no.auke.drone.domain.*;
-
+import no.auke.drone.application.TrackerUpdater;
+import no.auke.drone.domain.Device;
+import no.auke.drone.domain.MapPoint;
+import no.auke.drone.domain.SimpleTracker;
+import no.auke.drone.domain.Tracker;
 import no.auke.drone.entity.TrackerDB;
-import org.apache.commons.beanutils.BeanUtils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,35 +37,20 @@ public class SimpleTrackerFactory implements TrackerFactory {
     }
 
     @Override
-    public Tracker create(String id, String name) {
-        return create("REAL",id, name, new MapPoint(id, 0,0,0,0,0));
-    }
-    
-    @Override
-    public Tracker create(String trackerLayer, String id, String name) {
-        return create(trackerLayer,id, name, new MapPoint(id, 0,0,0,0,0));
-    }
-
-    @Override
-    public Tracker create(String trackerLayer, String id, String name, MapPoint location) {
-    	return create(trackerLayer, id, name, name, Tracker.TrackerType.fromValue(trackerLayer),null, location, "", "");
-    }
-
-    @Override
     public Tracker from(Device device) {
         if(device == null) return null;
-        return create(Tracker.TrackerType.REAL.toString(), device.getDeviceID(), device.getDescription(), device.getDescription(), Tracker.TrackerType.REAL ,null,  new MapPoint(device.getLastValidLatitude(),device.getLastValidLongitude()), device.getImeiNumber(), device.getSimPhoneNumber());
+        return create(Tracker.TrackerType.REAL.toString(), device.getDeviceID(), device.getDescription(), device.getDescription(), Tracker.TrackerType.REAL ,null,  new MapPoint(device.getLastValidLatitude(),device.getLastValidLongitude()), device.getImeiNumber(), device.getSimPhoneNumber(), "", true);
     }
 
     @Override
     public Tracker from(TrackerDB trackerDB) {
         if(trackerDB == null) return null;
-        return create(trackerDB.getLayer(),trackerDB.getId(),trackerDB.getName(), trackerDB.getDescription(), null, trackerDB.getOwner(), null, null, null);
+        return create(trackerDB.getLayer(),trackerDB.getId(),trackerDB.getName(), trackerDB.getDescription(), null, trackerDB.getOwner(), null, null, null, trackerDB.getContactInfo(), trackerDB.isStoredTrips());
     }
 
     @Override
     public Tracker create(String trackerLayer, String id, String name, String description, Tracker.TrackerType droneType,
-                          String owner, MapPoint location, String imei, String simPhone) {
+                          String owner, MapPoint location, String imei, String simPhone, String contactInfo, boolean storeTrip) {
         // sanitize input
         if(location == null) {
             location = new MapPoint();
@@ -81,7 +68,9 @@ public class SimpleTrackerFactory implements TrackerFactory {
         tracker.setCreateDate(new Date());
         tracker.setModifiedDate(new Date());
         tracker.setTrackerType(droneType);
-
+        tracker.setDescription(description);
+        tracker.setContactInfo(contactInfo);
+        tracker.setStoredTrips(storeTrip);
         tracker.setCurrentPosition(location);
         tracker.getPositions().add(tracker.getCurrentPosition());
         return tracker;
