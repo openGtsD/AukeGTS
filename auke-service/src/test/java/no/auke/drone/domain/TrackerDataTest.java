@@ -1,8 +1,13 @@
 package no.auke.drone.domain;
 
 
-import no.auke.drone.application.impl.SimpleTrackerFactory;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.when;
 import no.auke.drone.domain.Tracker.TrackerType;
+import no.auke.drone.services.impl.LayerServiceImpl;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,10 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-
-import static org.junit.Assert.*;
-import static org.powermock.api.mockito.PowerMockito.mock;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({TrackerData.class})
@@ -85,7 +86,7 @@ public class TrackerDataTest {
 	public void test_withinView() {
 		
 		TrackerData.clear();
-		TrackerLayer layer = TrackerData.getInstance().getTrackerLayer("DEFAULT");
+		LayerServiceImpl layer = TrackerData.getInstance().getTrackerLayer("DEFAULT");
 		layer.setRunningAutomatically(false);
 		
 //		TrackerData.getInstance().register((Observer) new SimpleTrackerFactory().create("drone1", "my tracker"));

@@ -4,6 +4,8 @@ import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.dao.QueryBuilder;
 import no.auke.drone.domain.*;
+import no.auke.drone.entity.Device;
+import no.auke.drone.entity.EventData;
 import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
 import no.auke.drone.services.TripService;

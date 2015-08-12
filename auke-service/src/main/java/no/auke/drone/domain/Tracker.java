@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import no.auke.drone.application.TrackerUpdater;
+import no.auke.drone.services.impl.LayerServiceImpl;
 
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 
@@ -129,7 +130,7 @@ public interface Tracker {
 
     List<String> getAdditionalLayers();
 
-    void addLayer(TrackerLayer trackerLayer);
+    void addLayer(LayerServiceImpl trackerLayer);
 
     void setTrackerPrefix(String trackerPrefix);
 

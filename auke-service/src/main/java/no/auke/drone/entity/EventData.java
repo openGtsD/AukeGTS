@@ -1,6 +1,7 @@
-package no.auke.drone.domain;
+package no.auke.drone.entity;
 
 import no.auke.drone.annotation.Column;
+import no.auke.drone.annotation.ID;
 
 /**
  * Created by huyduong on 4/20/2015.

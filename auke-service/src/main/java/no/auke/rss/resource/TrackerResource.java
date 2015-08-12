@@ -1,4 +1,4 @@
-package no.auke.drone.controller;
+package no.auke.rss.resource;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,10 +15,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.EventData;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.dto.AukeResponse;
+import no.auke.drone.entity.EventData;
 import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
 
@@ -34,13 +34,13 @@ import org.springframework.stereotype.Component;
 @Path("/drone")
 @Component
 @Produces(MediaType.APPLICATION_JSON)
-public class TrackerController {
+public class TrackerResource {
     @Autowired
     private TrackerService trackerService;
     @Autowired
     private EventService eventService;
 
-    private static final Logger logger = LoggerFactory.getLogger(TrackerController.class);
+    private static final Logger logger = LoggerFactory.getLogger(TrackerResource.class);
 
     @POST
     @Path("/load-drone-in-view/{layerId}/{zoom}")

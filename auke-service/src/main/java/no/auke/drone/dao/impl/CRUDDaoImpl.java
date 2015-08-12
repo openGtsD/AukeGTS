@@ -11,9 +11,10 @@ import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
+import no.auke.drone.annotation.ID;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.dao.QueryBuilder;
-import no.auke.drone.domain.ID;
+import no.auke.drone.utils.ReflectionUtils;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;

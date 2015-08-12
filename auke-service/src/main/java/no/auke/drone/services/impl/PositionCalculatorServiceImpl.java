@@ -5,8 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.TrackerLayer;
-import no.auke.drone.services.PositionCalculator;
+import no.auke.drone.services.PositionCalculatorService;
 import no.auke.drone.services.ZoomLayerService;
 
 import org.slf4j.Logger;
@@ -15,18 +14,18 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by huyduong on 3/26/2015.
  */
-public class PositionCalculatorImpl implements PositionCalculator {
+public class PositionCalculatorServiceImpl implements PositionCalculatorService {
     
-	private static final Logger logger = LoggerFactory.getLogger(PositionCalculator.class);
+	private static final Logger logger = LoggerFactory.getLogger(PositionCalculatorService.class);
 
     public static long CALC_FREQUENCY = 5000; // time in milliseconds
 
     private AtomicBoolean isRunning = new AtomicBoolean();
     private AtomicBoolean isRunningAutomatically = new AtomicBoolean(true);
-    private TrackerLayer trackerLayer;
+    private LayerServiceImpl trackerLayer;
     private ExecutorService executor;
 
-    public PositionCalculatorImpl(ExecutorService executor, TrackerLayer trackerLayer, boolean isRunningAutomatically) {
+    public PositionCalculatorServiceImpl(ExecutorService executor, LayerServiceImpl trackerLayer, boolean isRunningAutomatically) {
         this.trackerLayer = trackerLayer;
     	this.executor = executor;
         this.isRunningAutomatically = new AtomicBoolean(isRunningAutomatically);

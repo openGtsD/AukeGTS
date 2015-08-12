@@ -10,6 +10,7 @@ import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.*;
 import no.auke.drone.domain.Observer;
+import no.auke.drone.entity.Device;
 import no.auke.drone.entity.TrackerDB;
 import no.auke.drone.services.TrackerService;
 import no.auke.drone.utils.PointUtil;
@@ -29,10 +30,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class TrackerServiceImpl implements TrackerService {
     @Autowired
-    private CRUDDao<Device> crudDeviceDao;
+    private CRUDDao<Device> deviceDao;
 
     @Autowired
-    private CRUDDao<TrackerDB> trackerDBCRUDDao;
+    private CRUDDao<TrackerDB> trackerDao;
 
     @Autowired
     private CRUDDao<MapPoint> mapPointCRUDDao;
@@ -53,8 +54,8 @@ public class TrackerServiceImpl implements TrackerService {
 
     @PostConstruct
     public void initTrackerService() {
-        crudDeviceDao.setPersistentClass(Device.class);
-        trackerDBCRUDDao.setPersistentClass(TrackerDB.class);
+        deviceDao.setPersistentClass(Device.class);
+        trackerDao.setPersistentClass(TrackerDB.class);
         mapPointCRUDDao.setPersistentClass(MapPoint.class);
 
         logger.info("initializing SIMULATED tracker services");
@@ -66,14 +67,14 @@ public class TrackerServiceImpl implements TrackerService {
         }
         logger.info("finished initializing SIMULATED tracker services");
 
-        List<Device> devices = crudDeviceDao.getAll();
+        List<Device> devices = deviceDao.getAll();
         if (CollectionUtils.isNotEmpty(devices)) {
             for (Device device : devices) {
                 TrackerData.getInstance().register((Observer) simpleTrackerFactory.from(device));
             }
         }
 
-        List<TrackerDB> trackerDBs = trackerDBCRUDDao.getAll();
+        List<TrackerDB> trackerDBs = trackerDao.getAll();
         if (CollectionUtils.isNotEmpty(trackerDBs)) {
             for (TrackerDB trackerDB : trackerDBs) {
                 TrackerData.getInstance().register((Observer) simpleTrackerFactory.from(trackerDB));
@@ -102,8 +103,8 @@ public class TrackerServiceImpl implements TrackerService {
             persistedTracker = simpleTrackerFactory.create(tracker);
             TrackerData.getInstance().register((Observer) persistedTracker);
             if (persist) {
-                crudDeviceDao.create(new Device().from(persistedTracker));
-                trackerDBCRUDDao.create(new TrackerDB().from(persistedTracker));
+                deviceDao.create(new Device().from(persistedTracker));
+                trackerDao.create(new TrackerDB().from(persistedTracker));
             }
             result = persistedTracker;
         }
@@ -138,8 +139,8 @@ public class TrackerServiceImpl implements TrackerService {
         if (tracker == null) {
             return null;
         }
-        crudDeviceDao.delete(new Device().from(tracker));
-        trackerDBCRUDDao.delete(new TrackerDB().from(tracker));
+        deviceDao.delete(new Device().from(tracker));
+        trackerDao.delete(new TrackerDB().from(tracker));
         TrackerData.getInstance().remove((Observer) tracker);
         return tracker;
 
@@ -153,7 +154,7 @@ public class TrackerServiceImpl implements TrackerService {
         }
 
         if (refresh || tracker == null) {
-            Device device = crudDeviceDao.getById(id);
+            Device device = deviceDao.getById(id);
             tracker = simpleTrackerFactory.from(device);
 
             if (tracker != null) {
@@ -168,7 +169,7 @@ public class TrackerServiceImpl implements TrackerService {
     @Override
     public Tracker getTracker(String id) {
         Tracker tracker = null;
-        TrackerDB trackerDb = trackerDBCRUDDao.getById(id);
+        TrackerDB trackerDb = trackerDao.getById(id);
         if(null != trackerDb) {
             tracker = simpleTrackerFactory.from(trackerDb);
         } else {//THAI: for Simulate drones not insert DB. We need persist at init ??
@@ -180,12 +181,12 @@ public class TrackerServiceImpl implements TrackerService {
     }
 
     @Override
-    public TrackerLayer getTrackerLayer(String layerId) {
+    public LayerServiceImpl getTrackerLayer(String layerId) {
         return TrackerData.getInstance().getTrackerLayer(layerId);
     }
 
     @Override
-    public Collection<TrackerLayer> getTrackerLayers() {
+    public Collection<LayerServiceImpl> getTrackerLayers() {
         return TrackerData.getInstance().getLayers();
     }
 
@@ -331,7 +332,7 @@ public class TrackerServiceImpl implements TrackerService {
     @Override
     public void calculateAll() {
 
-        for (TrackerLayer layer : TrackerData.getInstance().getLayers()) {
+        for (LayerServiceImpl layer : TrackerData.getInstance().getLayers()) {
 
             layer.calculateAll();
 
@@ -375,8 +376,8 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Override
     public Tracker update(Tracker tracker) {
-        crudDeviceDao.update(new Device().from(tracker));
-        trackerDBCRUDDao.update(new TrackerDB().from(tracker));
+        deviceDao.update(new Device().from(tracker));
+        trackerDao.update(new TrackerDB().from(tracker));
         return TrackerData.getInstance().update(tracker);
 
     }

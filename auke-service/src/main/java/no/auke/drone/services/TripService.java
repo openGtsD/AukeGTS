@@ -3,7 +3,7 @@ package no.auke.drone.services;
 import java.util.List;
 
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.trips.TripInfo;
+import no.auke.drone.entity.TripInfo;
 
 /**
  * Created by huyduong on 6/14/2015.

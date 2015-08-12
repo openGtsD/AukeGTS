@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import no.auke.drone.application.impl.SimpleTrackerFactory;
+import no.auke.drone.services.impl.LayerServiceImpl;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -26,9 +27,9 @@ public class TrackerData implements Subject {
 	private static final Logger logger = LoggerFactory.getLogger(TrackerData.class);
 
     private static TrackerData trackerData;
-    private Map<String,TrackerLayer> trackerLayers;
+    private Map<String,LayerServiceImpl> trackerLayers;
     
-	public Collection<TrackerLayer> getLayers() {
+	public Collection<LayerServiceImpl> getLayers() {
 		return trackerLayers.values();
 	}    
 
@@ -45,16 +46,16 @@ public class TrackerData implements Subject {
 
     private TrackerData() {
     	trackerLayers = new ConcurrentHashMap<>();
-    	trackerLayers.put("REAL",new TrackerLayer("REAL"));
-        trackerLayers.put("SIMULATED",new TrackerLayer("SIMULATED",true)); // for testing only
+    	trackerLayers.put("REAL",new LayerServiceImpl("REAL"));
+        trackerLayers.put("SIMULATED",new LayerServiceImpl("SIMULATED",true)); // for testing only
     }
 
-    public TrackerLayer getTrackerLayer(String layerId) {
+    public LayerServiceImpl getTrackerLayer(String layerId) {
     	
-    	TrackerLayer layer = trackerLayers.get(StringUtils.upperCase(layerId));
+    	LayerServiceImpl layer = trackerLayers.get(StringUtils.upperCase(layerId));
     	if(layer == null) {
         	// add a new layer
-        	layer = new TrackerLayer(layerId);
+        	layer = new LayerServiceImpl(layerId);
         	trackerLayers.put(StringUtils.upperCase(layer.getLayerName()),layer);
     	}
     	return layer;	
@@ -85,7 +86,7 @@ public class TrackerData implements Subject {
     	List<Tracker> result = new ArrayList<>();
 
         if(StringUtils.isEmpty(layerId)) {
-        	for(TrackerLayer layer:trackerLayers.values()) {
+        	for(LayerServiceImpl layer:trackerLayers.values()) {
         		result.addAll(layer.getTrackers());
         	}
         } else {
@@ -138,7 +139,7 @@ public class TrackerData implements Subject {
 
     public Tracker getTracker(String trackerId) {
     	
-    	for(TrackerLayer trackerLayer : trackerLayers.values()) {
+    	for(LayerServiceImpl trackerLayer : trackerLayers.values()) {
     		if(trackerLayer.exists(trackerId)) {
     			return trackerLayer.getTracker(trackerId);
     		}
@@ -177,7 +178,7 @@ public class TrackerData implements Subject {
 	}
 
 	public void startCalculate() {
-    	for(TrackerLayer trackerLayer : trackerLayers.values()) {
+    	for(LayerServiceImpl trackerLayer : trackerLayers.values()) {
     		trackerLayer.startCalculate();
     	}
 

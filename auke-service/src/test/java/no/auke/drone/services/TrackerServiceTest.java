@@ -10,14 +10,14 @@ import java.util.Collection;
 
 import junit.framework.Assert;
 import no.auke.drone.dao.CRUDDao;
+import no.auke.drone.domain.AbstractIntegrationTest;
 import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.Device;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerData;
-import no.auke.drone.domain.TrackerLayer;
-import no.auke.drone.domain.test.AbstractIntegrationTest;
+import no.auke.drone.entity.Device;
 import no.auke.drone.entity.TrackerDB;
+import no.auke.drone.services.impl.LayerServiceImpl;
 
 import org.junit.After;
 import org.junit.Before;
@@ -115,7 +115,7 @@ public class TrackerServiceTest extends AbstractIntegrationTest {
 		
 		service.calculateAll();
 		
-		TrackerLayer layer = TrackerData.getInstance().getTrackerLayer(Tracker.TrackerType.REAL.toString());
+		LayerServiceImpl layer = TrackerData.getInstance().getTrackerLayer(Tracker.TrackerType.REAL.toString());
 		assertNotNull(layer);
 		
 		for(ZoomLayerService zlayer:layer.getZoomLayers()) {

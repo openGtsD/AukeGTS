@@ -1,10 +1,8 @@
 package no.auke.drone.entity;
 
 import no.auke.drone.annotation.Column;
-import no.auke.drone.domain.ID;
+import no.auke.drone.annotation.ID;
 import no.auke.drone.domain.Tracker;
-
-import java.util.Date;
 
 /**
  * Created by huyduong on 7/30/2015.

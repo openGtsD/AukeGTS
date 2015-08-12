@@ -14,8 +14,8 @@ import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.Tracker.TrackerType;
 import no.auke.drone.domain.TrackerData;
-import no.auke.drone.services.PositionCalculator;
-import no.auke.drone.services.impl.PositionCalculatorImpl;
+import no.auke.drone.services.PositionCalculatorService;
+import no.auke.drone.services.impl.PositionCalculatorServiceImpl;
 import no.auke.drone.services.impl.ZoomLayerServiceImpl;
 
 import org.junit.After;

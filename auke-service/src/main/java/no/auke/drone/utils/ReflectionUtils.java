@@ -1,4 +1,4 @@
-package no.auke.drone.dao.impl;
+package no.auke.drone.utils;
 
 import no.auke.drone.annotation.Column;
 

@@ -3,6 +3,8 @@ package no.auke.drone.domain;
 import java.util.List;
 import java.util.UUID;
 
+import no.auke.drone.annotation.ID;
+import no.auke.drone.entity.EventData;
 import no.auke.drone.utils.ByteUtil;
 
 public class MapPoint {

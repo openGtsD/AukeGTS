@@ -11,7 +11,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.TrackerLayer;
 import no.auke.drone.domain.TrackerSumImpl;
 import no.auke.drone.services.ZoomLayerService;
 
@@ -26,7 +25,7 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
     private Map<Long, TrackerSumImpl> trackerSUM = new ConcurrentHashMap<Long, TrackerSumImpl>();
     private Map<String, List> includedTrackerIds = new ConcurrentHashMap<>();
 
-    private TrackerLayer trackerLayer;
+    private LayerServiceImpl trackerLayer;
     private int zoomFactor;
 
     public ZoomLayerServiceImpl() {
@@ -90,7 +89,7 @@ public class ZoomLayerServiceImpl implements ZoomLayerService {
 
     }
 
-    public ZoomLayerServiceImpl(TrackerLayer trackerLayer, int zoomFactor) {
+    public ZoomLayerServiceImpl(LayerServiceImpl trackerLayer, int zoomFactor) {
 
         this.trackerLayer = trackerLayer;
         this.zoomFactor = zoomFactor;

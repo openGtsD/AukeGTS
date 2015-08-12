@@ -1,6 +1,9 @@
-package no.auke.drone.domain;
+package no.auke.drone.entity;
 
 import no.auke.drone.annotation.Column;
+import no.auke.drone.annotation.ID;
+import no.auke.drone.domain.Tracker;
+
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 
@@ -41,13 +44,9 @@ public class Device {
     @Column
     private Double lastValidHeading;
 
-//    private long lastUpdateTime;
-//    private long creationTime;
 
     public Device() {
         accountID = "demo"; // temporary
-//        lastUpdateTime = new Date().getTime();
-//        creationTime = new Date().getTime();
     }
 
     public Device from(Tracker tracker) {

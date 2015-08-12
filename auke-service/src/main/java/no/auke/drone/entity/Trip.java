@@ -1,11 +1,11 @@
-package no.auke.drone.domain.trips;
+package no.auke.drone.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import no.auke.drone.annotation.Column;
-import no.auke.drone.domain.ID;
+import no.auke.drone.annotation.ID;
 import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.utils.ByteUtil;

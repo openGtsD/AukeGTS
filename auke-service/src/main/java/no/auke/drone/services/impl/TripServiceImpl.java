@@ -7,8 +7,8 @@ import javax.annotation.PostConstruct;
 
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.trips.Trip;
-import no.auke.drone.domain.trips.TripInfo;
+import no.auke.drone.entity.Trip;
+import no.auke.drone.entity.TripInfo;
 import no.auke.drone.services.TripService;
 
 import org.springframework.beans.factory.annotation.Autowired;

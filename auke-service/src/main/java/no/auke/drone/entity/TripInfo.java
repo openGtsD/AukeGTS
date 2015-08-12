@@ -1,4 +1,4 @@
-package no.auke.drone.domain.trips;
+package no.auke.drone.entity;
 
 import no.auke.drone.annotation.Column;
 import no.auke.drone.domain.Tracker.TrackerType;

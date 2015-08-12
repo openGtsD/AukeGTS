@@ -5,11 +5,11 @@ import java.util.List;
 import junit.framework.Assert;
 import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
+import no.auke.drone.domain.AbstractIntegrationTest;
 import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.test.AbstractIntegrationTest;
-import no.auke.drone.domain.trips.TripInfo;
+import no.auke.drone.entity.TripInfo;
 import no.auke.drone.utils.PointUtil;
 
 import org.junit.After;

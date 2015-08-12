@@ -1,6 +1,7 @@
 package no.auke.drone.dao;
 
-import no.auke.drone.dao.impl.ReflectionUtils;
+import no.auke.drone.utils.ReflectionUtils;
+
 import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.Field;

@@ -1,4 +1,4 @@
-package no.auke.drone.controller;
+package no.auke.rss.resource;
 
 /**
  * Created by huyduong on 6/9/2015.
@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
@@ -20,7 +19,7 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
 @Path("/file")
-public class FileUploadController {
+public class UploadResource {
 
     @POST
     @Path("/upload")

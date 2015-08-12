@@ -10,8 +10,8 @@ import java.util.concurrent.Executors;
 
 import no.auke.drone.domain.*;
 import no.auke.drone.domain.Tracker.TrackerType;
-import no.auke.drone.services.PositionCalculator;
-import no.auke.drone.services.impl.PositionCalculatorImpl;
+import no.auke.drone.services.PositionCalculatorService;
+import no.auke.drone.services.impl.PositionCalculatorServiceImpl;
 import no.auke.drone.services.impl.ZoomLayerServiceImpl;
 
 import org.junit.After;

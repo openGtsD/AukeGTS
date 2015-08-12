@@ -6,8 +6,8 @@ import java.util.concurrent.Executors;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker.TrackerType;
 import no.auke.drone.domain.TrackerData;
-import no.auke.drone.services.PositionCalculator;
-import no.auke.drone.services.impl.PositionCalculatorImpl;
+import no.auke.drone.services.PositionCalculatorService;
+import no.auke.drone.services.impl.PositionCalculatorServiceImpl;
 
 import org.junit.After;
 import org.junit.Before;
@@ -28,7 +28,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({PositionCalculator.class})
+@PrepareForTest({PositionCalculatorService.class})
 @Ignore
 public class PositionsCalculatorTest {
 	
@@ -37,7 +37,7 @@ public class PositionsCalculatorTest {
         return executor;
     }
 	
-	PositionCalculator calculator;
+	PositionCalculatorService calculator;
 	SimpleTracker tracker1;
 	SimpleTracker tracker2;
 	SimpleTracker tracker3;
@@ -68,7 +68,7 @@ public class PositionsCalculatorTest {
 		assertEquals(3,TrackerData.getInstance().getTrackers().size());
 		assertEquals(2,TrackerData.getInstance().getLayers().size());
 		
-		PositionCalculatorImpl.CALC_FREQUENCY=10;
+		PositionCalculatorServiceImpl.CALC_FREQUENCY=10;
 
 //		calculator=new PositionCalculatorImpl(getExecutor(),true);
 			

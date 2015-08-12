@@ -5,7 +5,7 @@ import java.util.List;
 
 import no.auke.drone.domain.BoundingBox;
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.domain.TrackerLayer;
+import no.auke.drone.services.impl.LayerServiceImpl;
 
 /**
  * Created by huyduong on 3/25/2015.
@@ -19,8 +19,8 @@ public interface TrackerService {
     Tracker remove(String trackerId);
     Tracker getTracker(String id);
     Tracker getTracker(String id, boolean refresh);
-    TrackerLayer getTrackerLayer(String trackerLayer);
-    Collection<TrackerLayer> getTrackerLayers();
+    LayerServiceImpl getTrackerLayer(String trackerLayer);
+    Collection<LayerServiceImpl> getTrackerLayers();
     Collection<Tracker> getAll(String layerId);
     Collection<Tracker> getAll();
     Collection<Tracker> getTrackersByIds(List<String> ids);

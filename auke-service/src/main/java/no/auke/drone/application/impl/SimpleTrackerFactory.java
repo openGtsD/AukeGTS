@@ -4,10 +4,10 @@ import java.util.Date;
 
 import no.auke.drone.application.TrackerFactory;
 import no.auke.drone.application.TrackerUpdater;
-import no.auke.drone.domain.Device;
 import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
+import no.auke.drone.entity.Device;
 import no.auke.drone.entity.TrackerDB;
 
 import org.slf4j.Logger;

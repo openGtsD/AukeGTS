@@ -1,4 +1,4 @@
-package no.auke.drone.domain.test;
+package no.auke.drone.domain;
 
 import org.junit.After;
 import org.junit.Before;

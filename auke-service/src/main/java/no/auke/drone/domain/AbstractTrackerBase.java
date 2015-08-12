@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 import no.auke.drone.application.TrackerUpdater;
+import no.auke.drone.services.impl.LayerServiceImpl;
 
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 import org.slf4j.Logger;
@@ -201,7 +202,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     // TODO implement later
     @Override
-    public void addLayer(TrackerLayer trackerLayer) {
+    public void addLayer(LayerServiceImpl trackerLayer) {
 
     }
 
