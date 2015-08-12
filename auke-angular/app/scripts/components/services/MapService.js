@@ -52,8 +52,6 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
     mapAPI.setShowTrip = function(value) {
         mapAPI.showTrip = value;
     }
-
-
     mapAPI.loadDroneWithinCurrentView = function () {
         var map = mapAPI.map;
         var mapBound = map.getBounds();

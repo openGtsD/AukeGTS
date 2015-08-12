@@ -1,4 +1,4 @@
-package no.auke.drone.dto;
+package no.auke.drone.ws;
 
 import java.util.Arrays;
 import java.util.Collection;

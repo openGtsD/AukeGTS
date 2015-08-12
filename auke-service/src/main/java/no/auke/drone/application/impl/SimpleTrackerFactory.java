@@ -72,7 +72,10 @@ public class SimpleTrackerFactory implements TrackerFactory {
         tracker.setContactInfo(contactInfo);
         tracker.setStoredTrips(storeTrip);
         tracker.setCurrentPosition(location);
-        tracker.getPositions().add(tracker.getCurrentPosition());
+        
+//        THAI:
+//        Call duplicate since setCurrentPosition ready for it
+//        tracker.getPositions().add(tracker.getCurrentPosition());
         return tracker;
     }
 }

@@ -15,12 +15,16 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import no.auke.drone.domain.BoundingBox;
+import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
-import no.auke.drone.dto.AukeResponse;
 import no.auke.drone.entity.EventData;
+import no.auke.drone.entity.TripInfo;
 import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
+import no.auke.drone.services.TripService;
+import no.auke.drone.utils.ByteUtil;
+import no.auke.drone.ws.AukeResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -39,6 +43,8 @@ public class TrackerResource {
     private TrackerService trackerService;
     @Autowired
     private EventService eventService;
+    @Autowired
+    private TripService tripService;
 
     private static final Logger logger = LoggerFactory.getLogger(TrackerResource.class);
 
@@ -100,6 +106,24 @@ public class TrackerResource {
     public AukeResponse getTracker(@PathParam("id") String id) {
         Tracker tracker = trackerService.getTracker(id);
         return new AukeResponse(tracker != null, tracker);
+    }
+    
+    @POST
+    @Path("/get-trip/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse getTrip(@PathParam("id") String id) {
+        List<TripInfo> trips = tripService.getTripsByTrackerId(id);
+        List<MapPoint> tes = new ArrayList<>();
+        for(TripInfo info : trips) {
+            // THAI: Implementing...
+            List<byte[]> poslist = ByteUtil.splitDynamicBytes(info.getByteRoute());
+            for (byte[] pos : poslist) {
+                tes.add(new MapPoint(pos));
+            }
+           
+        }
+        
+        return new AukeResponse(trips != null, trips);
     }
     
     @POST

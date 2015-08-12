@@ -28,13 +28,13 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
     private boolean active = true;
 
     protected AtomicBoolean ismoving = new AtomicBoolean(true); // default value
-    
+
     private MapPoint currentPosition = new MapPoint();
 
     protected ReentrantLock block = new ReentrantLock();
 
     private String id;
-    
+
     private String layerId;
 
     protected TrackerUpdater trackerUpdater;
@@ -75,7 +75,10 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
     }
 
     public AbstractTrackerBase() {
-        latestPositions = new CircularFifoBuffer(5); // HUY: temporary set the latest positions at 5, will update it with parameter
+        latestPositions = new CircularFifoBuffer(5); // HUY: temporary set the
+                                                     // latest positions at 5,
+                                                     // will update it with
+                                                     // parameter
     }
 
     public AbstractTrackerBase(String id, String name) {
@@ -146,7 +149,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     @Override
     final public List<MapPoint> getPositions() {
-        if(positions==null) {
+        if (positions == null) {
             positions = new LinkedList<>();
         }
         return positions;
@@ -224,9 +227,9 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
                 block.lock();
                 logger.info("Save tracker " + getId());
 
-                
-                // TODO should turn it back once the trip service finishes trackerUpdater.getTripService().saveTrip(this);
-                
+                // TODO should turn it back once the trip service finishes
+                // trackerUpdater.getTripService().saveTrip(this);
+                trackerUpdater.getTripService().saveTrip(this);
                 // clear when save
                 getPositions().clear();
 
@@ -244,9 +247,8 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     @Override
     public String toString() {
-        return "{id: " + id + ", name:" + name + " layer:" + layerId +  " }";
+        return "{id: " + id + ", name:" + name + " layer:" + layerId + " }";
     }
-
 
     @Override
     final public TrackerType getTrackerType() {
@@ -332,55 +334,47 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
     final public boolean isMoving() {
         return ismoving.get();
     }
-    
+
     private boolean checkLogitude(double southWestLon, double northEastLon) {
-        if(southWestLon < northEastLon)
-        	return (currentPosition.getLongitude() <= northEastLon &&
-        			currentPosition.getLongitude() >= southWestLon
-        			);
-    	
-    	
+        if (southWestLon < northEastLon)
+            return (currentPosition.getLongitude() <= northEastLon && currentPosition.getLongitude() >= southWestLon);
+
         else {
-        	
-        	// time line
-        	return currentPosition.getLongitude() >= southWestLon || currentPosition.getLongitude() <= northEastLon; 
-        	
-        }    	
-    	
+
+            // time line
+            return currentPosition.getLongitude() >= southWestLon || currentPosition.getLongitude() <= northEastLon;
+
+        }
+
     }
 
     private boolean checkLatitude(double southWestLat, double northEastLat) {
-    	
-        if(southWestLat < northEastLat) {
-        	
-        	return  ( this.currentPosition.getLatitude() >= southWestLat && 
-        			  this.currentPosition.getLatitude() <= northEastLat
-        			);
-        	
-        } else {
-        	
-        	// over pole
 
-        	return ( this.currentPosition.getLatitude() >= southWestLat || 
-        			  this.currentPosition.getLatitude() <= northEastLat
-        		   );            	
+        if (southWestLat < northEastLat) {
+
+            return (this.currentPosition.getLatitude() >= southWestLat && this.currentPosition.getLatitude() <= northEastLat);
+
+        } else {
+
+            // over pole
+
+            return (this.currentPosition.getLatitude() >= southWestLat || this.currentPosition.getLatitude() <= northEastLat);
         }
-            	
-    	
-    }    
+
+    }
+
     @Override
     public boolean withinView(double southWestLat, double southWestLon, double northEastLat, double northEastLon) {
 
-    	// longitude are horizontal -> value -180 to 180
-    	// latitude are vertical -> value -90 to 90
-    	
+        // longitude are horizontal -> value -180 to 180
+        // latitude are vertical -> value -90 to 90
+
         try {
 
             block.lock();
 
-        	// LHA: fixed
-            return checkLogitude(southWestLon,northEastLon) && checkLatitude(southWestLat,northEastLat);
-
+            // LHA: fixed
+            return checkLogitude(southWestLon, northEastLon) && checkLatitude(southWestLat, northEastLat);
 
         } finally {
 
@@ -389,13 +383,11 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     }
 
-
-
     @Override
     public void setActive(boolean active) {
-    	
+
         this.active = active;
-    
+
         // if set passive, trip will be saved
         setMoving(active);
 
@@ -406,12 +398,11 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
         return active;
     }
 
-
     private void calculateSimulatedTrackers() {
-        
-    	if(isMoving()) {
 
-            if((stopFlightTime.get() - System.currentTimeMillis())<0) {
+        if (isMoving()) {
+
+            if ((stopFlightTime.get() - System.currentTimeMillis()) < 0) {
 
                 // stop flight
                 logger.debug(this.toString() + "stop calculate");
@@ -425,12 +416,11 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
             }
 
-
         } else {
 
-            if((startFlightTime.get() - System.currentTimeMillis())<0) {
+            if ((startFlightTime.get() - System.currentTimeMillis()) < 0) {
 
-                // stop flight
+                // start flight
                 logger.debug(this.toString() + "start calculate");
                 setMoving(true);
 
@@ -445,18 +435,18 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
     @Override
     public void calculate() {
-        
-    	if(TrackerType.REAL.toString().equalsIgnoreCase(this.getLayerId())) {
-        
-        	logger.trace(this.toString() + "started calculating");
+
+        if (TrackerType.REAL.toString().equalsIgnoreCase(this.getLayerId())) {
+
+            logger.trace(this.toString() + "started calculating");
             trackerUpdater.update(this);
             logger.debug(this.toString() + "finished calculating");
-        
+
         } else {
-        
-        	calculateSimulatedTrackers();
+
+            calculateSimulatedTrackers();
         }
-    	
+
     }
 
     @Override
@@ -466,7 +456,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
             block.lock();
 
-            if(logger.isDebugEnabled()) {
+            if (logger.isDebugEnabled()) {
                 logger.debug(this.toString() + "started moving");
             }
 
@@ -474,24 +464,23 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
             // maybe go slower
 
             Random ran = new Random();
-            if(speed == null) {
+            if (speed == null) {
                 speed = 5;
             }
             //
             speed = speed + (ran.nextInt(1) - 1);
-            if(speed<0){
+            if (speed < 0) {
                 speed = -speed;
             }
 
-            if(course == null) {
+            if (course == null) {
                 course = 360;
             }
             //
             course = course + (ran.nextInt(1) - 1);
-            if(course<0) {
-                course=-course;
+            if (course < 0) {
+                course = -course;
             }
-
 
             // fly
             double dx = speed * Math.sin(course);
@@ -501,12 +490,13 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
             double finalLongitude = getCurrentPosition().getLongitude() + deltaLongitude;
             double finalLatitude = getCurrentPosition().getLatitude() + deltaLatitude;
 
-            MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude, this.getCurrentPosition().getLatitude(), course, speed);
+            MapPoint positionUnit = new MapPoint(finalLatitude, finalLongitude,
+                    this.getCurrentPosition().getLatitude(), course, speed);
 
             setCurrentPosition(positionUnit);
             getLatestPositions().add(positionUnit);
 
-            if(logger.isDebugEnabled())
+            if (logger.isDebugEnabled())
                 logger.debug(this.toString() + "finished moving");
 
             return this;
@@ -515,10 +505,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
             block.unlock();
         }
-        
-        
 
     }
-    
-  
+
 }

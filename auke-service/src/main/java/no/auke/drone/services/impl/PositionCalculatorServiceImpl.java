@@ -22,11 +22,11 @@ public class PositionCalculatorServiceImpl implements PositionCalculatorService 
 
     private AtomicBoolean isRunning = new AtomicBoolean();
     private AtomicBoolean isRunningAutomatically = new AtomicBoolean(true);
-    private LayerServiceImpl trackerLayer;
+    private LayerServiceImpl layerService;
     private ExecutorService executor;
 
     public PositionCalculatorServiceImpl(ExecutorService executor, LayerServiceImpl trackerLayer, boolean isRunningAutomatically) {
-        this.trackerLayer = trackerLayer;
+        this.layerService = trackerLayer;
     	this.executor = executor;
         this.isRunningAutomatically = new AtomicBoolean(isRunningAutomatically);
     }
@@ -49,7 +49,7 @@ public class PositionCalculatorServiceImpl implements PositionCalculatorService 
                     	if(logger.isDebugEnabled()) 
                     		logger.debug("run calc");
                         
-                    	for(Tracker tracker : trackerLayer.getActiveTrackers()) {
+                    	for(Tracker tracker : layerService.getActiveTrackers()) {
                             
                         	if(isRunning.get()) {
                                 if(logger.isDebugEnabled()){
@@ -69,7 +69,7 @@ public class PositionCalculatorServiceImpl implements PositionCalculatorService 
                         if(logger.isDebugEnabled()) 
                         	logger.debug("run calc zoomlevels");
                         
-                        trackerLayer.calculateZoomLayers();
+                        layerService.calculateZoomLayers();
                         
 
                         if(isRunning.get() && (System.currentTimeMillis() - lastStarted) < CALC_FREQUENCY ) {
@@ -90,7 +90,7 @@ public class PositionCalculatorServiceImpl implements PositionCalculatorService 
     }
 
     public void stopCalculate() {
-		for(ZoomLayerService serv:trackerLayer.getZoomLayers()) {
+		for(ZoomLayerService serv:layerService.getZoomLayers()) {
 			serv.clear();
 		}
         isRunning.set(false);

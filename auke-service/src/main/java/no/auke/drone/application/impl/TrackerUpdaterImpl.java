@@ -51,31 +51,11 @@ public class TrackerUpdaterImpl implements TrackerUpdater {
     		Map<String,EventData> eventDatas = eventService.getEventDatas();
     		if(eventDatas.containsKey(tracker.getId())) {
     			tracker.setCurrentPosition(new MapPoint(eventDatas.get(tracker.getId())));
-    			
     		}
     		
+    		// THAI: had take looked and need discuss as well
     		tripService.detectMoving(tracker);
-    		
-    		
-    		
         }
-        
-        // LHA: a trip is not one position, its a series of positions
-        // 
-        
-        MapPoint currentPosition = tracker.getCurrentPosition();
-        if(currentPosition != null) {
-            currentPosition.setTrackerId(tracker.getId());
-        }
-
-        // LHA: by doing DB lookup for each time update is very resource consuming
-        // we agreed this was to be in memmory
-        
-        // removed.
-        // if(tripService.getTripById(currentPosition.getId()) == null) {
-        //    tripService.saveTrip(currentPosition);
-        // }
-
     }
 
 	@Override

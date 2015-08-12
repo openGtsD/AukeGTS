@@ -18,48 +18,47 @@ import org.slf4j.LoggerFactory;
  * Created by huyduong on 3/24/2015.
  */
 
-
 // LHA: maybe this object is the layer head ??
-// 
+//
 
 public class TrackerData implements Subject {
-	
-	private static final Logger logger = LoggerFactory.getLogger(TrackerData.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(TrackerData.class);
 
     private static TrackerData trackerData;
-    private Map<String,LayerServiceImpl> trackerLayers;
-    
-	public Collection<LayerServiceImpl> getLayers() {
-		return trackerLayers.values();
-	}    
+    private Map<String, LayerServiceImpl> layerMap;
+
+    public Collection<LayerServiceImpl> getLayers() {
+        return layerMap.values();
+    }
 
     public static synchronized TrackerData getInstance() {
-    	if (trackerData==null) {
-    		trackerData = new TrackerData();
+        if (trackerData == null) {
+            trackerData = new TrackerData();
         }
         return trackerData;
-    }    		
-    
-	public static void clear() {
-		trackerData=null;
-	}    
+    }
+
+    public static void clear() {
+        trackerData = null;
+    }
 
     private TrackerData() {
-    	trackerLayers = new ConcurrentHashMap<>();
-    	trackerLayers.put("REAL",new LayerServiceImpl("REAL"));
-        trackerLayers.put("SIMULATED",new LayerServiceImpl("SIMULATED",true)); // for testing only
+        layerMap = new ConcurrentHashMap<>();
+        layerMap.put("REAL", new LayerServiceImpl("REAL"));
+        layerMap.put("SIMULATED", new LayerServiceImpl("SIMULATED", true));
     }
 
     public LayerServiceImpl getTrackerLayer(String layerId) {
-    	
-    	LayerServiceImpl layer = trackerLayers.get(StringUtils.upperCase(layerId));
-    	if(layer == null) {
-        	// add a new layer
-        	layer = new LayerServiceImpl(layerId);
-        	trackerLayers.put(StringUtils.upperCase(layer.getLayerName()),layer);
-    	}
-    	return layer;	
-        
+
+        LayerServiceImpl layer = layerMap.get(StringUtils.upperCase(layerId));
+        if (layer == null) {
+            // add a new layer
+            layer = new LayerServiceImpl(layerId);
+            layerMap.put(StringUtils.upperCase(layer.getLayerName()), layer);
+        }
+        return layer;
+
     }
 
     public Collection<Tracker> getTrackers() {
@@ -67,7 +66,7 @@ public class TrackerData implements Subject {
     }
 
     public Collection<Tracker> getActiveTrackers() {
-    	return getActiveTrackers(null);
+        return getActiveTrackers(null);
     }
 
     public Collection<Tracker> getActiveTrackers(String layerId) {
@@ -83,31 +82,30 @@ public class TrackerData implements Subject {
     }
 
     public Collection<Tracker> getTrackers(String layerId) {
-    	List<Tracker> result = new ArrayList<>();
+        List<Tracker> result = new ArrayList<>();
 
-        if(StringUtils.isEmpty(layerId)) {
-        	for(LayerServiceImpl layer:trackerLayers.values()) {
-        		result.addAll(layer.getTrackers());
-        	}
+        if (StringUtils.isEmpty(layerId)) {
+            for (LayerServiceImpl layer : layerMap.values()) {
+                result.addAll(layer.getTrackers());
+            }
         } else {
-        	result.addAll(getTrackerLayer(layerId).getTrackers());
+            result.addAll(getTrackerLayer(layerId).getTrackers());
         }
 
         return result;
     }
 
     private void updateLayerReference(Tracker oldTracker, Tracker newTracker) {
-        if(!StringUtils.trimToEmpty(oldTracker.getLayerId()).equals(StringUtils.trimToEmpty(newTracker.getLayerId()))) {
+        if (!StringUtils.trimToEmpty(oldTracker.getLayerId()).equals(StringUtils.trimToEmpty(newTracker.getLayerId()))) {
             getTrackerLayer(oldTracker.getLayerId()).removeTracker(oldTracker);
             getTrackerLayer(newTracker.getLayerId()).addTracker(oldTracker);
             oldTracker.setLayerId(newTracker.getLayerId());
         }
     }
 
-
     private void update(Tracker oldTracker, Tracker newTracker) {
-        
-    	oldTracker.setName(newTracker.getName());
+
+        oldTracker.setName(newTracker.getName());
         oldTracker.setDescription(newTracker.getDescription());
         oldTracker.setContactInfo(newTracker.getContactInfo());
         oldTracker.setStoredTrips(newTracker.isStoredTrips());
@@ -119,70 +117,69 @@ public class TrackerData implements Subject {
         oldTracker.setSimPhone(newTracker.getSimPhone());
         oldTracker.setModifiedDate(new Date());
 
-        updateLayerReference(oldTracker,newTracker);
+        updateLayerReference(oldTracker, newTracker);
     }
 
     public Tracker update(Tracker newTracker) {
-    	Tracker tracker = getTracker(newTracker.getId());
-    	if(tracker == null) {
-    	    tracker = new SimpleTrackerFactory().create(newTracker);
+        Tracker tracker = getTracker(newTracker.getId());
+        if (tracker == null) {
+            tracker = new SimpleTrackerFactory().create(newTracker);
             TrackerData.getInstance().register((Observer) tracker);
-    	}
-    	
-        if(tracker.equals(newTracker)) {
+        }
+
+        if (tracker.equals(newTracker)) {
             return tracker;// do nothing
         }
 
-        update(tracker,newTracker);
+        update(tracker, newTracker);
         return tracker;
     }
 
     public Tracker getTracker(String trackerId) {
-    	
-    	for(LayerServiceImpl trackerLayer : trackerLayers.values()) {
-    		if(trackerLayer.exists(trackerId)) {
-    			return trackerLayer.getTracker(trackerId);
-    		}
-    	}
-    	return null;
-    
+
+        for (LayerServiceImpl trackerLayer : layerMap.values()) {
+            if (trackerLayer.exists(trackerId)) {
+                return trackerLayer.getTracker(trackerId);
+            }
+        }
+        return null;
+
     }
 
     public Tracker register(Observer tracker) {
-    	if(tracker.getLayerId()!=null) {
-    		getTrackerLayer(tracker.getLayerId()).addTracker((Tracker) tracker);
-    	}
+        if (tracker.getLayerId() != null) {
+            getTrackerLayer(tracker.getLayerId()).addTracker((Tracker) tracker);
+        }
         return (Tracker) tracker;
     }
 
     @Override
     public void remove(Observer tracker) {
-    	if(tracker.getLayerId()!=null) {
-    		getTrackerLayer(tracker.getLayerId()).removeTracker((Tracker)tracker);
-    	}
+        if (tracker.getLayerId() != null) {
+            getTrackerLayer(tracker.getLayerId()).removeTracker((Tracker) tracker);
+        }
     }
 
     @Override
     public void notifyAllItems() {
-        
-    	logger.info("........notifying " + getTrackers().size() + " items........");
+
+        logger.info("........notifying " + getTrackers().size() + " items........");
         for (Tracker tracker : getTrackers()) {
             tracker.update();
         }
         logger.info(".......notifying finished......");
-    
-    }
-
-	public boolean exists(String layerId) {
-		return trackerLayers.containsKey(layerId);
-	}
-
-	public void startCalculate() {
-    	for(LayerServiceImpl trackerLayer : trackerLayers.values()) {
-    		trackerLayer.startCalculate();
-    	}
 
     }
 
+    public boolean exists(String layerId) {
+        return layerMap.containsKey(layerId);
+    }
+
+    public void startCalculate() {
+        for (LayerServiceImpl layer : layerMap.values()) {
+            layer.startCalculate();
+        }
+
+    }
 
 }

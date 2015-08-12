@@ -1,7 +1,7 @@
 'use strict';
 
 
-angular.module('aukeGTS').controller('TripController', ['$scope', '$timeout', 'MapService', 'uiGmapGoogleMapApi', function ($scope, $timeout, MapService, uiGmapGoogleMapApi) {
+angular.module('aukeGTS').controller('TripController', ['$scope', '$timeout', 'MapService', 'TrackerService', 'uiGmapGoogleMapApi', function ($scope, $timeout, MapService, TrackerService, uiGmapGoogleMapApi) {
     var service = MapService.mapAPI;
 
     $scope.isShowTrip = service.getShowTrip();
@@ -9,6 +9,14 @@ angular.module('aukeGTS').controller('TripController', ['$scope', '$timeout', 'M
 
 
     $scope.showTrips = function (value, parameter) {
+//TODO
+        TrackerService.getTripByTrackerId(parameter.id).success(function (response) {
+            if (response.data && response.data.length > 0) {
+                //console.log(response.data);
+            }
+        });
+
+
         service.setShowTrip(value);
         $scope.isShowTrip = service.getShowTrip();
 

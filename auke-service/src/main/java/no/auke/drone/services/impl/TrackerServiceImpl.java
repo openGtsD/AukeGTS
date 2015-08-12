@@ -36,7 +36,7 @@ public class TrackerServiceImpl implements TrackerService {
     private CRUDDao<TrackerDB> trackerDao;
 
     @Autowired
-    private CRUDDao<MapPoint> mapPointCRUDDao;
+    private CRUDDao<MapPoint> mapPointDao;
 
     @Autowired
     private SimpleTrackerFactory simpleTrackerFactory;
@@ -56,7 +56,7 @@ public class TrackerServiceImpl implements TrackerService {
     public void initTrackerService() {
         deviceDao.setPersistentClass(Device.class);
         trackerDao.setPersistentClass(TrackerDB.class);
-        mapPointCRUDDao.setPersistentClass(MapPoint.class);
+        mapPointDao.setPersistentClass(MapPoint.class);
 
         logger.info("initializing SIMULATED tracker services");
 
@@ -81,9 +81,10 @@ public class TrackerServiceImpl implements TrackerService {
             }
         }
 
-        mapPointCRUDDao.deleteAll();
-
-        TrackerData.getInstance().startCalculate();
+        mapPointDao.deleteAll();
+        
+//      THAI: why we call this method again ?? Since its ready run at time register tracker
+//        TrackerData.getInstance().startCalculate();
     }
 
     public TrackerServiceImpl() {

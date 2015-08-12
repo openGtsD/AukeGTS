@@ -138,7 +138,6 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         Object[] parameters = prepareParameter(entity);
         logger.info("processing sql " + sql + " " + parameters);
         getJdbcTemplate().update(sql, parameters);
-
 //        setTime(entity);
         return entity;
     }
