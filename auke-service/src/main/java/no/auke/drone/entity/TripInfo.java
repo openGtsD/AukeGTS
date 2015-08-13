@@ -1,5 +1,7 @@
 package no.auke.drone.entity;
 
+import com.sun.syndication.io.impl.Base64;
+
 import no.auke.drone.annotation.Column;
 import no.auke.drone.domain.Tracker.TrackerType;
 
@@ -141,14 +143,16 @@ public class TripInfo extends Trip {
 		this.setOwner(trip.getTracker().getOwner());
 		this.setContactInfo(trip.getTracker().getContactInfo());
 		
+		
 		byteRoute=trip.getRouteAsBytes();
+		byteRoute = Base64.encode(byteRoute);
 		
 	}
 	
 	public Trip getTrip() {
 		
 		Trip trip = new Trip(getTrackerId(), getId());
-		trip.setRouteAsBytes(byteRoute);
+		trip.setRouteAsBytes(Base64.decode(byteRoute));
 		return trip;
 	}
 	

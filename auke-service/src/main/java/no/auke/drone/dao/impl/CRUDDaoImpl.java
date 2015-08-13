@@ -153,19 +153,26 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     }
 
     private Properties prepareUpdateParameter(T entity) {
-        Properties properties = new Properties();
+        
+    	Properties properties = new Properties();
         String[] fields = getFieldNames(entity,"");
+        
         try {
             for(String field : fields) {
-                if(BeanUtils.getProperty(entity,field) != null) {
-                    if(getFieldType(entity,field) != null && getFieldType(entity,field).equals(boolean.class)) {
-                        if(BeanUtils.getProperty(entity,field).equals(Boolean.TRUE.toString())) {
+                
+            	if(BeanUtils.getProperty(entity,field) != null) {
+                    
+                	if(getFieldType(entity,field) != null && getFieldType(entity,field).equals(boolean.class)) {
+                    
+                		if(BeanUtils.getProperty(entity,field).equals(Boolean.TRUE.toString())) {
                             properties.put(field, "1");
                         } else {
                             properties.put(field, "0");
                         }
+                		
                     } else {
-                        properties.put(field, BeanUtils.getProperty(entity,field));
+                        
+                    	properties.put(field, BeanUtils.getProperty(entity,field));
                     }
                 }
             }
