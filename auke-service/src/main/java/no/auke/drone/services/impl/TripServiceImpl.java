@@ -20,21 +20,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class TripServiceImpl implements TripService {
     private final int NUMB_LATEST_TRIP = 5;
-    
+
     @Autowired
     private CRUDDao<TripInfo> tripCRUDDao;
 
     @PostConstruct
     public void init() {
-    
-    	tripCRUDDao.setPersistentClass(TripInfo.class);
-    
+
+        tripCRUDDao.setPersistentClass(TripInfo.class);
+
     }
 
     @Override
     public void saveTrip(Tracker tracker) {
-    	Trip trip = new Trip(tracker);
-    	tripCRUDDao.create(new TripInfo(trip));
+        Trip trip = new Trip(tracker);
+        tripCRUDDao.create(new TripInfo(trip));
     }
 
     @Override
@@ -49,48 +49,43 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public void deleteTrip(TripInfo trip) {
-    	tripCRUDDao.delete(trip);
+        tripCRUDDao.delete(trip);
     }
 
     @Override
     public List<TripInfo> getTripsByTrackerId(String trackerId) {
         Properties properties = new Properties();
-        properties.put("trackerId",trackerId);
+        properties.put("trackerId", trackerId);
         return tripCRUDDao.getByProperties(properties);
     }
 
     @Override
     public void deleteTripsByTrackerId(String trackerId) {
         Properties properties = new Properties();
-        properties.put("trackerId",trackerId);
+        properties.put("trackerId", trackerId);
         tripCRUDDao.deleteAllByProperties(properties);
     }
 
-	@Override
-	public void detectMoving(Tracker tracker) {
-		
-		// LHA: 
-		
-		// here we figure if tracker is moving or not by analysing
-		// the positions 
-		// for ex. if long time since last position (for ex. a minute) 
-		// tracker is regarded stopped
-		// Or if same position for some time 
-		// or speed = 0 for some time
-		
-		// this logic we need to discuss
-		
-		if (false) {
-			
-			// this will also trigger a save on last trip 
-			tracker.setMoving(false);
-			
-		}
-		
-		
-		
-		
-		
-		
-	}
+    @Override
+    public void detectMoving(Tracker tracker) {
+
+        // LHA:
+
+        // here we figure if tracker is moving or not by analysing
+        // the positions
+        // for ex. if long time since last position (for ex. a minute)
+        // tracker is regarded stopped
+        // Or if same position for some time
+        // or speed = 0 for some time
+
+        // this logic we need to discuss
+
+        if (false) {
+
+            // this will also trigger a save on last trip
+            tracker.setMoving(false);
+
+        }
+
+    }
 }

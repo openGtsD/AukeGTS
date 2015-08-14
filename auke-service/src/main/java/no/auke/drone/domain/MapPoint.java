@@ -150,7 +150,6 @@ public class MapPoint {
 			this.setSpeed(ByteUtil.getDouble(subs.get(5)));
 			
 		}	
-
 	}
 	
 	

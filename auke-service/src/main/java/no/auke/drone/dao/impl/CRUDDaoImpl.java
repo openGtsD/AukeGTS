@@ -17,6 +17,7 @@ import no.auke.drone.dao.QueryBuilder;
 import no.auke.drone.utils.ReflectionUtils;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     }
 
     private JdbcTemplate getJdbcTemplate() {
-        if(jdbcTemplate == null) {
+        if (jdbcTemplate == null) {
             jdbcTemplate = new JdbcTemplate(dataSource);
         }
         return jdbcTemplate;
@@ -61,19 +62,17 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     @SuppressWarnings("unchecked")
     protected Class<T> getPersistentClass() {
         if (persistentClass == null) {
-            persistentClass = (Class<T>)
-                    ((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+            persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass())
+                    .getActualTypeArguments()[0];
         }
         return persistentClass;
     }
 
-
-
     private List<String> getIdFields() {
         List<String> ids = new ArrayList<>();
         Field[] fields = ReflectionUtils.getAllColumnFields(getPersistentClass());
-        for(Field field : fields) {
-            if(field.isAnnotationPresent(ID.class)) {
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(ID.class)) {
                 ids.add(field.getName());
             }
         }
@@ -83,7 +82,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     private String[] getFieldNames(T entity, String prefix) {
         Field[] fields = ReflectionUtils.getAllColumnFields(entity.getClass());
         String[] str = new String[fields.length];
-        for(int i = 0; i < fields.length; i++) {
+        for (int i = 0; i < fields.length; i++) {
             str[i] = prefix + fields[i].getName();
         }
         return str;
@@ -100,21 +99,24 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         return result;
     }
 
-
     private Object[] prepareParameter(T entity) {
         Object[] parameters = null;
         try {
             Field[] fields = ReflectionUtils.getAllColumnFields(entity.getClass());
             parameters = new Object[fields.length];
-            for(int i = 0; i < fields.length; i++) {
-                    parameters[i] = BeanUtils.getProperty(entity,fields[i].getName());
-                    if(fields[i].getType().equals(boolean.class)) {
-                        if(parameters[i].equals(Boolean.TRUE.toString())) {
-                            parameters[i] = "1";
-                        } else {
-                            parameters[i] = "0";
-                        }
+            for (int i = 0; i < fields.length; i++) {
+                parameters[i] = BeanUtils.getProperty(entity, fields[i].getName());
+                if (fields[i].getType().equals(boolean.class)) {
+                    if (parameters[i].equals(Boolean.TRUE.toString())) {
+                        parameters[i] = "1";
+                    } else {
+                        parameters[i] = "0";
                     }
+                }
+                //THAI: Fixed for case insert blob incorrect
+                if (fields[i].getType().isArray()) {
+                    parameters[i] = ConvertUtils.convert(BeanUtils.getArrayProperty(entity, fields[i].getName()), byte[].class);
+                }
             }
         } catch (Exception e) {
             logger.error(e.toString());
@@ -125,9 +127,9 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
 
     private void setTime(T entity) {
         try {
-            BeanUtils.setProperty(entity,"creationDate", new Date());
-            BeanUtils.setProperty(entity,"lastUpdateTime", new Date());
-        } catch(Exception e) {
+            BeanUtils.setProperty(entity, "creationDate", new Date());
+            BeanUtils.setProperty(entity, "lastUpdateTime", new Date());
+        } catch (Exception e) {
             logger.error(e.getCause().toString());
         }
     }
@@ -136,9 +138,8 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     public T create(T entity) {
         String sql = new QueryBuilder().buildInsert(entity).build();
         Object[] parameters = prepareParameter(entity);
-        logger.info("processing sql " + sql + " " + parameters);
+        logger.info("processing sql >>>>>> " + sql);
         getJdbcTemplate().update(sql, parameters);
-//        setTime(entity);
         return entity;
     }
 
@@ -146,33 +147,32 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     public T read(String field, String value) {
         Class<T> entityClass = getPersistentClass();
         String sql = "SELECT * FROM " + entityClass.getSimpleName() + " WHERE " + field + "  = ?";
-        T entity = (T)getJdbcTemplate().queryForObject(
-                sql, new Object[]{value},
-                new BeanPropertyRowMapper<T>());
+        T entity = (T) getJdbcTemplate().queryForObject(sql, new Object[] { value },
+                new BeanPropertyRowMapper<T>(persistentClass));
         return entity;
     }
 
     private Properties prepareUpdateParameter(T entity) {
-        
-    	Properties properties = new Properties();
-        String[] fields = getFieldNames(entity,"");
-        
+
+        Properties properties = new Properties();
+        String[] fields = getFieldNames(entity, "");
+
         try {
-            for(String field : fields) {
-                
-            	if(BeanUtils.getProperty(entity,field) != null) {
-                    
-                	if(getFieldType(entity,field) != null && getFieldType(entity,field).equals(boolean.class)) {
-                    
-                		if(BeanUtils.getProperty(entity,field).equals(Boolean.TRUE.toString())) {
+            for (String field : fields) {
+
+                if (BeanUtils.getProperty(entity, field) != null) {
+
+                    if (getFieldType(entity, field) != null && getFieldType(entity, field).equals(boolean.class)) {
+
+                        if (BeanUtils.getProperty(entity, field).equals(Boolean.TRUE.toString())) {
                             properties.put(field, "1");
                         } else {
                             properties.put(field, "0");
                         }
-                		
+
                     } else {
-                        
-                    	properties.put(field, BeanUtils.getProperty(entity,field));
+
+                        properties.put(field, BeanUtils.getProperty(entity, field));
                     }
                 }
             }
@@ -184,11 +184,11 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         return properties;
     }
 
-    private Properties buildIdentificationProperty(T entity){
+    private Properties buildIdentificationProperty(T entity) {
         Properties properties = new Properties();
-        try{
-            for(String field : getIdFields()) {
-                properties.put(field,BeanUtils.getProperty(entity,field));
+        try {
+            for (String field : getIdFields()) {
+                properties.put(field, BeanUtils.getProperty(entity, field));
             }
         } catch (Exception e) {
             logger.error(e.toString());
@@ -207,7 +207,7 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         sb.append(entity.getClass().getSimpleName());
         sb.append(" SET ");
         Properties properties = prepareUpdateParameter(entity);
-        sb.append(prepareEqualAndClause(properties,","));
+        sb.append(prepareEqualAndClause(properties, ","));
         sb.append(" WHERE ");
         sb.append(prepareIdentificationQuery(entity));
         return sb.toString();
@@ -224,7 +224,8 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     @Override
     public void delete(T entity) {
         Class<T> entityClass = getPersistentClass();
-        String sql = new QueryBuilder().buildDelete(entityClass.getSimpleName()).buildWhere().build() + prepareIdentificationQuery(entity);
+        String sql = new QueryBuilder().buildDelete(entityClass.getSimpleName()).buildWhere().build()
+                + prepareIdentificationQuery(entity);
         getJdbcTemplate().update(sql);
     }
 
@@ -238,37 +239,32 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     @Override
     public void deleteAllByProperties(Properties properties) {
         Class<T> entityClass = getPersistentClass();
-        String sql = new QueryBuilder().buildDelete(entityClass.getSimpleName()).buildWhere().buildEqualClause(properties).build();
+        String sql = new QueryBuilder().buildDelete(entityClass.getSimpleName()).buildWhere()
+                .buildEqualClause(properties).build();
         getJdbcTemplate().update(sql);
     }
 
     @Override
     public List getAll() {
-        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName())
-                .build();
+        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName()).build();
 
-        List<T> entities  = getJdbcTemplate().query(query,
-                new BeanPropertyRowMapper<T>(persistentClass));
+        List<T> entities = getJdbcTemplate().query(query, new BeanPropertyRowMapper<T>(persistentClass));
 
         return entities;
     }
 
     @Override
     public List<T> getTop(int top) {
-        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName())
-                .buildLimit(top)
-                .build();
+        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName()).buildLimit(top).build();
 
-        List<T> entities  = getJdbcTemplate().query(query,
-                new BeanPropertyRowMapper<T>(persistentClass));
+        List<T> entities = getJdbcTemplate().query(query, new BeanPropertyRowMapper<T>(persistentClass));
 
         return entities;
     }
 
     @Override
     public List get(String query) {
-        List<T> entities  = getJdbcTemplate().query(query,
-                new BeanPropertyRowMapper<T>(persistentClass));
+        List<T> entities = getJdbcTemplate().query(query, new BeanPropertyRowMapper<T>(persistentClass));
 
         return entities;
     }
@@ -276,10 +272,10 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
     @Override
     public T getById(String id) {
         Properties properties = new Properties();
-        properties.put(getIdFields().get(0),id);
-        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName()).buildWhere().buildEqualClause(properties).build();
-        List<T> entities  = getJdbcTemplate().query(query,
-                new BeanPropertyRowMapper<T>(persistentClass));
+        properties.put(getIdFields().get(0), id);
+        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName()).buildWhere()
+                .buildEqualClause(properties).build();
+        List<T> entities = getJdbcTemplate().query(query, new BeanPropertyRowMapper<T>(persistentClass));
 
         return entities.size() > 0 ? entities.get(0) : null;
     }
@@ -290,32 +286,28 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
 
     private String prepareEqualAndClause(Properties properties, String parameter) {
         StringBuilder sb = new StringBuilder();
-        if(properties.size() > 0) {
+        if (properties.size() > 0) {
             List<String> strings = new ArrayList<>();
-            for(Object o : properties.keySet()) {
+            for (Object o : properties.keySet()) {
                 strings.add(o.toString() + " = '" + properties.get(o).toString() + "'");
             }
-            sb.append(StringUtils.join(strings.toArray()," " + parameter + " "));
+            sb.append(StringUtils.join(strings.toArray(), " " + parameter + " "));
         }
         return sb.toString();
     }
 
     @Override
     public List getByProperties(Properties properties) {
-        if(properties == null || properties.size() == 0) {
+        if (properties == null || properties.size() == 0) {
             return getAll();
         }
 
-        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName())
-                                                      .buildWhere()
-                                                      .buildEqualClause(properties)
-                                                      .build();
+        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName()).buildWhere()
+                .buildEqualClause(properties).build();
 
-        List<T> entities  = getJdbcTemplate().query(query,
-                new BeanPropertyRowMapper<T>(persistentClass));
+        List<T> entities = getJdbcTemplate().query(query, new BeanPropertyRowMapper<T>(persistentClass));
 
         return entities;
     }
-
 
 }

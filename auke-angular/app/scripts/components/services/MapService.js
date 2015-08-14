@@ -49,8 +49,39 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
         return  mapAPI.showTrip;
     }
 
-    mapAPI.setShowTrip = function(value) {
+    mapAPI.getStartPoint = function() {
+        return mapAPI.startLatlng;
+    }
+
+    mapAPI.getEndPoint = function() {
+        return mapAPI.endLatlng;
+    }
+
+    mapAPI.getRoute = function() {
+        return mapAPI.route;
+    }
+
+    mapAPI.getTrip = function(id) {
+        TrackerService.getTripByTrackerId(id).success(function (response) {
+            if (response.data && response.data.length > 0) {
+                var tripInfo = response.data[0];
+                mapAPI.route = tripInfo.route;
+                mapAPI.startAddress = tripInfo.startPoint.trackerId;//TODO: should be modify into address start in mapPoint
+                mapAPI.startLatlng = tripInfo.startPoint.latitude+','+tripInfo.startPoint.longitude;
+
+                mapAPI.endAddress = tripInfo.stopPoint.trackerId;
+                mapAPI.endLatlng = tripInfo.stopPoint.latitude+','+tripInfo.stopPoint.longitude;
+
+            }
+        })
+    }
+
+    mapAPI.setShowTrip = function(value, trackerId){
+        mapAPI.trackerId = trackerId;
         mapAPI.showTrip = value;
+        if(value) {
+            mapAPI.getTrip(trackerId);
+        }
     }
     mapAPI.loadDroneWithinCurrentView = function () {
         var map = mapAPI.map;
@@ -158,6 +189,12 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
     mapAPI.layer = '';
     mapAPI.map = '';
     mapAPI.showTrip = false;
+
+    // ui trips
+    mapAPI.trackerId = '';
+    mapAPI.startLatlng = '';
+    mapAPI.endLatlng = '';
+    mapAPI.route = [];
 
 
     mapAPI.init = function () {
