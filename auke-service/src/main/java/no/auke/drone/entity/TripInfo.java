@@ -16,114 +16,14 @@ import no.auke.drone.domain.Tracker.TrackerType;
 public class TripInfo extends Trip implements Serializable {
     private static final long serialVersionUID = 2281073816884185202L;
 
-    @Column
-	private String trackerName;
 
-    @Column
-    private String owner;
-
-    @Column
-    private String contactInfo;
-
-    @Column
-    private TrackerType trackerType;
-
-    @Column
-    private String tripName;
-
-    // where did the trip took place
-    @Column
-    private String country;
-
-    @Column
-    private String city;
-
-    // what is this trip done (update by user)
-    @Column
-    private String description;
-
-    // trip is to be shown in public
-    // @Column TODO to check later
-    private boolean isPublic;
 
     // this contain the compacted as bytearray route of trippoints
     // should be stored as a blob in database
 
     @Column
     private byte[] byteRoute;
-
-    public String getTrackerName() {
-        return trackerName;
-    }
-
-    public void setTrackerName(String trackerName) {
-        this.trackerName = trackerName;
-    }
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public String getContactInfo() {
-        return contactInfo;
-    }
-
-    public void setContactInfo(String contactInfo) {
-        this.contactInfo = contactInfo;
-    }
-
-    public TrackerType getTrackerType() {
-        return trackerType;
-    }
-
-    public void setTrackerType(TrackerType trackerType) {
-        this.trackerType = trackerType;
-    }
-
-    public String getTripName() {
-        return tripName;
-    }
-
-    public void setTripName(String tripName) {
-        this.tripName = tripName;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public boolean isPublic() {
-        return isPublic;
-    }
-
-    public void setPublic(boolean isPublic) {
-        this.isPublic = isPublic;
-    }
-
+    
     public byte[] getByteRoute() {
         return byteRoute;
     }

@@ -1,5 +1,6 @@
 package no.auke.drone.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -49,25 +50,36 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public TripInfo getTripById(String tripId) {
-        return tripCRUDDao.getById(tripId);
+    public Trip getTripById(String tripId) {
+    	
+        return tripCRUDDao.getById(tripId).getTrip();
     }
 
     @Override
-    public List<TripInfo> getLatestTrips() {
-        return tripCRUDDao.getTop(NUMB_LATEST_TRIP);
+    public List<Trip> getLatestTrips() {
+    	
+        List<Trip> list = new ArrayList<Trip>();
+        for(TripInfo info:(List<TripInfo>)tripCRUDDao.getTop(NUMB_LATEST_TRIP)) {
+        	list.add(info.getTrip());
+        }
+        return list;    	
     }
 
     @Override
-    public void deleteTrip(TripInfo trip) {
-        tripCRUDDao.delete(trip);
+    public void deleteTrip(Trip trip) {
+        tripCRUDDao.delete(new TripInfo(trip));
     }
 
     @Override
-    public List<TripInfo> getTripsByTrackerId(String trackerId) {
+    public List<Trip> getTripsByTrackerId(String trackerId) {
         Properties properties = new Properties();
         properties.put("trackerId", trackerId);
-        return tripCRUDDao.getByProperties(properties);
+        
+        List<Trip> list = new ArrayList<Trip>();
+        for(TripInfo info:(List<TripInfo>)tripCRUDDao.getByProperties(properties)) {
+        	list.add(info.getTrip());
+        }
+        return list;
     }
 
     @Override

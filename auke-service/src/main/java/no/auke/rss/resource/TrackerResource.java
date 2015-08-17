@@ -19,6 +19,7 @@ import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.entity.EventData;
+import no.auke.drone.entity.Trip;
 import no.auke.drone.entity.TripInfo;
 import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
@@ -114,13 +115,7 @@ public class TrackerResource {
     @Path("/get-trip/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse getTrip(@PathParam("id") String id) {
-        List<TripInfo> trips = tripService.getTripsByTrackerId(id);
-        for(TripInfo info : trips) {
-            List<byte[]> poslist = ByteUtil.splitBytes(info.getByteRoute());
-            for (byte[] pos : poslist) {
-                info.getRoute().add(new MapPoint(pos));
-            }
-        }
+        List<Trip> trips = tripService.getTripsByTrackerId(id);
         
         return new AukeResponse(trips != null, trips);
     }
