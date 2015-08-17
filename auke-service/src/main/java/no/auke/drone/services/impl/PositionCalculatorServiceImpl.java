@@ -52,9 +52,9 @@ public class PositionCalculatorServiceImpl implements PositionCalculatorService 
                     	for(Tracker tracker : layerService.getActiveTrackers()) {
                             
                         	if(isRunning.get()) {
-                                if(logger.isDebugEnabled()){
+                                
+                        		if(logger.isDebugEnabled())
                                     logger.debug("tracker " + tracker.getId() + " is calculating");
-                                }
 
                         		// calc and update current positions
                                 tracker.calculate();

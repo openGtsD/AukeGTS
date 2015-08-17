@@ -39,7 +39,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TrackerServiceImpl implements TrackerService {
-    @Autowired
+    
+	@Autowired
     private CRUDDao<Device> deviceDao;
 
     @Autowired

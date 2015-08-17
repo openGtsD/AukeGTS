@@ -9,8 +9,11 @@ import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.entity.Trip;
 import no.auke.drone.entity.TripInfo;
+import no.auke.drone.services.PositionCalculatorService;
 import no.auke.drone.services.TripService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +22,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class TripServiceImpl implements TripService {
-    private final int NUMB_LATEST_TRIP = 5;
+	
+	private static final Logger logger = LoggerFactory.getLogger(TripServiceImpl.class);
+    
+	private final int NUMB_LATEST_TRIP = 5;
 
     @Autowired
     private CRUDDao<TripInfo> tripCRUDDao;
@@ -33,8 +39,13 @@ public class TripServiceImpl implements TripService {
 
     @Override
     public void saveTrip(Tracker tracker) {
+    	
+		if(logger.isDebugEnabled())
+            logger.debug("Save trip, trackerid " + tracker.getId() + " trip postions " + tracker.getPositions().size());
+    	
         Trip trip = new Trip(tracker);
         tripCRUDDao.create(new TripInfo(trip));
+        tracker.getPositions().clear();
     }
 
     @Override

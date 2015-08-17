@@ -160,6 +160,8 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
         this.currentPosition = currentPosition;
         // set history
         getPositions().add(currentPosition);
+        // set last active positions
+        getLatestPositions().add(currentPosition);        
     }
 
     @Override
@@ -232,8 +234,6 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
                 if(getPositions() != null && getPositions().size() > 0) {
                     trackerUpdater.getTripService().saveTrip(this);
                 }
-                // clear when save
-                getPositions().clear();
 
             } finally {
 
@@ -496,7 +496,6 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
                     this.getCurrentPosition().getLatitude(), course, speed);
 
             setCurrentPosition(positionUnit);
-            getLatestPositions().add(positionUnit);
 
             if (logger.isDebugEnabled())
                 logger.debug(this.toString() + "finished moving");
