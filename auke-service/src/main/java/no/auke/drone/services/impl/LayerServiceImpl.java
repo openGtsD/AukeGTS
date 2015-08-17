@@ -130,8 +130,10 @@ public class LayerServiceImpl implements LayerService {
     }
 
     public synchronized void addTracker(Tracker tracker) {
-        getActiveTrackersMap().put(tracker.getId(), tracker);
+        
+    	getActiveTrackersMap().put(tracker.getId(), tracker);
         getPassiveTrackersMap().remove(tracker.getId());
+        
         if (isRunningAutomatically) {
             positionCalculator.startCalculate();
         }

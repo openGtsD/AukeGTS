@@ -54,7 +54,8 @@ public class TrackerServiceImpl implements TrackerService {
 
     @PostConstruct
     public void initTrackerService() {
-        deviceDao.setPersistentClass(Device.class);
+        
+    	deviceDao.setPersistentClass(Device.class);
         trackerDao.setPersistentClass(TrackerDB.class);
         mapPointDao.setPersistentClass(MapPoint.class);
 
@@ -80,6 +81,9 @@ public class TrackerServiceImpl implements TrackerService {
                 TrackerData.getInstance().register((Observer) simpleTrackerFactory.from(trackerDB));
             }
         }
+
+        
+        
 
         mapPointDao.deleteAll();
         
