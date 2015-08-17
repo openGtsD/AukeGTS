@@ -1,6 +1,11 @@
 package no.auke.drone.services.impl;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -8,10 +13,15 @@ import javax.annotation.PostConstruct;
 
 import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
-import no.auke.drone.domain.*;
+import no.auke.drone.domain.BoundingBox;
+import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Observer;
+import no.auke.drone.domain.SimpleTracker;
+import no.auke.drone.domain.Tracker;
+import no.auke.drone.domain.TrackerData;
 import no.auke.drone.entity.Device;
 import no.auke.drone.entity.TrackerDB;
+import no.auke.drone.entity.TripInfo;
 import no.auke.drone.services.TrackerService;
 import no.auke.drone.utils.PointUtil;
 import no.auke.drone.utils.YmlPropertiesPersister;
@@ -37,6 +47,9 @@ public class TrackerServiceImpl implements TrackerService {
 
     @Autowired
     private CRUDDao<MapPoint> mapPointDao;
+    
+    @Autowired
+    private CRUDDao<TripInfo> tripDao;
 
     @Autowired
     private SimpleTrackerFactory simpleTrackerFactory;
@@ -58,9 +71,14 @@ public class TrackerServiceImpl implements TrackerService {
     	deviceDao.setPersistentClass(Device.class);
         trackerDao.setPersistentClass(TrackerDB.class);
         mapPointDao.setPersistentClass(MapPoint.class);
+        tripDao.setPersistentClass(TripInfo.class);
+        
 
         logger.info("initializing SIMULATED tracker services");
 
+        //THAI: we need consider should be store all history for a tracker ???
+        tripDao.deleteAll();
+        
         List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
 
         for (Tracker tracker : trackers) {
@@ -86,6 +104,7 @@ public class TrackerServiceImpl implements TrackerService {
         
 
         mapPointDao.deleteAll();
+        
         
 //      THAI: why we call this method again ?? Since its ready run at time register tracker
 //        TrackerData.getInstance().startCalculate();
@@ -285,19 +304,20 @@ public class TrackerServiceImpl implements TrackerService {
 
                     MapPoint rd = PointUtil.generateRandomMapPoint(point);
                     Tracker tracker = simpleTrackerFactory.create("SIMULATED", UUID.randomUUID().toString(), "Tracker"
-                            + i + "-" + j, "", Tracker.TrackerType.SIMULATED, null, rd, "0123222" + i, "123123123" + j, "", true);
+                            + i + "-" + j, "", Tracker.TrackerType.SIMULATED, "Tracker"
+                                    + i + "-" + j, rd, "0123222" + i, "123123123" + j, "", true);
                     result.add(tracker);
                 }
             }
 
             // create 2 trackers for Stig and LHF
-            MapPoint stig = new MapPoint(59.744076, 10.204455, 0, 0, 0); // Stig
-            Tracker stigTracker = simpleTrackerFactory.create("SIMULATED", UUID.randomUUID().toString(), "Tracker"
-                    + "Stig" + "-" + "Stig", "", Tracker.TrackerType.SIMULATED, null, stig, "0123222" + 1,
-                    "123123123" + 1, "", true);
+            MapPoint stig = new MapPoint(59.744076, 10.204455, 50, 40, 30); // Stig
+            Tracker stigTracker = simpleTrackerFactory.create("SIMULATED", "1", "Tracker"
+                    + "Stig" + "-" + "Stig", "", Tracker.TrackerType.SIMULATED, "Stig", stig, "0123222" + 1,
+                    "123123123" + 1, "ContactInfo", true);
             result.add(stigTracker);
 
-            // THAI - add more data for test
+//            // THAI - add more data for test
             for (int k = 1; k <= 50; k++) {
                 MapPoint rd = PointUtil.generateRandomMapPoint(stig);
                 Tracker tracker = simpleTrackerFactory.create("SIMULATED", UUID.randomUUID().toString(), "Tracker"

@@ -1,5 +1,7 @@
 package no.auke.drone.entity;
 
+import java.io.Serializable;
+
 import com.sun.syndication.io.impl.Base64;
 
 import no.auke.drone.annotation.Column;
@@ -11,8 +13,10 @@ import no.auke.drone.domain.Tracker.TrackerType;
 
 // This object is for store and retrieve som DB
 
-public class TripInfo extends Trip {
-	@Column
+public class TripInfo extends Trip implements Serializable {
+    private static final long serialVersionUID = 2281073816884185202L;
+
+    @Column
 	private String trackerName;
 
     @Column
@@ -142,17 +146,17 @@ public class TripInfo extends Trip {
 		this.setTrackerName(trip.getTracker().getName());
 		this.setOwner(trip.getTracker().getOwner());
 		this.setContactInfo(trip.getTracker().getContactInfo());
+		setByteRoute(trip.getRouteAsBytes());
 		
-		
-		byteRoute=trip.getRouteAsBytes();
-		byteRoute = Base64.encode(byteRoute);
+//		THAI: temp comment out, maybe we will use later??
+//		byteRoute = Base64.encode(byteRoute);
 		
 	}
 	
 	public Trip getTrip() {
 		
 		Trip trip = new Trip(getTrackerId(), getId());
-		trip.setRouteAsBytes(Base64.decode(byteRoute));
+		trip.setRouteAsBytes(byteRoute);
 		return trip;
 	}
 	

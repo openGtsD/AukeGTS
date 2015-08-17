@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.sun.syndication.io.impl.Base64;
+
 /**
  * Created by huyduong on 3/24/2015.
  */
@@ -113,14 +115,11 @@ public class TrackerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse getTrip(@PathParam("id") String id) {
         List<TripInfo> trips = tripService.getTripsByTrackerId(id);
-        List<MapPoint> tes = new ArrayList<>();
         for(TripInfo info : trips) {
-            // THAI: Implementing...
-            List<byte[]> poslist = ByteUtil.splitDynamicBytes(info.getByteRoute());
+            List<byte[]> poslist = ByteUtil.splitBytes(info.getByteRoute());
             for (byte[] pos : poslist) {
-                tes.add(new MapPoint(pos));
+                info.getRoute().add(new MapPoint(pos));
             }
-           
         }
         
         return new AukeResponse(trips != null, trips);

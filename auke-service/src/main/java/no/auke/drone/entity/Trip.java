@@ -1,5 +1,6 @@
 package no.auke.drone.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -10,7 +11,12 @@ import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.utils.ByteUtil;
 
-public class Trip {
+public class Trip implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1L;
+
     @ID
     @Column
     private UUID id;
@@ -158,27 +164,22 @@ public class Trip {
 
     public byte[] getRouteAsBytes() {
 
-        if (route != null && route.size() > 0) {
-
-            List<byte[]> positions = new ArrayList<byte[]>();
-            for (MapPoint point : route) {
-                positions.add(point.getBytes());
-            }
-            return ByteUtil.mergeBytes(positions);
-
-        } else {
-
+        if (null == route || route.size() <= 0)
             return null;
 
+        List<byte[]> positions = new ArrayList<byte[]>();
+        for (MapPoint point : route) {
+            positions.add(point.getBytes());
         }
+        return ByteUtil.mergeBytes(positions);
+
     }
 
     // LHA: this pack out the byte array of positions and store them in the
     // route array
-
     public void setRouteAsBytes(byte[] data) {
         route.clear();
-        List<byte[]> poslist = ByteUtil.splitDynamicBytes(data);
+        List<byte[]> poslist = ByteUtil.splitBytes(data);
         for (byte[] pos : poslist) {
             route.add(new MapPoint(pos));
         }
