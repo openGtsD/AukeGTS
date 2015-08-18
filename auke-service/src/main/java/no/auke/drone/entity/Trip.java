@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import no.auke.drone.annotation.Column;
 import no.auke.drone.annotation.ID;
-import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.Tracker.TrackerType;
 import no.auke.drone.utils.ByteUtil;

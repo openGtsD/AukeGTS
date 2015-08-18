@@ -2,8 +2,6 @@ package no.auke.drone.entity;
 
 import java.io.Serializable;
 
-import com.sun.syndication.io.impl.Base64;
-
 import no.auke.drone.annotation.Column;
 import no.auke.drone.domain.Tracker.TrackerType;
 
@@ -46,6 +44,7 @@ public class TripInfo extends Trip implements Serializable {
 		this.setTrackerName(trip.getTracker().getName());
 		this.setOwner(trip.getTracker().getOwner());
 		this.setContactInfo(trip.getTracker().getContactInfo());
+		this.setTrackerType(TrackerType.valueOf(trip.getTracker().getLayerId()));
 		setByteRoute(trip.getRouteAsBytes());
 		
 //		THAI: temp comment out, maybe we will use later??
@@ -56,6 +55,10 @@ public class TripInfo extends Trip implements Serializable {
 	public Trip getTrip() {
 		
 		Trip trip = new Trip(getTrackerId(), getId());
+		trip.setOwner(this.getOwner());
+		trip.setTrackerName(this.getTrackerName());
+		trip.setContactInfo(this.getContactInfo());
+		trip.setTrackerType(this.getTrackerType());
 		trip.setRouteAsBytes(byteRoute);
 		return trip;
 	}

@@ -2,7 +2,7 @@ package no.auke.drone.utils;
 
 import java.util.Random;
 
-import no.auke.drone.domain.MapPoint;
+import no.auke.drone.entity.MapPoint;
 
 public class PointUtil {
     

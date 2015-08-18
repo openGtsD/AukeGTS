@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.ReentrantLock;
 
 import no.auke.drone.application.TrackerUpdater;
+import no.auke.drone.entity.MapPoint;
 import no.auke.drone.services.impl.LayerServiceImpl;
 
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
@@ -18,7 +19,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by huyduong on 3/24/2015.
  */
-public abstract class AbstractTrackerBase implements Tracker, Observer {
+public abstract class AbstractTrackerBase implements Tracker {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractTrackerBase.class);
 
@@ -161,7 +162,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
         // set history
         getPositions().add(currentPosition);
         // set last active positions
-        getLatestPositions().add(currentPosition);        
+        getLatestPositions().add(currentPosition);
     }
 
     @Override
@@ -231,7 +232,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
                 // TODO should turn it back once the trip service finishes
                 // trackerUpdater.getTripService().saveTrip(this);
-                if(getPositions() != null && getPositions().size() > 0) {
+                if (getPositions() != null && getPositions().size() > 0) {
                     trackerUpdater.getTripService().saveTrip(this);
                 }
 
@@ -242,7 +243,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
 
         } else {
 
-            this.ismoving.set(true);
+            this.ismoving.set(isMoving);
         }
 
     }
@@ -409,8 +410,8 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
                 // stop flight
                 logger.debug(this.toString() + "stop calculate");
                 setMoving(false);
-
-            } else {
+            } 
+            else {
 
                 logger.trace(this.toString() + "started calculating");
                 trackerUpdater.update(this);
@@ -425,7 +426,7 @@ public abstract class AbstractTrackerBase implements Tracker, Observer {
                 // start flight
                 logger.debug(this.toString() + "start calculate");
                 setMoving(true);
-
+                
             } else {
 
                 logger.debug(this.toString() + "is not flying!!!");

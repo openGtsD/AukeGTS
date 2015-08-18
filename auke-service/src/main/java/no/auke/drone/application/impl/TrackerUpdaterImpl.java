@@ -1,9 +1,9 @@
 package no.auke.drone.application.impl;
 
 import no.auke.drone.application.TrackerUpdater;
-import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.entity.EventData;
+import no.auke.drone.entity.MapPoint;
 import no.auke.drone.services.EventService;
 import no.auke.drone.services.TrackerService;
 import no.auke.drone.services.TripService;

@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.powermock.api.mockito.PowerMockito.mock;
 import static org.powermock.api.mockito.PowerMockito.when;
 import no.auke.drone.domain.Tracker.TrackerType;
+import no.auke.drone.entity.MapPoint;
 import no.auke.drone.services.impl.LayerServiceImpl;
 
 import org.junit.After;

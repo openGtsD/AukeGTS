@@ -14,12 +14,11 @@ import javax.annotation.PostConstruct;
 import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.MapPoint;
-import no.auke.drone.domain.Observer;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.domain.TrackerData;
 import no.auke.drone.entity.Device;
+import no.auke.drone.entity.MapPoint;
 import no.auke.drone.entity.TrackerDB;
 import no.auke.drone.entity.TripInfo;
 import no.auke.drone.services.TrackerService;
@@ -83,21 +82,21 @@ public class TrackerServiceImpl implements TrackerService {
         List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
 
         for (Tracker tracker : trackers) {
-            TrackerData.getInstance().register((Observer) tracker);
+            TrackerData.getInstance().register(tracker);
         }
         logger.info("finished initializing SIMULATED tracker services");
 
         List<Device> devices = deviceDao.getAll();
         if (CollectionUtils.isNotEmpty(devices)) {
             for (Device device : devices) {
-                TrackerData.getInstance().register((Observer) simpleTrackerFactory.from(device));
+                TrackerData.getInstance().register(simpleTrackerFactory.from(device));
             }
         }
 
         List<TrackerDB> trackerDBs = trackerDao.getAll();
         if (CollectionUtils.isNotEmpty(trackerDBs)) {
             for (TrackerDB trackerDB : trackerDBs) {
-                TrackerData.getInstance().register((Observer) simpleTrackerFactory.from(trackerDB));
+                TrackerData.getInstance().register(simpleTrackerFactory.from(trackerDB));
             }
         }
 
@@ -126,7 +125,7 @@ public class TrackerServiceImpl implements TrackerService {
         Tracker persistedTracker = getTracker(tracker.getId());
         if (persistedTracker == null) {
             persistedTracker = simpleTrackerFactory.create(tracker);
-            TrackerData.getInstance().register((Observer) persistedTracker);
+            TrackerData.getInstance().register(persistedTracker);
             if (persist) {
                 deviceDao.create(new Device().from(persistedTracker));
                 trackerDao.create(new TrackerDB().from(persistedTracker));
@@ -166,7 +165,7 @@ public class TrackerServiceImpl implements TrackerService {
         }
         deviceDao.delete(new Device().from(tracker));
         trackerDao.delete(new TrackerDB().from(tracker));
-        TrackerData.getInstance().remove((Observer) tracker);
+        TrackerData.getInstance().remove(tracker);
         return tracker;
 
     }
@@ -183,7 +182,7 @@ public class TrackerServiceImpl implements TrackerService {
             tracker = simpleTrackerFactory.from(device);
 
             if (tracker != null) {
-                TrackerData.getInstance().register((Observer) tracker);
+                TrackerData.getInstance().register(tracker);
             }
         }
 

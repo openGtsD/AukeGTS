@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import no.auke.drone.application.TrackerUpdater;
+import no.auke.drone.entity.MapPoint;
 import no.auke.drone.services.impl.LayerServiceImpl;
 
 import org.apache.commons.collections.buffer.CircularFifoBuffer;

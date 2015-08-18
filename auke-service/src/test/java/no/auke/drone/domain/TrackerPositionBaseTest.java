@@ -1,5 +1,7 @@
 package no.auke.drone.domain;
 
+import no.auke.drone.entity.MapPoint;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

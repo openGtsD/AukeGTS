@@ -10,7 +10,6 @@ import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.entity.Trip;
 import no.auke.drone.entity.TripInfo;
-import no.auke.drone.services.PositionCalculatorService;
 import no.auke.drone.services.TripService;
 
 import org.slf4j.Logger;

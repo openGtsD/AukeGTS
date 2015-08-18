@@ -15,10 +15,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import no.auke.drone.domain.BoundingBox;
-import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
 import no.auke.drone.entity.EventData;
+import no.auke.drone.entity.MapPoint;
 import no.auke.drone.entity.Trip;
 import no.auke.drone.entity.TripInfo;
 import no.auke.drone.services.EventService;
@@ -116,7 +116,6 @@ public class TrackerResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse getTrip(@PathParam("id") String id) {
         List<Trip> trips = tripService.getTripsByTrackerId(id);
-        
         return new AukeResponse(trips != null, trips);
     }
     

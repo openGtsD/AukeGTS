@@ -6,9 +6,9 @@ import junit.framework.Assert;
 import no.auke.drone.application.impl.SimpleTrackerFactory;
 import no.auke.drone.dao.CRUDDao;
 import no.auke.drone.domain.AbstractIntegrationTest;
-import no.auke.drone.domain.MapPoint;
 import no.auke.drone.domain.SimpleTracker;
 import no.auke.drone.domain.Tracker;
+import no.auke.drone.entity.MapPoint;
 import no.auke.drone.entity.TripInfo;
 import no.auke.drone.utils.PointUtil;
 
@@ -108,20 +108,20 @@ public class TripServiceTest extends AbstractIntegrationTest {
         Assert.assertEquals(0,tripInfos.size());
     }
 
-    @Test
-    public void testGetLatestTrips() {
-
-        
-    }
-
-    @Test
-    public void testGetTripsByTrackerId() {
-
-        
-    }
-
-    @Test
-    public void testDeleteTripsByTrackerId() {
-
-    }
+//    @Test
+//    public void testGetLatestTrips() {
+//
+//        
+//    }
+//
+//    @Test
+//    public void testGetTripsByTrackerId() {
+//
+//        
+//    }
+//
+//    @Test
+//    public void testDeleteTripsByTrackerId() {
+//
+//    }
 }

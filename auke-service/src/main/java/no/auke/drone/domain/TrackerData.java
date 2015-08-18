@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 // LHA: maybe this object is the layer head ??
 //
 
-public class TrackerData implements Subject {
+public class TrackerData {
 
     private static final Logger logger = LoggerFactory.getLogger(TrackerData.class);
 
@@ -124,7 +124,7 @@ public class TrackerData implements Subject {
         Tracker tracker = getTracker(newTracker.getId());
         if (tracker == null) {
             tracker = new SimpleTrackerFactory().create(newTracker);
-            TrackerData.getInstance().register((Observer) tracker);
+            TrackerData.getInstance().register(tracker);
         }
 
         if (tracker.equals(newTracker)) {
@@ -146,31 +146,19 @@ public class TrackerData implements Subject {
 
     }
 
-    public Tracker register(Observer tracker) {
+    public Tracker register(Tracker tracker) {
         if (tracker.getLayerId() != null) {
-            getTrackerLayer(tracker.getLayerId()).addTracker((Tracker) tracker);
+            getTrackerLayer(tracker.getLayerId()).addTracker(tracker);
         }
-        return (Tracker) tracker;
+        return  tracker;
     }
 
-    @Override
-    public void remove(Observer tracker) {
+    public void remove(Tracker tracker) {
         if (tracker.getLayerId() != null) {
-            getTrackerLayer(tracker.getLayerId()).removeTracker((Tracker) tracker);
+            getTrackerLayer(tracker.getLayerId()).removeTracker(tracker);
         }
     }
-
-    @Override
-    public void notifyAllItems() {
-
-        logger.info("........notifying " + getTrackers().size() + " items........");
-        for (Tracker tracker : getTrackers()) {
-            tracker.update();
-        }
-        logger.info(".......notifying finished......");
-
-    }
-
+  
     public boolean exists(String layerId) {
         return layerMap.containsKey(layerId);
     }
