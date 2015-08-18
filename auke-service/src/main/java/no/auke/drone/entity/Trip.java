@@ -150,7 +150,7 @@ public class Trip implements Serializable {
     }
 
     public Trip() {
-    };
+    }
 
     public long getStartTime() {
 
@@ -244,6 +244,11 @@ public class Trip implements Serializable {
         this.tracker = tracker;
         id = UUID.randomUUID();
         setRoute(tracker.getPositions());
+        setTrackerName(tracker.getName());
+        setOwner(tracker.getName());
+        setContactInfo(tracker.getContactInfo());
+        setTrackerType(TrackerType.valueOf(tracker.getLayerId()));
+        setTripName(tracker.getName());
     }
     
     public Trip(TripInfo trip) {

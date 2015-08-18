@@ -41,10 +41,13 @@ public class TripInfo extends Trip implements Serializable {
 		
 		super(trip.getTracker());
 		this.setTrackerId(trip.getTrackerId());
-		this.setTrackerName(trip.getTracker().getName());
-		this.setOwner(trip.getTracker().getOwner());
-		this.setContactInfo(trip.getTracker().getContactInfo());
-		this.setTrackerType(TrackerType.valueOf(trip.getTracker().getLayerId()));
+		this.setTrackerName(trip.getTrackerName());
+		this.setOwner(trip.getOwner());
+		this.setContactInfo(trip.getContactInfo());
+		this.setTrackerType(trip.getTrackerType());
+		this.setTripName(trip.getTripName());
+		this.setCountry(trip.getCountry());
+		this.setCity(trip.getCity());
 		setByteRoute(trip.getRouteAsBytes());
 		
 //		THAI: temp comment out, maybe we will use later??

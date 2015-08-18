@@ -112,11 +112,19 @@ public class TrackerResource {
     }
     
     @POST
+    @Path("/get-trips/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse getTrips(@PathParam("id") String id) {
+        List<Trip> trips = tripService.getTripsByTrackerId(id);
+        return new AukeResponse(trips != null, trips);
+    }
+    
+    @POST
     @Path("/get-trip/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse getTrip(@PathParam("id") String id) {
-        List<Trip> trips = tripService.getTripsByTrackerId(id);
-        return new AukeResponse(trips != null, trips);
+        Trip trip = tripService.getTripById(id);
+        return new AukeResponse(trip != null, trip);
     }
     
     @POST

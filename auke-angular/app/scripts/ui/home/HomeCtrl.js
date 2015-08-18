@@ -54,6 +54,22 @@ angular.module('aukeGTS').controller('HomeCtrl', ['$scope', '$stateParams', '$ti
         $scope.showMarkers(500);
     }
 
+
+    $scope.isShowTrip = service.getShowTrip();
+    $scope.trips = service.getTrips();
+    $scope.showTrips = function (value, parameter) {
+        service.setShowTrip(value, parameter.id);
+        $scope.isShowTrip = service.getShowTrip();
+    }
+    $scope.$watch('isShowTrip', function () {
+        if ($scope.isShowTrip) {
+            $timeout(function () {
+                $scope.trips = service.getTrips()
+            }, 500);
+        }
+    });
+
+
     $scope.$on('$destroy', function() {
         $scope.stop();
     });

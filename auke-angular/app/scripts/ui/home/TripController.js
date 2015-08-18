@@ -1,25 +1,22 @@
 'use strict';
 
 
-angular.module('aukeGTS').controller('TripController', ['$scope', '$timeout', 'MapService', 'uiGmapGoogleMapApi', function ($scope, $timeout, MapService, uiGmapGoogleMapApi) {
+angular.module('aukeGTS').controller('TripController', ['$scope', '$stateParams', '$timeout', 'MapService', 'uiGmapGoogleMapApi', function ($scope, $stateParams, $timeout, MapService, uiGmapGoogleMapApi) {
     var service = MapService.mapAPI;
-    $scope.isShowTrip = service.getShowTrip();
+
     $scope.map2 = {};
     $scope.m = null;
 
-    $scope.showTrips = function (value, parameter) {
-
-        service.setShowTrip(value, parameter.id);
-        $scope.isShowTrip = service.getShowTrip();
-
+    if ($stateParams.id != null && $stateParams.id != '') {
+        service.setTripId($stateParams.id);
         $scope.map2 = {
             center: {
-                latitude: parameter.latitude,
-                longitude: parameter.longitude
+                latitude: 0,
+                longitude: 0
             },
             zoom: 8,
             options: {
-                maxZoom: 20,
+                maxZoom: 21,
                 minZoom: 3
             },
             control: {},
@@ -39,13 +36,17 @@ angular.module('aukeGTS').controller('TripController', ['$scope', '$timeout', 'M
         };
 
         var directionsDisplay = new google.maps.DirectionsRenderer();
-        $scope.calcRoute = function () {
+        $scope.calcRoute = function () {console.log(service.getRoute());
+            console.log(service.getStartPoint());
+            console.log(service.getEndPoint());
             var ways = [];
             for (var i = 0; i < service.getRoute().length; i++) {
-                ways.push({
-                    location: service.getRoute()[i].latitude+','+service.getRoute()[i].longitude,
-                    stopover: true
-                });
+                if(i <= 6) {//TODO: limit wayspoint from google API
+                    ways.push({
+                        location: service.getRoute()[i].latitude + ',' + service.getRoute()[i].longitude,
+                        stopover: true
+                    });
+                }
             }
 
             directionsDisplay.setMap($scope.m);
@@ -58,17 +59,17 @@ angular.module('aukeGTS').controller('TripController', ['$scope', '$timeout', 'M
                 optimizeWaypoints: true,
                 travelMode: google.maps.TravelMode.WALKING
             };
-            directionsService.route(request, function (response, status) {
+            directionsService.route(request, function (response, status) {console.log(status);
                 if (status == google.maps.DirectionsStatus.OK) {
                     directionsDisplay.setDirections(response);
                 }
             });
             return;
         }
-        if ($scope.isShowTrip) {
-            $timeout(function () {
-                $scope.calcRoute();
-            }, 1000);
-        }
+        //if ($scope.isShowTrip) {
+        $timeout(function () {
+            $scope.calcRoute();
+        }, 1000);
+        //}
     }
-}]);
+}])

@@ -19,4 +19,9 @@ angular.module('aukeGTS').config(function ($stateProvider, $urlRouterProvider) {
             templateUrl: domain + '/app/scripts/ui/home/home.html',
             controller: 'HomeCtrl'
         })
+        .state('viewTrip', {
+            url: '/home:{id}',
+            templateUrl: domain + '/app/scripts/ui/home/trip.html',
+            controller: 'TripController'
+        })
 });

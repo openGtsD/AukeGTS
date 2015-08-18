@@ -77,7 +77,7 @@ public class TrackerServiceImpl implements TrackerService {
         logger.info("initializing SIMULATED tracker services");
 
         //THAI: we need consider should be store all history for a tracker ???
-//        tripDao.deleteAll();
+        tripDao.deleteAll();
         
         List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
 
@@ -305,14 +305,14 @@ public class TrackerServiceImpl implements TrackerService {
                     MapPoint rd = PointUtil.generateRandomMapPoint(point);
                     Tracker tracker = simpleTrackerFactory.create("SIMULATED", UUID.randomUUID().toString(), "Tracker"
                             + i + "-" + j, "", Tracker.TrackerType.SIMULATED, "Tracker"
-                                    + i + "-" + j, rd, "0123222" + i, "123123123" + j, "", true);
+                                    + i + "-" + j, rd, "0123222" + i, "123123123" + j, "ContactInfo", true);
                     result.add(tracker);
                 }
             }
 
             // create 2 trackers for Stig and LHF
             MapPoint stig = new MapPoint(59.744076, 10.204455, 50, 40, 30); // Stig
-            Tracker stigTracker = simpleTrackerFactory.create("SIMULATED", "1", "Tracker"
+            Tracker stigTracker = simpleTrackerFactory.create("SIMULATED", UUID.randomUUID().toString(), "Tracker"
                     + "Stig" + "-" + "Stig", "", Tracker.TrackerType.SIMULATED, "Stig", stig, "0123222" + 1,
                     "123123123" + 1, "ContactInfo", true);
             result.add(stigTracker);
@@ -321,15 +321,15 @@ public class TrackerServiceImpl implements TrackerService {
             for (int k = 1; k <= 50; k++) {
                 MapPoint rd = PointUtil.generateRandomMapPoint(stig);
                 Tracker tracker = simpleTrackerFactory.create("SIMULATED", UUID.randomUUID().toString(), "Tracker"
-                        + "Stig" + "-" + "Stig" + k, "", Tracker.TrackerType.SIMULATED, null, rd, "0123222" + 1,
-                        "123123123" + 1, "", true);
+                        + "Stig" + "-" + "Stig" + k, "", Tracker.TrackerType.SIMULATED, "rd" + k, rd, "0123222" + 1,
+                        "123123123" + 1, "ContactInfo", true);
                 result.add(tracker);
             }
 
             MapPoint lhf = new MapPoint(59.722268, 10.213038, 0, 0, 0);
             Tracker lhfTracker = simpleTrackerFactory
                     .create("SIMULATED", UUID.randomUUID().toString(), "Tracker" + "LHF" + "-" + "LHF", "",
-                            Tracker.TrackerType.SIMULATED, null, lhf, "0123222" + 1, "123123123" + 1, "", true);
+                            Tracker.TrackerType.SIMULATED, null, lhf, "0123222" + 1, "123123123" + 1, "ContactInfo", true);
             result.add(lhfTracker);
 
             // THAI - add more data for test
