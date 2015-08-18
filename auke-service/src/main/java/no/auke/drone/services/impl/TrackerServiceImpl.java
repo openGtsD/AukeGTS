@@ -77,7 +77,7 @@ public class TrackerServiceImpl implements TrackerService {
         logger.info("initializing SIMULATED tracker services");
 
         //THAI: we need consider should be store all history for a tracker ???
-        tripDao.deleteAll();
+//        tripDao.deleteAll();
         
         List<Tracker> trackers = new TrackerServiceFacade().createTrackersForCapitalCities();
 

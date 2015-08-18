@@ -279,7 +279,7 @@ public class Trip implements Serializable {
         for (MapPoint point : route) {
             positions.add(point.getBytes());
         }
-        return ByteUtil.mergeBytes(positions);
+        return ByteUtil.mergeDynamicBytesWithLength(positions);
 
     }
 
@@ -287,7 +287,7 @@ public class Trip implements Serializable {
     // route array
     public void setRouteAsBytes(byte[] data) {
         route.clear();
-        List<byte[]> poslist = ByteUtil.splitBytes(data);
+        List<byte[]> poslist = ByteUtil.splitDynamicBytes(data);
         for (byte[] pos : poslist) {
             route.add(new MapPoint(pos));
         }

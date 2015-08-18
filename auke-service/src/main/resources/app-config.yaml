@@ -33,3 +33,5 @@ tracker:
     maxSize: 10
     registered: registered
     longest: longest
+trip:
+    maxSize: 10

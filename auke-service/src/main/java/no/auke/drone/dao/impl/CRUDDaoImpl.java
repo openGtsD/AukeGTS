@@ -301,9 +301,8 @@ public class CRUDDaoImpl<T> implements CRUDDao<T> {
         if (properties == null || properties.size() == 0) {
             return getAll();
         }
-
-        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName()).buildWhere()
-                .buildEqualClause(properties).build();
+        
+        String query = new QueryBuilder().buildSelect(getPersistentClass().getSimpleName()).buildWhere().buildEqualClause(properties).build();
 
         List<T> entities = getJdbcTemplate().query(query, new BeanPropertyRowMapper<T>(persistentClass));
 

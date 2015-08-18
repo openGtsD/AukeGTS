@@ -120,6 +120,14 @@ public class TrackerResource {
     }
     
     @POST
+    @Path("/get-lastest-trip")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public AukeResponse getTrip() {
+        List<Trip> trips = tripService.getLatestTrips();
+        return new AukeResponse(trips != null, trips);
+    }
+    
+    @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     public AukeResponse update(SimpleTracker tracker) {

@@ -11,6 +11,7 @@ import no.auke.drone.domain.Tracker;
 import no.auke.drone.entity.Trip;
 import no.auke.drone.entity.TripInfo;
 import no.auke.drone.services.TripService;
+import no.auke.drone.utils.YmlPropertiesPersister;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +26,13 @@ public class TripServiceImpl implements TripService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TripServiceImpl.class);
     
-	private final int NUMB_LATEST_TRIP = 5;
+//	private final int NUMB_LATEST_TRIP = 5;
 
     @Autowired
     private CRUDDao<TripInfo> tripCRUDDao;
+    
+    @Autowired
+    private YmlPropertiesPersister propertiesPersister;
 
     @PostConstruct
     public void init() {
@@ -58,7 +62,7 @@ public class TripServiceImpl implements TripService {
     public List<Trip> getLatestTrips() {
     	
         List<Trip> list = new ArrayList<Trip>();
-        for(TripInfo info:(List<TripInfo>)tripCRUDDao.getTop(NUMB_LATEST_TRIP)) {
+        for(TripInfo info:(List<TripInfo>)tripCRUDDao.getTop(propertiesPersister.getNumberByKey("trip.maxSize"))) {
         	list.add(info.getTrip());
         }
         return list;    	
