@@ -17,8 +17,15 @@
 }
 
 .gmap-popup {
-    height: 300px !important;
-   
+    position: absolute !important;
+    top: 1px;
+    right: 1px;
+    bottom: 1px;
+}
+
+.tableOver {
+    overflow: auto;
+    height: 600px !important;
 }
 
 .css-form input.ng-invalid.ng-touched {

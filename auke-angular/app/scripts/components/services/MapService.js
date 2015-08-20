@@ -45,62 +45,31 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
         ];
     }
 
-    mapAPI.getShowTrip = function() {
-        return  mapAPI.showTrip;
+
+
+    mapAPI.getTrips = function() {
+        return mapAPI.listTrip;
     }
 
-    mapAPI.getStartPoint = function() {
-        return mapAPI.startLatlng;
+    mapAPI.getTripInfo = function() {
+        return mapAPI.tripInfo;
     }
 
-    mapAPI.getEndPoint = function() {
-        return mapAPI.endLatlng;
-    }
-
-    mapAPI.getRoute = function() {
-        return mapAPI.route;
-    }
-
-    mapAPI.getTrip = function(id) {
-        TrackerService.getTripById(id).success(function (response) {
-            if (response.data && response.data.length > 0) {
-                var tripInfo = response.data[0];
-                mapAPI.route = tripInfo.route;
-                mapAPI.startAddress = tripInfo.startPoint.trackerId;//TODO: should be modify into address start in mapPoint
-                mapAPI.startLatlng = tripInfo.startPoint.latitude+','+tripInfo.startPoint.longitude;
-
-                mapAPI.endAddress = tripInfo.stopPoint.trackerId;
-                mapAPI.endLatlng = tripInfo.stopPoint.latitude+','+tripInfo.stopPoint.longitude;
-            }
-        })
-    }
-
-    mapAPI.getTripByTrackerId = function(id) {
-        TrackerService.getTripByTrackerId(id).success(function (response) {
+    mapAPI.getTripByTrackerId = function(trackerId){
+        TrackerService.getTripByTrackerId(trackerId).success(function (response) {
             if (response.data && response.data.length > 0) {
                 mapAPI.listTrip = response.data;
             }
         })
     }
 
-    mapAPI.getTrips = function() {
-        return mapAPI.listTrip;
+    mapAPI.getTripById = function(id) {
+        TrackerService.getTripById(id).success(function (response) {
+            if (response.data && response.data.length > 0) {
+                mapAPI.tripInfo = response.data[0];
+            }
+        })
     }
-
-    mapAPI.setShowTrip = function(value, trackerId){
-        mapAPI.trackerId = trackerId;
-        mapAPI.showTrip = value;
-        if(value) {
-            mapAPI.getTripByTrackerId(trackerId);
-        }
-    }
-
-    mapAPI.setTripId = function(id) {
-        if(id) {
-            mapAPI.getTrip(id);
-        }
-    }
-
 
     mapAPI.loadDroneWithinCurrentView = function () {
         var map = mapAPI.map;
@@ -180,6 +149,15 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
         return marker;
     };
 
+    mapAPI.createTripIcon = function(lat, lon, i) {
+        return {
+            id: i,
+            latitude: lat,
+            longitude: lon
+            //icon: createIcon(start, stop),
+        }
+    }
+
     mapAPI.setCenter = function (tracker) {
 
         var posn = new google.maps.LatLng(tracker.latitude,
@@ -200,7 +178,7 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
         marker: {},
         show: false,
         closeClick: function () {
-            mapAPI.setShowTrip(false);
+
             this.show = false;
         },
         options: {} // define when map is ready
@@ -211,11 +189,8 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
 
     // ui trips
     mapAPI.trackerId = '';
-    mapAPI.startLatlng = '';
-    mapAPI.endLatlng = '';
-    mapAPI.route = [];
     mapAPI.listTrip = [];
-
+    mapAPI.tripInfo = '';
 
     mapAPI.init = function () {
         return {
@@ -256,7 +231,7 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
                     zoom_changed: function (maps, eventName, args) {
                         mapAPI.map = maps;
                         mapAPI.window.show = false;
-                        mapAPI.setShowTrip(false);
+
                         mapAPI.loadDroneWithinCurrentView();
 
                     },

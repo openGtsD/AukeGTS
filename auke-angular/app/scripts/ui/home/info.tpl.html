@@ -1,54 +1,17 @@
-<div class="itin-window" ng-controller="HomeCtrl">
-    <div ng-hide="isShowTrip">
-        <strong>Tracker Info</strong>&nbsp;<button ng-click="showTrips(true, parameter)" class="btn btn-primary">Show Trips</button>
-        <hr>
-        <div layout="row">
-            <ul>
-                <li>Name: <span class='highlight'> {{ parameter.name }}</span></li>
-                <li>GPS: <span class='highlight'> {{ parameter.latitude + " / " + parameter.longitude }}</span></li>
-                <li>Altitude: <span class='highlight'> {{ parameter.altitude }}</span></li>
-                <li>Moving: <span class='highlight'> {{ parameter.moving }}</span></li>
-                <li>Speed: <span class='highlight'> {{ parameter.speed }}</span></li>
-                <li>Time: <span class='highlight'> {{ parameter.time }}</span></li>
-            </ul>
+<div class="itin-window">
 
-        </div>
+    <strong>Tracker Info</strong>&nbsp;<a href='#/trips:{{ parameter.id }}' target="_blank" class="btn btn-primary">Show
+    Trips</a>
+    <hr>
+    <div layout="row">
+        <ul>
+            <li>Name: <span class='highlight'> {{ parameter.name }}</span></li>
+            <li>GPS: <span class='highlight'> {{ parameter.latitude + " / " + parameter.longitude }}</span></li>
+            <li>Altitude: <span class='highlight'> {{ parameter.altitude }}</span></li>
+            <li>Moving: <span class='highlight'> {{ parameter.moving }}</span></li>
+            <li>Speed: <span class='highlight'> {{ parameter.speed }}</span></li>
+            <li>Time: <span class='highlight'> {{ parameter.time }}</span></li>
+        </ul>
     </div>
-    <div ng-hide="!isShowTrip" class="gmap-popup">
-        <strong>Trips Info</strong>&nbsp;<button ng-click="showTrips(false, parameter)" class="btn btn-primary">Back</button>
-        <hr>
-        <div layout="row">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-
-                    <th>ID</th>
-                    <th>Owner</th>
-                    <!--<th>Trip Time</th>-->
-                    <th>Start Time</th>
-                    <th>Stop Time</th>
-                    <th>Type</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="trip in trips">
-                    <td><a href='#/home:{{ trip.id }}' target="_blank">{{ trip.id }}</a></td>
-                    <td>{{ trip.owner }}</td>
-                    <!--<td>{{ trip.tripTime }}</td>-->
-                    <td>{{ trip.startTime*1000 | date:'yyyy-MM-dd HH:mm:ss Z'}}</td>
-                    <td>{{ trip.stopTime*1000 | date:'yyyy-MM-dd HH:mm:ss Z' }}</td>
-                    <td>{{ trip.trackerType }}</td>
-                </tr>
-                </tbody>
-            </table>
-
-        </div>
-        <!--<ui-gmap-google-map center="map2.center"-->
-                            <!--zoom="map2.zoom"-->
-                            <!--events="map2.events"-->
-                            <!--options="map2.options" bounds="map2.bounds" control="map2.control">-->
-        <!--</ui-gmap-google-map>-->
-    </div>
-
 
 </div>
