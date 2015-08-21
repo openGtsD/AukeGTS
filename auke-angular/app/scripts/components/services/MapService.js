@@ -153,8 +153,8 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
         return {
             id: i,
             latitude: lat,
-            longitude: lon
-            //icon: createIcon(start, stop),
+            longitude: lon,
+            icon: i == 0 ? TrackerService.getBaseURL() + '/app/images/start.gif' : i < 0 ? TrackerService.getBaseURL() + '/app/images/end.gif' : mapAPI.createIcon,
         }
     }
 

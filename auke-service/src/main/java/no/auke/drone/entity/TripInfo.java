@@ -3,7 +3,6 @@ package no.auke.drone.entity;
 import java.io.Serializable;
 
 import no.auke.drone.annotation.Column;
-import no.auke.drone.domain.Tracker.TrackerType;
 
 // this is the storage class for trip
 // and used for updates from UI
