@@ -102,12 +102,21 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
         }
         else {
             var ne = mapBound.getNorthEast(); // LatLng of the north-east corner
-            var sw = mapBound.getSouthWest();
+            var sw = mapBound.getSouthWest(); // LatLng of the south-west corder
+
+            //var nw = new google.maps.LatLng(ne.lat(), sw.lng());
+            //var se = new google.maps.LatLng(sw.lat(), ne.lng());
+
+            var southWestLat = sw.lat();
+            var southWestLon = sw.lng();
+            var northEastLat = ne.lat();
+            var northEastLon = ne.lng();
+
             var dataObject = {
-                southWestLat: sw.lat(),
-                southWestLon: sw.lng(),
-                northEastLat: ne.lat(),
-                northEastLon: ne.lng()
+                southWestLat: southWestLat,
+                southWestLon: southWestLon,
+                northEastLat: northEastLat,
+                northEastLon: northEastLon
             };
 
             TrackerService.loadDroneWithinView(dataObject, mapAPI.layer.value, zoom).success(function (response) {
@@ -123,11 +132,18 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
                 } else {
                     // Sometimes when drone moving, Dialog not hidden
                     mapAPI.window.show = false;
+                    mapAPI.windowInfo.show = false;
                 }
                 mapAPI.markers = markers;
                 $('#zoomId').text(zoom);
                 $("#type").text(zoom >= 11 ? "drone" : "position");
                 $("#trackerNumber").text(mapAPI.markers.length);
+
+                $("#southWestLat").text(southWestLat);
+                $("#southWestLon").text(southWestLon);
+                $("#northEastLat").text(northEastLat);
+                $("#northEastLon").text(northEastLon);
+
             });
         }
     };
@@ -174,6 +190,14 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
     //init properties
     mapAPI.uuid = '';
     mapAPI.markers = [];
+    mapAPI.windowInfo = {
+        marker: {},
+        show: false,
+        closeClick: function () {
+            this.show = false;
+        },
+        options: {} // define when map is ready
+    };
     mapAPI.window = {
         marker: {},
         show: false,
@@ -208,7 +232,10 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
                 markersEvents: { // event marker
                     click: function (marker, eventName, model) {
                         if (mapAPI.map.getZoom() < 11) {
-                            mapAPI.setCenter(model);
+                            //mapAPI.setCenter(model);
+                            mapAPI.windowInfo.model = model;
+                            mapAPI.windowInfo.show = true;
+
                         } else {
                             TrackerService.load(model.id).success(function (response) {
                                 if (response.data && response.data.length > 0) {
@@ -223,16 +250,12 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
                 control: {},
                 events: { // event map
                     tilesloaded: function (maps, eventName, args) {
-                        mapAPI.map = maps;
                     },
                     dragend: function (maps, eventName, args) {
-                        mapAPI.map = maps;
                     },
                     zoom_changed: function (maps, eventName, args) {
-                        mapAPI.map = maps;
                         mapAPI.window.show = false;
-
-                        mapAPI.loadDroneWithinCurrentView();
+                        mapAPI.windowInfo.show = false;
 
                     },
                     idle: function (maps, eventName, args) {
@@ -240,7 +263,8 @@ angular.module('aukeGTS').factory('MapService', function ($http, $timeout, $inte
                         mapAPI.loadDroneWithinCurrentView();
                     }
                 },
-                window: mapAPI.window
+                window: mapAPI.window,
+                windowInfo: mapAPI.windowInfo
             }
         };
     }

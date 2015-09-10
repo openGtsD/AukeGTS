@@ -3,6 +3,11 @@
             ng-model="layer" ng-change="update()"></select>
     Zoom Factory <span id="zoomId" style="color: red"></span> - Number <span id="type"></span> in current view is <span
             id="trackerNumber" style="color: red"></span>
+    southWestLat:&nbsp;</span> <span id="southWestLat"></span> &nbsp;
+    southWestLon:&nbsp; <span id="southWestLon"></span> &nbsp;
+    northEastLat:&nbsp; <span id="northEastLat"></span> &nbsp;
+    northEastLon:&nbsp;<span id="northEastLon"></span>&nbsp;
+
 </div>
 
 <ui-gmap-google-map center="map.center"
@@ -13,7 +18,12 @@
                     options="map.window.options" closeclick="map.window.closeClick()">
     </ui-gmap-window>
 
-    <ui-gmap-markers models="markers" coords="'self'" icon="'icon'" doCluster="true" events="map.markersEvents"
+    <ui-gmap-window show="map.windowInfo.show" coords="map.windowInfo.model"
+                    options="map.windowInfo.options" closeclick="map.windowInfo.closeClick()">
+        <div>You can see correct drone fyling when zoom level >= 11 </div>
+    </ui-gmap-window>
+
+    <ui-gmap-markers models="markers" coords="'self'" icon="'icon'" doCluster="cluster" events="map.markersEvents"
                      options="'options'">
     </ui-gmap-markers>
 </ui-gmap-google-map>

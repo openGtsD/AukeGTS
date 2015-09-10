@@ -5,6 +5,7 @@ angular.module('aukeGTS').controller('HomeCtrl', ['$scope', '$stateParams', '$ti
     var service = MapService.mapAPI;
     $scope.markers = [];
     $scope.layers = service.getLayers();
+    $scope.cluster = false;
 
     if($stateParams.id != null && $stateParams.id != '') {
         service.setUUID($stateParams.id);
@@ -41,8 +42,10 @@ angular.module('aukeGTS').controller('HomeCtrl', ['$scope', '$stateParams', '$ti
         $scope.showMarkers(200);
 
         if($scope.map.zoom >= 11) {
+            $scope.cluster = true;
             $scope.start();
         } else {
+            $scope.cluster = false;
             $scope.stop();
         }
 
